@@ -8,10 +8,9 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: ecitizen-scc-api
+    container_name: ecitizen-api
     ports:
       - "${PORT:-4010}:4010"
-      - "${WS_PORT:-4011}:4011"
     environment:
       - NODE_ENV=${NODE_ENV:-development}
       - PORT=4010
@@ -57,7 +56,7 @@ services:
   # ============================================
   postgres:
     image: postgres:16-alpine
-    container_name: ecitizen-scc-postgres
+    container_name: ecitizen-postgres
     ports:
       - "${DB_PORT:-5442}:5432"
     environment:
@@ -80,7 +79,7 @@ services:
   # ============================================
   redis:
     image: redis:7-alpine
-    container_name: ecitizen-scc-redis
+    container_name: ecitizen-redis
     ports:
       - "${REDIS_PORT:-6389}:6379"
     command: redis-server --appendonly yes
@@ -102,4 +101,4 @@ volumes:
 
 networks:
   ecitizen-network:
-    driver: bridge
+    external: true
