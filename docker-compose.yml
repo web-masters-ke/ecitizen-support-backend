@@ -38,6 +38,8 @@ services:
       - THROTTLE_TTL=${THROTTLE_TTL:-60}
       - THROTTLE_LIMIT=${THROTTLE_LIMIT:-100}
       - LOG_LEVEL=${LOG_LEVEL:-debug}
+      - CORS_ORIGINS=${CORS_ORIGINS:-http://localhost:3000}
+      - CLIENT_URL=${CLIENT_URL:-http://localhost:3000}
     depends_on:
       postgres:
         condition: service_healthy
