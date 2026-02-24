@@ -11,6 +11,7 @@ import {
 } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
 import { Request } from 'express';
+import { Public } from '@/common/decorators/public.decorator';
 import { KnowledgeBaseService } from './knowledge-base.service';
 import {
   CreateKbCategoryDto,
@@ -38,6 +39,7 @@ export class KnowledgeBaseController {
     return this.kbService.createCategory(dto);
   }
 
+  @Public()
   @Get('categories')
   @ApiOperation({ summary: 'List knowledge base categories' })
   getCategories(@Query() query: QueryKbCategoriesDto) {
@@ -52,12 +54,14 @@ export class KnowledgeBaseController {
     return this.kbService.createArticle(dto);
   }
 
+  @Public()
   @Get('articles')
   @ApiOperation({ summary: 'List knowledge base articles (paginated, filterable)' })
   getArticles(@Query() query: QueryKbArticlesDto) {
     return this.kbService.getArticles(query);
   }
 
+  @Public()
   @Get('articles/:id')
   @ApiOperation({ summary: 'Get article by ID with all versions' })
   getArticle(
@@ -117,6 +121,7 @@ export class KnowledgeBaseController {
     return this.kbService.createTag(dto);
   }
 
+  @Public()
   @Get('tags')
   @ApiOperation({ summary: 'List knowledge base tags' })
   getTags(@Query() query: QueryKbTagsDto) {
