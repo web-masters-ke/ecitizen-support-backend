@@ -1,0 +1,105 @@
+version: '3.8'
+
+services:
+  # ============================================
+  # eCitizen SCC Backend API
+  # ============================================
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: ecitizen-scc-api
+    ports:
+      - "${PORT:-4010}:4010"
+      - "${WS_PORT:-4011}:4011"
+    environment:
+      - NODE_ENV=${NODE_ENV:-development}
+      - PORT=4010
+      - DATABASE_URL=postgresql://${DB_USERNAME:-ecitizen}:${DB_PASSWORD:-ecitizen_pass}@postgres:5432/${DB_NAME:-ecitizen_scc}?schema=public
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - REDIS_PASSWORD=${REDIS_PASSWORD:-}
+      - JWT_SECRET=${JWT_SECRET:-your-super-secret-jwt-key-change-in-production}
+      - JWT_REFRESH_SECRET=${JWT_REFRESH_SECRET:-your-super-secret-refresh-key-change-in-production}
+      - JWT_ACCESS_EXPIRATION=${JWT_ACCESS_EXPIRATION:-15m}
+      - JWT_REFRESH_EXPIRATION=${JWT_REFRESH_EXPIRATION:-24h}
+      - BREVO_API_KEY=${BREVO_API_KEY:-}
+      - BREVO_FROM_EMAIL=${BREVO_FROM_EMAIL:-noreply@ecitizen.go.ke}
+      - BREVO_FROM_NAME=${BREVO_FROM_NAME:-eCitizen SCC}
+      - BONGA_SMS_URL=${BONGA_SMS_URL:-https://api.bongasms.co.ke/v2/sms}
+      - BONGA_CLIENT_ID=${BONGA_CLIENT_ID:-}
+      - BONGA_API_KEY=${BONGA_API_KEY:-}
+      - BONGA_API_SECRET=${BONGA_API_SECRET:-}
+      - BONGA_SERVICE_ID=${BONGA_SERVICE_ID:-}
+      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID:-}
+      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY:-}
+      - AWS_REGION=${AWS_REGION:-af-south-1}
+      - S3_BUCKET=${S3_BUCKET:-ecitizen-scc-media}
+      - CLOUDFRONT_DOMAIN=${CLOUDFRONT_DOMAIN:-}
+      - CLOUDFRONT_ENABLED=${CLOUDFRONT_ENABLED:-false}
+      - MAX_FILE_SIZE_MB=${MAX_FILE_SIZE_MB:-50}
+      - THROTTLE_TTL=${THROTTLE_TTL:-60}
+      - THROTTLE_LIMIT=${THROTTLE_LIMIT:-100}
+      - LOG_LEVEL=${LOG_LEVEL:-debug}
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    volumes:
+      - media_uploads:/app/uploads
+    restart: unless-stopped
+    networks:
+      - ecitizen-network
+
+  # ============================================
+  # PostgreSQL Database
+  # ============================================
+  postgres:
+    image: postgres:16-alpine
+    container_name: ecitizen-scc-postgres
+    ports:
+      - "${DB_PORT:-5442}:5432"
+    environment:
+      POSTGRES_USER: ${DB_USERNAME:-ecitizen}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-ecitizen_pass}
+      POSTGRES_DB: ${DB_NAME:-ecitizen_scc}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USERNAME:-ecitizen} -d ${DB_NAME:-ecitizen_scc}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+    networks:
+      - ecitizen-network
+
+  # ============================================
+  # Redis Cache
+  # ============================================
+  redis:
+    image: redis:7-alpine
+    container_name: ecitizen-scc-redis
+    ports:
+      - "${REDIS_PORT:-6389}:6379"
+    command: redis-server --appendonly yes
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+    networks:
+      - ecitizen-network
+
+volumes:
+  postgres_data:
+  redis_data:
+  media_uploads:
+
+networks:
+  ecitizen-network:
+    driver: bridge

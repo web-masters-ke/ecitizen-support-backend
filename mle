@@ -1,0 +1,3241 @@
+eCitizen Service Command Center (eSCC) – Machine Learning Architecture & Engineering Document
+
+1. Introduction
+
+1.1 Purpose
+This document defines the Machine Learning (ML) Architecture and Engineering Framework for the eCitizen Service Command Center (eSCC).
+The ML platform enables intelligent automation, predictive analytics, and decision support across the national eCitizen support ecosystem.
+The purpose of ML within eSCC is to:
+	•	Improve ticket triage accuracy
+	•	Reduce resolution time
+	•	Predict SLA breaches before occurrence
+	•	Detect operational and fraud anomalies
+	•	Support human decision-makers with AI-assisted recommendations
+	•	Enhance citizen experience through intelligent routing and prioritization
+	•	Provide national-level operational forecasting and insights
+The ML system operates as a decision-support layer, not an autonomous authority. All critical actions remain subject to:
+	•	Defined governance policies
+	•	Human override controls
+	•	Audit traceability
+	•	Regulatory compliance requirements
+The ML platform must function reliably at:
+	•	National scale
+	•	Multi-agency coordination level
+	•	High concurrency environments
+	•	Regulated public-sector operational standards
+
+1.2 Scope
+The ML platform covers the following domains within eSCC:
+1.2.1 Real-Time Intelligence
+	•	Ticket classification
+	•	Agency routing
+	•	Priority scoring
+	•	Sentiment detection
+	•	Knowledge base recommendation
+	•	Fraud anomaly scoring
+Latency target:
+	•	<200ms for synchronous inference endpoints
+1.2.2 Predictive & Analytical Intelligence
+	•	SLA breach prediction
+	•	Escalation probability modeling
+	•	Capacity forecasting
+	•	Root cause clustering
+	•	Performance trend modeling
+Execution mode:
+	•	Batch pipelines
+	•	Scheduled retraining jobs
+	•	Near-real-time analytics streams
+1.2.3 ML System Boundaries
+The ML platform:
+	•	Does not autonomously close tickets
+	•	Does not autonomously penalize agencies
+	•	Does not override human governance structures
+	•	Does not make final compliance decisions
+All outputs are:
+	•	Confidence-scored
+	•	Explainable
+	•	Logged for audit
+	•	Override-capable
+1.2.4 Deployment Scope
+The ML services are implemented as:
+	•	Independent microservices
+	•	Containerized workloads
+	•	Kubernetes-managed services
+	•	Secure internal APIs
+	•	Kafka-integrated data pipelines
+The system supports:
+	•	Multi-region deployment
+	•	Horizontal scaling
+	•	GPU-accelerated workloads where required
+
+1.3 Alignment with SRS, TDD, DDD, and Backend Engineering Design (BED)
+This ML architecture is tightly aligned with existing eSCC documentation layers.
+
+1.3.1 Alignment with SRS (Software Requirements Specification)
+The ML platform fulfills the following functional requirements defined in SRS:
+SRS Functional Requirement
+ML Component
+Automated ticket categorization
+Multi-label classification model
+Intelligent routing
+Routing optimization engine
+SLA monitoring
+SLA breach prediction model
+Escalation detection
+Escalation risk classifier
+Fraud detection
+Anomaly detection engine
+Knowledge assistance
+Semantic recommendation engine
+Operational reporting
+Forecasting and clustering models
+Non-functional SRS requirements supported:
+	•	High availability (99.9%+)
+	•	Low latency inference
+	•	Security and data protection
+	•	Audit traceability
+	•	National scalability
+
+1.3.2 Alignment with TDD (Technical Design Document)
+The ML architecture integrates with TDD components:
+	•	Microservices architecture
+	•	Kafka event-driven backbone
+	•	API Gateway
+	•	Redis caching layer
+	•	PostgreSQL transactional database
+	•	Monitoring and observability stack
+ML services expose standardized internal APIs consistent with TDD specifications.
+Model deployment follows:
+	•	CI/CD pipelines
+	•	Container registry standards
+	•	Infrastructure-as-code governance
+	•	Version-controlled releases
+
+1.3.3 Alignment with DDD (Database Design Document)
+The ML platform consumes structured entities defined in DDD, including:
+	•	Ticket
+	•	TicketHistory
+	•	SLARecord
+	•	EscalationLog
+	•	Agency
+	•	User
+	•	InteractionLog
+	•	AuditLog
+Feature pipelines derive attributes directly from these canonical schemas.
+Key alignment principles:
+	•	No duplication of authoritative data
+	•	Feature store references primary database keys
+	•	Schema evolution tracking aligned with DDD versioning
+	•	Strict referential integrity for training datasets
+
+1.3.4 Alignment with Backend Engineering Design (BED)
+The ML system adheres to backend engineering standards:
+	•	JWT-based authentication for inference APIs
+	•	RBAC-based authorization
+	•	Rate limiting and throttling
+	•	Structured logging
+	•	Centralized observability
+	•	Distributed tracing
+	•	Secure secrets management
+	•	Zero-trust internal service communication
+The ML services are treated as:
+	•	First-class backend services
+	•	Independently deployable units
+	•	Fully monitored and auditable components
+
+1.4 Design Principles
+The ML platform is built on the following principles:
+	•	Human-in-the-loop governance
+	•	Explainability-first AI
+	•	Security-by-design
+	•	Scalability-by-default
+	•	Auditability at every decision point
+	•	Bias mitigation and fairness validation
+	•	Operational resilience under national load
+	•	Fail-safe fallback to rule-based systems
+
+1.5 National-Scale Operational Context
+The eSCC ML platform must operate under:
+	•	24/7 government service environment
+	•	Multi-agency coordination
+	•	National crisis scenarios
+	•	Election periods
+	•	Disaster response surges
+	•	Public scrutiny and audit requirements
+Design implications:
+	•	No single point of ML failure
+	•	Deterministic fallback behavior
+	•	Transparent decision logs
+	•	Rapid rollback capability
+	•	Multi-region redundancy
+	•	Disaster recovery RTO < 5 minutes
+
+2. ML Use Case Architecture
+This section defines the production-grade ML use cases for eCitizen Service Command Center (eSCC).
+Each use case includes:
+	•	Business objective
+	•	Input data sources
+	•	Feature categories
+	•	Model type
+	•	Output schema
+	•	Confidence scoring
+	•	Human override controls
+	•	Retraining strategy
+	•	Monitoring metrics
+All models must integrate with SRS functional requirements, TDD microservices architecture, DDD entities, and BED security standards.
+
+2.1 Ticket Classification Engine
+2.1.1 Business Objective
+Automatically classify incoming tickets to:
+	•	Service category
+	•	Sub-category
+	•	Responsible agency
+	•	Issue type
+	•	Severity band
+Reduce manual triage workload and improve routing accuracy.
+
+2.1.2 Input Data Sources
+From DDD entities:
+	•	Ticket.title
+	•	Ticket.description
+	•	Ticket.attachments metadata
+	•	User.service_history
+	•	Ticket.channel (web, mobile, chatbot)
+	•	Language
+	•	Historical classification labels
+
+2.1.3 Feature Categories
+Text Features
+	•	Transformer embeddings (BERT or domain-tuned model)
+	•	Keyword density
+	•	N-grams
+Metadata Features
+	•	Submission channel
+	•	Time of submission
+	•	Region
+	•	Previous ticket frequency
+Behavioral Features
+	•	Past escalation rate
+	•	User complaint history
+
+2.1.4 Model Type
+	•	Multi-label transformer-based classifier
+	•	Fine-tuned domain model
+	•	Hierarchical classification (category → sub-category)
+Latency requirement:
+	•	<200ms inference
+
+2.1.5 Output Schema
+{   "ticket_id": "UUID",   "predicted_category": "ID_SERVICES",   "predicted_subcategory": "PASSPORT_DELAY",   "predicted_agency": "IMMIGRATION",   "severity_band": "HIGH",   "confidence_score": 0.92,   "model_version": "v1.3.2" }
+
+2.1.6 Confidence Scoring
+	•	Softmax probabilities
+	•	Calibration using Platt scaling
+	•	Threshold tiers:
+	•	≥ 0.90 → Auto-apply
+	•	0.70–0.89 → Human validation queue
+	•	< 0.70 → Manual triage required
+
+2.1.7 Human Override Controls
+	•	Level 1 officers can modify classification
+	•	Override logged in AuditLog
+	•	Overrides fed into retraining pipeline
+
+2.1.8 Retraining Strategy
+	•	Weekly incremental retraining
+	•	Monthly full retraining
+	•	Active learning from corrected tickets
+
+2.1.9 Monitoring Metrics
+	•	Accuracy
+	•	Macro F1 score
+	•	Misclassification rate by agency
+	•	Drift in input distribution
+	•	Override frequency
+
+2.2 Intelligent Routing Engine
+2.2.1 Business Objective
+Assign tickets to:
+	•	Level 1 Government Desk
+	•	Level 2 Service Provider
+	•	Specialized escalation unit
+Optimize for:
+	•	SLA adherence
+	•	Load balancing
+	•	Expertise matching
+
+2.2.2 Input Data
+	•	Classified ticket attributes
+	•	Agency workload metrics
+	•	Historical resolution time
+	•	Agent skill mapping
+	•	SLA priority level
+
+2.2.3 Feature Categories
+	•	Agency capacity
+	•	Queue length
+	•	Historical SLA performance
+	•	Escalation likelihood
+	•	Ticket severity
+
+2.2.4 Model Type
+	•	Gradient boosting ranking model
+	•	Reinforcement learning for routing optimization (future phase)
+
+2.2.5 Output Schema
+{   "ticket_id": "UUID",   "assigned_unit": "IMMIGRATION_L1",   "assigned_agent_group": "PASSPORT_TEAM_A",   "predicted_resolution_time_hours": 18,   "routing_confidence": 0.87 }
+
+2.2.6 Human Controls
+	•	Supervisor override capability
+	•	Escalation rule precedence over ML suggestion
+
+2.2.7 Monitoring Metrics
+	•	SLA adherence rate
+	•	Load distribution fairness
+	•	Reassignment frequency
+	•	Routing accuracy vs manual override
+
+2.3 SLA Breach Prediction Model
+2.3.1 Business Objective
+Predict probability that a ticket will breach SLA before deadline.
+Enable proactive intervention.
+
+2.3.2 Inputs
+	•	Ticket age
+	•	Priority level
+	•	Agency workload
+	•	Historical breach rates
+	•	Escalation history
+	•	Agent performance metrics
+
+2.3.3 Model Type
+	•	Time-to-event survival model
+	•	Gradient boosting classifier
+
+2.3.4 Output Schema
+{   "ticket_id": "UUID",   "breach_probability": 0.78,   "predicted_time_to_breach_hours": 6,   "risk_level": "HIGH" }
+
+2.3.5 Trigger Thresholds
+	•	0.75 → Immediate escalation alert
+	•	0.50–0.75 → Supervisor notification
+	•	<0.50 → Monitor only
+
+2.3.6 Monitoring
+	•	ROC-AUC
+	•	Precision at high-risk threshold
+	•	Early warning effectiveness
+	•	Reduction in actual SLA breaches
+
+2.4 Sentiment & Emotional Risk Detection
+2.4.1 Business Objective
+Detect:
+	•	Frustration
+	•	Aggression
+	•	Urgency
+	•	Escalation risk
+	•	Abuse language
+Improve citizen experience management.
+
+2.4.2 Inputs
+	•	Ticket description
+	•	Chat transcripts
+	•	Email communications
+
+2.4.3 Model Type
+	•	Fine-tuned transformer NLP classifier
+	•	Multi-label emotional state detection
+
+2.4.4 Output Schema
+{   "ticket_id": "UUID",   "sentiment_score": -0.76,   "emotion_tags": ["FRUSTRATED", "URGENT"],   "escalation_risk_score": 0.81 }
+
+2.4.5 Controls
+	•	Abuse detection triggers moderation workflow
+	•	High-risk cases flagged for priority review
+
+2.4.6 Monitoring
+	•	False positive rate
+	•	Escalation correlation
+	•	Complaint satisfaction improvement
+
+2.5 Fraud & Anomaly Detection
+2.5.1 Business Objective
+Detect:
+	•	Bot-generated tickets
+	•	Coordinated complaint campaigns
+	•	Insider manipulation
+	•	SLA gaming
+	•	Mass duplicate submissions
+
+2.5.2 Inputs
+	•	IP patterns
+	•	Submission frequency
+	•	Behavioral anomalies
+	•	User metadata
+	•	Agency performance deviations
+
+2.5.3 Model Type
+	•	Isolation Forest
+	•	Autoencoder anomaly detection
+	•	Graph-based anomaly detection
+
+2.5.4 Output Schema
+{   "entity_id": "UUID",   "anomaly_score": 0.94,   "anomaly_type": "COORDINATED_ACTIVITY",   "confidence": 0.89 }
+
+2.5.5 Controls
+	•	Does not auto-block
+	•	Flags sent to Fraud Review Team
+	•	Mandatory audit logging
+
+2.5.6 Monitoring
+	•	False positives
+	•	Confirmed fraud rate
+	•	Detection latency
+
+2.6 Root Cause Clustering
+2.6.1 Business Objective
+Cluster similar tickets to detect:
+	•	System outages
+	•	Policy gaps
+	•	Recurring failures
+	•	Service degradation patterns
+
+2.6.2 Model Type
+	•	Embedding-based clustering
+	•	DBSCAN or hierarchical clustering
+
+2.6.3 Outputs
+	•	Cluster ID
+	•	Cluster size
+	•	Dominant keywords
+	•	Agency impact score
+
+2.6.4 Monitoring
+	•	Cluster coherence
+	•	Incident detection speed
+	•	False grouping rate
+
+2.7 Auto-Suggest Knowledge Engine
+2.7.1 Business Objective
+Recommend:
+	•	Knowledge base articles
+	•	Policy references
+	•	Similar past resolutions
+	•	Standard operating procedures
+
+2.7.2 Model Type
+	•	Semantic search (vector similarity)
+	•	Retrieval-augmented ranking
+
+2.7.3 Output
+{   "ticket_id": "UUID",   "suggestions": [     {       "kb_id": "KB123",       "title": "Passport Processing Delays",       "relevance_score": 0.91     }   ] }
+
+2.7.4 Monitoring
+	•	Click-through rate
+	•	Resolution acceleration
+	•	Manual search reduction
+
+2.8 Capacity & Demand Forecasting
+2.8.1 Business Objective
+Forecast:
+	•	Ticket volume by agency
+	•	Seasonal spikes
+	•	Crisis surge load
+	•	Resource demand
+
+2.8.2 Model Type
+	•	Time-series forecasting (Prophet / LSTM)
+	•	Ensemble seasonal models
+
+2.8.3 Output
+{   "agency": "IMMIGRATION",   "forecast_period": "2026-Q3",   "predicted_ticket_volume": 420000,   "confidence_interval": [390000, 455000] }
+
+2.8.4 Monitoring
+	•	MAPE
+	•	Forecast bias
+	•	Capacity alignment accuracy
+
+3. ML System Architecture
+This section defines the production-grade ML system architecture for eCitizen Service Command Center (eSCC).
+The architecture is:
+	•	Microservice-based
+	•	Event-driven
+	•	Secure-by-design
+	•	Horizontally scalable
+	•	Fully auditable
+	•	Integrated with SRS, TDD, DDD, and BED
+
+3.1 Architectural Pattern
+The ML platform follows a Distributed MLOps Microservices Architecture composed of:
+	•	Data ingestion layer (event-driven)
+	•	Feature engineering services
+	•	Online feature store
+	•	Offline feature store
+	•	Model training pipeline
+	•	Model registry
+	•	Inference services
+	•	Monitoring and drift detection services
+	•	Governance and audit layer
+All components are deployed as independent containerized services managed by Kubernetes.
+
+3.1.1 Core Design Principles
+	•	Stateless inference services
+	•	Versioned feature pipelines
+	•	Immutable model artifacts
+	•	Zero-trust service communication
+	•	Explicit model-to-feature version coupling
+	•	Deterministic fallback mechanisms
+
+3.2 High-Level Architecture (Textual Diagram)
+Below is the logical architecture flow.
+
+3.2.1 Data Ingestion Layer
+Sources:
+	•	Ticket Service (from Backend)
+	•	SLA Service
+	•	Escalation Service
+	•	Agency Performance Service
+	•	Authentication Service (metadata only)
+	•	Audit Logs
+	•	Chat Transcripts
+Integration mechanism:
+	•	Kafka event streams
+	•	ticket.created
+	•	ticket.updated
+	•	sla.updated
+	•	escalation.triggered
+	•	fraud.signal
+Purpose:
+	•	Real-time feature enrichment
+	•	Offline training dataset construction
+	•	Drift monitoring
+
+3.2.2 Feature Engineering Service
+Responsibilities:
+	•	Consume Kafka events
+	•	Extract structured features
+	•	Generate embeddings
+	•	Apply transformations
+	•	Validate feature schema
+	•	Version features
+Feature outputs are written to:
+	•	Online feature store (Redis)
+	•	Offline feature store (PostgreSQL / Data Lake)
+This ensures:
+	•	Low-latency inference access
+	•	Historical reproducibility for retraining
+
+3.2.3 Feature Store Architecture
+Online Feature Store (Redis)
+Used for:
+	•	Real-time inference
+	•	Sub-50ms feature retrieval
+	•	Cached embeddings
+	•	SLA metrics snapshot
+Design:
+	•	Key: entity_type:entity_id:feature_version
+	•	TTL for volatile features
+	•	Encryption at rest enabled
+
+Offline Feature Store (PostgreSQL / Data Lake)
+Used for:
+	•	Model training
+	•	Backtesting
+	•	Historical analysis
+	•	Drift detection
+Design:
+	•	Feature tables partitioned by date
+	•	Feature version tracking
+	•	Referential integrity with DDD entities
+
+3.2.4 Model Training Cluster
+Environment:
+	•	Dedicated ML compute nodes
+	•	GPU-enabled where required
+	•	Isolated from production network
+Pipeline:
+	•	Extract training data
+	•	Validate schema consistency
+	•	Train model
+	•	Evaluate metrics
+	•	Bias and fairness testing
+	•	Security validation
+	•	Register model artifact
+Training orchestration:
+	•	Scheduled via workflow engine (e.g., Airflow)
+	•	Controlled by CI/CD pipeline
+
+3.2.5 Model Registry
+Centralized registry storing:
+	•	Model artifact
+	•	Model version
+	•	Training dataset hash
+	•	Performance metrics
+	•	Bias audit results
+	•	Approval status
+	•	Deployment history
+Registry enforces:
+	•	Signed artifacts
+	•	Approval workflow
+	•	Role-based access
+	•	Immutable version storage
+Recommended tool:
+	•	MLflow or equivalent enterprise-grade registry
+
+3.2.6 Inference Gateway
+The Inference Gateway acts as:
+	•	Unified ML API entry point
+	•	Authentication enforcement layer
+	•	Rate limiter
+	•	Version routing controller
+Responsibilities:
+	•	JWT validation (aligned with BED)
+	•	RBAC enforcement
+	•	Input schema validation
+	•	Feature retrieval coordination
+	•	Model version routing
+	•	Confidence threshold enforcement
+Latency target:
+	•	Classification <200ms
+	•	SLA prediction <250ms
+	•	Sentiment <150ms
+
+3.2.7 Inference Services
+Each major ML capability runs as its own service:
+	•	Classification Service
+	•	Routing Service
+	•	SLA Prediction Service
+	•	Sentiment Service
+	•	Fraud Detection Service
+	•	Clustering Service
+	•	Forecasting Service
+	•	Knowledge Suggestion Service
+Design characteristics:
+	•	Stateless
+	•	Autoscaled
+	•	Model loaded in memory
+	•	Health checks enabled
+	•	Circuit breaker integration
+
+3.2.8 Monitoring & Observability Layer
+Integrated with enterprise observability stack:
+	•	Prometheus (metrics)
+	•	Grafana (dashboards)
+	•	ELK (structured logs)
+	•	Distributed tracing (OpenTelemetry)
+Monitored metrics:
+	•	Inference latency
+	•	Error rate
+	•	Model confidence drift
+	•	Feature distribution drift
+	•	Override frequency
+	•	SLA alert accuracy
+
+3.2.9 Governance Layer
+Cross-cutting component responsible for:
+	•	Human-in-loop enforcement
+	•	Explainability integration
+	•	Decision trace logging
+	•	Bias monitoring
+	•	Regulatory compliance auditing
+All ML outputs must pass through governance validation before being committed to ticket workflow.
+
+3.3 Real-Time vs Batch Processing
+The ML platform supports hybrid processing.
+
+3.3.1 Real-Time Processing
+Used for:
+	•	Ticket classification
+	•	Routing
+	•	Sentiment detection
+	•	Fraud scoring
+	•	Knowledge suggestion
+Characteristics:
+	•	Synchronous API call
+	•	Feature retrieval from Redis
+	•	Model inference in-memory
+	•	Response returned immediately
+	•	Logged asynchronously
+Latency SLA:
+	•	P95 < 200ms
+Fallback strategy:
+	•	Rule-based routing
+	•	Default severity assignment
+	•	Cached previous model result
+
+3.3.2 Near-Real-Time Streaming
+Used for:
+	•	Anomaly detection
+	•	Surge detection
+	•	Escalation wave detection
+Processing:
+	•	Kafka stream processors
+	•	Sliding window analytics
+	•	Streaming aggregations
+
+3.3.3 Batch Processing
+Used for:
+	•	Model retraining
+	•	Root cause clustering
+	•	Capacity forecasting
+	•	Drift recalibration
+	•	Bias testing
+Frequency:
+	•	Daily incremental updates
+	•	Weekly retraining
+	•	Monthly full retraining
+
+3.4 Model Versioning & Traffic Control
+Production inference supports:
+	•	Version pinning
+	•	Canary deployment
+	•	Shadow testing
+	•	A/B testing
+Traffic control mechanism:
+	•	Weighted routing in inference gateway
+	•	Rollback within 60 seconds
+	•	Automatic rollback if:
+	•	Latency threshold exceeded
+	•	Error rate spike
+	•	Confidence collapse detected
+
+3.5 Fault Tolerance & Fail-Safe Design
+The ML platform must never block core eSCC operations.
+Fail-safe measures:
+	•	Timeout threshold at 300ms
+	•	Automatic fallback to rule engine
+	•	Circuit breaker isolation
+	•	Retry policy with exponential backoff
+	•	Graceful degradation to manual triage
+No ML outage should prevent ticket intake or routing.
+
+3.6 Multi-Region Deployment
+National resilience requirement:
+	•	Primary region
+	•	Secondary region (hot standby)
+	•	Geo-redundant Kafka cluster
+	•	Replicated feature store
+	•	Registry replication
+Failover:
+	•	RTO < 5 minutes
+	•	Automatic inference endpoint rerouting
+
+4. Data Engineering & Feature Store
+This section defines the data engineering architecture and feature store design for the eCitizen Service Command Center (eSCC) ML platform.
+All data pipelines must align with:
+	•	DDD canonical schemas
+	•	TDD microservices architecture
+	•	BED security standards
+	•	National data protection regulations
+The design ensures:
+	•	Reproducibility
+	•	Low-latency inference
+	•	Secure data handling
+	•	Auditability
+	•	Scalability
+
+4.1 Data Sources
+The ML platform consumes structured and unstructured data from authoritative backend services.
+All data ingestion must occur via secure Kafka topics or controlled ETL pipelines.
+
+4.1.1 Core Transactional Data (From DDD)
+Ticket Domain
+	•	Ticket.id
+	•	Ticket.title
+	•	Ticket.description
+	•	Ticket.status
+	•	Ticket.priority
+	•	Ticket.category
+	•	Ticket.subcategory
+	•	Ticket.created_at
+	•	Ticket.updated_at
+	•	Ticket.channel
+	•	Ticket.region
+	•	Ticket.language
+SLA Domain
+	•	SLARecord.ticket_id
+	•	SLARecord.sla_type
+	•	SLARecord.deadline
+	•	SLARecord.breach_status
+	•	SLARecord.breach_timestamp
+Escalation Domain
+	•	EscalationLog.ticket_id
+	•	EscalationLog.level
+	•	EscalationLog.trigger_reason
+	•	EscalationLog.timestamp
+Agency Domain
+	•	Agency.id
+	•	Agency.performance_score
+	•	Agency.current_queue_size
+	•	Agency.average_resolution_time
+	•	Agency.breach_rate
+User Domain (PII-controlled)
+	•	User.id (hashed reference)
+	•	User.region
+	•	User.service_history_count
+	•	User.escalation_frequency
+
+4.1.2 Interaction & Behavioral Data
+	•	Chat transcripts
+	•	Email communications
+	•	Attachment metadata
+	•	Submission IP (hashed)
+	•	Device fingerprint (anonymized)
+	•	Time-of-day patterns
+	•	Frequency patterns
+
+4.1.3 Operational Logs
+	•	AuditLog
+	•	Override actions
+	•	Manual reclassification events
+	•	Reassignment records
+	•	System alerts
+
+4.1.4 Data Governance Constraints
+The ML system must:
+	•	Never store raw PII in feature store
+	•	Use hashed user identifiers
+	•	Apply tokenization for sensitive fields
+	•	Enforce encryption in transit (TLS 1.3)
+	•	Enforce encryption at rest (AES-256)
+Access to training data must be:
+	•	Role-restricted
+	•	Logged
+	•	Audited
+
+4.2 Feature Engineering Pipelines
+Feature pipelines transform raw DDD-aligned data into model-ready features.
+All feature transformations must be:
+	•	Deterministic
+	•	Version-controlled
+	•	Reproducible
+	•	Documented
+
+4.2.1 Text Feature Engineering
+Used for:
+	•	Classification
+	•	Sentiment
+	•	Clustering
+	•	Knowledge suggestion
+Pipeline:
+	•	Text normalization
+	•	Lowercasing
+	•	Unicode normalization
+	•	Removal of harmful injection patterns
+	•	Language detection
+	•	Tokenization
+	•	Embedding generation
+	•	Transformer embeddings (domain fine-tuned)
+	•	Embedding dimension standardized (e.g., 768)
+	•	Keyword extraction
+	•	Topic modeling tags (optional)
+Feature versioning required:
+	•	embedding_model_version
+	•	tokenizer_version
+
+4.2.2 Metadata Features
+Derived from structured data:
+	•	Ticket age (hours)
+	•	Time to SLA deadline
+	•	Day-of-week indicator
+	•	Submission channel encoding
+	•	Region encoding
+	•	Severity encoding
+	•	Historical breach ratio by agency
+	•	Queue size snapshot
+
+4.2.3 Behavioral Features
+	•	User ticket frequency (30-day window)
+	•	Escalation rate
+	•	Repeat complaint indicator
+	•	Session activity burst detection
+	•	IP anomaly score
+All behavioral features must exclude identifiable personal data.
+
+4.2.4 Time-Series Features
+Used for SLA and forecasting models:
+	•	Rolling 7-day ticket count
+	•	Rolling 30-day breach rate
+	•	Moving average resolution time
+	•	Seasonal trend index
+	•	Holiday adjustment factor
+
+4.2.5 Feature Validation Rules
+Each feature pipeline must enforce:
+	•	Null threshold tolerance
+	•	Range validation
+	•	Schema validation
+	•	Distribution monitoring
+	•	Outlier detection
+Invalid features must trigger:
+	•	Logging
+	•	Alert
+	•	Fallback to default value
+
+4.3 Feature Store Design
+The feature store supports:
+	•	Online low-latency inference
+	•	Offline reproducible training
+	•	Version consistency
+	•	Audit traceability
+
+4.3.1 Online Feature Store (Redis)
+Purpose:
+	•	Real-time inference retrieval
+	•	Sub-50ms access
+	•	Precomputed embeddings caching
+Key Design:
+Key format:
+entity_type:entity_id:feature_set:version
+Example:
+ticket:12345:classification_features:v3
+Stored as:
+	•	Serialized JSON
+	•	Encrypted at rest
+	•	TTL applied for volatile features
+Replication:
+	•	Redis cluster mode
+	•	Multi-node replication
+	•	Failover enabled
+
+4.3.2 Offline Feature Store (PostgreSQL / Data Lake)
+Purpose:
+	•	Training dataset generation
+	•	Historical feature backtesting
+	•	Drift detection
+	•	Bias testing
+Design:
+	•	Partitioned tables by date
+	•	Schema version column
+	•	Feature version column
+	•	Model training dataset ID
+Example schema:
+feature_classification_v3   - ticket_id   - embedding_vector   - severity_encoding   - agency_load_score   - label_category   - created_at
+All offline features must reference:
+	•	DDD primary keys
+	•	Dataset hash
+	•	Training job ID
+
+4.3.3 Feature Versioning Strategy
+Every feature set includes:
+	•	feature_set_name
+	•	version_number
+	•	creation_timestamp
+	•	transformation_commit_hash
+Models must record:
+	•	Feature set version used
+	•	Embedding model version
+	•	Data snapshot timestamp
+This ensures full reproducibility.
+
+4.3.4 Backfill Strategy
+When schema changes occur:
+	•	Freeze current model
+	•	Create new feature version
+	•	Backfill historical data
+	•	Retrain model
+	•	Validate metrics
+	•	Promote to production
+Backward compatibility must be maintained for:
+	•	Active inference services
+	•	Shadow testing deployments
+
+4.3.5 Feature Drift Monitoring
+The system continuously monitors:
+	•	Feature distribution shifts
+	•	Mean/variance changes
+	•	Embedding centroid drift
+	•	Missing value spikes
+Drift detection methods:
+	•	KL divergence
+	•	Population Stability Index (PSI)
+	•	Embedding distance metrics
+If drift exceeds threshold:
+	•	Trigger retraining workflow
+	•	Notify ML governance team
+	•	Log compliance alert
+
+4.4 Data Lineage & Auditability
+Every feature must maintain lineage:
+	•	Source system
+	•	Source event ID
+	•	Transformation pipeline version
+	•	Timestamp of computation
+	•	Responsible service identity
+All feature computations must be:
+	•	Logged
+	•	Traceable
+	•	Auditable under national standards
+
+4.5 Data Retention & Compliance
+Retention rules:
+	•	Raw logs retained per national policy
+	•	Training datasets archived securely
+	•	Model training snapshots preserved
+	•	Data deletion workflows supported (Right to Erasure compliance where applicable)
+Sensitive data masking:
+	•	Before training
+	•	Before feature storage
+	•	Before logging
+
+5. Model Lifecycle Management
+This section defines the full lifecycle management framework for ML models within the eCitizen Service Command Center (eSCC).
+The lifecycle must ensure:
+	•	Reproducibility
+	•	Governance compliance
+	•	Bias control
+	•	Security integrity
+	•	Controlled deployment
+	•	Continuous performance monitoring
+All lifecycle processes align with:
+	•	SRS functional requirements
+	•	TDD architecture
+	•	DDD schema governance
+	•	Backend Engineering Design (BED) security standards
+	•	National audit and regulatory obligations
+
+5.1 Model Development & Training Strategy
+5.1.1 Training Paradigms
+The eSCC ML platform supports:
+	•	Supervised Learning
+	•	Ticket classification
+	•	SLA breach prediction
+	•	Sentiment detection
+	•	Semi-Supervised Learning
+	•	Large unlabeled ticket datasets
+	•	Active human validation loops
+	•	Unsupervised Learning
+	•	Root cause clustering
+	•	Anomaly detection
+	•	Time-Series Forecasting
+	•	Capacity forecasting
+	•	Surge detection
+
+5.1.2 Dataset Construction
+Each training dataset must include:
+	•	Dataset ID
+	•	Snapshot timestamp
+	•	Feature version
+	•	Label schema version
+	•	Record count
+	•	Source lineage metadata
+	•	Data validation report
+Dataset generation rules:
+	•	Pull from offline feature store
+	•	Freeze data snapshot
+	•	Validate schema integrity
+	•	Remove PII
+	•	Apply bias control checks
+No training may proceed without:
+	•	Dataset validation pass
+	•	Governance approval (for high-impact models)
+
+5.1.3 Data Splitting Strategy
+Standard split:
+	•	70% training
+	•	15% validation
+	•	15% test
+For time-series models:
+	•	Rolling window validation
+	•	Chronological holdout
+Data leakage checks must be enforced.
+
+5.1.4 Bias & Fairness Evaluation
+For models impacting routing or prioritization:
+Evaluate:
+	•	Disparate impact ratio
+	•	False positive/negative parity
+	•	Regional performance disparity
+	•	Language bias detection
+Protected attributes must not be used directly in models.
+If bias threshold exceeded:
+	•	Model rejected
+	•	Retraining required
+	•	Governance escalation triggered
+
+5.2 Model Registry
+The model registry is the authoritative source of all approved ML models.
+
+5.2.1 Registry Metadata Requirements
+Each registered model must include:
+	•	Model name
+	•	Model version
+	•	Training dataset ID
+	•	Feature version
+	•	Hyperparameters
+	•	Performance metrics
+	•	Bias audit report
+	•	Security scan report
+	•	Approval status
+	•	Deployment history
+	•	Artifact hash
+	•	Digital signature
+Artifacts must be:
+	•	Immutable
+	•	Encrypted at rest
+	•	Signed before deployment
+
+5.2.2 Approval Workflow
+Before production deployment:
+	•	Automated performance validation
+	•	Bias testing validation
+	•	Security scan
+	•	Governance review (if high-impact model)
+	•	Deployment approval logged
+Only approved roles may promote models to production.
+
+5.3 Model Deployment Strategy
+Deployment must support controlled rollouts and immediate rollback.
+
+5.3.1 Deployment Modes
+	•	Shadow Deployment
+	•	Model runs in parallel
+	•	No impact on live decisions
+	•	Output logged for comparison
+	•	Canary Release
+	•	5–10% traffic
+	•	Real-world validation
+	•	Continuous monitoring
+	•	Blue/Green Deployment
+	•	Full environment duplication
+	•	Zero-downtime switch
+
+5.3.2 Traffic Routing
+Inference Gateway supports:
+	•	Version pinning
+	•	Weighted routing
+	•	Automatic rollback triggers
+Automatic rollback conditions:
+	•	Latency exceeds SLA
+	•	Error rate spike
+	•	Confidence distribution collapse
+	•	Severe performance degradation
+Rollback time target:
+	•	< 60 seconds
+
+5.4 Model Performance Monitoring
+Continuous monitoring is mandatory.
+
+5.4.1 Performance Metrics
+Classification models:
+	•	Accuracy
+	•	Macro F1
+	•	Precision/Recall
+	•	Confusion matrix
+	•	Override rate
+SLA models:
+	•	ROC-AUC
+	•	Precision at high-risk threshold
+	•	Early warning effectiveness
+Forecasting models:
+	•	MAPE
+	•	Forecast bias
+	•	Confidence interval coverage
+Anomaly models:
+	•	False positive rate
+	•	Confirmed fraud ratio
+	•	Detection latency
+
+5.4.2 Drift Detection
+Monitor:
+	•	Feature distribution drift
+	•	Label drift
+	•	Prediction drift
+	•	Embedding centroid shift
+Detection methods:
+	•	Population Stability Index
+	•	KL divergence
+	•	Kolmogorov–Smirnov test
+Drift thresholds must be defined per model.
+If drift detected:
+	•	Alert generated
+	•	Retraining pipeline triggered
+	•	Governance log entry created
+
+5.5 Human Feedback Loop
+Human corrections are critical for model improvement.
+Sources:
+	•	Manual reclassification
+	•	Routing overrides
+	•	Escalation changes
+	•	False fraud flag reports
+Feedback integration:
+	•	Logged in structured format
+	•	Tagged by reason code
+	•	Added to retraining dataset
+	•	Weighted appropriately in training
+
+5.6 Model Retirement & Decommissioning
+Models must be retired when:
+	•	Persistent underperformance
+	•	Bias risk identified
+	•	Regulatory changes require replacement
+	•	Feature schema deprecated
+Retirement process:
+	•	Disable traffic routing
+	•	Archive model artifact
+	•	Preserve audit logs
+	•	Update documentation
+	•	Notify governance team
+No model may be deleted without audit preservation.
+
+5.7 Reproducibility & Audit Readiness
+For national governance compliance, every model must be reproducible.
+Reproducibility requirements:
+	•	Dataset snapshot preserved
+	•	Feature version recorded
+	•	Hyperparameters logged
+	•	Training environment version documented
+	•	Code commit hash stored
+	•	Random seed recorded
+Upon audit request, the system must be able to:
+	•	Reproduce predictions
+	•	Reconstruct training conditions
+	•	Provide bias testing evidence
+	•	Provide deployment approval record
+
+5.8 Security Controls in Lifecycle
+	•	Training cluster isolated from production
+	•	No internet access from production inference nodes
+	•	Artifact integrity verified before loading
+	•	Secrets managed via secure vault
+	•	Registry access restricted via RBAC
+	•	All lifecycle actions logged
+
+6. AI Governance & Compliance
+This section defines the AI governance, compliance, accountability, and regulatory control framework for the eCitizen Service Command Center (eSCC) ML platform.
+The ML system operates within:
+	•	National public-sector governance standards
+	•	Data protection and privacy laws
+	•	Public accountability requirements
+	•	Enterprise security frameworks
+	•	Human oversight mandates
+The ML platform is strictly decision-support, not autonomous governance.
+
+6.1 Human-in-the-Loop Controls
+AI outputs must never execute irreversible or high-impact actions without defined oversight.
+
+6.1.1 Decision Impact Classification
+All ML use cases are categorized:
+Low Impact
+	•	Knowledge suggestions
+	•	Sentiment tagging
+Medium Impact
+	•	Ticket classification
+	•	Intelligent routing
+High Impact
+	•	SLA breach escalation triggers
+	•	Fraud anomaly flags
+	•	Escalation prioritization
+High-impact outputs require additional controls.
+
+6.1.2 Mandatory Human Review Thresholds
+Defined confidence-based gating:
+	•	Confidence ≥ 0.90 → Auto-apply (medium impact only)
+	•	Confidence 0.70–0.89 → Queue for review
+	•	Confidence < 0.70 → Manual decision required
+High-impact outputs:
+	•	Always logged
+	•	Subject to override
+	•	Escalation alerts must be visible to supervisors
+Fraud detection:
+	•	Cannot auto-suspend
+	•	Cannot auto-penalize
+	•	Requires formal review workflow
+
+6.1.3 Override Mechanisms
+Authorized users may:
+	•	Reclassify ticket
+	•	Change routing
+	•	Dismiss anomaly
+	•	Modify SLA risk level
+Override must capture:
+	•	User ID
+	•	Role
+	•	Timestamp
+	•	Reason code
+	•	Original ML output
+	•	Final decision
+Overrides feed retraining pipeline.
+
+6.2 Bias & Fairness Controls
+Public-sector AI must avoid discriminatory impact.
+
+6.2.1 Protected Attribute Exclusion
+Models must not use:
+	•	Ethnicity
+	•	Religion
+	•	Political affiliation
+	•	Sensitive demographic attributes
+Regional and language attributes may only be used for service optimization, not penalty decisions.
+
+6.2.2 Bias Testing Framework
+Before deployment, evaluate:
+	•	Regional performance parity
+	•	Language-based error rates
+	•	False positive disparities
+	•	Escalation prediction disparities
+Bias metrics:
+	•	Disparate impact ratio
+	•	Equal opportunity difference
+	•	False positive parity
+If bias threshold exceeded:
+	•	Deployment blocked
+	•	Model retraining required
+	•	Governance escalation triggered
+
+6.2.3 Ongoing Bias Monitoring
+Monthly bias audit:
+	•	Sample analysis
+	•	Performance disaggregation
+	•	Cross-agency impact review
+Results logged for regulatory reporting.
+
+6.3 Explainability Layer
+All ML decisions must be explainable.
+
+6.3.1 Explainability Requirements
+Each prediction must include:
+	•	Top contributing features
+	•	Confidence score
+	•	Model version
+	•	Feature version
+	•	Decision reason codes
+
+6.3.2 Explainability Techniques
+Classification and routing:
+	•	SHAP values
+	•	Feature importance scores
+SLA model:
+	•	Top risk drivers
+	•	Historical performance comparison
+Clustering:
+	•	Dominant keywords
+	•	Cluster similarity metrics
+
+6.3.3 UI Integration
+In ticket view:
+Display:
+	•	“AI Suggested Classification”
+	•	Confidence score
+	•	Top 3 decision factors
+	•	Override option
+This ensures transparency to officers.
+
+6.4 Decision Traceability & Audit Logging
+Every ML action must be traceable.
+
+6.4.1 Prediction Logging Requirements
+Each inference log must include:
+	•	Request ID
+	•	Ticket ID
+	•	Model name
+	•	Model version
+	•	Feature version
+	•	Prediction output
+	•	Confidence score
+	•	Latency
+	•	User override status
+Logs stored in secure audit storage.
+
+6.4.2 Model Audit Record
+For each production model:
+	•	Training dataset ID
+	•	Performance metrics at deployment
+	•	Bias audit results
+	•	Approval authority
+	•	Deployment timestamp
+	•	Rollback history
+
+6.4.3 Audit Access Controls
+Audit logs must be:
+	•	Immutable
+	•	Encrypted
+	•	RBAC-restricted
+	•	Tamper-evident
+Access must be logged.
+
+6.5 Regulatory Compliance Alignment
+The ML platform must align with:
+	•	National data protection laws
+	•	Public sector ICT governance standards
+	•	Government transparency frameworks
+	•	Records retention regulations
+	•	Cybersecurity directives
+
+6.5.1 Data Protection Compliance
+Requirements:
+	•	PII masking before training
+	•	Right to erasure workflow support
+	•	Data minimization
+	•	Purpose limitation enforcement
+	•	Data retention controls
+
+6.5.2 Transparency & Accountability
+The system must support:
+	•	Public audit requests
+	•	Parliamentary oversight
+	•	Internal audit reviews
+	•	External regulatory inspections
+Upon request, the platform must provide:
+	•	Model logic summary
+	•	Bias testing results
+	•	Decision logs
+	•	Deployment history
+
+6.6 Risk Escalation Governance
+If AI malfunction occurs:
+Examples:
+	•	Systematic misclassification
+	•	Bias spike
+	•	Fraud model false positives surge
+	•	Routing imbalance
+Required actions:
+	•	Immediate alert
+	•	Freeze affected model
+	•	Switch to fallback rule engine
+	•	Notify governance committee
+	•	Open incident report
+	•	Conduct root cause analysis
+All incidents must be documented.
+
+6.7 Ethical AI Principles for eSCC
+The ML platform must adhere to:
+	•	Lawfulness
+	•	Fairness
+	•	Transparency
+	•	Accountability
+	•	Reliability
+	•	Security
+	•	Human oversight
+These principles are embedded in:
+	•	Deployment workflow
+	•	Monitoring framework
+	•	Override controls
+	•	Audit logs
+
+6.8 AI Governance Committee
+For national-scale governance, establish:
+	•	Chief AI Officer
+	•	Data Protection Officer
+	•	Security Lead
+	•	Legal Advisor
+	•	Operational Representative
+	•	External Ethics Advisor (optional)
+Responsibilities:
+	•	Model approval
+	•	Bias review
+	•	Incident review
+	•	Policy updates
+	•	Compliance reporting
+
+7. Security Architecture
+This section defines the security architecture for the eCitizen Service Command Center (eSCC) ML platform.
+The ML system must comply with:
+	•	Backend Engineering Design (BED) security controls
+	•	Enterprise zero-trust architecture
+	•	National cybersecurity standards
+	•	Government cloud hosting policies
+	•	Public-sector audit requirements
+Security objectives:
+	•	Protect citizen data
+	•	Protect model integrity
+	•	Prevent adversarial exploitation
+	•	Ensure service availability
+	•	Maintain audit traceability
+
+7.1 Security Architecture Principles
+The ML platform follows:
+	•	Zero-trust internal communication
+	•	Least-privilege access control
+	•	Defense-in-depth
+	•	Encryption by default
+	•	Immutable audit logging
+	•	Secure software supply chain
+
+7.2 Model Security
+Models are high-value digital assets. Compromise may cause systemic risk.
+
+7.2.1 Model Artifact Protection
+All trained model artifacts must:
+	•	Be stored encrypted at rest (AES-256)
+	•	Be digitally signed before registry upload
+	•	Include artifact hash (SHA-256)
+	•	Be immutable once approved
+Inference services must verify:
+	•	Artifact signature
+	•	Artifact hash integrity
+	•	Registry trust certificate
+Unsigned models must not load.
+
+7.2.2 Secure Model Registry
+Registry controls:
+	•	RBAC-restricted access
+	•	Multi-factor authentication for model promotion
+	•	Immutable version history
+	•	Access logging
+	•	Segregated read/write permissions
+Only authorized ML engineers may register models. Only governance-approved roles may promote to production.
+
+7.2.3 Model Supply Chain Security
+Training environment must enforce:
+	•	Locked dependency versions
+	•	Container image scanning
+	•	SBOM (Software Bill of Materials)
+	•	Vulnerability scanning before deployment
+	•	CI/CD security validation gates
+No model may be deployed without:
+	•	Dependency vulnerability clearance
+	•	Static security analysis pass
+
+7.3 Inference Security
+Inference APIs are exposed internally and must follow strict security controls.
+
+7.3.1 Authentication
+All inference endpoints require:
+	•	JWT validation
+	•	Token signature verification
+	•	Token expiration enforcement
+	•	Issuer validation
+No anonymous inference requests permitted.
+
+7.3.2 Authorization
+RBAC rules:
+	•	Only backend services may call ML inference APIs
+	•	No direct external access
+	•	Role-based routing control
+	•	Separate roles for:
+	•	Inference access
+	•	Model promotion
+	•	Monitoring access
+
+7.3.3 Input Validation
+Before model invocation:
+	•	JSON schema validation
+	•	Field length constraints
+	•	Content sanitization
+	•	Injection pattern detection
+	•	Payload size limits
+Invalid input must:
+	•	Return structured error
+	•	Log incident
+	•	Not reach model layer
+
+7.3.4 Rate Limiting & Throttling
+Inference Gateway must enforce:
+	•	Per-service rate limits
+	•	Burst protection
+	•	Global throttle during surge
+	•	Abuse detection thresholds
+Prevents:
+	•	Resource exhaustion
+	•	Denial-of-service attempts
+	•	Model probing attacks
+
+7.4 Data Security
+The ML platform handles sensitive government operational data.
+
+7.4.1 Data Encryption
+Encryption in transit:
+	•	TLS 1.3 mandatory
+	•	Mutual TLS for internal services
+Encryption at rest:
+	•	AES-256 for:
+	•	Feature store
+	•	Model registry
+	•	Training datasets
+	•	Audit logs
+Key management:
+	•	Centralized Key Management System (KMS)
+	•	Automatic key rotation
+	•	Access logged
+
+7.4.2 PII Protection
+PII handling rules:
+	•	Remove raw PII before feature storage
+	•	Replace user identifiers with hashed tokens
+	•	Mask sensitive fields in logs
+	•	Enforce least-data principle
+Training data must never contain:
+	•	Full ID numbers
+	•	Raw addresses
+	•	Phone numbers
+	•	Payment details
+
+7.4.3 Data Access Controls
+Access to:
+	•	Offline feature store
+	•	Training datasets
+	•	Audit logs
+Must require:
+	•	Role authorization
+	•	Logged access
+	•	Periodic access review
+
+7.5 Adversarial Protection
+Government ML systems are high-risk targets.
+
+7.5.1 Input Manipulation Defense
+Implement:
+	•	Anomaly detection on inputs
+	•	Text injection pattern detection
+	•	Repeated payload similarity detection
+	•	Suspicious token analysis
+Prevent:
+	•	Prompt injection attempts
+	•	Model evasion attacks
+	•	Adversarial noise injection
+
+7.5.2 Model Abuse Detection
+Monitor for:
+	•	Confidence probing patterns
+	•	Repeated edge-case inputs
+	•	Automated querying behavior
+	•	Feature manipulation attempts
+If detected:
+	•	Trigger security alert
+	•	Throttle caller
+	•	Log forensic data
+
+7.5.3 Data Poisoning Defense
+Training pipeline must:
+	•	Validate label integrity
+	•	Detect abnormal label shifts
+	•	Monitor dataset distribution changes
+	•	Flag suspicious override spikes
+If poisoning suspected:
+	•	Freeze retraining
+	•	Initiate governance review
+	•	Isolate affected dataset
+
+7.6 Infrastructure Security
+
+7.6.1 Network Segmentation
+Separate:
+	•	Production inference cluster
+	•	Training cluster
+	•	Feature engineering services
+	•	Registry services
+Enforce:
+	•	Private subnets
+	•	No public exposure of training cluster
+	•	Firewall rules between environments
+
+7.6.2 Kubernetes Security
+	•	Pod security policies
+	•	Non-root containers
+	•	Resource limits enforced
+	•	Namespace isolation
+	•	Secret injection via vault
+	•	No hardcoded credentials
+
+7.6.3 Secrets Management
+All secrets:
+	•	Stored in secure vault
+	•	Rotated automatically
+	•	Access controlled via IAM
+	•	Never stored in code or containers
+
+7.7 Logging & Security Monitoring
+Security logs must include:
+	•	Authentication failures
+	•	Authorization violations
+	•	Model load events
+	•	Registry access events
+	•	Suspicious inference patterns
+	•	Drift anomalies
+Logs must be:
+	•	Centralized
+	•	Tamper-evident
+	•	Retained per national policy
+	•	Monitored by SOC team
+
+7.8 Incident Response Plan
+If ML security breach occurs:
+	•	Isolate affected service
+	•	Disable compromised model
+	•	Switch to fallback rule engine
+	•	Preserve forensic logs
+	•	Notify security operations center
+	•	Initiate incident response protocol
+	•	Submit governance report
+RTO target:
+	•	< 15 minutes for inference isolation
+
+7.9 Business Continuity & Resilience
+ML service must not block core ticket intake.
+Controls:
+	•	Circuit breakers
+	•	Automatic fallback logic
+	•	Graceful degradation
+	•	Read-only safe mode
+	•	Load shedding during crisis
+
+8. Scalability & National Load Design
+This section defines the scalability, performance, and resilience design for the eCitizen Service Command Center (eSCC) ML platform under national-scale operational conditions.
+The system must support:
+	•	10M+ tickets per year
+	•	Peak daily surges during national incidents
+	•	Multi-agency concurrent operations
+	•	24/7 availability
+	•	Disaster and crisis spikes
+	•	Election and policy change surges
+The design aligns with:
+	•	SRS non-functional requirements
+	•	TDD distributed architecture
+	•	BED scalability and availability standards
+	•	National operational resilience policies
+
+8.1 National Load Assumptions
+Baseline projections:
+	•	30,000–100,000 tickets/day average
+	•	Peak surge: 10× daily average during crisis
+	•	Concurrent inference calls: 500–2,000 RPS during peak
+	•	95th percentile latency target: <200ms for classification
+	•	99.9% availability target
+All ML components must scale horizontally.
+
+8.2 Horizontal Scalability Design
+All ML inference services must be:
+	•	Stateless
+	•	Containerized
+	•	Autoscaled
+	•	Behind internal load balancer
+
+8.2.1 Kubernetes Autoscaling
+Use:
+	•	Horizontal Pod Autoscaler (HPA)
+	•	CPU-based scaling
+	•	Memory-based scaling
+	•	Custom metrics (RPS, latency)
+Scaling triggers:
+	•	CPU > 65%
+	•	Memory > 70%
+	•	Latency P95 > threshold
+	•	Queue backlog > threshold
+Minimum replica count must handle baseline traffic without cold starts.
+
+8.2.2 Model Memory Optimization
+To support scaling:
+	•	Load model into memory at pod startup
+	•	Use lightweight optimized models for real-time inference
+	•	Use quantized models where acceptable
+	•	Avoid loading multiple heavy models per pod
+For large models:
+	•	Use shared inference pool
+	•	GPU-enabled node group
+
+8.3 GPU Scaling Strategy
+GPU required for:
+	•	Transformer embeddings
+	•	High-throughput NLP
+	•	Large clustering workloads
+Design:
+	•	Dedicated GPU node pool
+	•	Autoscaled GPU nodes
+	•	Mixed CPU/GPU inference support
+	•	Model tagging to GPU-enabled deployment group
+GPU failover:
+	•	CPU fallback for critical models (reduced throughput mode)
+
+8.4 Kafka Scalability
+Kafka is the backbone of event-driven ML processing.
+
+8.4.1 Topic Partitioning
+High-volume topics:
+	•	ticket.created
+	•	ticket.updated
+	•	sla.updated
+Must use:
+	•	Sufficient partition count
+	•	Key-based partitioning (ticket_id)
+	•	Replication factor ≥ 3
+
+8.4.2 Stream Processing Scaling
+Stream processors must:
+	•	Scale horizontally
+	•	Support consumer group rebalancing
+	•	Handle replay safely
+	•	Support backpressure control
+
+8.5 Feature Store Scalability
+
+8.5.1 Online Feature Store (Redis Cluster)
+Design:
+	•	Redis Cluster mode
+	•	Sharded keys
+	•	Replica nodes
+	•	Failover enabled
+	•	Memory eviction policy configured
+Target:
+	•	<50ms retrieval latency at P95
+
+8.5.2 Offline Feature Store
+PostgreSQL:
+	•	Partitioned tables
+	•	Indexed on ticket_id and timestamp
+	•	Read replicas for analytics
+	•	Archival policy for historical data
+For large-scale training:
+	•	Data lake integration for bulk dataset extraction
+
+8.6 Multi-Region Deployment
+To support national resilience:
+Primary Region:
+	•	Active inference cluster
+	•	Active Kafka cluster
+	•	Active feature store
+Secondary Region:
+	•	Hot standby inference cluster
+	•	Replicated feature store
+	•	Kafka mirror cluster
+	•	Registry replica
+Failover mechanism:
+	•	Health checks via global load balancer
+	•	Automatic region reroute
+	•	DNS failover support
+RTO target:
+	•	< 5 minutes
+RPO target:
+	•	Near-zero for critical metadata
+
+8.7 Surge Handling Strategy
+National events may cause sudden load spikes.
+Examples:
+	•	National exam results release
+	•	Passport system outage
+	•	Election-related complaints
+	•	Disaster response incidents
+Surge controls:
+	•	Autoscale inference pods
+	•	Activate read-only mode for non-critical ML services
+	•	Prioritize high-impact ML endpoints
+	•	Enable adaptive rate limiting
+	•	Activate load shedding for low-priority analytics
+Critical services (classification, routing) must never be disabled.
+
+8.8 Caching Strategy
+To reduce load:
+	•	Cache repeated classification results
+	•	Cache embedding vectors
+	•	Cache SLA risk snapshots
+	•	Cache frequent knowledge suggestions
+Cache invalidation triggers:
+	•	Ticket update event
+	•	SLA update
+	•	Manual override
+
+8.9 Graceful Degradation Model
+If ML services become overloaded:
+	•	Deactivate non-critical services:
+	•	Forecasting
+	•	Clustering
+	•	Analytics dashboards
+	•	Fallback to:
+	•	Rule-based classification
+	•	Static routing table
+	•	Default SLA thresholds
+	•	Continue core operations without ML blocking
+No citizen-facing downtime permitted due to ML overload.
+
+8.10 Performance Benchmarks
+Before national deployment, the ML system must pass:
+	•	Load test at 3× projected peak
+	•	Sustained 24-hour stress test
+	•	Failover simulation test
+	•	Model warm restart test
+	•	Cache eviction stress test
+Benchmark metrics:
+	•	P95 latency < 200ms
+	•	Error rate < 0.5%
+	•	No message loss in Kafka
+	•	No memory leak in 24-hour window
+
+8.11 Capacity Planning Model
+Quarterly review required for:
+	•	Ticket volume growth
+	•	Agency onboarding increase
+	•	Model complexity growth
+	•	Embedding storage expansion
+Capacity forecasting must inform:
+	•	Node scaling
+	•	GPU pool sizing
+	•	Kafka partition increase
+	•	Storage expansion
+
+8.12 Resilience Under Political or Policy Change
+Public-sector systems face policy shifts.
+Design considerations:
+	•	Feature flagging for new routing rules
+	•	Model retraining after policy updates
+	•	Rollback capability
+	•	Rapid redeployment support
+	•	Change audit trail
+
+9. Observability & MLOps
+This section defines the observability, monitoring, operational controls, and MLOps framework for the eCitizen Service Command Center (eSCC) ML platform.
+The objective is to ensure:
+	•	Continuous visibility into model behavior
+	•	Early detection of performance degradation
+	•	Drift and anomaly detection
+	•	Operational resilience
+	•	Audit-grade traceability
+	•	Automated retraining workflows
+This section aligns with:
+	•	TDD observability stack
+	•	BED monitoring standards
+	•	National audit and compliance requirements
+
+9.1 Observability Architecture
+The ML platform integrates with the enterprise observability stack:
+	•	Prometheus (metrics collection)
+	•	Grafana (dashboards)
+	•	ELK stack (structured logs)
+	•	OpenTelemetry (distributed tracing)
+	•	Alert manager (incident notifications)
+Observability covers:
+	•	Infrastructure health
+	•	Inference performance
+	•	Model behavior
+	•	Data drift
+	•	Security events
+	•	Governance metrics
+
+9.2 Logging Framework
+All ML services must produce structured logs.
+
+9.2.1 Inference Logs
+Each prediction must log:
+	•	request_id
+	•	ticket_id
+	•	model_name
+	•	model_version
+	•	feature_version
+	•	prediction_output
+	•	confidence_score
+	•	latency_ms
+	•	fallback_triggered (boolean)
+	•	override_flag (boolean)
+	•	timestamp
+Logs must:
+	•	Exclude raw PII
+	•	Be encrypted at rest
+	•	Be immutable
+
+9.2.2 Training Logs
+Each training job must log:
+	•	job_id
+	•	dataset_id
+	•	feature_version
+	•	hyperparameters
+	•	training_duration
+	•	evaluation_metrics
+	•	bias_metrics
+	•	training_environment_version
+	•	artifact_hash
+Training logs must be retained per national record retention policies.
+
+9.2.3 Governance Logs
+Log:
+	•	Model approval events
+	•	Model promotion events
+	•	Rollback events
+	•	Bias audit outcomes
+	•	Override frequency spikes
+	•	Drift alerts
+All governance logs must be tamper-evident.
+
+9.3 Metrics Monitoring
+
+9.3.1 Infrastructure Metrics
+Monitor:
+	•	CPU usage
+	•	Memory usage
+	•	GPU utilization
+	•	Pod restart count
+	•	Network latency
+	•	Disk I/O
+Threshold breaches trigger autoscaling or alert.
+
+9.3.2 Inference Performance Metrics
+Monitor:
+	•	P50 / P95 / P99 latency
+	•	Request throughput (RPS)
+	•	Error rate
+	•	Timeout rate
+	•	Fallback activation rate
+Alerts:
+	•	P95 latency > SLA
+	•	Error rate > 0.5%
+	•	Fallback rate spike
+
+9.3.3 Model Quality Metrics (Online Monitoring)
+Monitor:
+	•	Confidence distribution shifts
+	•	Prediction distribution shifts
+	•	Override rate
+	•	Escalation correlation
+	•	Fraud confirmation rate
+If override rate exceeds threshold:
+	•	Flag potential degradation
+	•	Trigger review
+
+9.4 Drift Detection Framework
+Drift detection must run continuously.
+
+9.4.1 Feature Drift
+Monitor:
+	•	Mean/variance changes
+	•	Missing value spikes
+	•	PSI (Population Stability Index)
+	•	KL divergence
+Threshold breach triggers:
+	•	Drift alert
+	•	Retraining workflow
+
+9.4.2 Label Drift
+Compare:
+	•	Historical labels
+	•	Recent confirmed outcomes
+	•	Manual override corrections
+If drift detected:
+	•	Recalibrate model
+	•	Update training dataset
+
+9.4.3 Prediction Drift
+Monitor:
+	•	Sudden change in class distribution
+	•	Extreme confidence collapse
+	•	Routing imbalance
+Abnormal pattern triggers governance review.
+
+9.5 Alerting & Incident Response
+Alerts must be categorized:
+	•	Critical (production impact)
+	•	High (model degradation)
+	•	Medium (performance warning)
+	•	Informational
+Critical examples:
+	•	Inference service down
+	•	Registry compromise attempt
+	•	Severe bias detected
+	•	Drift above critical threshold
+Incident workflow:
+	•	Alert triggered
+	•	On-call ML engineer notified
+	•	Incident ticket created
+	•	Model frozen if required
+	•	Root cause analysis
+	•	Post-incident review
+All incidents must be logged.
+
+9.6 Automated Retraining Pipeline
+Retraining may be triggered by:
+	•	Scheduled cycle
+	•	Drift detection
+	•	Override spike
+	•	Policy change
+	•	Major surge event
+Pipeline steps:
+	•	Freeze dataset snapshot
+	•	Recompute features
+	•	Train candidate model
+	•	Evaluate performance
+	•	Run bias checks
+	•	Register model
+	•	Shadow deployment
+	•	Canary release
+	•	Promote or reject
+All retraining actions must be logged.
+
+9.7 Model Fallback Management
+If model performance degrades:
+Automatic fallback triggers:
+	•	Latency spike
+	•	Error spike
+	•	Confidence collapse
+	•	Registry integrity failure
+Fallback mechanism:
+	•	Route to previous stable model
+	•	Activate rule-based system
+	•	Log event
+	•	Notify governance
+Rollback time target:
+	•	< 60 seconds
+
+9.8 Dashboards & Reporting
+Operational dashboards must include:
+	•	Real-time inference metrics
+	•	Drift indicators
+	•	SLA breach prediction accuracy
+	•	Fraud detection confirmation rate
+	•	Override trend graph
+	•	Model version distribution
+	•	Regional performance parity
+Governance dashboards must include:
+	•	Bias indicators
+	•	Approval history
+	•	Model lifecycle timeline
+	•	Incident log summary
+Dashboards must support export for audit review.
+
+9.9 MLOps Automation Standards
+All ML lifecycle activities must be automated via CI/CD:
+	•	Model training pipelines
+	•	Registry promotion gates
+	•	Deployment rollout
+	•	Monitoring validation
+	•	Security scanning
+Manual intervention allowed only for:
+	•	Governance approval
+	•	Incident management
+	•	Emergency rollback
+All automation must be version-controlled and auditable.
+
+9.10 Continuous Improvement Framework
+Quarterly review must assess:
+	•	Model performance trends
+	•	Bias metrics
+	•	Operational impact
+	•	Citizen satisfaction indicators
+	•	Resource utilization
+	•	Emerging risk patterns
+Findings must inform:
+	•	Model redesign
+	•	Feature engineering updates
+	•	Governance policy updates
+	•	Capacity planning
+
+10. Integration with eSCC Backend
+This section defines how the ML platform integrates with the eCitizen Service Command Center (eSCC) backend ecosystem.
+Integration must align with:
+	•	SRS functional workflows
+	•	TDD microservices architecture
+	•	DDD canonical schemas
+	•	Backend Engineering Design (BED) API and security standards
+	•	Event-driven Kafka backbone
+The ML layer is an internal service tier and is not directly exposed to external users.
+
+10.1 Integration Architecture Overview
+The ML platform integrates through:
+	•	Synchronous REST inference APIs
+	•	Asynchronous Kafka event streams
+	•	Feature store data synchronization
+	•	Audit log pipeline integration
+	•	Governance workflow integration
+All integration occurs within secure internal network boundaries.
+
+10.2 Synchronous Inference APIs
+Inference APIs are exposed through the Inference Gateway, which enforces:
+	•	JWT authentication
+	•	RBAC authorization
+	•	Rate limiting
+	•	Input validation
+	•	Structured logging
+All APIs are internal-only endpoints.
+
+10.2.1 Ticket Classification API
+Endpoint
+POST /ml/classify
+Request Schema
+{   "ticket_id": "UUID",   "title": "string",   "description": "string",   "channel": "WEB|MOBILE|CHATBOT",   "region": "string",   "language": "string" }
+Response Schema
+{   "ticket_id": "UUID",   "predicted_category": "string",   "predicted_subcategory": "string",   "predicted_agency": "string",   "severity_band": "LOW|MEDIUM|HIGH|CRITICAL",   "confidence_score": 0.92,   "model_version": "string",   "feature_version": "string" }
+Error Codes
+	•	400 – Validation error
+	•	401 – Unauthorized
+	•	403 – Forbidden
+	•	429 – Rate limit exceeded
+	•	500 – Internal inference failure
+	•	503 – Fallback activated
+
+10.2.2 SLA Breach Prediction API
+Endpoint
+POST /ml/predict-sla
+Request Schema
+{   "ticket_id": "UUID",   "current_status": "string",   "priority": "string",   "agency_id": "UUID",   "elapsed_time_hours": 12 }
+Response Schema
+{   "ticket_id": "UUID",   "breach_probability": 0.78,   "predicted_time_to_breach_hours": 6,   "risk_level": "LOW|MEDIUM|HIGH",   "model_version": "string" }
+
+10.2.3 Anomaly Detection API
+Endpoint
+POST /ml/anomaly-detect
+Request Schema
+{   "entity_type": "USER|AGENCY|TICKET",   "entity_id": "UUID",   "behavioral_snapshot": {} }
+Response Schema
+{   "entity_id": "UUID",   "anomaly_score": 0.94,   "anomaly_type": "COORDINATED_ACTIVITY|FRAUD_RISK",   "confidence": 0.89 }
+
+10.2.4 Knowledge Suggestion API
+Endpoint
+POST /ml/suggest-resolution
+Request Schema
+{   "ticket_id": "UUID",   "description": "string" }
+Response Schema
+{   "ticket_id": "UUID",   "suggestions": [     {       "kb_id": "string",       "title": "string",       "relevance_score": 0.91     }   ] }
+
+10.3 Asynchronous Kafka Integration
+Kafka is the primary integration backbone for event-driven ML operations.
+
+10.3.1 Consumed Topics
+ML services consume:
+	•	ticket.created
+	•	ticket.updated
+	•	ticket.status.changed
+	•	sla.updated
+	•	escalation.triggered
+	•	agency.performance.updated
+	•	override.recorded
+Purpose:
+	•	Real-time feature updates
+	•	Drift monitoring
+	•	Retraining dataset updates
+	•	Anomaly detection triggers
+
+10.3.2 Produced Topics
+ML services publish:
+	•	ticket.classified
+	•	ticket.routed
+	•	sla.breach-warning
+	•	anomaly.detected
+	•	ml.drift.alert
+	•	model.deployed
+	•	model.rollback
+Each event must include:
+	•	Event ID
+	•	Timestamp
+	•	Model version
+	•	Correlation ID
+	•	Audit metadata
+Replication factor ≥ 3 required.
+
+10.4 Backend Workflow Integration
+
+10.4.1 Ticket Intake Flow
+	•	Ticket Service creates ticket
+	•	ticket.created event published
+	•	ML Classification Service consumes event
+	•	Classification result published to ticket.classified
+	•	Routing Service consumes classification
+	•	Routing result published to ticket.routed
+	•	Ticket Service updates assignment
+All steps logged for audit traceability.
+
+10.4.2 SLA Monitoring Flow
+	•	SLA Service updates deadline
+	•	sla.updated event emitted
+	•	SLA Prediction Service computes breach probability
+	•	If threshold exceeded → sla.breach-warning event
+	•	Escalation workflow triggered
+
+10.4.3 Override Feedback Flow
+	•	Officer overrides ML decision
+	•	override.recorded event emitted
+	•	Feature store updated
+	•	Feedback tagged for retraining dataset
+
+10.5 Database Integration (DDD Alignment)
+ML services do not directly modify primary transactional tables.
+Rules:
+	•	Read-only access to canonical tables
+	•	Writes occur via backend services only
+	•	Feature store references canonical IDs
+	•	No duplication of source-of-truth records
+Audit and inference logs stored separately.
+
+10.6 Security Integration with Backend
+All integration must comply with BED:
+	•	Mutual TLS between services
+	•	JWT validation at gateway
+	•	RBAC enforcement
+	•	Rate limiting
+	•	Structured logging
+	•	Secrets via vault
+No ML endpoint may bypass API gateway controls.
+
+10.7 Version Compatibility Management
+To avoid breaking changes:
+	•	APIs versioned (/v1/ml/classify)
+	•	Backward compatibility maintained
+	•	Deprecation policy documented
+	•	Model version independent of API version
+Schema changes require:
+	•	Contract validation
+	•	Integration testing
+	•	Staged rollout
+
+10.8 Testing & Validation
+Before production integration:
+	•	Contract testing
+	•	Load testing at 3× peak
+	•	Failover simulation
+	•	Security penetration testing
+	•	Replay testing with historical data
+All integration tests must be automated in CI/CD.
+
+10.9 Failure Handling & Fallback
+If ML service unavailable:
+Backend must:
+	•	Activate rule-based fallback
+	•	Assign default routing
+	•	Log fallback usage
+	•	Continue ticket processing
+No ticket intake or SLA tracking may be blocked by ML outage.
+
+11. Disaster Recovery Strategy
+This section defines the disaster recovery (DR), business continuity, and resilience framework for the eCitizen Service Command Center (eSCC) ML platform.
+The ML platform supports national public services and must maintain operational continuity during:
+	•	Infrastructure failures
+	•	Cybersecurity incidents
+	•	Data corruption events
+	•	Regional outages
+	•	Natural disasters
+	•	Political or crisis-related surges
+The DR strategy aligns with:
+	•	SRS availability requirements (≥ 99.9%)
+	•	TDD multi-region architecture
+	•	BED resilience standards
+	•	National ICT disaster recovery policies
+
+11.1 Recovery Objectives
+11.1.1 Recovery Time Objective (RTO)
+Maximum allowed downtime:
+	•	Inference services: < 5 minutes
+	•	Feature store: < 10 minutes
+	•	Model registry: < 15 minutes
+	•	Training cluster: < 24 hours
+Critical real-time services must recover automatically.
+
+11.1.2 Recovery Point Objective (RPO)
+Maximum acceptable data loss:
+	•	Inference logs: Near-zero
+	•	Model registry metadata: Near-zero
+	•	Feature store (online): < 5 minutes
+	•	Training datasets: < 24 hours
+All critical metadata must be replicated synchronously or near-synchronously.
+
+11.2 Multi-Region Deployment Strategy
+The ML platform must operate across at least two regions:
+Primary Region:
+	•	Active inference cluster
+	•	Active Kafka cluster
+	•	Active online feature store
+	•	Active registry
+Secondary Region:
+	•	Hot standby inference cluster
+	•	Kafka mirror cluster
+	•	Feature store replica
+	•	Registry replica
+Failover must be automated.
+
+11.2.1 Traffic Failover
+Global load balancer monitors:
+	•	Health checks
+	•	Latency thresholds
+	•	Service availability
+If primary region fails:
+	•	Traffic rerouted to secondary region
+	•	DNS update triggered
+	•	Kafka failover activated
+	•	Feature store read replica promoted
+Failover completion target:
+	•	< 5 minutes
+
+11.3 Model Registry Backup & Recovery
+Model registry is mission-critical.
+Backup strategy:
+	•	Daily full backup
+	•	Hourly incremental backup
+	•	Encrypted backup storage
+	•	Geo-redundant replication
+Registry recovery process:
+	•	Restore latest snapshot
+	•	Validate artifact integrity
+	•	Re-enable model loading
+	•	Log restoration event
+Registry recovery must not require model retraining.
+
+11.4 Feature Store Backup Strategy
+11.4.1 Online Feature Store (Redis)
+	•	Cluster replication enabled
+	•	Snapshot backups at regular intervals
+	•	Append-only file (AOF) enabled
+	•	Cross-region replication
+If Redis failure:
+	•	Promote replica
+	•	Rehydrate from snapshot
+	•	Resume traffic
+
+11.4.2 Offline Feature Store
+PostgreSQL backup:
+	•	Daily snapshot
+	•	Continuous WAL archiving
+	•	Cross-region replication
+If corruption detected:
+	•	Isolate corrupted partition
+	•	Restore last clean snapshot
+	•	Rebuild affected feature partitions
+
+11.5 Kafka Disaster Recovery
+Kafka replication factor: ≥ 3
+MirrorMaker or equivalent cross-region replication required.
+If broker failure:
+	•	Automatic leader re-election
+	•	Consumer group rebalance
+If cluster failure:
+	•	Switch to mirrored cluster
+	•	Resume event consumption
+	•	Replay unprocessed offsets
+No event loss permitted for:
+	•	ticket.created
+	•	sla.updated
+	•	override.recorded
+
+11.6 Inference Service Recovery
+Inference services are stateless and recover via:
+	•	Pod restart
+	•	Kubernetes rescheduling
+	•	Autoscaling group restart
+Warm startup requirements:
+	•	Preload model artifact
+	•	Validate registry integrity
+	•	Perform health check before serving traffic
+Maximum cold start time:
+	•	< 60 seconds
+
+11.7 Training Cluster Recovery
+Training is non-critical for immediate operations.
+If training cluster fails:
+	•	Inference continues unaffected
+	•	Retraining delayed
+	•	Incident logged
+Recovery steps:
+	•	Restore compute environment
+	•	Validate dataset integrity
+	•	Resume pipeline scheduling
+Training cluster must be isolated from inference cluster.
+
+11.8 Fallback Operational Mode
+If ML inference is unavailable:
+System must activate:
+	•	Rule-based classification
+	•	Static routing table
+	•	Default SLA monitoring logic
+	•	Disable non-critical ML features
+Critical services must continue:
+	•	Ticket intake
+	•	Assignment
+	•	SLA tracking
+Fallback activation must be logged.
+
+11.9 Data Corruption Handling
+If model artifact corruption detected:
+	•	Block model loading
+	•	Roll back to last known stable version
+	•	Alert governance
+	•	Investigate integrity breach
+If feature store corruption detected:
+	•	Isolate affected partition
+	•	Restore snapshot
+	•	Revalidate model predictions
+All corruption events must generate incident report.
+
+11.10 Cyber Incident Response Integration
+If security breach impacts ML layer:
+	•	Isolate compromised environment
+	•	Revoke credentials
+	•	Disable affected models
+	•	Switch to fallback logic
+	•	Conduct forensic audit
+	•	Notify security operations center
+	•	Submit compliance report
+Inference must resume within RTO window.
+
+11.11 Periodic DR Testing
+Disaster recovery must be tested:
+	•	Quarterly failover simulation
+	•	Registry restoration test
+	•	Feature store restore drill
+	•	Kafka replay simulation
+	•	Full-region outage simulation
+Test results must be:
+	•	Documented
+	•	Audited
+	•	Reviewed by governance committee
+
+11.12 Business Continuity Under National Crisis
+During crisis events:
+	•	Surge autoscaling enabled
+	•	Non-essential ML jobs paused
+	•	Priority models allocated more compute
+	•	Monitoring thresholds adjusted
+Operational continuity must prioritize:
+	•	Ticket classification
+	•	Routing
+	•	SLA breach prediction
+Secondary services may be temporarily degraded.
+
+12. Implementation Stack Recommendation
+This section defines the recommended production-grade technology stack for the eCitizen Service Command Center (eSCC) ML platform.
+The stack must satisfy:
+	•	National-scale throughput
+	•	Enterprise security standards
+	•	Government compliance requirements
+	•	Long-term maintainability
+	•	High observability
+	•	Strong MLOps capabilities
+All selections align with:
+	•	TDD microservices architecture
+	•	DDD schema governance
+	•	BED security and DevSecOps standards
+
+12.1 Core Programming Languages
+12.1.1 ML Services – Python
+Recommended for:
+	•	Model training
+	•	Feature engineering
+	•	Inference APIs
+Justification:
+	•	Strong ML ecosystem
+	•	Mature NLP libraries
+	•	Broad community support
+	•	Enterprise-ready tooling
+	•	Extensive model explainability support
+
+12.1.2 Backend Integration – Node.js (Existing eSCC Stack)
+ML services integrate via:
+	•	REST APIs
+	•	Kafka consumers
+No ML logic embedded directly in Node.js services.
+
+12.2 ML Frameworks
+12.2.1 PyTorch (Primary Deep Learning Framework)
+Recommended for:
+	•	Transformer-based NLP models
+	•	Sentiment analysis
+	•	Classification
+	•	Embedding generation
+Justification:
+	•	Production-grade
+	•	Strong GPU support
+	•	Flexible architecture
+	•	Model quantization support
+	•	TorchServe compatibility
+
+12.2.2 Scikit-Learn
+Recommended for:
+	•	Gradient boosting
+	•	Random forests
+	•	Classical ML models
+	•	Isolation Forest
+	•	Feature preprocessing
+Lightweight and suitable for fast inference models.
+
+12.2.3 XGBoost / LightGBM
+Recommended for:
+	•	SLA prediction
+	•	Routing optimization
+	•	Structured data classification
+Justification:
+	•	High performance
+	•	Efficient CPU inference
+	•	Low latency
+	•	Excellent tabular performance
+
+12.3 NLP & Embedding Models
+12.3.1 Transformer Models
+	•	Fine-tuned BERT or domain-adapted transformer
+	•	Multilingual support required
+Use case:
+	•	Ticket classification
+	•	Sentiment detection
+	•	Knowledge retrieval
+Model must support:
+	•	English + national languages
+	•	Domain fine-tuning
+
+12.3.2 Sentence Embeddings
+Use:
+	•	Sentence-transformers
+	•	Domain fine-tuned embedding model
+Required for:
+	•	Clustering
+	•	Semantic search
+	•	Knowledge suggestion
+Embedding size standardized (e.g., 768 dimensions).
+
+12.4 API Framework
+12.4.1 FastAPI
+Recommended for:
+	•	Inference endpoints
+	•	Health checks
+	•	Schema validation
+Justification:
+	•	High performance (ASGI)
+	•	Automatic OpenAPI generation
+	•	Strong typing
+	•	Lightweight
+	•	Easy integration with Pydantic validation
+
+12.5 Model Serving Layer
+Options:
+	•	Native FastAPI inference
+	•	TorchServe (for heavy models)
+	•	ONNX Runtime (for optimized deployment)
+Recommendation:
+	•	FastAPI for lightweight services
+	•	ONNX Runtime for optimized transformer inference
+Benefits:
+	•	Lower latency
+	•	Smaller memory footprint
+	•	CPU optimization support
+
+12.6 Feature Store
+12.6.1 Online Feature Store – Redis Cluster
+Purpose:
+	•	Sub-50ms feature retrieval
+	•	Cached embeddings
+	•	Real-time features
+Redis must be:
+	•	Cluster mode enabled
+	•	Replicated
+	•	Encrypted
+	•	Authenticated
+
+12.6.2 Offline Feature Store – PostgreSQL + Data Lake
+PostgreSQL:
+	•	Structured feature tables
+	•	Partitioned by date
+	•	Indexed for training queries
+Data lake (optional):
+	•	Large-scale historical storage
+	•	Batch analytics
+	•	Long-term archival
+
+12.7 Messaging Backbone
+Apache Kafka
+Purpose:
+	•	Event-driven feature updates
+	•	Real-time drift monitoring
+	•	Override feedback
+	•	Asynchronous inference triggers
+Configuration:
+	•	Replication factor ≥ 3
+	•	Partition scaling
+	•	Schema registry enabled
+	•	Message retention per compliance policy
+
+12.8 Model Registry & Experiment Tracking
+MLflow (Recommended)
+Capabilities:
+	•	Model versioning
+	•	Artifact tracking
+	•	Metric logging
+	•	Experiment comparison
+	•	Deployment tagging
+Must integrate with:
+	•	CI/CD pipeline
+	•	Registry approval workflow
+	•	Access control policies
+Alternative enterprise registry acceptable if:
+	•	Supports version immutability
+	•	Supports RBAC
+	•	Supports artifact signing
+
+12.9 Containerization & Orchestration
+Docker
+All services containerized:
+	•	Immutable builds
+	•	Versioned images
+	•	Scanned for vulnerabilities
+
+Kubernetes
+Used for:
+	•	Autoscaling
+	•	Self-healing
+	•	Rolling deployment
+	•	Blue/green deployment
+	•	Canary rollout
+Cluster requirements:
+	•	Separate namespaces for:
+	•	Inference
+	•	Training
+	•	Registry
+	•	Resource limits enforced
+	•	Pod security policies enabled
+
+12.10 Monitoring & Observability
+Prometheus
+	•	Infrastructure metrics
+	•	Inference metrics
+	•	Custom ML metrics
+
+Grafana
+	•	Operational dashboards
+	•	Governance dashboards
+	•	Drift dashboards
+
+ELK Stack
+	•	Structured logs
+	•	Inference logs
+	•	Governance logs
+	•	Security events
+
+OpenTelemetry
+	•	Distributed tracing
+	•	Cross-service latency tracking
+
+12.11 Security Tooling
+	•	Vault for secrets management
+	•	Container image scanning (Trivy or equivalent)
+	•	Static code analysis
+	•	Dependency vulnerability scanning
+	•	SBOM generation
+	•	IAM with least-privilege policies
+
+12.12 CI/CD & DevSecOps
+Pipeline must support:
+	•	Automated testing
+	•	Model evaluation gates
+	•	Bias validation gates
+	•	Security scanning
+	•	Artifact signing
+	•	Controlled promotion to production
+Stages:
+	•	Build
+	•	Test
+	•	Security scan
+	•	Register model
+	•	Governance approval
+	•	Deploy shadow
+	•	Canary
+	•	Full rollout
+All pipeline actions logged.
+
+12.13 Infrastructure Hosting Considerations
+Environment must support:
+	•	Government-approved cloud or national data center
+	•	Multi-region deployment
+	•	GPU node pools
+	•	Encrypted storage
+	•	Network segmentation
+Compliance must include:
+	•	National ICT authority standards
+	•	Government security baseline
+	•	Data sovereignty requirements
+
+12.14 Justification Summary
+The recommended stack provides:
+	•	Low-latency inference
+	•	High scalability
+	•	Strong ML ecosystem support
+	•	Enterprise security compatibility
+	•	Full MLOps lifecycle control
+	•	Reproducibility and audit readiness
+	•	National resilience capability
+This stack balances:
+	•	Performance
+	•	Security
+	•	Maintainability
+	•	Governance compliance
+
+13. Risk Assessment
+This section identifies, categorizes, and mitigates risks associated with deploying Machine Learning within the eCitizen Service Command Center (eSCC).
+The ML platform operates in a national public-sector environment. Risk exposure includes:
+	•	Operational risk
+	•	Governance risk
+	•	Security risk
+	•	Ethical risk
+	•	Political risk
+	•	Reputational risk
+All risks must have defined mitigation controls aligned with:
+	•	SRS operational requirements
+	•	TDD architecture safeguards
+	•	DDD data governance
+	•	BED security controls
+	•	National AI governance standards
+
+13.1 Risk Classification Framework
+Risks are categorized by:
+	•	Likelihood (Low / Medium / High)
+	•	Impact (Low / Medium / High / Critical)
+	•	Detectability (High / Medium / Low)
+	•	Mitigation maturity
+Each risk must be logged in a formal Risk Register.
+
+13.2 Model Bias Risk
+Description
+Models may disproportionately misclassify or deprioritize tickets from:
+	•	Certain regions
+	•	Certain languages
+	•	Certain service categories
+This may result in:
+	•	Unequal service delivery
+	•	Public complaints
+	•	Legal scrutiny
+	•	Political backlash
+Likelihood
+Medium
+Impact
+High
+Mitigation
+	•	Remove protected attributes
+	•	Conduct pre-deployment bias testing
+	•	Monitor performance disaggregated by region/language
+	•	Monthly bias audit
+	•	Governance approval before deployment
+	•	Immediate rollback if disparity exceeds threshold
+
+13.3 Automation Overreach Risk
+Description
+Over-reliance on ML outputs may:
+	•	Reduce human scrutiny
+	•	Lead to systemic routing errors
+	•	Trigger unfair escalations
+	•	Misprioritize urgent cases
+Likelihood
+Medium
+Impact
+High
+Mitigation
+	•	Human-in-the-loop thresholds
+	•	Mandatory review for high-impact decisions
+	•	Confidence-based gating
+	•	Clear UI labeling of AI suggestions
+	•	Override logging and monitoring
+ML must remain advisory, not autonomous.
+
+13.4 Political Misuse Risk
+Description
+AI outputs could be manipulated or misinterpreted to:
+	•	Suppress certain complaint types
+	•	Favor certain agencies
+	•	Influence politically sensitive issues
+Likelihood
+Low–Medium
+Impact
+Critical
+Mitigation
+	•	Strict audit logging
+	•	Immutable model registry
+	•	Transparent bias reporting
+	•	Independent AI governance committee
+	•	Multi-role approval for model promotion
+	•	External audit capability
+All model changes must be documented and reviewable.
+
+13.5 System Gaming Risk
+Description
+Users or insiders may attempt to:
+	•	Manipulate language to escalate priority
+	•	Trigger anomaly flags intentionally
+	•	Probe model weaknesses
+	•	Inflate ticket volume
+Likelihood
+High
+Impact
+Medium–High
+Mitigation
+	•	Adversarial input detection
+	•	Confidence probing detection
+	•	Behavioral anomaly modeling
+	•	Rate limiting
+	•	Continuous drift monitoring
+	•	Fraud review workflow
+No single signal should automatically alter workflow.
+
+13.6 Data Poisoning Risk
+Description
+Malicious or accidental manipulation of:
+	•	Training labels
+	•	Override patterns
+	•	Feature inputs
+Could degrade model accuracy over time.
+Likelihood
+Medium
+Impact
+High
+Mitigation
+	•	Validate label integrity
+	•	Monitor override spikes
+	•	Require multi-role approval for bulk label edits
+	•	Dataset validation checks
+	•	Drift detection on label distribution
+	•	Training dataset freeze before retraining
+Retraining must not automatically trust recent overrides.
+
+13.7 Model Degradation Risk
+Description
+Over time, models may degrade due to:
+	•	Policy changes
+	•	New service types
+	•	Behavioral shifts
+	•	Seasonal changes
+Likelihood
+High
+Impact
+Medium–High
+Mitigation
+	•	Continuous drift monitoring
+	•	Scheduled retraining
+	•	Performance dashboards
+	•	Canary deployment testing
+	•	Automatic rollback capability
+
+13.8 False Positive Fraud Detection Risk
+Description
+Anomaly models may incorrectly flag:
+	•	Legitimate users
+	•	Agencies with temporary surge
+	•	Coordinated but valid complaints
+Likelihood
+Medium
+Impact
+High
+Mitigation
+	•	Human fraud review requirement
+	•	Confidence threshold enforcement
+	•	Multi-signal confirmation
+	•	No automatic penalties
+	•	Appeal and review mechanism
+
+13.9 Infrastructure Failure Risk
+Description
+Outages in:
+	•	Inference cluster
+	•	Kafka
+	•	Feature store
+	•	Model registry
+May impact operations.
+Likelihood
+Medium
+Impact
+High
+Mitigation
+	•	Multi-region deployment
+	•	Automated failover
+	•	Stateless inference pods
+	•	Fallback rule engine
+	•	Regular DR testing
+ML must never block core ticket intake.
+
+13.10 Cybersecurity Risk
+Description
+Threat actors may attempt:
+	•	Model extraction
+	•	Model tampering
+	•	Data exfiltration
+	•	Adversarial attacks
+Likelihood
+Medium
+Impact
+Critical
+Mitigation
+	•	Model artifact signing
+	•	Encryption at rest and transit
+	•	Secure registry
+	•	RBAC enforcement
+	•	Security monitoring
+	•	SOC integration
+	•	Prompt injection detection
+
+13.11 Reputational Risk
+Description
+Public perception of AI misuse could:
+	•	Damage trust in eCitizen
+	•	Lead to media scrutiny
+	•	Trigger legal review
+Likelihood
+Medium
+Impact
+High
+Mitigation
+	•	Transparency in AI usage
+	•	Clear communication that AI is advisory
+	•	Public accountability reporting
+	•	Documented fairness controls
+	•	Ethical AI policy publication
+
+13.12 Compliance Risk
+Description
+Non-compliance with:
+	•	Data protection laws
+	•	Retention policies
+	•	Audit obligations
+May result in legal penalties.
+Likelihood
+Low–Medium
+Impact
+Critical
+Mitigation
+	•	PII masking
+	•	Data minimization
+	•	Retention policy enforcement
+	•	Audit-ready logs
+	•	Governance oversight
+	•	Periodic compliance review
+
+13.13 Operational Dependency Risk
+Description
+Over-dependence on a single ML vendor, framework, or GPU provider may:
+	•	Increase cost
+	•	Create lock-in
+	•	Reduce flexibility
+Likelihood
+Medium
+Impact
+Medium
+Mitigation
+	•	Open standards adoption
+	•	Containerized architecture
+	•	Model portability (ONNX support)
+	•	Multi-cloud readiness
+	•	Avoid proprietary lock-in
+
+13.14 Ethical Risk
+Description
+AI recommendations may conflict with human judgment or ethical considerations.
+Likelihood
+Medium
+Impact
+High
+Mitigation
+	•	Mandatory human override capability
+	•	Explainability integration
+	•	Governance committee oversight
+	•	Incident review process
+	•	Ethical AI training for officers
+
+13.15 Risk Monitoring & Review
+Risk assessment must be reviewed:
+	•	Quarterly
+	•	After major incident
+	•	After major model update
+	•	After policy change
+Risk register must include:
+	•	Risk owner
+	•	Mitigation status
+	•	Review date
+	•	Escalation level
+
+14. Roadmap & Phased Rollout
+This section defines the phased implementation and national rollout strategy for the eCitizen Service Command Center (eSCC) ML platform.
+The rollout must:
+	•	Minimize operational disruption
+	•	Allow progressive validation
+	•	Maintain governance oversight
+	•	Control risk exposure
+	•	Deliver incremental value
+	•	Align with SRS, TDD, DDD, and BED
+Each phase includes:
+	•	Scope
+	•	Technical deliverables
+	•	Governance checkpoints
+	•	Success metrics
+	•	Exit criteria
+
+14.1 Phase 0 – Foundation & Infrastructure Readiness
+Objective
+Establish secure ML infrastructure and governance framework before activating models.
+Scope
+	•	Kubernetes cluster provisioning
+	•	Model registry deployment
+	•	Feature store deployment
+	•	Kafka topic configuration
+	•	CI/CD pipeline setup
+	•	Security hardening
+	•	Governance committee formation
+Deliverables
+	•	ML infrastructure live (non-production)
+	•	Secure model registry operational
+	•	Feature versioning framework implemented
+	•	Drift monitoring baseline configured
+	•	Security scanning integrated
+	•	Disaster recovery validation test completed
+Governance Checkpoint
+	•	Infrastructure security audit
+	•	Compliance validation
+	•	Approval to begin model deployment
+Exit Criteria
+	•	All services pass load testing
+	•	RTO/RPO validated
+	•	Security controls verified
+
+14.2 Phase 1 – Ticket Classification & Intelligent Routing
+Objective
+Automate initial triage and routing to reduce manual workload.
+Scope
+	•	Multi-label ticket classification
+	•	Intelligent routing engine
+	•	Inference APIs integration
+	•	Human override interface
+	•	Confidence gating
+Deployment Strategy
+	•	Shadow deployment (2–4 weeks)
+	•	Canary rollout (10% traffic)
+	•	Full deployment after validation
+Success Metrics
+	•	≥ 85% classification accuracy
+	•	≥ 80% routing accuracy
+	•	Reduction in manual triage time
+	•	Override rate < defined threshold
+	•	No SLA degradation
+Governance Checkpoint
+	•	Bias testing approval
+	•	Performance validation
+	•	Risk review
+Exit Criteria
+	•	Stable performance for 30 days
+	•	No major incident
+	•	Governance sign-off
+
+14.3 Phase 2 – SLA Prediction & Sentiment Detection
+Objective
+Enable proactive SLA management and citizen experience monitoring.
+Scope
+	•	SLA breach prediction model
+	•	Escalation risk scoring
+	•	Sentiment and emotional tagging
+	•	Supervisor alert dashboards
+Deployment Strategy
+	•	Limited-agency pilot
+	•	Gradual expansion across agencies
+	•	Canary validation
+Success Metrics
+	•	≥ 70% precision for high-risk SLA prediction
+	•	Reduction in actual SLA breaches
+	•	Improved response time for high-frustration tickets
+	•	No bias detected across regions
+Governance Checkpoint
+	•	Bias audit
+	•	Impact assessment
+	•	Citizen satisfaction review
+Exit Criteria
+	•	Demonstrated SLA breach reduction
+	•	Escalation handling improvement
+
+14.4 Phase 3 – Fraud Detection & Root Cause Clustering
+Objective
+Strengthen system integrity and identify systemic service issues.
+Scope
+	•	Behavioral anomaly detection
+	•	Coordinated activity detection
+	•	Root cause clustering
+	•	Surge detection
+Deployment Strategy
+	•	Fraud detection in advisory mode
+	•	No automatic penalties
+	•	Human review workflow mandatory
+Success Metrics
+	•	Reduced coordinated abuse
+	•	Confirmed fraud detection rate
+	•	Faster systemic incident identification
+	•	Low false positive rate
+Governance Checkpoint
+	•	Fraud impact review
+	•	Legal compliance validation
+	•	Risk committee approval
+Exit Criteria
+	•	Stable detection performance
+	•	No reputational incidents
+
+14.5 Phase 4 – Capacity Forecasting & Knowledge Automation
+Objective
+Enable predictive national planning and resolution acceleration.
+Scope
+	•	Ticket volume forecasting
+	•	Agency workload prediction
+	•	Knowledge base auto-suggestions
+	•	Resource optimization analytics
+Deployment Strategy
+	•	Advisory-only forecasting
+	•	Dashboard integration
+	•	Gradual operational use
+Success Metrics
+	•	Forecast MAPE within acceptable range
+	•	Improved staffing alignment
+	•	Increased knowledge article usage
+	•	Reduced average resolution time
+Governance Checkpoint
+	•	Operational impact review
+	•	Forecast reliability validation
+Exit Criteria
+	•	Sustained accuracy across seasonal cycles
+	•	Agency adoption confirmed
+
+14.6 Phase 5 – Optimization & Continuous Improvement
+Objective
+Enhance performance, fairness, and resilience.
+Scope
+	•	Model optimization
+	•	Feature engineering improvements
+	•	Embedding upgrades
+	•	Drift mitigation automation
+	•	Governance reporting automation
+Success Metrics
+	•	Reduced inference latency
+	•	Reduced infrastructure cost per ticket
+	•	Improved fairness metrics
+	•	Reduced override rate
+Governance Checkpoint
+	•	Annual AI audit
+	•	Compliance revalidation
+	•	Policy update review
+
+14.7 National Rollout Strategy
+Rollout must follow:
+	•	Pilot agencies
+	•	Medium-volume agencies
+	•	High-volume national agencies
+	•	Full national activation
+Each stage requires:
+	•	Load validation
+	•	Performance review
+	•	Bias assessment
+	•	Incident-free period
+
+14.8 Change Management & Training
+Operational success requires:
+	•	Training Level 1 officers
+	•	Training supervisors
+	•	Training fraud review teams
+	•	Publishing AI usage guidelines
+	•	Updating operational SOPs
+Officers must understand:
+	•	AI is advisory
+	•	Override authority
+	•	How to interpret confidence scores
+	•	How to report anomalies
+
+14.9 Communication & Transparency
+Public communication strategy:
+	•	Publish AI governance framework
+	•	Publish fairness commitments
+	•	Provide transparency documentation
+	•	Clarify non-autonomous nature of AI
+Internal communication:
+	•	Deployment announcements
+	•	Model update logs
+	•	Performance summaries
+
+14.10 Long-Term Evolution
+Future enhancements may include:
+	•	Reinforcement learning for routing optimization
+	•	Multilingual deep language adaptation
+	•	Cross-agency policy gap analysis
+	•	Real-time citizen satisfaction scoring
+	•	Advanced graph-based fraud detection
+All future enhancements must pass:
+	•	Risk assessment
+	•	Bias audit
+	•	Governance approval
+	•	Security validation
+
+14.11 Completion Criteria for Full ML Maturity
+The eSCC ML platform is considered fully mature when:
+	•	All core use cases operational
+	•	Bias monitoring automated
+	•	Drift detection automated
+	•	Failover tested and validated
+	•	Annual audit passed
+	•	No critical ML-related incident in 12 months
+
+

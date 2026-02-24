@@ -1,0 +1,1457 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ============================================
+// ENUMS
+// ============================================
+
+enum UserType {
+  CITIZEN
+  BUSINESS
+  AGENCY_AGENT
+  SERVICE_PROVIDER_AGENT
+  COMMAND_CENTER_ADMIN
+  SUPER_ADMIN
+  API_CLIENT
+}
+
+enum AgencyType {
+  MINISTRY
+  DEPARTMENT
+  PARASTATAL
+  COUNTY_GOVERNMENT
+  REGULATORY_BODY
+  SERVICE_PROVIDER
+}
+
+enum TicketChannel {
+  WEB
+  MOBILE
+  USSD
+  SMS
+  API
+  CALL_CENTER
+  WHATSAPP
+  EMAIL
+}
+
+enum TicketStatusName {
+  OPEN
+  ASSIGNED
+  IN_PROGRESS
+  ESCALATED
+  PENDING_CITIZEN
+  RESOLVED
+  CLOSED
+  REOPENED
+  REJECTED
+}
+
+enum TicketPriorityName {
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
+}
+
+enum MessageType {
+  COMMENT
+  STATUS_CHANGE
+  ESCALATION_NOTE
+  SYSTEM_UPDATE
+}
+
+enum BreachType {
+  RESPONSE
+  RESOLUTION
+}
+
+enum EscalationTrigger {
+  SYSTEM
+  SUPERVISOR
+  COMMAND_CENTER
+  MANUAL_OVERRIDE
+}
+
+enum ExecutionStatus {
+  SUCCESS
+  FAILED
+  SKIPPED
+}
+
+enum NotificationChannel {
+  EMAIL
+  SMS
+  PUSH
+  IN_APP
+  WEBHOOK
+}
+
+enum NotificationStatus {
+  PENDING
+  SENT
+  FAILED
+  CANCELLED
+  RETRYING
+}
+
+enum DeliveryStatus {
+  PENDING
+  DELIVERED
+  FAILED
+  BOUNCED
+}
+
+enum KbVisibility {
+  PUBLIC
+  AGENCY_INTERNAL
+  AGENT_ONLY
+}
+
+enum AccessType {
+  READ
+  EXPORT
+  PRINT
+  DOWNLOAD
+}
+
+enum OnboardingStatus {
+  PENDING
+  IN_PROGRESS
+  COMPLETED
+  SUSPENDED
+}
+
+// ============================================
+// DOMAIN 1: USER & IDENTITY
+// ============================================
+
+model User {
+  id                     String    @id @default(uuid()) @db.Uuid
+  ecitizenUserId         String?   @unique @map("ecitizen_user_id") @db.VarChar(100)
+  userType               UserType  @map("user_type")
+  firstName              String?   @map("first_name") @db.VarChar(100)
+  lastName               String?   @map("last_name") @db.VarChar(100)
+  email                  String    @unique @db.VarChar(255)
+  phoneNumber            String?   @map("phone_number") @db.VarChar(20)
+  nationalId             String?   @map("national_id") @db.VarChar(50)
+  businessRegistrationNo String?   @map("business_registration_no") @db.VarChar(100)
+  passwordHash           String?   @map("password_hash")
+  isActive               Boolean   @default(true) @map("is_active")
+  isVerified             Boolean   @default(false) @map("is_verified")
+  mfaEnabled             Boolean   @default(false) @map("mfa_enabled")
+  lastLoginAt            DateTime? @map("last_login_at")
+  createdAt              DateTime  @default(now()) @map("created_at")
+  updatedAt              DateTime  @updatedAt @map("updated_at")
+  deletedAt              DateTime? @map("deleted_at")
+
+  // Relations
+  userRoles              UserRole[]
+  agencyUsers            AgencyUser[]
+  sessions               Session[]
+  passwordResetTokens    PasswordResetToken[]
+  mfaDevices             MfaDevice[]
+  ticketsCreated         Ticket[]             @relation("TicketCreator")
+  ticketsAssigned        Ticket[]             @relation("TicketAssignee")
+  ticketMessages         TicketMessage[]
+  ticketAssignmentsTo    TicketAssignment[]   @relation("AssignedTo")
+  ticketAssignmentsBy    TicketAssignment[]   @relation("AssignedBy")
+  ticketHistory          TicketHistory[]
+  ticketAttachments      TicketAttachment[]
+  escalationEventsTo     EscalationEvent[]
+  aiRecommendations      AiRecommendation[]
+  automationRules        AutomationRule[]
+  workflowTriggers       WorkflowTrigger[]
+  kbArticles             KbArticle[]
+  kbArticleVersions      KbArticleVersion[]
+  kbFeedback             KbFeedback[]
+  kbArticleViews         KbArticleView[]
+  auditLogs              AuditLog[]
+  userActivityLogs       UserActivityLog[]
+  dataAccessLogs         DataAccessLog[]
+  consentRecords         ConsentRecord[]
+  userActivityMetrics    UserActivityMetric[]
+  userRolesAssigned      UserRole[]           @relation("AssignedBy")
+
+  @@map("users")
+}
+
+model Role {
+  id           String   @id @default(uuid()) @db.Uuid
+  name         String   @unique @db.VarChar(100)
+  description  String?
+  isSystemRole Boolean  @default(false) @map("is_system_role")
+  createdAt    DateTime @default(now()) @map("created_at")
+
+  rolePermissions RolePermission[]
+  userRoles       UserRole[]
+
+  @@map("roles")
+}
+
+model Permission {
+  id          String @id @default(uuid()) @db.Uuid
+  name        String @db.VarChar(150)
+  resource    String @db.VarChar(100)
+  action      String @db.VarChar(50)
+  description String?
+
+  rolePermissions RolePermission[]
+
+  @@unique([resource, action], name: "uq_permissions")
+  @@map("permissions")
+}
+
+model RolePermission {
+  roleId       String @map("role_id") @db.Uuid
+  permissionId String @map("permission_id") @db.Uuid
+
+  role       Role       @relation(fields: [roleId], references: [id], onDelete: Cascade)
+  permission Permission @relation(fields: [permissionId], references: [id], onDelete: Cascade)
+
+  @@id([roleId, permissionId])
+  @@map("role_permissions")
+}
+
+model UserRole {
+  id         String   @id @default(uuid()) @db.Uuid
+  userId     String   @map("user_id") @db.Uuid
+  roleId     String   @map("role_id") @db.Uuid
+  agencyId   String?  @map("agency_id") @db.Uuid
+  assignedAt DateTime @default(now()) @map("assigned_at")
+  assignedBy String?  @map("assigned_by") @db.Uuid
+
+  user       User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  role       Role  @relation(fields: [roleId], references: [id], onDelete: Cascade)
+  assigner   User? @relation("AssignedBy", fields: [assignedBy], references: [id])
+
+  @@unique([userId, roleId, agencyId], name: "uq_user_role")
+  @@map("user_roles")
+}
+
+model AgencyUser {
+  id               String   @id @default(uuid()) @db.Uuid
+  userId           String   @map("user_id") @db.Uuid
+  agencyId         String   @map("agency_id") @db.Uuid
+  departmentId     String?  @map("department_id") @db.Uuid
+  employmentStatus String   @default("active") @map("employment_status") @db.VarChar(30)
+  createdAt        DateTime @default(now()) @map("created_at")
+
+  user       User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  agency     Agency      @relation(fields: [agencyId], references: [id], onDelete: Cascade)
+  department Department? @relation(fields: [departmentId], references: [id])
+
+  @@unique([userId, agencyId], name: "uq_agency_user")
+  @@map("agency_users")
+}
+
+model Session {
+  id               String   @id @default(uuid()) @db.Uuid
+  userId           String   @map("user_id") @db.Uuid
+  refreshTokenHash String   @map("refresh_token_hash")
+  ipAddress        String?  @map("ip_address") @db.VarChar(45)
+  userAgent        String?  @map("user_agent")
+  expiresAt        DateTime @map("expires_at")
+  revoked          Boolean  @default(false)
+  createdAt        DateTime @default(now()) @map("created_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("sessions")
+}
+
+model ApiKey {
+  id         String    @id @default(uuid()) @db.Uuid
+  clientName String?   @map("client_name") @db.VarChar(150)
+  apiKeyHash String    @map("api_key_hash")
+  agencyId   String?   @map("agency_id") @db.Uuid
+  isActive   Boolean   @default(true) @map("is_active")
+  rateLimit  Int       @default(1000) @map("rate_limit")
+  expiresAt  DateTime? @map("expires_at")
+  createdAt  DateTime  @default(now()) @map("created_at")
+
+  agency Agency? @relation(fields: [agencyId], references: [id])
+
+  @@map("api_keys")
+}
+
+model AuthenticationLog {
+  id             BigInt   @id @default(autoincrement())
+  userId         String?  @map("user_id") @db.Uuid
+  emailAttempted String?  @map("email_attempted") @db.VarChar(255)
+  success        Boolean?
+  failureReason  String?  @map("failure_reason") @db.VarChar(255)
+  ipAddress      String?  @map("ip_address") @db.VarChar(45)
+  userAgent      String?  @map("user_agent")
+  createdAt      DateTime @default(now()) @map("created_at")
+
+  @@map("authentication_logs")
+}
+
+model PasswordResetToken {
+  id        String   @id @default(uuid()) @db.Uuid
+  userId    String   @map("user_id") @db.Uuid
+  tokenHash String   @map("token_hash")
+  expiresAt DateTime @map("expires_at")
+  used      Boolean  @default(false)
+  createdAt DateTime @default(now()) @map("created_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("password_reset_tokens")
+}
+
+model MfaDevice {
+  id         String   @id @default(uuid()) @db.Uuid
+  userId     String   @map("user_id") @db.Uuid
+  deviceType String?  @map("device_type") @db.VarChar(50)
+  secretKey  String   @map("secret_key")
+  isVerified Boolean  @default(false) @map("is_verified")
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("mfa_devices")
+}
+
+// ============================================
+// DOMAIN 2: AGENCY & ORGANIZATION
+// ============================================
+
+model Agency {
+  id                 String          @id @default(uuid()) @db.Uuid
+  agencyCode         String          @unique @map("agency_code") @db.VarChar(50)
+  agencyName         String          @map("agency_name") @db.VarChar(255)
+  agencyType         AgencyType      @map("agency_type")
+  parentAgencyId     String?         @map("parent_agency_id") @db.Uuid
+  registrationNumber String?         @map("registration_number") @db.VarChar(100)
+  officialEmail      String?         @map("official_email") @db.VarChar(255)
+  officialPhone      String?         @map("official_phone") @db.VarChar(50)
+  physicalAddress    String?         @map("physical_address")
+  county             String?         @db.VarChar(100)
+  isActive           Boolean         @default(true) @map("is_active")
+  onboardingStatus   OnboardingStatus @default(PENDING) @map("onboarding_status")
+  createdAt          DateTime        @default(now()) @map("created_at")
+  updatedAt          DateTime        @updatedAt @map("updated_at")
+
+  parentAgency       Agency?          @relation("AgencyHierarchy", fields: [parentAgencyId], references: [id])
+  childAgencies      Agency[]         @relation("AgencyHierarchy")
+  departments        Department[]
+  agencyUsers        AgencyUser[]
+  apiKeys            ApiKey[]
+  escalationMatrices EscalationMatrix[]
+  agencySettings     AgencySetting[]
+  businessHours      AgencyBusinessHour[]
+  agencyContacts     AgencyContact[]
+  agencyServiceMaps  AgencyServiceMapping[]
+  ticketCategories   TicketCategory[]
+  tickets            Ticket[]
+  slaPolicies        SlaPolicy[]
+  automationRules    AutomationRule[]
+  kbCategories       KbCategory[]
+  kbArticles         KbArticle[]
+  kbTags             KbTag[]
+  notificationTemplates NotificationTemplate[]
+  notifications      Notification[]
+  ticketTags         TicketTag[]
+  ticketMetricsHourly  TicketMetricHourly[]
+  ticketMetricsDaily   TicketMetricDaily[]
+  agencyPerformance    AgencyPerformanceMetric[]
+  slaPerformance       SlaPerformanceMetric[]
+  userActivityLogs     UserActivityLog[]
+  dataAccessLogs       DataAccessLog[]
+  userActivityMetrics  UserActivityMetric[]
+  dashboardSnapshots   DashboardSnapshot[]
+  businessCalendarOverrides BusinessCalendarOverride[]
+
+  @@map("agencies")
+}
+
+model Department {
+  id             String   @id @default(uuid()) @db.Uuid
+  agencyId       String   @map("agency_id") @db.Uuid
+  departmentName String   @map("department_name") @db.VarChar(255)
+  departmentCode String?  @map("department_code") @db.VarChar(50)
+  description    String?
+  isActive       Boolean  @default(true) @map("is_active")
+  createdAt      DateTime @default(now()) @map("created_at")
+
+  agency          Agency            @relation(fields: [agencyId], references: [id], onDelete: Cascade)
+  agencyUsers     AgencyUser[]
+  tickets         Ticket[]
+  escalationLevels EscalationLevel[]
+
+  @@unique([agencyId, departmentName], name: "uq_department")
+  @@map("departments")
+}
+
+model ServiceProvider {
+  id                String    @id @default(uuid()) @db.Uuid
+  providerName      String    @unique @map("provider_name") @db.VarChar(255)
+  providerType      String?   @map("provider_type") @db.VarChar(100)
+  contactEmail      String?   @map("contact_email") @db.VarChar(255)
+  contactPhone      String?   @map("contact_phone") @db.VarChar(50)
+  contractReference String?   @map("contract_reference") @db.VarChar(100)
+  contractStartDate DateTime? @map("contract_start_date") @db.Date
+  contractEndDate   DateTime? @map("contract_end_date") @db.Date
+  isActive          Boolean   @default(true) @map("is_active")
+  createdAt         DateTime  @default(now()) @map("created_at")
+
+  agencyServiceMaps AgencyServiceMapping[]
+
+  @@map("service_providers")
+}
+
+model AgencyServiceMapping {
+  id                String   @id @default(uuid()) @db.Uuid
+  agencyId          String   @map("agency_id") @db.Uuid
+  serviceProviderId String   @map("service_provider_id") @db.Uuid
+  supportScope      String?  @map("support_scope")
+  isPrimary         Boolean  @default(false) @map("is_primary")
+  createdAt         DateTime @default(now()) @map("created_at")
+
+  agency          Agency          @relation(fields: [agencyId], references: [id], onDelete: Cascade)
+  serviceProvider ServiceProvider @relation(fields: [serviceProviderId], references: [id], onDelete: Cascade)
+
+  @@unique([agencyId, serviceProviderId], name: "uq_agency_provider")
+  @@map("agency_service_mappings")
+}
+
+model EscalationMatrix {
+  id                       String   @id @default(uuid()) @db.Uuid
+  agencyId                 String   @map("agency_id") @db.Uuid
+  priorityLevel            String   @map("priority_level") @db.VarChar(50)
+  maxResponseTimeMinutes   Int      @map("max_response_time_minutes")
+  maxResolutionTimeMinutes Int      @map("max_resolution_time_minutes")
+  autoEscalationEnabled    Boolean  @default(true) @map("auto_escalation_enabled")
+  createdAt                DateTime @default(now()) @map("created_at")
+
+  agency           Agency            @relation(fields: [agencyId], references: [id], onDelete: Cascade)
+  escalationLevels EscalationLevel[]
+
+  @@map("escalation_matrix")
+}
+
+model EscalationLevel {
+  id                   String   @id @default(uuid()) @db.Uuid
+  escalationMatrixId   String   @map("escalation_matrix_id") @db.Uuid
+  levelNumber          Int      @map("level_number")
+  escalationRole       String?  @map("escalation_role") @db.VarChar(100)
+  escalationDepartmentId String? @map("escalation_department_id") @db.Uuid
+  notifyViaEmail       Boolean  @default(true) @map("notify_via_email")
+  notifyViaSms         Boolean  @default(false) @map("notify_via_sms")
+  createdAt            DateTime @default(now()) @map("created_at")
+
+  escalationMatrix EscalationMatrix @relation(fields: [escalationMatrixId], references: [id], onDelete: Cascade)
+  department       Department?       @relation(fields: [escalationDepartmentId], references: [id])
+
+  @@unique([escalationMatrixId, levelNumber], name: "uq_escalation_level")
+  @@map("escalation_levels")
+}
+
+model AgencySetting {
+  id           String   @id @default(uuid()) @db.Uuid
+  agencyId     String   @map("agency_id") @db.Uuid
+  settingKey   String   @map("setting_key") @db.VarChar(100)
+  settingValue String   @map("setting_value")
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  agency Agency @relation(fields: [agencyId], references: [id], onDelete: Cascade)
+
+  @@unique([agencyId, settingKey], name: "uq_agency_setting")
+  @@map("agency_settings")
+}
+
+model AgencyBusinessHour {
+  id        String  @id @default(uuid()) @db.Uuid
+  agencyId  String  @map("agency_id") @db.Uuid
+  dayOfWeek Int     @map("day_of_week")
+  startTime String  @map("start_time") @db.VarChar(8)
+  endTime   String  @map("end_time") @db.VarChar(8)
+  isActive  Boolean @default(true) @map("is_active")
+
+  agency Agency @relation(fields: [agencyId], references: [id], onDelete: Cascade)
+
+  @@unique([agencyId, dayOfWeek], name: "uq_business_hours")
+  @@map("agency_business_hours")
+}
+
+model AgencyContact {
+  id              String   @id @default(uuid()) @db.Uuid
+  agencyId        String   @map("agency_id") @db.Uuid
+  contactName     String?  @map("contact_name") @db.VarChar(255)
+  roleTitle       String?  @map("role_title") @db.VarChar(255)
+  email           String?  @db.VarChar(255)
+  phone           String?  @db.VarChar(50)
+  escalationLevel Int?     @map("escalation_level")
+  createdAt       DateTime @default(now()) @map("created_at")
+
+  agency Agency @relation(fields: [agencyId], references: [id], onDelete: Cascade)
+
+  @@map("agency_contacts")
+}
+
+// ============================================
+// DOMAIN 3: TICKET MANAGEMENT
+// ============================================
+
+model TicketCategory {
+  id          String   @id @default(uuid()) @db.Uuid
+  agencyId    String   @map("agency_id") @db.Uuid
+  name        String   @db.VarChar(150)
+  description String?
+  isActive    Boolean  @default(true) @map("is_active")
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  agency              Agency               @relation(fields: [agencyId], references: [id], onDelete: Cascade)
+  tickets             Ticket[]
+  aiClassificationLogs AiClassificationLog[] @relation("PredictedCategory")
+  slaRules            SlaRule[]             @relation("SlaRuleCategory")
+
+  @@unique([agencyId, name], name: "uq_ticket_category")
+  @@map("ticket_categories")
+}
+
+model TicketPriorityLevel {
+  id            String             @id @default(uuid()) @db.Uuid
+  name          TicketPriorityName @unique
+  severityScore Int                @map("severity_score")
+  description   String?
+
+  tickets              Ticket[]
+  aiClassificationLogs AiClassificationLog[] @relation("PredictedPriority")
+  slaRules             SlaRule[]
+
+  @@map("ticket_priority_levels")
+}
+
+model TicketStatus {
+  id             String           @id @default(uuid()) @db.Uuid
+  name           TicketStatusName @unique
+  isClosedStatus Boolean          @default(false) @map("is_closed_status")
+  isSystemStatus Boolean          @default(false) @map("is_system_status")
+
+  tickets            Ticket[]
+  ticketHistoryOld   TicketHistory[] @relation("OldStatus")
+  ticketHistoryNew   TicketHistory[] @relation("NewStatus")
+
+  @@map("ticket_statuses")
+}
+
+model Ticket {
+  id                    String        @id @default(uuid()) @db.Uuid
+  ticketNumber          String        @unique @map("ticket_number") @db.VarChar(30)
+  agencyId              String        @map("agency_id") @db.Uuid
+  departmentId          String?       @map("department_id") @db.Uuid
+  categoryId            String?       @map("category_id") @db.Uuid
+  createdBy             String        @map("created_by") @db.Uuid
+  currentAssigneeId     String?       @map("current_assignee_id") @db.Uuid
+  priorityId            String?       @map("priority_id") @db.Uuid
+  statusId              String        @map("status_id") @db.Uuid
+  channel               TicketChannel
+  subject               String        @db.VarChar(255)
+  description           String
+  aiPredictedCategoryId String?       @map("ai_predicted_category_id") @db.Uuid
+  aiConfidenceScore     Decimal?      @map("ai_confidence_score") @db.Decimal(5, 2)
+  aiAutoAssigned        Boolean       @default(false) @map("ai_auto_assigned")
+  slaResponseDueAt      DateTime?     @map("sla_response_due_at")
+  slaResolutionDueAt    DateTime?     @map("sla_resolution_due_at")
+  firstResponseAt       DateTime?     @map("first_response_at")
+  resolvedAt            DateTime?     @map("resolved_at")
+  closedAt              DateTime?     @map("closed_at")
+  reopenCount           Int           @default(0) @map("reopen_count")
+  escalationLevel       Int           @default(0) @map("escalation_level")
+  isEscalated           Boolean       @default(false) @map("is_escalated")
+  isDeleted             Boolean       @default(false) @map("is_deleted")
+  createdAt             DateTime      @default(now()) @map("created_at")
+  updatedAt             DateTime      @updatedAt @map("updated_at")
+
+  agency            Agency              @relation(fields: [agencyId], references: [id])
+  department        Department?         @relation(fields: [departmentId], references: [id])
+  category          TicketCategory?     @relation(fields: [categoryId], references: [id])
+  creator           User                @relation("TicketCreator", fields: [createdBy], references: [id])
+  assignee          User?               @relation("TicketAssignee", fields: [currentAssigneeId], references: [id])
+  priority          TicketPriorityLevel? @relation(fields: [priorityId], references: [id])
+  status            TicketStatus        @relation(fields: [statusId], references: [id])
+  messages          TicketMessage[]
+  attachments       TicketAttachment[]
+  assignments       TicketAssignment[]
+  history           TicketHistory[]
+  tagMappings       TicketTagMapping[]
+  slaTracking       SlaTracking?
+  escalationEvents  EscalationEvent[]
+  breachLogs        BreachLog[]
+  aiClassifications AiClassificationLog[]
+  aiRecommendations AiRecommendation[]
+  automationLogs    AutomationExecutionLog[]
+  workflowTriggers  WorkflowTrigger[]
+  notifications     Notification[]
+
+  @@index([agencyId, statusId])
+  @@index([agencyId, priorityId])
+  @@index([agencyId, createdAt(sort: Desc)])
+  @@index([currentAssigneeId])
+  @@map("tickets")
+}
+
+model TicketMessage {
+  id          String      @id @default(uuid()) @db.Uuid
+  ticketId    String      @map("ticket_id") @db.Uuid
+  senderId    String?     @map("sender_id") @db.Uuid
+  messageType MessageType @default(COMMENT) @map("message_type")
+  messageText String?     @map("message_text")
+  isInternal  Boolean     @default(false) @map("is_internal")
+  createdAt   DateTime    @default(now()) @map("created_at")
+
+  ticket      Ticket             @relation(fields: [ticketId], references: [id], onDelete: Cascade)
+  sender      User?              @relation(fields: [senderId], references: [id])
+  attachments TicketAttachment[]
+
+  @@index([ticketId, createdAt])
+  @@map("ticket_messages")
+}
+
+model TicketAttachment {
+  id         String   @id @default(uuid()) @db.Uuid
+  ticketId   String   @map("ticket_id") @db.Uuid
+  messageId  String?  @map("message_id") @db.Uuid
+  fileName   String?  @map("file_name") @db.VarChar(255)
+  fileType   String?  @map("file_type") @db.VarChar(100)
+  fileSize   BigInt?  @map("file_size")
+  storageUrl String   @map("storage_url")
+  uploadedBy String?  @map("uploaded_by") @db.Uuid
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  ticket  Ticket         @relation(fields: [ticketId], references: [id], onDelete: Cascade)
+  message TicketMessage? @relation(fields: [messageId], references: [id])
+  uploader User?         @relation(fields: [uploadedBy], references: [id])
+
+  @@map("ticket_attachments")
+}
+
+model TicketAssignment {
+  id               String   @id @default(uuid()) @db.Uuid
+  ticketId         String   @map("ticket_id") @db.Uuid
+  assignedTo       String?  @map("assigned_to") @db.Uuid
+  assignedBy       String?  @map("assigned_by") @db.Uuid
+  assignmentReason String?  @map("assignment_reason")
+  assignedAt       DateTime @default(now()) @map("assigned_at")
+
+  ticket   Ticket @relation(fields: [ticketId], references: [id], onDelete: Cascade)
+  assignee User?  @relation("AssignedTo", fields: [assignedTo], references: [id])
+  assigner User?  @relation("AssignedBy", fields: [assignedBy], references: [id])
+
+  @@map("ticket_assignments")
+}
+
+model TicketHistory {
+  id           BigInt   @id @default(autoincrement())
+  ticketId     String   @map("ticket_id") @db.Uuid
+  oldStatusId  String?  @map("old_status_id") @db.Uuid
+  newStatusId  String?  @map("new_status_id") @db.Uuid
+  changedBy    String?  @map("changed_by") @db.Uuid
+  changeReason String?  @map("change_reason")
+  changedAt    DateTime @default(now()) @map("changed_at")
+
+  ticket    Ticket        @relation(fields: [ticketId], references: [id], onDelete: Cascade)
+  oldStatus TicketStatus? @relation("OldStatus", fields: [oldStatusId], references: [id])
+  newStatus TicketStatus? @relation("NewStatus", fields: [newStatusId], references: [id])
+  changer   User?         @relation(fields: [changedBy], references: [id])
+
+  @@index([ticketId, changedAt])
+  @@map("ticket_history")
+}
+
+model TicketTag {
+  id       String  @id @default(uuid()) @db.Uuid
+  name     String  @db.VarChar(100)
+  agencyId String? @map("agency_id") @db.Uuid
+
+  agency   Agency?          @relation(fields: [agencyId], references: [id])
+  mappings TicketTagMapping[]
+
+  @@unique([agencyId, name], name: "uq_ticket_tag")
+  @@map("ticket_tags")
+}
+
+model TicketTagMapping {
+  ticketId String @map("ticket_id") @db.Uuid
+  tagId    String @map("tag_id") @db.Uuid
+
+  ticket Ticket    @relation(fields: [ticketId], references: [id], onDelete: Cascade)
+  tag    TicketTag @relation(fields: [tagId], references: [id], onDelete: Cascade)
+
+  @@id([ticketId, tagId])
+  @@map("ticket_tag_mappings")
+}
+
+// ============================================
+// DOMAIN 4: SLA & ESCALATION
+// ============================================
+
+model SlaPolicy {
+  id                  String   @id @default(uuid()) @db.Uuid
+  agencyId            String   @map("agency_id") @db.Uuid
+  policyName          String   @map("policy_name") @db.VarChar(150)
+  description         String?
+  isActive            Boolean  @default(true) @map("is_active")
+  appliesBusinessHours Boolean @default(true) @map("applies_business_hours")
+  createdAt           DateTime @default(now()) @map("created_at")
+  updatedAt           DateTime @updatedAt @map("updated_at")
+
+  agency      Agency        @relation(fields: [agencyId], references: [id], onDelete: Cascade)
+  slaRules    SlaRule[]
+  slaTracking SlaTracking[]
+
+  @@unique([agencyId, policyName], name: "uq_sla_policy")
+  @@map("sla_policies")
+}
+
+model SlaRule {
+  id                    String @id @default(uuid()) @db.Uuid
+  slaPolicyId           String @map("sla_policy_id") @db.Uuid
+  priorityId            String? @map("priority_id") @db.Uuid
+  categoryId            String? @map("category_id") @db.Uuid
+  responseTimeMinutes   Int    @map("response_time_minutes")
+  resolutionTimeMinutes Int    @map("resolution_time_minutes")
+  escalationAfterMinutes Int?  @map("escalation_after_minutes")
+  createdAt             DateTime @default(now()) @map("created_at")
+
+  slaPolicy SlaPolicy            @relation(fields: [slaPolicyId], references: [id], onDelete: Cascade)
+  priority  TicketPriorityLevel? @relation(fields: [priorityId], references: [id])
+  category  TicketCategory?      @relation("SlaRuleCategory", fields: [categoryId], references: [id])
+
+  @@map("sla_rules")
+}
+
+model SlaTracking {
+  id                  String    @id @default(uuid()) @db.Uuid
+  ticketId            String    @unique @map("ticket_id") @db.Uuid
+  slaPolicyId         String?   @map("sla_policy_id") @db.Uuid
+  responseDueAt       DateTime  @map("response_due_at")
+  resolutionDueAt     DateTime  @map("resolution_due_at")
+  responseMet         Boolean?  @map("response_met")
+  resolutionMet       Boolean?  @map("resolution_met")
+  responseBreached    Boolean   @default(false) @map("response_breached")
+  resolutionBreached  Boolean   @default(false) @map("resolution_breached")
+  responseBreachAt    DateTime? @map("response_breach_at")
+  resolutionBreachAt  DateTime? @map("resolution_breach_at")
+  escalationLevel     Int       @default(0) @map("escalation_level")
+  lastEscalatedAt     DateTime? @map("last_escalated_at")
+  createdAt           DateTime  @default(now()) @map("created_at")
+  updatedAt           DateTime  @updatedAt @map("updated_at")
+
+  ticket    Ticket     @relation(fields: [ticketId], references: [id], onDelete: Cascade)
+  slaPolicy SlaPolicy? @relation(fields: [slaPolicyId], references: [id])
+  escalationEvents EscalationEvent[]
+  breachLogs       BreachLog[]
+
+  @@map("sla_tracking")
+}
+
+model EscalationEvent {
+  id                String           @id @default(uuid()) @db.Uuid
+  ticketId          String           @map("ticket_id") @db.Uuid
+  slaTrackingId     String?          @map("sla_tracking_id") @db.Uuid
+  previousLevel     Int?             @map("previous_level")
+  newLevel          Int?             @map("new_level")
+  escalatedToUserId String?          @map("escalated_to_user_id") @db.Uuid
+  escalatedToRole   String?          @map("escalated_to_role") @db.VarChar(100)
+  escalationReason  String?          @map("escalation_reason") @db.VarChar(255)
+  triggeredBy       EscalationTrigger @default(SYSTEM) @map("triggered_by")
+  createdAt         DateTime         @default(now()) @map("created_at")
+
+  ticket      Ticket       @relation(fields: [ticketId], references: [id], onDelete: Cascade)
+  slaTracking SlaTracking? @relation(fields: [slaTrackingId], references: [id])
+  escalatedTo User?        @relation(fields: [escalatedToUserId], references: [id])
+
+  @@map("escalation_events")
+}
+
+model BreachLog {
+  id                    BigInt    @id @default(autoincrement())
+  ticketId              String    @map("ticket_id") @db.Uuid
+  slaTrackingId         String?   @map("sla_tracking_id") @db.Uuid
+  breachType            BreachType @map("breach_type")
+  breachTimestamp       DateTime  @map("breach_timestamp")
+  breachDurationMinutes Int?      @map("breach_duration_minutes")
+  recordedAt            DateTime  @default(now()) @map("recorded_at")
+
+  ticket      Ticket       @relation(fields: [ticketId], references: [id], onDelete: Cascade)
+  slaTracking SlaTracking? @relation(fields: [slaTrackingId], references: [id])
+
+  @@map("breach_logs")
+}
+
+model BusinessCalendarOverride {
+  id           String   @id @default(uuid()) @db.Uuid
+  agencyId     String   @map("agency_id") @db.Uuid
+  overrideDate DateTime @map("override_date") @db.Date
+  isWorkingDay Boolean  @default(false) @map("is_working_day")
+  startTime    String?  @map("start_time") @db.VarChar(8)
+  endTime      String?  @map("end_time") @db.VarChar(8)
+  description  String?
+
+  agency Agency @relation(fields: [agencyId], references: [id], onDelete: Cascade)
+
+  @@unique([agencyId, overrideDate], name: "uq_calendar_override")
+  @@map("business_calendar_overrides")
+}
+
+// ============================================
+// DOMAIN 5: AI & AUTOMATION
+// ============================================
+
+model AiModel {
+  id                      String   @id @default(uuid()) @db.Uuid
+  modelName               String   @map("model_name") @db.VarChar(150)
+  modelVersion            String   @map("model_version") @db.VarChar(50)
+  modelType               String?  @map("model_type") @db.VarChar(100)
+  deploymentEnvironment   String?  @map("deployment_environment") @db.VarChar(50)
+  isActive                Boolean  @default(true) @map("is_active")
+  createdAt               DateTime @default(now()) @map("created_at")
+
+  classificationLogs AiClassificationLog[]
+
+  @@unique([modelName, modelVersion], name: "uq_ai_model")
+  @@map("ai_models")
+}
+
+model AiClassificationLog {
+  id                  String   @id @default(uuid()) @db.Uuid
+  ticketId            String   @map("ticket_id") @db.Uuid
+  aiModelId           String?  @map("ai_model_id") @db.Uuid
+  predictedCategoryId String?  @map("predicted_category_id") @db.Uuid
+  predictedPriorityId String?  @map("predicted_priority_id") @db.Uuid
+  confidenceScore     Decimal? @map("confidence_score") @db.Decimal(5, 2)
+  sentimentScore      Decimal? @map("sentiment_score") @db.Decimal(5, 2)
+  autoApplied         Boolean  @default(false) @map("auto_applied")
+  manualOverride      Boolean  @default(false) @map("manual_override")
+  createdAt           DateTime @default(now()) @map("created_at")
+
+  ticket            Ticket               @relation(fields: [ticketId], references: [id], onDelete: Cascade)
+  aiModel           AiModel?             @relation(fields: [aiModelId], references: [id])
+  predictedCategory TicketCategory?      @relation("PredictedCategory", fields: [predictedCategoryId], references: [id])
+  predictedPriority TicketPriorityLevel? @relation("PredictedPriority", fields: [predictedPriorityId], references: [id])
+
+  @@map("ai_classification_logs")
+}
+
+model AiRecommendation {
+  id                 String   @id @default(uuid()) @db.Uuid
+  ticketId           String   @map("ticket_id") @db.Uuid
+  recommendationType String?  @map("recommendation_type") @db.VarChar(100)
+  recommendedValue   String?  @map("recommended_value")
+  confidenceScore    Decimal? @map("confidence_score") @db.Decimal(5, 2)
+  applied            Boolean  @default(false)
+  appliedBy          String?  @map("applied_by") @db.Uuid
+  createdAt          DateTime @default(now()) @map("created_at")
+
+  ticket  Ticket @relation(fields: [ticketId], references: [id], onDelete: Cascade)
+  applier User?  @relation(fields: [appliedBy], references: [id])
+
+  @@map("ai_recommendations")
+}
+
+model AutomationRule {
+  id                  String   @id @default(uuid()) @db.Uuid
+  agencyId            String   @map("agency_id") @db.Uuid
+  ruleName            String   @map("rule_name") @db.VarChar(150)
+  triggerEvent        String   @map("trigger_event") @db.VarChar(100)
+  conditionExpression String   @map("condition_expression")
+  isActive            Boolean  @default(true) @map("is_active")
+  createdBy           String?  @map("created_by") @db.Uuid
+  createdAt           DateTime @default(now()) @map("created_at")
+
+  agency  Agency             @relation(fields: [agencyId], references: [id], onDelete: Cascade)
+  creator User?              @relation(fields: [createdBy], references: [id])
+  actions AutomationAction[]
+  executionLogs AutomationExecutionLog[]
+
+  @@unique([agencyId, ruleName], name: "uq_automation_rule")
+  @@map("automation_rules")
+}
+
+model AutomationAction {
+  id               String   @id @default(uuid()) @db.Uuid
+  automationRuleId String   @map("automation_rule_id") @db.Uuid
+  actionType       String   @map("action_type") @db.VarChar(100)
+  actionPayload    Json?    @map("action_payload")
+  executionOrder   Int      @default(1) @map("execution_order")
+  createdAt        DateTime @default(now()) @map("created_at")
+
+  automationRule AutomationRule @relation(fields: [automationRuleId], references: [id], onDelete: Cascade)
+
+  @@map("automation_actions")
+}
+
+model WorkflowTrigger {
+  id            String   @id @default(uuid()) @db.Uuid
+  ticketId      String?  @map("ticket_id") @db.Uuid
+  triggerType   String?  @map("trigger_type") @db.VarChar(100)
+  triggeredBy   String?  @map("triggered_by") @db.Uuid
+  triggerSource String?  @map("trigger_source") @db.VarChar(100)
+  createdAt     DateTime @default(now()) @map("created_at")
+
+  ticket  Ticket? @relation(fields: [ticketId], references: [id], onDelete: Cascade)
+  trigger User?   @relation(fields: [triggeredBy], references: [id])
+
+  @@map("workflow_triggers")
+}
+
+model AutomationExecutionLog {
+  id               BigInt          @id @default(autoincrement())
+  ticketId         String?         @map("ticket_id") @db.Uuid
+  automationRuleId String?         @map("automation_rule_id") @db.Uuid
+  actionType       String?         @map("action_type") @db.VarChar(100)
+  executionStatus  ExecutionStatus @map("execution_status")
+  errorMessage     String?         @map("error_message")
+  executedAt       DateTime        @default(now()) @map("executed_at")
+
+  ticket         Ticket?         @relation(fields: [ticketId], references: [id], onDelete: Cascade)
+  automationRule AutomationRule? @relation(fields: [automationRuleId], references: [id])
+
+  @@map("automation_execution_logs")
+}
+
+// ============================================
+// DOMAIN 6: KNOWLEDGE BASE
+// ============================================
+
+model KbCategory {
+  id               String   @id @default(uuid()) @db.Uuid
+  agencyId         String?  @map("agency_id") @db.Uuid
+  name             String   @db.VarChar(150)
+  description      String?
+  parentCategoryId String?  @map("parent_category_id") @db.Uuid
+  isActive         Boolean  @default(true) @map("is_active")
+  createdAt        DateTime @default(now()) @map("created_at")
+
+  agency         Agency?      @relation(fields: [agencyId], references: [id])
+  parentCategory KbCategory?  @relation("KbCategoryHierarchy", fields: [parentCategoryId], references: [id])
+  childCategories KbCategory[] @relation("KbCategoryHierarchy")
+  articles       KbArticle[]
+
+  @@unique([agencyId, name], name: "uq_kb_category")
+  @@map("kb_categories")
+}
+
+model KbArticle {
+  id               String       @id @default(uuid()) @db.Uuid
+  agencyId         String?      @map("agency_id") @db.Uuid
+  categoryId       String?      @map("category_id") @db.Uuid
+  title            String       @db.VarChar(255)
+  slug             String       @db.VarChar(255)
+  currentVersionId String?      @map("current_version_id") @db.Uuid
+  visibility       KbVisibility @default(PUBLIC)
+  isPublished      Boolean      @default(false) @map("is_published")
+  publishedAt      DateTime?    @map("published_at")
+  createdBy        String?      @map("created_by") @db.Uuid
+  createdAt        DateTime     @default(now()) @map("created_at")
+  updatedAt        DateTime     @updatedAt @map("updated_at")
+
+  agency    Agency?            @relation(fields: [agencyId], references: [id])
+  category  KbCategory?        @relation(fields: [categoryId], references: [id])
+  creator   User?              @relation(fields: [createdBy], references: [id])
+  versions  KbArticleVersion[]
+  tagMappings KbArticleTagMapping[]
+  feedback  KbFeedback[]
+  views     KbArticleView[]
+
+  @@unique([agencyId, slug], name: "uq_kb_slug")
+  @@map("kb_articles")
+}
+
+model KbArticleVersion {
+  id            String   @id @default(uuid()) @db.Uuid
+  articleId     String   @map("article_id") @db.Uuid
+  versionNumber Int      @map("version_number")
+  content       String
+  summary       String?
+  changeNotes   String?  @map("change_notes")
+  isPublished   Boolean  @default(false) @map("is_published")
+  createdBy     String?  @map("created_by") @db.Uuid
+  createdAt     DateTime @default(now()) @map("created_at")
+
+  article KbArticle @relation(fields: [articleId], references: [id], onDelete: Cascade)
+  creator User?     @relation(fields: [createdBy], references: [id])
+
+  @@unique([articleId, versionNumber], name: "uq_article_version")
+  @@map("kb_article_versions")
+}
+
+model KbTag {
+  id       String  @id @default(uuid()) @db.Uuid
+  agencyId String? @map("agency_id") @db.Uuid
+  name     String  @db.VarChar(100)
+
+  agency   Agency?              @relation(fields: [agencyId], references: [id])
+  mappings KbArticleTagMapping[]
+
+  @@unique([agencyId, name], name: "uq_kb_tag")
+  @@map("kb_tags")
+}
+
+model KbArticleTagMapping {
+  articleId String @map("article_id") @db.Uuid
+  tagId     String @map("tag_id") @db.Uuid
+
+  article KbArticle @relation(fields: [articleId], references: [id], onDelete: Cascade)
+  tag     KbTag     @relation(fields: [tagId], references: [id], onDelete: Cascade)
+
+  @@id([articleId, tagId])
+  @@map("kb_article_tag_mappings")
+}
+
+model KbFeedback {
+  id              String   @id @default(uuid()) @db.Uuid
+  articleId       String   @map("article_id") @db.Uuid
+  userId          String?  @map("user_id") @db.Uuid
+  rating          Int?
+  wasHelpful      Boolean? @map("was_helpful")
+  feedbackComment String?  @map("feedback_comment")
+  createdAt       DateTime @default(now()) @map("created_at")
+
+  article KbArticle @relation(fields: [articleId], references: [id], onDelete: Cascade)
+  user    User?     @relation(fields: [userId], references: [id])
+
+  @@map("kb_feedback")
+}
+
+model KbArticleView {
+  id        BigInt   @id @default(autoincrement())
+  articleId String   @map("article_id") @db.Uuid
+  viewedBy  String?  @map("viewed_by") @db.Uuid
+  ipAddress String?  @map("ip_address") @db.VarChar(45)
+  viewedAt  DateTime @default(now()) @map("viewed_at")
+
+  article KbArticle @relation(fields: [articleId], references: [id], onDelete: Cascade)
+  viewer  User?     @relation(fields: [viewedBy], references: [id])
+
+  @@map("kb_article_views")
+}
+
+// ============================================
+// DOMAIN 7: NOTIFICATIONS
+// ============================================
+
+model NotificationTemplate {
+  id              String              @id @default(uuid()) @db.Uuid
+  agencyId        String?             @map("agency_id") @db.Uuid
+  templateName    String              @map("template_name") @db.VarChar(150)
+  channel         NotificationChannel
+  subjectTemplate String?             @map("subject_template") @db.VarChar(255)
+  bodyTemplate    String              @map("body_template")
+  isActive        Boolean             @default(true) @map("is_active")
+  createdAt       DateTime            @default(now()) @map("created_at")
+  updatedAt       DateTime            @updatedAt @map("updated_at")
+
+  agency        Agency?        @relation(fields: [agencyId], references: [id])
+  notifications Notification[]
+
+  @@unique([agencyId, templateName, channel], name: "uq_notification_template")
+  @@map("notification_templates")
+}
+
+model Notification {
+  id           String              @id @default(uuid()) @db.Uuid
+  agencyId     String?             @map("agency_id") @db.Uuid
+  ticketId     String?             @map("ticket_id") @db.Uuid
+  templateId   String?             @map("template_id") @db.Uuid
+  triggerEvent String?             @map("trigger_event") @db.VarChar(100)
+  channel      NotificationChannel
+  status       NotificationStatus  @default(PENDING)
+  scheduledAt  DateTime            @default(now()) @map("scheduled_at")
+  sentAt       DateTime?           @map("sent_at")
+  retryCount   Int                 @default(0) @map("retry_count")
+  maxRetries   Int                 @default(3) @map("max_retries")
+  createdAt    DateTime            @default(now()) @map("created_at")
+
+  agency     Agency?               @relation(fields: [agencyId], references: [id])
+  ticket     Ticket?               @relation(fields: [ticketId], references: [id])
+  template   NotificationTemplate? @relation(fields: [templateId], references: [id])
+  recipients NotificationRecipient[]
+  deliveryLogs NotificationDeliveryLog[]
+  smsLogs    SmsLog[]
+  emailLogs  EmailLog[]
+  pushLogs   PushLog[]
+  webhookLogs WebhookLog[]
+
+  @@index([status, scheduledAt])
+  @@map("notifications")
+}
+
+model NotificationRecipient {
+  id              String         @id @default(uuid()) @db.Uuid
+  notificationId  String         @map("notification_id") @db.Uuid
+  recipientUserId String?        @map("recipient_user_id") @db.Uuid
+  recipientEmail  String?        @map("recipient_email") @db.VarChar(255)
+  recipientPhone  String?        @map("recipient_phone") @db.VarChar(50)
+  deliveryStatus  DeliveryStatus @default(PENDING) @map("delivery_status")
+  deliveredAt     DateTime?      @map("delivered_at")
+
+  notification Notification @relation(fields: [notificationId], references: [id], onDelete: Cascade)
+  deliveryLogs NotificationDeliveryLog[]
+
+  @@map("notification_recipients")
+}
+
+model NotificationDeliveryLog {
+  id             BigInt         @id @default(autoincrement())
+  notificationId String?        @map("notification_id") @db.Uuid
+  recipientId    String?        @map("recipient_id") @db.Uuid
+  attemptNumber  Int?           @map("attempt_number")
+  deliveryStatus DeliveryStatus @map("delivery_status")
+  providerResponse String?      @map("provider_response")
+  attemptedAt    DateTime       @default(now()) @map("attempted_at")
+
+  notification Notification?          @relation(fields: [notificationId], references: [id], onDelete: Cascade)
+  recipient    NotificationRecipient? @relation(fields: [recipientId], references: [id])
+
+  @@map("notification_delivery_logs")
+}
+
+model SmsLog {
+  id                BigInt   @id @default(autoincrement())
+  notificationId    String?  @map("notification_id") @db.Uuid
+  phoneNumber       String?  @map("phone_number") @db.VarChar(50)
+  messageBody       String?  @map("message_body")
+  providerName      String?  @map("provider_name") @db.VarChar(100)
+  providerMessageId String?  @map("provider_message_id") @db.VarChar(150)
+  deliveryStatus    String?  @map("delivery_status") @db.VarChar(50)
+  cost              Decimal? @db.Decimal(10, 4)
+  sentAt            DateTime @default(now()) @map("sent_at")
+
+  notification Notification? @relation(fields: [notificationId], references: [id])
+
+  @@map("sms_logs")
+}
+
+model EmailLog {
+  id                BigInt   @id @default(autoincrement())
+  notificationId    String?  @map("notification_id") @db.Uuid
+  recipientEmail    String?  @map("recipient_email") @db.VarChar(255)
+  subject           String?
+  messageBody       String?  @map("message_body")
+  providerName      String?  @map("provider_name") @db.VarChar(100)
+  providerMessageId String?  @map("provider_message_id") @db.VarChar(150)
+  deliveryStatus    String?  @map("delivery_status") @db.VarChar(50)
+  opened            Boolean  @default(false)
+  clicked           Boolean  @default(false)
+  sentAt            DateTime @default(now()) @map("sent_at")
+
+  notification Notification? @relation(fields: [notificationId], references: [id])
+
+  @@map("email_logs")
+}
+
+model PushLog {
+  id             BigInt   @id @default(autoincrement())
+  notificationId String?  @map("notification_id") @db.Uuid
+  deviceToken    String?  @map("device_token")
+  messageTitle   String?  @map("message_title")
+  messageBody    String?  @map("message_body")
+  deliveryStatus String?  @map("delivery_status") @db.VarChar(50)
+  sentAt         DateTime @default(now()) @map("sent_at")
+
+  notification Notification? @relation(fields: [notificationId], references: [id])
+
+  @@map("push_logs")
+}
+
+model WebhookLog {
+  id             BigInt   @id @default(autoincrement())
+  notificationId String?  @map("notification_id") @db.Uuid
+  targetUrl      String?  @map("target_url")
+  payload        Json?
+  responseStatus Int?     @map("response_status")
+  responseBody   String?  @map("response_body")
+  sentAt         DateTime @default(now()) @map("sent_at")
+
+  notification Notification? @relation(fields: [notificationId], references: [id])
+
+  @@map("webhook_logs")
+}
+
+// ============================================
+// DOMAIN 8: AUDIT & COMPLIANCE
+// ============================================
+
+model AuditLog {
+  id              BigInt   @id @default(autoincrement())
+  entityType      String   @map("entity_type") @db.VarChar(100)
+  entityId        String?  @map("entity_id") @db.Uuid
+  actionType      String   @map("action_type") @db.VarChar(100)
+  oldValue        Json?    @map("old_value")
+  newValue        Json?    @map("new_value")
+  performedBy     String?  @map("performed_by") @db.Uuid
+  performedByRole String?  @map("performed_by_role") @db.VarChar(100)
+  ipAddress       String?  @map("ip_address") @db.VarChar(45)
+  createdAt       DateTime @default(now()) @map("created_at")
+
+  performer User? @relation(fields: [performedBy], references: [id])
+
+  @@index([entityType, entityId])
+  @@index([createdAt(sort: Desc)])
+  @@map("audit_logs")
+}
+
+model UserActivityLog {
+  id           BigInt   @id @default(autoincrement())
+  userId       String?  @map("user_id") @db.Uuid
+  agencyId     String?  @map("agency_id") @db.Uuid
+  activityType String?  @map("activity_type") @db.VarChar(100)
+  ticketId     String?  @map("ticket_id") @db.Uuid
+  description  String?
+  ipAddress    String?  @map("ip_address") @db.VarChar(45)
+  userAgent    String?  @map("user_agent")
+  createdAt    DateTime @default(now()) @map("created_at")
+
+  user   User?   @relation(fields: [userId], references: [id])
+  agency Agency? @relation(fields: [agencyId], references: [id])
+
+  @@map("user_activity_logs")
+}
+
+model DataAccessLog {
+  id            BigInt   @id @default(autoincrement())
+  userId        String?  @map("user_id") @db.Uuid
+  agencyId      String?  @map("agency_id") @db.Uuid
+  entityType    String?  @map("entity_type") @db.VarChar(100)
+  entityId      String?  @map("entity_id") @db.Uuid
+  fieldAccessed String?  @map("field_accessed") @db.VarChar(100)
+  accessType    AccessType @map("access_type")
+  accessedAt    DateTime @default(now()) @map("accessed_at")
+
+  user   User?   @relation(fields: [userId], references: [id])
+  agency Agency? @relation(fields: [agencyId], references: [id])
+
+  @@map("data_access_logs")
+}
+
+model ConsentRecord {
+  id               String    @id @default(uuid()) @db.Uuid
+  userId           String?   @map("user_id") @db.Uuid
+  consentType      String    @map("consent_type") @db.VarChar(100)
+  currentVersionId String?   @map("current_version_id") @db.Uuid
+  consentGiven     Boolean   @map("consent_given")
+  consentTimestamp  DateTime  @map("consent_timestamp")
+  revokedAt        DateTime? @map("revoked_at")
+  createdAt        DateTime  @default(now()) @map("created_at")
+
+  user User? @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("consent_records")
+}
+
+model ConsentVersion {
+  id            String   @id @default(uuid()) @db.Uuid
+  consentType   String   @map("consent_type") @db.VarChar(100)
+  versionNumber Int      @map("version_number")
+  consentText   String   @map("consent_text")
+  effectiveDate DateTime @map("effective_date") @db.Date
+  createdAt     DateTime @default(now()) @map("created_at")
+
+  @@unique([consentType, versionNumber], name: "uq_consent_version")
+  @@map("consent_versions")
+}
+
+model RetentionPolicy {
+  id                  String   @id @default(uuid()) @db.Uuid
+  entityType          String   @unique @map("entity_type") @db.VarChar(100)
+  retentionPeriodDays Int      @map("retention_period_days")
+  archiveAfterDays    Int?     @map("archive_after_days")
+  isActive            Boolean  @default(true) @map("is_active")
+  createdAt           DateTime @default(now()) @map("created_at")
+
+  @@map("retention_policies")
+}
+
+model ArchivalRecord {
+  id                String   @id @default(uuid()) @db.Uuid
+  entityType        String?  @map("entity_type") @db.VarChar(100)
+  entityId          String?  @map("entity_id") @db.Uuid
+  archivedAt        DateTime @default(now()) @map("archived_at")
+  archivedByProcess String?  @map("archived_by_process") @db.VarChar(100)
+  storageLocation   String?  @map("storage_location")
+
+  @@map("archival_records")
+}
+
+// ============================================
+// DOMAIN 9: ANALYTICS & REPORTING
+// ============================================
+
+model TicketMetricHourly {
+  id                        BigInt   @id @default(autoincrement())
+  agencyId                  String?  @map("agency_id") @db.Uuid
+  hourBucket                DateTime @map("hour_bucket")
+  ticketsCreated            Int      @default(0) @map("tickets_created")
+  ticketsResolved           Int      @default(0) @map("tickets_resolved")
+  ticketsClosed             Int      @default(0) @map("tickets_closed")
+  ticketsEscalated          Int      @default(0) @map("tickets_escalated")
+  ticketsReopened           Int      @default(0) @map("tickets_reopened")
+  avgFirstResponseMinutes   Decimal? @map("avg_first_response_minutes") @db.Decimal(10, 2)
+  avgResolutionMinutes      Decimal? @map("avg_resolution_minutes") @db.Decimal(10, 2)
+  createdAt                 DateTime @default(now()) @map("created_at")
+
+  agency Agency? @relation(fields: [agencyId], references: [id])
+
+  @@unique([agencyId, hourBucket], name: "uq_ticket_hourly")
+  @@map("ticket_metrics_hourly")
+}
+
+model TicketMetricDaily {
+  id                        BigInt   @id @default(autoincrement())
+  agencyId                  String?  @map("agency_id") @db.Uuid
+  dateBucket                DateTime @map("date_bucket") @db.Date
+  ticketsCreated            Int      @default(0) @map("tickets_created")
+  ticketsResolved           Int      @default(0) @map("tickets_resolved")
+  ticketsClosed             Int      @default(0) @map("tickets_closed")
+  openTickets               Int      @default(0) @map("open_tickets")
+  escalatedTickets          Int      @default(0) @map("escalated_tickets")
+  breachedResponse          Int      @default(0) @map("breached_response")
+  breachedResolution        Int      @default(0) @map("breached_resolution")
+  avgFirstResponseMinutes   Decimal? @map("avg_first_response_minutes") @db.Decimal(10, 2)
+  avgResolutionMinutes      Decimal? @map("avg_resolution_minutes") @db.Decimal(10, 2)
+  createdAt                 DateTime @default(now()) @map("created_at")
+
+  agency Agency? @relation(fields: [agencyId], references: [id])
+
+  @@unique([agencyId, dateBucket], name: "uq_ticket_daily")
+  @@map("ticket_metrics_daily")
+}
+
+model AgencyPerformanceMetric {
+  id                        BigInt   @id @default(autoincrement())
+  agencyId                  String?  @map("agency_id") @db.Uuid
+  reportingPeriodStart      DateTime @map("reporting_period_start") @db.Date
+  reportingPeriodEnd        DateTime @map("reporting_period_end") @db.Date
+  totalTickets              Int?     @map("total_tickets")
+  avgResponseTime           Decimal? @map("avg_response_time") @db.Decimal(10, 2)
+  avgResolutionTime         Decimal? @map("avg_resolution_time") @db.Decimal(10, 2)
+  slaCompliancePercentage   Decimal? @map("sla_compliance_percentage") @db.Decimal(5, 2)
+  escalationRatePercentage  Decimal? @map("escalation_rate_percentage") @db.Decimal(5, 2)
+  citizenSatisfactionScore  Decimal? @map("citizen_satisfaction_score") @db.Decimal(5, 2)
+  createdAt                 DateTime @default(now()) @map("created_at")
+
+  agency Agency? @relation(fields: [agencyId], references: [id])
+
+  @@unique([agencyId, reportingPeriodStart, reportingPeriodEnd], name: "uq_agency_performance")
+  @@map("agency_performance_metrics")
+}
+
+model SlaPerformanceMetric {
+  id                        BigInt   @id @default(autoincrement())
+  agencyId                  String?  @map("agency_id") @db.Uuid
+  dateBucket                DateTime @map("date_bucket") @db.Date
+  totalSlaTracked           Int?     @map("total_sla_tracked")
+  responseMet               Int?     @map("response_met")
+  responseBreached          Int?     @map("response_breached")
+  resolutionMet             Int?     @map("resolution_met")
+  resolutionBreached        Int?     @map("resolution_breached")
+  avgBreachDurationMinutes  Decimal? @map("avg_breach_duration_minutes") @db.Decimal(10, 2)
+  createdAt                 DateTime @default(now()) @map("created_at")
+
+  agency Agency? @relation(fields: [agencyId], references: [id])
+
+  @@unique([agencyId, dateBucket], name: "uq_sla_daily")
+  @@map("sla_performance_metrics")
+}
+
+model UserActivityMetric {
+  id                        BigInt   @id @default(autoincrement())
+  userId                    String?  @map("user_id") @db.Uuid
+  agencyId                  String?  @map("agency_id") @db.Uuid
+  dateBucket                DateTime @map("date_bucket") @db.Date
+  ticketsAssigned           Int      @default(0) @map("tickets_assigned")
+  ticketsResolved           Int      @default(0) @map("tickets_resolved")
+  avgResolutionTimeMinutes  Decimal? @map("avg_resolution_time_minutes") @db.Decimal(10, 2)
+  escalationsHandled        Int      @default(0) @map("escalations_handled")
+  createdAt                 DateTime @default(now()) @map("created_at")
+
+  user   User?   @relation(fields: [userId], references: [id])
+  agency Agency? @relation(fields: [agencyId], references: [id])
+
+  @@unique([userId, dateBucket], name: "uq_user_daily")
+  @@map("user_activity_metrics")
+}
+
+model DashboardSnapshot {
+  id              String   @id @default(uuid()) @db.Uuid
+  agencyId        String?  @map("agency_id") @db.Uuid
+  snapshotType    String?  @map("snapshot_type") @db.VarChar(100)
+  snapshotPayload Json     @map("snapshot_payload")
+  generatedAt     DateTime @default(now()) @map("generated_at")
+
+  agency Agency? @relation(fields: [agencyId], references: [id])
+
+  @@map("dashboard_snapshots")
+}
+
+// ============================================
+// DOMAIN 10: INTEGRATION
+// ============================================
+
+model ApiIdempotencyKey {
+  id             String   @id @default(uuid()) @db.Uuid
+  idempotencyKey String   @map("idempotency_key") @db.VarChar(255)
+  endpoint       String?  @db.VarChar(255)
+  requestHash    String?  @map("request_hash")
+  responseSnapshot Json?  @map("response_snapshot")
+  createdAt      DateTime @default(now()) @map("created_at")
+
+  @@unique([idempotencyKey, endpoint], name: "uq_idempotency")
+  @@map("api_idempotency_keys")
+}
+
+model EventOutbox {
+  id            String   @id @default(uuid()) @db.Uuid
+  aggregateType String?  @map("aggregate_type") @db.VarChar(100)
+  aggregateId   String?  @map("aggregate_id") @db.Uuid
+  eventType     String?  @map("event_type") @db.VarChar(100)
+  eventPayload  Json?    @map("event_payload")
+  published     Boolean  @default(false)
+  createdAt     DateTime @default(now()) @map("created_at")
+
+  @@map("event_outbox")
+}
+
+// ============================================
+// DOMAIN 11: MEDIA
+// ============================================
+
+model Media {
+  id            String   @id @default(uuid()) @db.Uuid
+  fileId        String   @unique @map("file_id")
+  originalName  String   @map("original_name") @db.VarChar(255)
+  fileName      String   @map("file_name") @db.VarChar(255)
+  userId        String   @map("user_id") @db.Uuid
+  mediaType     String   @map("media_type") @db.VarChar(50)
+  mimeType      String   @map("mime_type") @db.VarChar(100)
+  sizeBytes     BigInt   @map("size_bytes")
+  storageUrl    String   @map("storage_url")
+  thumbnailUrl  String?  @map("thumbnail_url")
+  width         Int?
+  height        Int?
+  duration      Int?
+  metadata      Json?
+  isActive      Boolean  @default(true) @map("is_active")
+  isDeleted     Boolean  @default(false) @map("is_deleted")
+  deletedAt     DateTime? @map("deleted_at")
+  deletedBy     String?  @map("deleted_by") @db.Uuid
+  deletionReason String? @map("deletion_reason")
+  restoredAt    DateTime? @map("restored_at")
+  restoredBy    String?  @map("restored_by") @db.Uuid
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+
+  @@map("media")
+}
