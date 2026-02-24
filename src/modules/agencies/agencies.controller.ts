@@ -49,7 +49,7 @@ export class AgenciesController {
   // ============================================================
 
   @Get('agencies')
-  @Roles('SUPER_ADMIN', 'COMMAND_CENTER_ADMIN', 'AGENCY_AGENT')
+  @Roles('SUPER_ADMIN', 'COMMAND_CENTER_ADMIN', 'AGENCY_AGENT', 'CITIZEN', 'BUSINESS')
   @ApiOperation({
     summary: 'List agencies (paginated)',
     description:
@@ -61,7 +61,7 @@ export class AgenciesController {
   }
 
   @Get('agencies/:id')
-  @Roles('SUPER_ADMIN', 'COMMAND_CENTER_ADMIN', 'AGENCY_AGENT')
+  @Roles('SUPER_ADMIN', 'COMMAND_CENTER_ADMIN', 'AGENCY_AGENT', 'CITIZEN', 'BUSINESS')
   @ApiOperation({
     summary: 'Get agency by ID',
     description:
