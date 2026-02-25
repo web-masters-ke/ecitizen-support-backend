@@ -118,6 +118,39 @@ export class UpdateUserDto extends PartialType(CreateUserDto) {
 }
 
 // ──────────────────────────────────────────────
+// Self-update DTO (citizen/user updating own profile)
+// Only safe fields — no role, userType, or status changes allowed.
+// ──────────────────────────────────────────────
+
+export class UpdateMyProfileDto {
+  @ApiPropertyOptional({ example: 'Jane' })
+  @IsOptional()
+  @IsString()
+  @MinLength(1)
+  @MaxLength(100)
+  firstName?: string;
+
+  @ApiPropertyOptional({ example: 'Doe' })
+  @IsOptional()
+  @IsString()
+  @MinLength(1)
+  @MaxLength(100)
+  lastName?: string;
+
+  @ApiPropertyOptional({ example: '+254712345678' })
+  @IsOptional()
+  @IsString()
+  @MaxLength(20)
+  phoneNumber?: string;
+
+  @ApiPropertyOptional({ example: '12345678' })
+  @IsOptional()
+  @IsString()
+  @MaxLength(20)
+  nationalId?: string;
+}
+
+// ──────────────────────────────────────────────
 // Assign Roles DTO
 // ──────────────────────────────────────────────
 

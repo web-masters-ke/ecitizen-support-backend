@@ -9,6 +9,7 @@ import { PrismaService } from '../../config/prisma.service';
 import {
   CreateUserDto,
   UpdateUserDto,
+  UpdateMyProfileDto,
   AssignRolesDto,
   UserFilterDto,
 } from './dto/users.dto';
@@ -303,6 +304,37 @@ export class UsersService {
     });
 
     this.logger.log(`User updated: ${user.id}`);
+    return this.sanitizeUser(user);
+  }
+
+  // ──────────────────────────────────────────────
+  // UPDATE OWN PROFILE (citizen / any authenticated user)
+  // Only firstName, lastName, phoneNumber, nationalId — no role/status changes.
+  // ──────────────────────────────────────────────
+
+  async updateMyProfile(userId: string, dto: UpdateMyProfileDto) {
+    await this.ensureUserExists(userId);
+
+    const user = await this.prisma.user.update({
+      where: { id: userId },
+      data: {
+        ...(dto.firstName !== undefined && { firstName: dto.firstName }),
+        ...(dto.lastName !== undefined && { lastName: dto.lastName }),
+        ...(dto.phoneNumber !== undefined && { phoneNumber: dto.phoneNumber }),
+        ...(dto.nationalId !== undefined && { nationalId: dto.nationalId }),
+      },
+      include: {
+        userRoles: { include: { role: true } },
+        agencyUsers: {
+          include: {
+            agency: { select: { id: true, agencyName: true, agencyCode: true } },
+            department: { select: { id: true, departmentName: true } },
+          },
+        },
+      },
+    });
+
+    this.logger.log(`Profile self-updated: ${user.id}`);
     return this.sanitizeUser(user);
   }
 

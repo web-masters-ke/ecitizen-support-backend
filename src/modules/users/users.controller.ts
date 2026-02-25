@@ -23,6 +23,7 @@ import { UsersService } from './users.service';
 import {
   CreateUserDto,
   UpdateUserDto,
+  UpdateMyProfileDto,
   AssignRolesDto,
   ToggleUserStatusDto,
   UserFilterDto,
@@ -95,6 +96,25 @@ export class UsersController {
     @CurrentUser('sub') currentUserId: string,
   ) {
     return this.usersService.create(dto, currentUserId);
+  }
+
+  // ──────────────────────────────────────────────
+  // PATCH /api/v1/users/me  — self-profile update (any authenticated user)
+  // Must be defined BEFORE :id to avoid route shadowing.
+  // ──────────────────────────────────────────────
+
+  @Patch('me')
+  @Roles('SUPER_ADMIN', 'COMMAND_CENTER_ADMIN', 'AGENCY_AGENT', 'CITIZEN', 'BUSINESS')
+  @ApiOperation({
+    summary: 'Update own profile',
+    description: 'Allows any authenticated user to update their own firstName, lastName, phoneNumber, and nationalId.',
+  })
+  @ApiResponse({ status: 200, description: 'Profile updated' })
+  async updateMe(
+    @CurrentUser('sub') currentUserId: string,
+    @Body() dto: UpdateMyProfileDto,
+  ) {
+    return this.usersService.updateMyProfile(currentUserId, dto);
   }
 
   // ──────────────────────────────────────────────
