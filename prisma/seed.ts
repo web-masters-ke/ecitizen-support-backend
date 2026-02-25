@@ -310,6 +310,222 @@ async function main() {
   console.log('✅ Sample agency, departments, categories, and SLA seeded');
 
   // ==========================================
+  // 7b. Seed Core Kenyan Government Agencies
+  // ==========================================
+  const coreAgencies = [
+    {
+      agencyCode: 'KRA',
+      agencyName: 'Kenya Revenue Authority',
+      agencyType: AgencyType.REGULATORY_BODY,
+      officialEmail: 'callcentre@kra.go.ke',
+      officialPhone: '+254 20 4999999',
+      county: 'Nairobi',
+      description: 'National tax collection and revenue administration authority',
+      categories: [
+        { name: 'PIN Registration', description: 'KRA PIN registration and issues' },
+        { name: 'Tax Compliance', description: 'Tax compliance certificates and queries' },
+        { name: 'VAT Issues', description: 'VAT registration and refund queries' },
+        { name: 'Customs & Excise', description: 'Customs clearance and excise duty' },
+        { name: 'iTax Support', description: 'iTax portal technical support' },
+      ],
+    },
+    {
+      agencyCode: 'IMMIGRATION',
+      agencyName: 'Department of Immigration Services',
+      agencyType: AgencyType.MINISTRY,
+      officialEmail: 'info@immigration.go.ke',
+      officialPhone: '+254 20 2222022',
+      county: 'Nairobi',
+      description: 'Passport, visa, and citizenship services',
+      categories: [
+        { name: 'Passport Application', description: 'New passport applications and renewals' },
+        { name: 'Visa Services', description: 'Visa applications and extensions' },
+        { name: 'Citizenship', description: 'Citizenship and naturalization' },
+        { name: 'Work Permit', description: 'Work permits and alien cards' },
+        { name: 'Travel Document', description: 'Emergency travel document queries' },
+      ],
+    },
+    {
+      agencyCode: 'NTSA',
+      agencyName: 'National Transport and Safety Authority',
+      agencyType: AgencyType.REGULATORY_BODY,
+      officialEmail: 'customercare@ntsa.go.ke',
+      officialPhone: '+254 20 2848000',
+      county: 'Nairobi',
+      description: 'Vehicle registration, driving licences and road safety',
+      categories: [
+        { name: 'Driving Licence', description: 'Driving licence applications and renewals' },
+        { name: 'Vehicle Registration', description: 'New registration and transfers' },
+        { name: 'Motor Vehicle Inspection', description: 'Inspection certificates' },
+        { name: 'PSV Licensing', description: 'Public service vehicle licensing' },
+        { name: 'Accident Reporting', description: 'Road accident reports' },
+      ],
+    },
+    {
+      agencyCode: 'NHIF',
+      agencyName: 'National Hospital Insurance Fund',
+      agencyType: AgencyType.PARASTATAL,
+      officialEmail: 'info@nhif.or.ke',
+      officialPhone: '+254 20 2727101',
+      county: 'Nairobi',
+      description: 'National health insurance fund',
+      categories: [
+        { name: 'Registration', description: 'NHIF member registration' },
+        { name: 'Contributions', description: 'Contribution queries and updates' },
+        { name: 'Claims', description: 'Medical claim submissions and status' },
+        { name: 'Beneficiary Update', description: 'Update of dependants' },
+        { name: 'Card Replacement', description: 'Lost or damaged NHIF card' },
+      ],
+    },
+    {
+      agencyCode: 'NSSF',
+      agencyName: 'National Social Security Fund',
+      agencyType: AgencyType.PARASTATAL,
+      officialEmail: 'info@nssf.or.ke',
+      officialPhone: '+254 20 2729000',
+      county: 'Nairobi',
+      description: 'National social security and pension fund',
+      categories: [
+        { name: 'Member Registration', description: 'NSSF member number issuance' },
+        { name: 'Contribution Statement', description: 'Statement of contributions' },
+        { name: 'Benefits Claim', description: 'Pension and withdrawal claims' },
+        { name: 'Employer Registration', description: 'Employer onboarding' },
+        { name: 'Card Issues', description: 'NSSF card replacement' },
+      ],
+    },
+    {
+      agencyCode: 'NRB',
+      agencyName: 'National Registration Bureau',
+      agencyType: AgencyType.MINISTRY,
+      officialEmail: 'info@nrb.go.ke',
+      officialPhone: '+254 20 2223600',
+      county: 'Nairobi',
+      description: 'National ID card issuance and civil registration',
+      categories: [
+        { name: 'National ID Application', description: 'First-time ID card applications' },
+        { name: 'ID Replacement', description: 'Lost or damaged ID replacement' },
+        { name: 'Birth Certificate', description: 'Birth certificate applications' },
+        { name: 'Death Certificate', description: 'Death certificate applications' },
+        { name: 'Change of Details', description: 'Correction of personal details' },
+      ],
+    },
+    {
+      agencyCode: 'HELB',
+      agencyName: 'Higher Education Loans Board',
+      agencyType: AgencyType.PARASTATAL,
+      officialEmail: 'helb@helb.co.ke',
+      officialPhone: '+254 711 052 000',
+      county: 'Nairobi',
+      description: 'Student loan applications and repayment management',
+      categories: [
+        { name: 'Loan Application', description: 'University loan application process' },
+        { name: 'Loan Repayment', description: 'Repayment queries and clearance' },
+        { name: 'Clearance Certificate', description: 'HELB clearance certificate' },
+        { name: 'Bursary', description: 'Bursary applications and disbursement' },
+        { name: 'Account Queries', description: 'Account balance and statement' },
+      ],
+    },
+    {
+      agencyCode: 'KNEC',
+      agencyName: 'Kenya National Examinations Council',
+      agencyType: AgencyType.PARASTATAL,
+      officialEmail: 'info@knec.ac.ke',
+      officialPhone: '+254 20 3317412',
+      county: 'Nairobi',
+      description: 'National examinations body for Kenya',
+      categories: [
+        { name: 'Certificate Collection', description: 'KCSE/KCPE certificate collection' },
+        { name: 'Result Verification', description: 'Examination result verification' },
+        { name: 'Re-marking', description: 'Re-marking and appeals' },
+        { name: 'Registration', description: 'Exam registration and centre queries' },
+        { name: 'Replacement Certificate', description: 'Lost certificate replacement' },
+      ],
+    },
+    {
+      agencyCode: 'BRS',
+      agencyName: 'Business Registration Service',
+      agencyType: AgencyType.REGULATORY_BODY,
+      officialEmail: 'info@brs.go.ke',
+      officialPhone: '+254 20 2213043',
+      county: 'Nairobi',
+      description: 'Business name and company registration',
+      categories: [
+        { name: 'Business Name Registration', description: 'Sole proprietor and partnership registration' },
+        { name: 'Company Registration', description: 'Limited company registration' },
+        { name: 'Annual Returns', description: 'Annual return filing' },
+        { name: 'Certificate of Compliance', description: 'Compliance certificate requests' },
+        { name: 'Deregistration', description: 'Business closure and winding up' },
+      ],
+    },
+    {
+      agencyCode: 'DCI',
+      agencyName: 'Directorate of Criminal Investigations',
+      agencyType: AgencyType.MINISTRY,
+      officialEmail: 'info@dci.go.ke',
+      officialPhone: '+254 20 3343333',
+      county: 'Nairobi',
+      description: 'Police clearance certificates and criminal investigations',
+      categories: [
+        { name: 'Police Clearance', description: 'Certificate of good conduct applications' },
+        { name: 'Character Certificate', description: 'Character reference certificates' },
+        { name: 'Report an Incident', description: 'Report criminal activity or fraud' },
+        { name: 'Status Inquiry', description: 'Track clearance certificate application' },
+      ],
+    },
+  ];
+
+  for (const agency of coreAgencies) {
+    const { categories: agencyCats, description: _desc, ...agencyData } = agency;
+    const createdAgency = await prisma.agency.upsert({
+      where: { agencyCode: agencyData.agencyCode },
+      update: {},
+      create: {
+        ...agencyData,
+        isActive: true,
+        onboardingStatus: 'COMPLETED',
+      },
+    });
+
+    // Seed categories for each agency
+    for (const cat of agencyCats) {
+      await prisma.ticketCategory.upsert({
+        where: { uq_ticket_category: { agencyId: createdAgency.id, name: cat.name } },
+        update: {},
+        create: { agencyId: createdAgency.id, ...cat },
+      });
+    }
+
+    // Seed default SLA policy per agency
+    const agencySla = await prisma.slaPolicy.upsert({
+      where: { uq_sla_policy: { agencyId: createdAgency.id, policyName: 'Default SLA Policy' } },
+      update: {},
+      create: {
+        agencyId: createdAgency.id,
+        policyName: 'Default SLA Policy',
+        description: `Default SLA policy for ${agencyData.agencyName}`,
+        isActive: true,
+        appliesBusinessHours: true,
+      },
+    });
+
+    const priorities = await prisma.ticketPriorityLevel.findMany();
+    for (const pl of priorities) {
+      const slaCfg = { LOW: { response: 480, resolution: 2880 }, MEDIUM: { response: 240, resolution: 1440 }, HIGH: { response: 60, resolution: 480 }, CRITICAL: { response: 15, resolution: 120 } };
+      const cfg = slaCfg[pl.name as keyof typeof slaCfg];
+      if (cfg) {
+        const exists = await prisma.slaRule.findFirst({ where: { slaPolicyId: agencySla.id, priorityId: pl.id } });
+        if (!exists) {
+          await prisma.slaRule.create({
+            data: { slaPolicyId: agencySla.id, priorityId: pl.id, responseTimeMinutes: cfg.response, resolutionTimeMinutes: cfg.resolution, escalationAfterMinutes: Math.round(cfg.resolution * 0.75) },
+          });
+        }
+      }
+    }
+  }
+
+  console.log(`✅ ${coreAgencies.length} core Kenyan government agencies seeded`);
+
+  // ==========================================
   // 8. Create Sample Citizen User
   // ==========================================
   const citizenPassword = await bcrypt.hash('Citizen@123', 10);
