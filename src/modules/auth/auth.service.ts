@@ -23,8 +23,8 @@ import {
 } from './dto/auth.dto';
 
 const BCRYPT_ROUNDS = 10;
-const ACCESS_TOKEN_EXPIRY = '15m';
-const REFRESH_TOKEN_EXPIRY_MS = 24 * 60 * 60 * 1000; // 24h in milliseconds
+const ACCESS_TOKEN_EXPIRY = '2h';
+const REFRESH_TOKEN_EXPIRY_MS = 30 * 24 * 60 * 60 * 1000; // 30 days in milliseconds
 
 @Injectable()
 export class AuthService {
