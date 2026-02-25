@@ -14,13 +14,17 @@ import {
   UserFilterDto,
 } from './dto/users.dto';
 import { PaginatedResult } from '../../common/dto/pagination.dto';
+import { NotificationsService } from '../notifications/notifications.service';
 import * as bcrypt from 'bcryptjs';
 
 @Injectable()
 export class UsersService {
   private readonly logger = new Logger(UsersService.name);
 
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly notificationsService: NotificationsService,
+  ) {}
 
   // ──────────────────────────────────────────────
   // CREATE
@@ -94,6 +98,64 @@ export class UsersService {
     });
 
     this.logger.log(`User created: ${user.id} (${user.email})`);
+
+    // Send welcome notification with credentials
+    const plainPassword = dto.password ?? '';
+    const roleName =
+      user.userRoles?.[0]?.role?.name ??
+      dto.userType?.replace(/_/g, ' ') ??
+      'User';
+    const loginUrl = 'http://18.190.206.56:3011/login';
+    const welcomeSubject = 'Welcome to eCitizen Service Command Centre';
+    const welcomeBody = `Dear ${user.firstName ?? 'User'},
+
+Your eCitizen SCC account has been created. You have been assigned the role: <strong>${roleName}</strong>.
+
+<strong>Login Details:</strong>
+Email: ${user.email}
+${plainPassword ? `Temporary Password: <strong>${plainPassword}</strong>` : ''}
+
+Login here: <a href="${loginUrl}">${loginUrl}</a>
+
+Please change your password after your first login.
+
+eCitizen Service Team`;
+
+    const recipient = {
+      recipientUserId: user.id,
+      recipientEmail: user.email ?? undefined,
+      recipientPhone: user.phoneNumber ?? undefined,
+    };
+
+    if (user.email) {
+      this.notificationsService
+        .sendNotification({
+          channel: 'EMAIL' as any,
+          triggerEvent: 'USER_CREATED',
+          subject: welcomeSubject,
+          body: welcomeBody,
+          recipients: [recipient],
+        })
+        .catch((err) =>
+          this.logger.warn(`Welcome EMAIL failed for ${user.email}: ${err?.message}`),
+        );
+    }
+
+    if (user.phoneNumber) {
+      const smsBody = `eCitizen SCC: Your account is ready. Role: ${roleName}. Email: ${user.email}${plainPassword ? `. Temp password: ${plainPassword}` : ''}. Login: ${loginUrl}`;
+      this.notificationsService
+        .sendNotification({
+          channel: 'SMS' as any,
+          triggerEvent: 'USER_CREATED',
+          subject: welcomeSubject,
+          body: smsBody,
+          recipients: [recipient],
+        })
+        .catch((err) =>
+          this.logger.warn(`Welcome SMS failed for ${user.phoneNumber}: ${err?.message}`),
+        );
+    }
+
     return this.sanitizeUser(user);
   }
 
