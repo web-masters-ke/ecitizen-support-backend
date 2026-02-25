@@ -3,6 +3,7 @@ import {
   Get,
   Post,
   Patch,
+  Delete,
   Param,
   Body,
   Query,
@@ -69,6 +70,15 @@ export class WorkflowController {
       message: 'Automation rule updated successfully',
       data: rule,
     };
+  }
+
+  @Delete('automation-rules/:id')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  @ApiOperation({ summary: 'Delete an automation rule and its actions' })
+  @ApiResponse({ status: 204, description: 'Rule deleted' })
+  @ApiResponse({ status: 404, description: 'Rule not found' })
+  async deleteRule(@Param('id', ParseUUIDPipe) id: string) {
+    await this.workflowService.deleteRule(id);
   }
 
   @Post('automation-rules/:id/actions')

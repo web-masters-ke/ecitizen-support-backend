@@ -495,6 +495,76 @@ async function main() {
       });
     }
 
+    // Seed departments for each agency
+    const agencyDepartments: Record<string, { departmentName: string; departmentCode: string }[]> = {
+      KRA: [
+        { departmentName: 'Domestic Taxes', departmentCode: 'KRA-DTD' },
+        { departmentName: 'Customs & Border Control', departmentCode: 'KRA-CBD' },
+        { departmentName: 'Taxpayer Services', departmentCode: 'KRA-TPS' },
+        { departmentName: 'Enforcement & Compliance', departmentCode: 'KRA-ENF' },
+      ],
+      IMMIGRATION: [
+        { departmentName: 'Passport & Travel Documents', departmentCode: 'IMM-PAS' },
+        { departmentName: 'Visa & Permits', departmentCode: 'IMM-VIS' },
+        { departmentName: 'Citizenship & Naturalization', departmentCode: 'IMM-CTZ' },
+        { departmentName: 'Border Management', departmentCode: 'IMM-BOR' },
+      ],
+      NTSA: [
+        { departmentName: 'Driving Licences', departmentCode: 'NTSA-DL' },
+        { departmentName: 'Vehicle Registration', departmentCode: 'NTSA-VR' },
+        { departmentName: 'Motor Vehicle Inspection', departmentCode: 'NTSA-MVI' },
+        { departmentName: 'PSV & Enforcement', departmentCode: 'NTSA-PSV' },
+      ],
+      NHIF: [
+        { departmentName: 'Member Registration', departmentCode: 'NHIF-REG' },
+        { departmentName: 'Claims Processing', departmentCode: 'NHIF-CLM' },
+        { departmentName: 'Contributions', departmentCode: 'NHIF-CON' },
+        { departmentName: 'Customer Service', departmentCode: 'NHIF-CS' },
+      ],
+      NSSF: [
+        { departmentName: 'Member Services', departmentCode: 'NSSF-MS' },
+        { departmentName: 'Benefits & Pensions', departmentCode: 'NSSF-BEN' },
+        { departmentName: 'Employer Relations', departmentCode: 'NSSF-EMP' },
+        { departmentName: 'Finance & Contributions', departmentCode: 'NSSF-FIN' },
+      ],
+      NRB: [
+        { departmentName: 'National ID Issuance', departmentCode: 'NRB-NID' },
+        { departmentName: 'Civil Registration', departmentCode: 'NRB-CVR' },
+        { departmentName: 'Records & Archives', departmentCode: 'NRB-REC' },
+      ],
+      HELB: [
+        { departmentName: 'Loan Applications', departmentCode: 'HELB-LA' },
+        { departmentName: 'Loan Repayment', departmentCode: 'HELB-LR' },
+        { departmentName: 'Bursaries & Scholarships', departmentCode: 'HELB-BUR' },
+        { departmentName: 'Customer Support', departmentCode: 'HELB-CS' },
+      ],
+      KNEC: [
+        { departmentName: 'Examinations Administration', departmentCode: 'KNEC-EXM' },
+        { departmentName: 'Certificates & Results', departmentCode: 'KNEC-CRT' },
+        { departmentName: 'Assessment & Research', departmentCode: 'KNEC-RES' },
+      ],
+      BRS: [
+        { departmentName: 'Business Name Registration', departmentCode: 'BRS-BNR' },
+        { departmentName: 'Company Registration', departmentCode: 'BRS-COR' },
+        { departmentName: 'Compliance & Returns', departmentCode: 'BRS-CPL' },
+      ],
+      DCI: [
+        { departmentName: 'Police Clearance', departmentCode: 'DCI-PCL' },
+        { departmentName: 'Cybercrime', departmentCode: 'DCI-CYB' },
+        { departmentName: 'Investigations', departmentCode: 'DCI-INV' },
+        { departmentName: 'Public Liaison', departmentCode: 'DCI-PUB' },
+      ],
+    };
+
+    const depts = agencyDepartments[agencyData.agencyCode] ?? [];
+    for (const dept of depts) {
+      await prisma.department.upsert({
+        where: { uq_department: { agencyId: createdAgency.id, departmentName: dept.departmentName } },
+        update: {},
+        create: { agencyId: createdAgency.id, ...dept, isActive: true },
+      });
+    }
+
     // Seed default SLA policy per agency
     const agencySla = await prisma.slaPolicy.upsert({
       where: { uq_sla_policy: { agencyId: createdAgency.id, policyName: 'Default SLA Policy' } },
@@ -524,6 +594,245 @@ async function main() {
   }
 
   console.log(`✅ ${coreAgencies.length} core Kenyan government agencies seeded`);
+
+  // ==========================================
+  // 7c. Enrich all agencies: contacts, business hours, settings, agents, service providers
+  // ==========================================
+
+  // Collect all agencies
+  const allAgencies = await prisma.agency.findMany({ include: { departments: { take: 1 } } });
+
+  // Per-agency contact data
+  const agencyContactMap: Record<string, { contactName: string; roleTitle: string; email: string; phone: string; escalationLevel: number }[]> = {
+    'ICT-AUTH': [
+      { contactName: 'David Njoroge', roleTitle: 'Director of Customer Service', email: 'djoroge@icta.go.ke', phone: '+254 20 2089062', escalationLevel: 1 },
+      { contactName: 'Mary Wanjiru', roleTitle: 'Head of Public Relations', email: 'pr@icta.go.ke', phone: '+254 20 2089063', escalationLevel: 2 },
+    ],
+    KRA: [
+      { contactName: 'Peter Mwangi', roleTitle: 'Head of Customer Service', email: 'cs@kra.go.ke', phone: '+254 20 4999901', escalationLevel: 1 },
+      { contactName: 'Grace Akinyi', roleTitle: 'Deputy Commissioner – Taxpayer Services', email: 'taxpayerservices@kra.go.ke', phone: '+254 20 4999902', escalationLevel: 2 },
+    ],
+    IMMIGRATION: [
+      { contactName: 'Fatuma Hassan', roleTitle: 'Director of Passport Services', email: 'passports@immigration.go.ke', phone: '+254 20 2222023', escalationLevel: 1 },
+      { contactName: 'Moses Kipkemoi', roleTitle: 'Head of Visa & Permits', email: 'visas@immigration.go.ke', phone: '+254 20 2222024', escalationLevel: 2 },
+    ],
+    NTSA: [
+      { contactName: 'Lucy Otieno', roleTitle: 'Customer Experience Manager', email: 'cx@ntsa.go.ke', phone: '+254 20 2848001', escalationLevel: 1 },
+      { contactName: 'David Kimani', roleTitle: 'Head of Vehicle Licensing', email: 'licensing@ntsa.go.ke', phone: '+254 20 2848002', escalationLevel: 2 },
+    ],
+    NHIF: [
+      { contactName: 'Ann Wambui', roleTitle: 'Head of Member Services', email: 'members@nhif.or.ke', phone: '+254 20 2727102', escalationLevel: 1 },
+      { contactName: 'John Omondi', roleTitle: 'Claims Manager', email: 'claims@nhif.or.ke', phone: '+254 20 2727103', escalationLevel: 2 },
+    ],
+    NSSF: [
+      { contactName: 'Rose Auma', roleTitle: 'Head of Member Services', email: 'members@nssf.or.ke', phone: '+254 20 2729001', escalationLevel: 1 },
+      { contactName: 'Patrick Muiru', roleTitle: 'Benefits & Pensions Manager', email: 'benefits@nssf.or.ke', phone: '+254 20 2729002', escalationLevel: 2 },
+    ],
+    NRB: [
+      { contactName: 'Esther Chebet', roleTitle: 'Director of Civil Registration', email: 'registration@nrb.go.ke', phone: '+254 20 2223601', escalationLevel: 1 },
+      { contactName: 'Samuel Njoroge', roleTitle: 'Head of National ID Issuance', email: 'nationalid@nrb.go.ke', phone: '+254 20 2223602', escalationLevel: 2 },
+    ],
+    HELB: [
+      { contactName: 'Violet Awino', roleTitle: 'Head of Loan Services', email: 'loans@helb.co.ke', phone: '+254 711 052 001', escalationLevel: 1 },
+      { contactName: 'Eric Muriithi', roleTitle: 'Bursaries Manager', email: 'bursaries@helb.co.ke', phone: '+254 711 052 002', escalationLevel: 2 },
+    ],
+    KNEC: [
+      { contactName: 'Gladys Makena', roleTitle: 'Head of Examinations', email: 'exams@knec.ac.ke', phone: '+254 20 3317413', escalationLevel: 1 },
+      { contactName: 'Peter Kamau', roleTitle: 'Certificates Manager', email: 'certificates@knec.ac.ke', phone: '+254 20 3317414', escalationLevel: 2 },
+    ],
+    BRS: [
+      { contactName: 'Jennifer Muthoni', roleTitle: 'Head of Registration Services', email: 'registration@brs.go.ke', phone: '+254 20 2213044', escalationLevel: 1 },
+      { contactName: 'Michael Ongeri', roleTitle: 'Compliance Manager', email: 'compliance@brs.go.ke', phone: '+254 20 2213045', escalationLevel: 2 },
+    ],
+    DCI: [
+      { contactName: 'Sharon Kerubo', roleTitle: 'Head of Police Clearance', email: 'clearance@dci.go.ke', phone: '+254 20 3343334', escalationLevel: 1 },
+      { contactName: 'Anthony Simiyu', roleTitle: 'Public Liaison Officer', email: 'public@dci.go.ke', phone: '+254 20 3343335', escalationLevel: 2 },
+    ],
+  };
+
+  // Per-agency sample agents
+  const agencyAgentMap: Record<string, { firstName: string; lastName: string; email: string; phone: string }[]> = {
+    'ICT-AUTH': [
+      { firstName: 'Brian', lastName: 'Otieno', email: 'brian.otieno@icta.go.ke', phone: '+254710001001' },
+      { firstName: 'Cynthia', lastName: 'Wanjiku', email: 'cynthia.wanjiku@icta.go.ke', phone: '+254710001002' },
+    ],
+    KRA: [
+      { firstName: 'Salome', lastName: 'Njeri', email: 'salome.njeri@kra.go.ke', phone: '+254710002001' },
+      { firstName: 'James', lastName: 'Odhiambo', email: 'james.odhiambo@kra.go.ke', phone: '+254710002002' },
+    ],
+    IMMIGRATION: [
+      { firstName: 'Amina', lastName: 'Mohamed', email: 'amina.mohamed@immigration.go.ke', phone: '+254710003001' },
+      { firstName: 'Victor', lastName: 'Kipchoge', email: 'victor.kipchoge@immigration.go.ke', phone: '+254710003002' },
+    ],
+    NTSA: [
+      { firstName: 'Faith', lastName: 'Kemunto', email: 'faith.kemunto@ntsa.go.ke', phone: '+254710004001' },
+      { firstName: 'Collins', lastName: 'Mutua', email: 'collins.mutua@ntsa.go.ke', phone: '+254710004002' },
+    ],
+    NHIF: [
+      { firstName: 'Irene', lastName: 'Achieng', email: 'irene.achieng@nhif.or.ke', phone: '+254710005001' },
+      { firstName: 'Dennis', lastName: 'Wekesa', email: 'dennis.wekesa@nhif.or.ke', phone: '+254710005002' },
+    ],
+    NSSF: [
+      { firstName: 'Hellen', lastName: 'Moraa', email: 'hellen.moraa@nssf.or.ke', phone: '+254710006001' },
+      { firstName: 'Geoffrey', lastName: 'Rono', email: 'geoffrey.rono@nssf.or.ke', phone: '+254710006002' },
+    ],
+    NRB: [
+      { firstName: 'Alice', lastName: 'Chepkoech', email: 'alice.chepkoech@nrb.go.ke', phone: '+254710007001' },
+      { firstName: 'Edwin', lastName: 'Kiprotich', email: 'edwin.kiprotich@nrb.go.ke', phone: '+254710007002' },
+    ],
+    HELB: [
+      { firstName: 'Winnie', lastName: 'Adhiambo', email: 'winnie.adhiambo@helb.co.ke', phone: '+254710008001' },
+      { firstName: 'Kevin', lastName: 'Karimi', email: 'kevin.karimi@helb.co.ke', phone: '+254710008002' },
+    ],
+    KNEC: [
+      { firstName: 'Pauline', lastName: 'Wangari', email: 'pauline.wangari@knec.ac.ke', phone: '+254710009001' },
+      { firstName: 'Stanley', lastName: 'Mwenda', email: 'stanley.mwenda@knec.ac.ke', phone: '+254710009002' },
+    ],
+    BRS: [
+      { firstName: 'Lilian', lastName: 'Nyawira', email: 'lilian.nyawira@brs.go.ke', phone: '+254710010001' },
+      { firstName: 'Oscar', lastName: 'Wafula', email: 'oscar.wafula@brs.go.ke', phone: '+254710010002' },
+    ],
+    DCI: [
+      { firstName: 'Diana', lastName: 'Nasimiyu', email: 'diana.nasimiyu@dci.go.ke', phone: '+254710011001' },
+      { firstName: 'Simon', lastName: 'Gitonga', email: 'simon.gitonga@dci.go.ke', phone: '+254710011002' },
+    ],
+  };
+
+  const enrichAgentPwd = await bcrypt.hash('Agent@123', 10);
+  const enrichL1Role = await prisma.role.findUnique({ where: { name: 'L1_AGENT' } });
+
+  for (const ag of allAgencies) {
+    const code = ag.agencyCode;
+    const firstDeptId = ag.departments[0]?.id ?? null;
+
+    // ── Contacts (delete + recreate for idempotency) ──────────────────────────
+    const contacts = agencyContactMap[code];
+    if (contacts) {
+      await prisma.agencyContact.deleteMany({ where: { agencyId: ag.id } });
+      for (const c of contacts) {
+        await prisma.agencyContact.create({
+          data: { agencyId: ag.id, contactName: c.contactName, roleTitle: c.roleTitle, email: c.email, phone: c.phone, escalationLevel: c.escalationLevel },
+        });
+      }
+    }
+
+    // ── Business Hours Mon–Fri 08:00–17:00, Sat 09:00–13:00 ──────────────────
+    const hours = [
+      { dayOfWeek: 1, startTime: '08:00', endTime: '17:00', isActive: true },
+      { dayOfWeek: 2, startTime: '08:00', endTime: '17:00', isActive: true },
+      { dayOfWeek: 3, startTime: '08:00', endTime: '17:00', isActive: true },
+      { dayOfWeek: 4, startTime: '08:00', endTime: '17:00', isActive: true },
+      { dayOfWeek: 5, startTime: '08:00', endTime: '17:00', isActive: true },
+      { dayOfWeek: 6, startTime: '09:00', endTime: '13:00', isActive: true },
+    ];
+    for (const h of hours) {
+      await prisma.agencyBusinessHour.upsert({
+        where: { uq_business_hours: { agencyId: ag.id, dayOfWeek: h.dayOfWeek } },
+        update: { startTime: h.startTime, endTime: h.endTime, isActive: h.isActive },
+        create: { agencyId: ag.id, ...h },
+      });
+    }
+
+    // ── Settings ──────────────────────────────────────────────────────────────
+    const defaultSettings = [
+      { settingKey: 'auto_assign_enabled', settingValue: 'true' },
+      { settingKey: 'sla_notifications_enabled', settingValue: 'true' },
+      { settingKey: 'max_tickets_per_agent', settingValue: '50' },
+      { settingKey: 'default_ticket_priority', settingValue: 'MEDIUM' },
+      { settingKey: 'citizen_feedback_enabled', settingValue: 'true' },
+    ];
+    for (const s of defaultSettings) {
+      await prisma.agencySetting.upsert({
+        where: { uq_agency_setting: { agencyId: ag.id, settingKey: s.settingKey } },
+        update: {},
+        create: { agencyId: ag.id, ...s },
+      });
+    }
+
+    // ── Sample Agents ─────────────────────────────────────────────────────────
+    const agents = agencyAgentMap[code] ?? [];
+    for (const a of agents) {
+      const user = await prisma.user.upsert({
+        where: { email: a.email },
+        update: {},
+        create: { email: a.email, firstName: a.firstName, lastName: a.lastName, phoneNumber: a.phone, userType: UserType.AGENCY_AGENT, passwordHash: enrichAgentPwd, isActive: true, isVerified: true },
+      });
+      await prisma.agencyUser.upsert({
+        where: { uq_agency_user: { userId: user.id, agencyId: ag.id } },
+        update: {},
+        create: { userId: user.id, agencyId: ag.id, departmentId: firstDeptId },
+      });
+      if (enrichL1Role) {
+        const existingRole = await prisma.userRole.findFirst({ where: { userId: user.id, roleId: enrichL1Role.id, agencyId: ag.id } });
+        if (!existingRole) {
+          await prisma.userRole.create({ data: { userId: user.id, roleId: enrichL1Role.id, agencyId: ag.id } });
+        }
+      }
+    }
+  }
+
+  // ── Global Service Providers ──────────────────────────────────────────────
+  const serviceProviders = [
+    { providerName: 'Safaricom PLC', providerType: 'PAYMENT_GATEWAY', contactEmail: 'enterprise@safaricom.co.ke', contactPhone: '+254722000000' },
+    { providerName: 'Equity Bank Kenya', providerType: 'PAYMENT_GATEWAY', contactEmail: 'eazzyapi@equitybank.co.ke', contactPhone: '+254763000000' },
+    { providerName: 'Kenya Post Corporation', providerType: 'DELIVERY', contactEmail: 'info@posta.co.ke', contactPhone: '+254 20 2324000' },
+  ];
+
+  const createdProviders: { id: string }[] = [];
+  for (const sp of serviceProviders) {
+    const provider = await prisma.serviceProvider.upsert({
+      where: { providerName: sp.providerName },
+      update: {},
+      create: sp,
+    });
+    createdProviders.push(provider);
+  }
+
+  // Link all 3 providers to every agency
+  for (const ag of allAgencies) {
+    for (const provider of createdProviders) {
+      const exists = await prisma.agencyServiceMapping.findFirst({ where: { agencyId: ag.id, serviceProviderId: provider.id } });
+      if (!exists) {
+        await prisma.agencyServiceMapping.create({
+          data: { agencyId: ag.id, serviceProviderId: provider.id, isPrimary: provider === createdProviders[0] },
+        });
+      }
+    }
+  }
+
+  // ── Escalation Matrices (4 priority levels per agency) ───────────────────
+  const escalationPriorities = [
+    { priorityLevel: 'CRITICAL', maxResponseTimeMinutes: 15, maxResolutionTimeMinutes: 120 },
+    { priorityLevel: 'HIGH',     maxResponseTimeMinutes: 60, maxResolutionTimeMinutes: 480 },
+    { priorityLevel: 'MEDIUM',   maxResponseTimeMinutes: 240, maxResolutionTimeMinutes: 1440 },
+    { priorityLevel: 'LOW',      maxResponseTimeMinutes: 480, maxResolutionTimeMinutes: 2880 },
+  ];
+
+  for (const ag of allAgencies) {
+    for (const ep of escalationPriorities) {
+      // Upsert by agency + priorityLevel
+      let matrix = await prisma.escalationMatrix.findFirst({ where: { agencyId: ag.id, priorityLevel: ep.priorityLevel } });
+      if (!matrix) {
+        matrix = await prisma.escalationMatrix.create({
+          data: { agencyId: ag.id, priorityLevel: ep.priorityLevel, maxResponseTimeMinutes: ep.maxResponseTimeMinutes, maxResolutionTimeMinutes: ep.maxResolutionTimeMinutes, autoEscalationEnabled: true },
+        });
+      }
+      // 3 escalation levels: L1_AGENT → L1_SUPERVISOR → AGENCY_ADMIN
+      const levels = [
+        { levelNumber: 1, escalationRole: 'L1_AGENT', notifyViaEmail: true, notifyViaSms: false },
+        { levelNumber: 2, escalationRole: 'L1_SUPERVISOR', notifyViaEmail: true, notifyViaSms: true },
+        { levelNumber: 3, escalationRole: 'AGENCY_ADMIN', notifyViaEmail: true, notifyViaSms: true },
+      ];
+      for (const lv of levels) {
+        const exists = await prisma.escalationLevel.findFirst({ where: { escalationMatrixId: matrix.id, levelNumber: lv.levelNumber } });
+        if (!exists) {
+          await prisma.escalationLevel.create({ data: { escalationMatrixId: matrix.id, ...lv } });
+        }
+      }
+    }
+  }
+
+  console.log('✅ Contacts, business hours, settings, agents, and service providers seeded for all agencies');
 
   // ==========================================
   // 8. Create Sample Citizen User

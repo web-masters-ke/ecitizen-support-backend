@@ -4,6 +4,7 @@ import {
   Post,
   Patch,
   Put,
+  Delete,
   Param,
   Body,
   Query,
@@ -79,6 +80,27 @@ export class SlaController {
       message: 'SLA policy updated successfully',
       data: policy,
     };
+  }
+
+  @Delete('policies/:id')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  @ApiOperation({ summary: 'Delete an SLA policy and its rules' })
+  @ApiResponse({ status: 204, description: 'SLA policy deleted' })
+  @ApiResponse({ status: 404, description: 'SLA policy not found' })
+  async deletePolicy(@Param('id', ParseUUIDPipe) id: string) {
+    await this.slaService.deletePolicy(id);
+  }
+
+  @Delete('policies/:policyId/rules/:ruleId')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  @ApiOperation({ summary: 'Delete a specific rule from an SLA policy' })
+  @ApiResponse({ status: 204, description: 'Rule deleted' })
+  @ApiResponse({ status: 404, description: 'Rule not found' })
+  async deleteRule(
+    @Param('policyId', ParseUUIDPipe) policyId: string,
+    @Param('ruleId', ParseUUIDPipe) ruleId: string,
+  ) {
+    await this.slaService.deleteRule(policyId, ruleId);
   }
 
   @Post('policies/:id/rules')

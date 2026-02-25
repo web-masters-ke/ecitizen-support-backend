@@ -7,6 +7,7 @@ import {
 import { PrismaService } from '../../config/prisma.service';
 import { PaginatedResult } from '../../common/dto/pagination.dto';
 import { NotificationsService } from '../notifications/notifications.service';
+import { SlaService } from '../sla/sla.service';
 import {
   CreateTicketDto,
   UpdateTicketDto,
@@ -96,6 +97,7 @@ export class TicketsService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly notificationsService: NotificationsService,
+    private readonly slaService: SlaService,
   ) {}
 
   // ============================================
@@ -525,7 +527,18 @@ export class TicketsService {
       });
     });
 
+    if (!ticket) throw new NotFoundException('Ticket creation failed');
+
     this.logger.log(`Ticket created: ${ticketNumber} by user ${createdBy}`);
+
+    // Attach SLA tracking (non-blocking — failure here must not break ticket creation)
+    this.slaService.attachSlaToTicket({
+      id: ticket.id,
+      agencyId: ticket.agencyId,
+      priorityId: ticket.priorityId ?? null,
+      categoryId: ticket.categoryId ?? null,
+      createdAt: ticket.createdAt,
+    }).catch((err) => this.logger.warn(`SLA attach failed for ${ticket.id}: ${err.message}`));
 
     return ticket;
   }

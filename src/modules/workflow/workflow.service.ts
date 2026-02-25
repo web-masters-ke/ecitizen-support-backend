@@ -120,6 +120,12 @@ export class WorkflowService {
     });
   }
 
+  async deleteRule(id: string) {
+    await this.findRuleById(id);
+    await this.prisma.automationAction.deleteMany({ where: { automationRuleId: id } });
+    await this.prisma.automationRule.delete({ where: { id } });
+  }
+
   async addAction(ruleId: string, dto: CreateAutomationActionDto) {
     await this.findRuleById(ruleId);
     return this.prisma.automationAction.create({

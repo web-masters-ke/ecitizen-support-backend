@@ -692,7 +692,7 @@ export class AgenciesService {
 
       // 5. Find AGENCY_ADMIN role and assign
       const agencyAdminRole = await tx.role.findFirst({
-        where: { roleName: 'AGENCY_ADMIN' },
+        where: { name: 'AGENCY_ADMIN' },
       });
       if (agencyAdminRole) {
         await tx.userRole.create({

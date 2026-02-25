@@ -82,6 +82,24 @@ export class SlaService {
     });
   }
 
+  async deletePolicy(id: string) {
+    await this.findPolicyById(id);
+    await this.prisma.slaRule.deleteMany({ where: { slaPolicyId: id } });
+    await this.prisma.slaPolicy.delete({ where: { id } });
+  }
+
+  async deleteRule(policyId: string, ruleId: string) {
+    const rule = await this.prisma.slaRule.findFirst({
+      where: { id: ruleId, slaPolicyId: policyId },
+    });
+    if (!rule) {
+      throw new NotFoundException(
+        `SLA rule ${ruleId} not found in policy ${policyId}`,
+      );
+    }
+    await this.prisma.slaRule.delete({ where: { id: ruleId } });
+  }
+
   async addRule(policyId: string, dto: CreateSlaRuleDto) {
     await this.findPolicyById(policyId);
     return this.prisma.slaRule.create({
