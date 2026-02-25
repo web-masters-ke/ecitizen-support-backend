@@ -17,8 +17,10 @@ import {
   CreateServiceProviderDto,
   MapServiceProviderDto,
   ServiceProviderFilterDto,
+  OnboardAgencyDto,
 } from './dto/agencies.dto';
 import { PaginatedResult } from '../../common/dto/pagination.dto';
+import * as bcrypt from 'bcryptjs';
 
 @Injectable()
 export class AgenciesService {
@@ -611,6 +613,148 @@ export class AgenciesService {
       `Service provider ${dto.serviceProviderId} mapped to agency ${agencyId}`,
     );
     return mapping;
+  }
+
+  // ============================================================
+  //  AGENCY ONBOARDING
+  // ============================================================
+
+  async onboardAgency(dto: OnboardAgencyDto) {
+    // Check for duplicate agency code
+    const existing = await this.prisma.agency.findUnique({
+      where: { agencyCode: dto.agencyCode },
+    });
+    if (existing) {
+      throw new ConflictException(`Agency with code "${dto.agencyCode}" already exists`);
+    }
+
+    // Check admin email is not taken
+    const existingUser = await this.prisma.user.findUnique({
+      where: { email: dto.adminUser.email },
+    });
+    if (existingUser) {
+      throw new ConflictException(`User with email "${dto.adminUser.email}" already exists`);
+    }
+
+    const passwordHash = await bcrypt.hash(dto.adminUser.password, 12);
+
+    const result = await this.prisma.$transaction(async (tx) => {
+      // 1. Create agency
+      const agency = await tx.agency.create({
+        data: {
+          agencyCode: dto.agencyCode,
+          agencyName: dto.agencyName,
+          agencyType: dto.agencyType,
+          officialEmail: dto.officialEmail,
+          officialPhone: dto.officialPhone,
+          physicalAddress: dto.physicalAddress,
+          county: dto.county,
+          onboardingStatus: 'IN_PROGRESS',
+        },
+      });
+
+      // 2. Create departments
+      const departments: any[] = [];
+      if (dto.departments && dto.departments.length > 0) {
+        for (const dept of dto.departments) {
+          const d = await tx.department.create({
+            data: {
+              agencyId: agency.id,
+              departmentName: dept.departmentName,
+              departmentCode: dept.departmentCode,
+              description: dept.description,
+            },
+          });
+          departments.push(d);
+        }
+      }
+
+      // 3. Create admin user
+      const adminUser = await tx.user.create({
+        data: {
+          email: dto.adminUser.email,
+          firstName: dto.adminUser.firstName,
+          lastName: dto.adminUser.lastName,
+          phoneNumber: dto.adminUser.phoneNumber,
+          userType: 'AGENCY_AGENT',
+          passwordHash,
+        },
+      });
+
+      // 4. Link user to agency (first department if any)
+      await tx.agencyUser.create({
+        data: {
+          userId: adminUser.id,
+          agencyId: agency.id,
+          departmentId: departments[0]?.id ?? null,
+        },
+      });
+
+      // 5. Find AGENCY_ADMIN role and assign
+      const agencyAdminRole = await tx.role.findFirst({
+        where: { roleName: 'AGENCY_ADMIN' },
+      });
+      if (agencyAdminRole) {
+        await tx.userRole.create({
+          data: {
+            userId: adminUser.id,
+            roleId: agencyAdminRole.id,
+            agencyId: agency.id,
+          },
+        });
+      }
+
+      // 6. Create 3 default automation rules
+      const defaultRules = [
+        {
+          ruleName: 'auto-escalate-critical',
+          triggerEvent: 'TICKET_CREATED',
+          conditionExpression: JSON.stringify({ priority: 'CRITICAL', escalateAfterHours: 2 }),
+        },
+        {
+          ruleName: 'notify-on-assign',
+          triggerEvent: 'TICKET_ASSIGNED',
+          conditionExpression: JSON.stringify({ notifyAgent: true }),
+        },
+        {
+          ruleName: 'notify-citizen-resolved',
+          triggerEvent: 'TICKET_RESOLVED',
+          conditionExpression: JSON.stringify({ notifyCreator: true }),
+        },
+      ];
+
+      for (const rule of defaultRules) {
+        await tx.automationRule.create({
+          data: {
+            agencyId: agency.id,
+            ruleName: rule.ruleName,
+            triggerEvent: rule.triggerEvent,
+            conditionExpression: rule.conditionExpression,
+          },
+        });
+      }
+
+      // 7. Mark onboarding complete
+      const finalAgency = await tx.agency.update({
+        where: { id: agency.id },
+        data: { onboardingStatus: 'COMPLETED' },
+        include: {
+          departments: true,
+          agencyUsers: {
+            include: {
+              user: {
+                select: { id: true, email: true, firstName: true, lastName: true, userType: true },
+              },
+            },
+          },
+        },
+      });
+
+      return { agency: finalAgency, adminUser: { id: adminUser.id, email: adminUser.email, firstName: adminUser.firstName, lastName: adminUser.lastName } };
+    });
+
+    this.logger.log(`Agency onboarded: ${result.agency.id} (${result.agency.agencyCode})`);
+    return result;
   }
 
   // ============================================================

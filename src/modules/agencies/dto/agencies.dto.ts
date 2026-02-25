@@ -6,11 +6,14 @@ import {
   IsBoolean,
   IsUUID,
   IsInt,
+  IsArray,
   Min,
   Max,
   MaxLength,
+  MinLength,
   Matches,
   ValidateNested,
+  IsNotEmpty,
 } from 'class-validator';
 import { Type } from 'class-transformer';
 import { ApiProperty, ApiPropertyOptional, PartialType } from '@nestjs/swagger';
@@ -347,4 +350,108 @@ export class ServiceProviderFilterDto extends PaginationDto {
   @Type(() => Boolean)
   @IsBoolean()
   isActive?: boolean;
+}
+
+// ──────────────────────────────────────────────
+// Agency Onboard DTOs
+// ──────────────────────────────────────────────
+
+export class OnboardDepartmentDto {
+  @ApiProperty({ description: 'Department name' })
+  @IsString()
+  @IsNotEmpty()
+  @MaxLength(255)
+  departmentName: string;
+
+  @ApiPropertyOptional({ description: 'Department code' })
+  @IsOptional()
+  @IsString()
+  @MaxLength(50)
+  departmentCode?: string;
+
+  @ApiPropertyOptional({ description: 'Department description' })
+  @IsOptional()
+  @IsString()
+  description?: string;
+}
+
+export class OnboardAdminUserDto {
+  @ApiProperty({ description: 'Admin first name' })
+  @IsString()
+  @IsNotEmpty()
+  @MaxLength(100)
+  firstName: string;
+
+  @ApiProperty({ description: 'Admin last name' })
+  @IsString()
+  @IsNotEmpty()
+  @MaxLength(100)
+  lastName: string;
+
+  @ApiProperty({ description: 'Admin email address' })
+  @IsEmail()
+  email: string;
+
+  @ApiProperty({ description: 'Admin password (min 8 chars)', minLength: 8 })
+  @IsString()
+  @MinLength(8)
+  password: string;
+
+  @ApiPropertyOptional({ description: 'Admin phone number' })
+  @IsOptional()
+  @IsString()
+  @MaxLength(20)
+  phoneNumber?: string;
+}
+
+export class OnboardAgencyDto {
+  @ApiProperty({ description: 'Unique agency code', example: 'MOH' })
+  @IsString()
+  @IsNotEmpty()
+  @MaxLength(50)
+  agencyCode: string;
+
+  @ApiProperty({ description: 'Agency name', example: 'Ministry of Health' })
+  @IsString()
+  @IsNotEmpty()
+  @MaxLength(255)
+  agencyName: string;
+
+  @ApiProperty({ description: 'Agency type', enum: AgencyTypeEnum })
+  @IsEnum(AgencyTypeEnum)
+  agencyType: AgencyTypeEnum;
+
+  @ApiPropertyOptional({ description: 'Official email' })
+  @IsOptional()
+  @IsEmail()
+  officialEmail?: string;
+
+  @ApiPropertyOptional({ description: 'Official phone' })
+  @IsOptional()
+  @IsString()
+  @MaxLength(50)
+  officialPhone?: string;
+
+  @ApiPropertyOptional({ description: 'Physical address' })
+  @IsOptional()
+  @IsString()
+  physicalAddress?: string;
+
+  @ApiPropertyOptional({ description: 'County' })
+  @IsOptional()
+  @IsString()
+  @MaxLength(100)
+  county?: string;
+
+  @ApiPropertyOptional({ description: 'Initial departments', type: [OnboardDepartmentDto] })
+  @IsOptional()
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => OnboardDepartmentDto)
+  departments?: OnboardDepartmentDto[];
+
+  @ApiProperty({ description: 'Admin user to create for this agency' })
+  @ValidateNested()
+  @Type(() => OnboardAdminUserDto)
+  adminUser: OnboardAdminUserDto;
 }

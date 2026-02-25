@@ -295,6 +295,7 @@ export class TicketsService {
           lastName: true,
           email: true,
           phoneNumber: true,
+          nationalId: true,
           userType: true,
         },
       },

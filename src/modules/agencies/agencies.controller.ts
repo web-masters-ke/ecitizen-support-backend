@@ -32,6 +32,7 @@ import {
   CreateServiceProviderDto,
   MapServiceProviderDto,
   ServiceProviderFilterDto,
+  OnboardAgencyDto,
 } from './dto/agencies.dto';
 import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
 import { RolesGuard } from '../../common/guards/roles.guard';
@@ -85,6 +86,20 @@ export class AgenciesController {
   @ApiResponse({ status: 409, description: 'Duplicate agency code' })
   async create(@Body() dto: CreateAgencyDto) {
     return this.agenciesService.create(dto);
+  }
+
+  @Post('agencies/onboard')
+  @Roles('SUPER_ADMIN', 'COMMAND_CENTER_ADMIN')
+  @HttpCode(HttpStatus.CREATED)
+  @ApiOperation({
+    summary: 'Onboard a new agency (full setup)',
+    description:
+      'Creates an agency with departments, admin user, AgencyUser link, role assignment, and 3 default automation rules — all in a single transaction.',
+  })
+  @ApiResponse({ status: 201, description: 'Agency onboarded successfully' })
+  @ApiResponse({ status: 409, description: 'Duplicate agency code or admin email' })
+  async onboardAgency(@Body() dto: OnboardAgencyDto) {
+    return this.agenciesService.onboardAgency(dto);
   }
 
   @Patch('agencies/:id')
