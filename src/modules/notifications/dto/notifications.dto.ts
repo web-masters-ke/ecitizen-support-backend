@@ -230,6 +230,11 @@ export class QueryNotificationsDto {
   @IsInt()
   @Min(1)
   limit?: number;
+
+  @ApiPropertyOptional({ description: 'Filter to notifications for a specific recipient user' })
+  @IsOptional()
+  @IsUUID()
+  recipientUserId?: string;
 }
 
 export class QueryNotificationTemplatesDto {

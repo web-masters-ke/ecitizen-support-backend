@@ -1086,25 +1086,26 @@ export class TicketsService {
 
     // Notify the citizen (fire-and-forget — don't block the response)
     const creator = (updatedTicket as any).creator;
-    if (creator?.email) {
+    if (creator?.id) {
+      const subject = `Your request ${updatedTicket.ticketNumber} has been resolved`;
+      const body = `Dear ${creator.firstName ?? 'Citizen'},\n\nYour service request <strong>${updatedTicket.ticketNumber}</strong> — <em>${(updatedTicket as any).subject}</em> — has been resolved.\n\n${dto.resolutionNotes ? `Resolution notes: ${dto.resolutionNotes}` : ''}\n\nYou can view your ticket and leave feedback at any time by logging into the eCitizen portal.\n\nThank you for using eCitizen Kenya.\n\neCitizen Service Team`;
+      const recipient = {
+        recipientUserId: creator.id,
+        recipientEmail: creator.email ?? undefined,
+        recipientPhone: creator.phoneNumber ?? undefined,
+      };
+
+      // In-app notification (always fires — visible in mobile/web notification bell)
       this.notificationsService
-        .sendNotification({
-          ticketId: id,
-          channel: 'EMAIL' as any,
-          triggerEvent: 'TICKET_RESOLVED',
-          subject: `Your request ${updatedTicket.ticketNumber} has been resolved`,
-          body: `Dear ${creator.firstName ?? 'Citizen'},\n\nYour service request <strong>${updatedTicket.ticketNumber}</strong> — <em>${(updatedTicket as any).subject}</em> — has been resolved.\n\n${dto.resolutionNotes ? `Resolution notes: ${dto.resolutionNotes}` : ''}\n\nYou can view your ticket and leave feedback at any time by logging into the eCitizen portal.\n\nThank you for using eCitizen Kenya.\n\neCitizen Service Team`,
-          recipients: [
-            {
-              recipientUserId: creator.id,
-              recipientEmail: creator.email,
-              recipientPhone: creator.phoneNumber ?? undefined,
-            },
-          ],
-        })
-        .catch((err) =>
-          this.logger.warn(`Failed to send resolution notification for ticket ${updatedTicket.ticketNumber}: ${err?.message}`),
-        );
+        .sendNotification({ ticketId: id, channel: 'IN_APP' as any, triggerEvent: 'TICKET_RESOLVED', subject, body, recipients: [recipient] })
+        .catch((err) => this.logger.warn(`IN_APP resolve notify failed for ${updatedTicket.ticketNumber}: ${err?.message}`));
+
+      // Email notification (fires if email address exists)
+      if (creator.email) {
+        this.notificationsService
+          .sendNotification({ ticketId: id, channel: 'EMAIL' as any, triggerEvent: 'TICKET_RESOLVED', subject, body, recipients: [recipient] })
+          .catch((err) => this.logger.warn(`EMAIL resolve notify failed for ${updatedTicket.ticketNumber}: ${err?.message}`));
+      }
     }
 
     return updatedTicket;
@@ -1114,13 +1115,39 @@ export class TicketsService {
    * Close a ticket (usually after confirmation from citizen).
    */
   async closeTicket(id: string, dto: CloseTicketDto, closedBy: string) {
-    return this.transitionStatus(
+    const updatedTicket = await this.transitionStatus(
       id,
       TicketStatusEnum.CLOSED,
       closedBy,
       dto.reason || 'Ticket closed',
       { closedAt: new Date() },
     );
+
+    // Notify the citizen that their ticket has been closed
+    const creator = (updatedTicket as any).creator;
+    if (creator?.id) {
+      const subject = `Your request ${updatedTicket.ticketNumber} has been closed`;
+      const body = `Dear ${creator.firstName ?? 'Citizen'},\n\nYour service request <strong>${updatedTicket.ticketNumber}</strong> — <em>${(updatedTicket as any).subject}</em> — has been closed.\n\n${dto.reason ? `Reason: ${dto.reason}` : ''}\n\nIf you need further assistance, you can raise a new ticket on the eCitizen portal.\n\nThank you for using eCitizen Kenya.\n\neCitizen Service Team`;
+      const recipient = {
+        recipientUserId: creator.id,
+        recipientEmail: creator.email ?? undefined,
+        recipientPhone: creator.phoneNumber ?? undefined,
+      };
+
+      // In-app notification
+      this.notificationsService
+        .sendNotification({ ticketId: id, channel: 'IN_APP' as any, triggerEvent: 'TICKET_CLOSED', subject, body, recipients: [recipient] })
+        .catch((err) => this.logger.warn(`IN_APP close notify failed for ${updatedTicket.ticketNumber}: ${err?.message}`));
+
+      // Email notification
+      if (creator.email) {
+        this.notificationsService
+          .sendNotification({ ticketId: id, channel: 'EMAIL' as any, triggerEvent: 'TICKET_CLOSED', subject, body, recipients: [recipient] })
+          .catch((err) => this.logger.warn(`EMAIL close notify failed for ${updatedTicket.ticketNumber}: ${err?.message}`));
+      }
+    }
+
+    return updatedTicket;
   }
 
   /**

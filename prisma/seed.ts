@@ -696,6 +696,31 @@ async function main() {
       { firstName: 'Diana', lastName: 'Nasimiyu', email: 'diana.nasimiyu@dci.go.ke', phone: '+254710011001' },
       { firstName: 'Simon', lastName: 'Gitonga', email: 'simon.gitonga@dci.go.ke', phone: '+254710011002' },
     ],
+    KEBS: [
+      { firstName: 'Joyce', lastName: 'Kamau', email: 'joyce.kamau@kebs.go.ke', phone: '+254710012001' },
+      { firstName: 'Robert', lastName: 'Ochieng', email: 'robert.ochieng@kebs.go.ke', phone: '+254710012002' },
+      { firstName: 'Faith', lastName: 'Njoroge', email: 'faith.njoroge@kebs.go.ke', phone: '+254710012003' },
+    ],
+    CAK: [
+      { firstName: 'Mark', lastName: 'Maina', email: 'mark.maina@cak.go.ke', phone: '+254710013001' },
+      { firstName: 'Susan', lastName: 'Akinyi', email: 'susan.akinyi@cak.go.ke', phone: '+254710013002' },
+    ],
+    NEMA: [
+      { firstName: 'George', lastName: 'Waweru', email: 'george.waweru@nema.go.ke', phone: '+254710014001' },
+      { firstName: 'Carol', lastName: 'Chepkemoi', email: 'carol.chepkemoi@nema.go.ke', phone: '+254710014002' },
+    ],
+    MOE: [
+      { firstName: 'Philip', lastName: 'Karanja', email: 'philip.karanja@education.go.ke', phone: '+254710015001' },
+      { firstName: 'Mercy', lastName: 'Atieno', email: 'mercy.atieno@education.go.ke', phone: '+254710015002' },
+    ],
+    MOH: [
+      { firstName: 'Daniel', lastName: 'Mwangi', email: 'daniel.mwangi@health.go.ke', phone: '+254710016001' },
+      { firstName: 'Beatrice', lastName: 'Wanjiru', email: 'beatrice.wanjiru@health.go.ke', phone: '+254710016002' },
+    ],
+    NLC: [
+      { firstName: 'Linet', lastName: 'Omondi', email: 'linet.omondi@nlc.go.ke', phone: '+254710017001' },
+      { firstName: 'Francis', lastName: 'Mutua', email: 'francis.mutua@nlc.go.ke', phone: '+254710017002' },
+    ],
   };
 
   const enrichAgentPwd = await bcrypt.hash('Agent@123', 10);

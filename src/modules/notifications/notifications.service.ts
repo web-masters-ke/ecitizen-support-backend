@@ -403,6 +403,11 @@ export class NotificationsService {
     if (query.channel) where.channel = query.channel;
     if (query.status) where.status = query.status;
 
+    // When scoped to a specific recipient, filter via the recipients join table
+    if (query.recipientUserId) {
+      where.recipients = { some: { recipientUserId: query.recipientUserId } };
+    }
+
     const [items, total] = await Promise.all([
       this.prisma.notification.findMany({
         where,
@@ -425,8 +430,20 @@ export class NotificationsService {
       this.prisma.notification.count({ where }),
     ]);
 
+    // Count unread: notifications where this user's recipient record is not yet READ
+    let unreadCount = 0;
+    if (query.recipientUserId) {
+      unreadCount = await this.prisma.notificationRecipient.count({
+        where: {
+          recipientUserId: query.recipientUserId,
+          NOT: { deliveryStatus: 'READ' as any },
+        },
+      });
+    }
+
     return {
       items,
+      unreadCount,
       meta: { total, page, limit, totalPages: Math.ceil(total / limit) },
     };
   }

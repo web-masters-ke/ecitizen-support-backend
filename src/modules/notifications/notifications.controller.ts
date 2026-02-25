@@ -12,6 +12,7 @@ import {
 } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse, ApiQuery } from '@nestjs/swagger';
 import { NotificationsService } from './notifications.service';
+import { CurrentUser } from '../../common/decorators/current-user.decorator';
 import {
   SendNotificationDto,
   CreateNotificationTemplateDto,
@@ -95,18 +96,30 @@ export class NotificationsController {
   // ============================================
 
   @Get()
-  @ApiOperation({ summary: 'List notifications with optional filters' })
+  @ApiOperation({ summary: 'List notifications — citizens see only their own' })
   @ApiQuery({ name: 'agencyId', required: false })
   @ApiQuery({ name: 'channel', required: false, enum: NotificationChannelDto })
   @ApiQuery({ name: 'status', required: false })
   @ApiQuery({ name: 'page', required: false })
   @ApiQuery({ name: 'limit', required: false })
-  async findNotifications(@Query() query: QueryNotificationsDto) {
-    const result = await this.notificationsService.findNotifications(query);
+  async findNotifications(
+    @Query() query: QueryNotificationsDto,
+    @CurrentUser('sub') currentUserId: string,
+    @CurrentUser('userType') userType: string,
+  ) {
+    // Citizens and business users only see notifications addressed to them
+    const scopedQuery =
+      userType === 'CITIZEN' || userType === 'BUSINESS'
+        ? { ...query, recipientUserId: currentUserId }
+        : query;
+    const result = await this.notificationsService.findNotifications(scopedQuery);
     return {
       success: true,
       data: result.items,
-      meta: result.meta,
+      meta: {
+        ...result.meta,
+        unreadCount: result.unreadCount,
+      },
     };
   }
 
