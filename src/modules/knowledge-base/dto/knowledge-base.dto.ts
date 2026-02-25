@@ -11,7 +11,7 @@ import {
   MinLength,
   MaxLength,
 } from 'class-validator';
-import { Type } from 'class-transformer';
+import { Type, Transform } from 'class-transformer';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
 // ─── Enums ───────────────────────────────────────────────────────────────────
@@ -159,6 +159,7 @@ export class QueryKbArticlesDto {
 
   @ApiPropertyOptional({ default: false })
   @IsOptional()
+  @Transform(({ value }) => value === true || value === 'true' || value === '1')
   @IsBoolean()
   publishedOnly?: boolean;
 

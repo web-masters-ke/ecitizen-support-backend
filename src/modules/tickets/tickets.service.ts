@@ -6,6 +6,7 @@ import {
 } from '@nestjs/common';
 import { PrismaService } from '../../config/prisma.service';
 import { PaginatedResult } from '../../common/dto/pagination.dto';
+import { NotificationsService } from '../notifications/notifications.service';
 import {
   CreateTicketDto,
   UpdateTicketDto,
@@ -92,7 +93,10 @@ const STATUS_TRANSITIONS: Record<TicketStatusEnum, TicketStatusEnum[]> = {
 export class TicketsService {
   private readonly logger = new Logger(TicketsService.name);
 
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly notificationsService: NotificationsService,
+  ) {}
 
   // ============================================
   // Ticket Number Generation
@@ -1055,16 +1059,41 @@ export class TicketsService {
   // ============================================
 
   /**
-   * Mark a ticket as resolved.
+   * Mark a ticket as resolved and notify the citizen who raised it.
    */
   async resolveTicket(id: string, dto: ResolveTicketDto, resolvedBy: string) {
-    return this.transitionStatus(
+    const updatedTicket = await this.transitionStatus(
       id,
       TicketStatusEnum.RESOLVED,
       resolvedBy,
       dto.resolutionNotes || 'Ticket resolved',
       { resolvedAt: new Date() },
     );
+
+    // Notify the citizen (fire-and-forget — don't block the response)
+    const creator = (updatedTicket as any).creator;
+    if (creator?.email) {
+      this.notificationsService
+        .sendNotification({
+          ticketId: id,
+          channel: 'EMAIL' as any,
+          triggerEvent: 'TICKET_RESOLVED',
+          subject: `Your request ${updatedTicket.ticketNumber} has been resolved`,
+          body: `Dear ${creator.firstName ?? 'Citizen'},\n\nYour service request <strong>${updatedTicket.ticketNumber}</strong> — <em>${(updatedTicket as any).subject}</em> — has been resolved.\n\n${dto.resolutionNotes ? `Resolution notes: ${dto.resolutionNotes}` : ''}\n\nYou can view your ticket and leave feedback at any time by logging into the eCitizen portal.\n\nThank you for using eCitizen Kenya.\n\neCitizen Service Team`,
+          recipients: [
+            {
+              recipientUserId: creator.id,
+              recipientEmail: creator.email,
+              recipientPhone: creator.phoneNumber ?? undefined,
+            },
+          ],
+        })
+        .catch((err) =>
+          this.logger.warn(`Failed to send resolution notification for ticket ${updatedTicket.ticketNumber}: ${err?.message}`),
+        );
+    }
+
+    return updatedTicket;
   }
 
   /**
