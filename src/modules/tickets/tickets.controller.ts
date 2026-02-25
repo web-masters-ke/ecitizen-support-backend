@@ -392,6 +392,19 @@ export class TicketLookupsController {
   constructor(private readonly ticketsService: TicketsService) {}
 
   // ------------------------------------------
+  // POST /api/v1/ticket-categories - Create category
+  // ------------------------------------------
+
+  @Post('ticket-categories')
+  @ApiOperation({ summary: 'Create a ticket category for an agency' })
+  @SwaggerResponse({ status: 201, description: 'Category created' })
+  async createCategory(
+    @Body() dto: { agencyId: string; name: string; description?: string },
+  ) {
+    return this.ticketsService.createCategory(dto);
+  }
+
+  // ------------------------------------------
   // GET /api/v1/ticket-categories - List categories
   // ------------------------------------------
 

@@ -1471,6 +1471,22 @@ export class TicketsService {
   // ============================================
 
   /**
+   * Create a ticket category for an agency.
+   */
+  async createCategory(dto: { agencyId: string; name: string; description?: string }) {
+    return this.prisma.ticketCategory.upsert({
+      where: { uq_ticket_category: { agencyId: dto.agencyId, name: dto.name } },
+      update: {},
+      create: {
+        agencyId: dto.agencyId,
+        name: dto.name,
+        description: dto.description,
+        isActive: true,
+      },
+    });
+  }
+
+  /**
    * Get ticket categories, optionally filtered by agency.
    */
   async getCategories(filters: CategoryFilterDto) {
