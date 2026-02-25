@@ -18,8 +18,8 @@ services:
       - REDIS_PASSWORD=${REDIS_PASSWORD:-}
       - JWT_SECRET=${JWT_SECRET:-your-super-secret-jwt-key-change-in-production}
       - JWT_REFRESH_SECRET=${JWT_REFRESH_SECRET:-your-super-secret-refresh-key-change-in-production}
-      - JWT_ACCESS_EXPIRATION=${JWT_ACCESS_EXPIRATION:-15m}
-      - JWT_REFRESH_EXPIRATION=${JWT_REFRESH_EXPIRATION:-24h}
+      - JWT_ACCESS_EXPIRATION=${JWT_ACCESS_EXPIRATION:-2h}
+      - JWT_REFRESH_EXPIRATION=${JWT_REFRESH_EXPIRATION:-30d}
       - BREVO_API_KEY=${BREVO_API_KEY:-}
       - BREVO_FROM_EMAIL=${BREVO_FROM_EMAIL:-noreply@ecitizen.go.ke}
       - BREVO_FROM_NAME=${BREVO_FROM_NAME:-eCitizen SCC}
