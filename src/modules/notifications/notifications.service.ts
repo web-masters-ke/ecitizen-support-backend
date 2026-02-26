@@ -430,13 +430,14 @@ export class NotificationsService {
       this.prisma.notification.count({ where }),
     ]);
 
-    // Count unread: notifications where this user's recipient record is not yet READ
+    // Count unread: IN_APP recipient records not yet delivered (deliveredAt is null)
     let unreadCount = 0;
     if (query.recipientUserId) {
       unreadCount = await this.prisma.notificationRecipient.count({
         where: {
           recipientUserId: query.recipientUserId,
-          NOT: { deliveryStatus: 'READ' as any },
+          deliveredAt: null,
+          notification: { channel: 'IN_APP' },
         },
       });
     }
