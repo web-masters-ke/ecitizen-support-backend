@@ -199,6 +199,12 @@ export class KnowledgeBaseService {
           tagMappings: {
             include: { tag: { select: { id: true, name: true } } },
           },
+          versions: {
+            where: { isPublished: true },
+            orderBy: { versionNumber: 'desc' },
+            take: 1,
+            select: { id: true, summary: true, content: true },
+          },
           _count: { select: { views: true, feedback: true, versions: true } },
         },
         orderBy: { updatedAt: 'desc' },
@@ -208,8 +214,19 @@ export class KnowledgeBaseService {
       this.prisma.kbArticle.count({ where }),
     ]);
 
+    // Flatten summary from the first published version onto each article for easy consumption
+    const enriched = articles.map((a: any) => {
+      const ver = a.versions?.[0];
+      return {
+        ...a,
+        summary: ver?.summary ?? null,
+        excerpt: ver?.summary ?? (ver?.content ? (ver.content as string).replace(/<[^>]*>/g, '').substring(0, 200) : null),
+        versions: undefined, // remove versions array from list response to keep it light
+      };
+    });
+
     return {
-      data: articles,
+      data: enriched,
       pagination: {
         page,
         limit,
