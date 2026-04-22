@@ -5,6 +5,7 @@ import {
   BadRequestException,
   Logger,
 } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { PrismaService } from '../../config/prisma.service';
 import {
   CreateUserDto,
@@ -24,6 +25,7 @@ export class UsersService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly notificationsService: NotificationsService,
+    private readonly configService: ConfigService,
   ) {}
 
   // ──────────────────────────────────────────────
@@ -105,7 +107,8 @@ export class UsersService {
       user.userRoles?.[0]?.role?.name ??
       dto.userType?.replace(/_/g, ' ') ??
       'User';
-    const loginUrl = 'http://18.190.206.56:3011/login';
+    const adminFrontendUrl = this.configService.get<string>('ADMIN_FRONTEND_URL', 'http://localhost:3001');
+    const loginUrl = `${adminFrontendUrl}/login`;
     const welcomeSubject = 'Welcome to eCitizen Service Command Centre';
     const welcomeBody = `Dear ${user.firstName ?? 'User'},
 
