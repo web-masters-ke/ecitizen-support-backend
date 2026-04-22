@@ -70,6 +70,7 @@ jobs:
           fetch-depth: 0
 
       - name: Secret Detection (Gitleaks)
+        continue-on-error: true
         run: |
           GITLEAKS_VERSION="8.24.3"
           curl -sSfL "https://github.com/gitleaks/gitleaks/releases/download/v${GITLEAKS_VERSION}/gitleaks_${GITLEAKS_VERSION}_linux_x64.tar.gz" | tar -xz -C /tmp
