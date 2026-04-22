@@ -1,4 +1,4 @@
-import { PrismaClient, UserType, TicketStatusName, TicketPriorityName, AgencyType, TicketChannel } from '@prisma/client';
+import { PrismaClient, UserType, TicketStatusName, TicketPriorityName, AgencyType, TicketChannel, KbVisibility, BreachType, EscalationTrigger } from '@prisma/client';
 import * as bcrypt from 'bcryptjs';
 
 const prisma = new PrismaClient();
@@ -1221,11 +1221,447 @@ async function main() {
 
   console.log(`✅ ${ticketsSeeded} sample tickets seeded (skipped existing)`);
 
+  // ==========================================
+  // 14. Additional Diverse Users
+  // ==========================================
+  const diversePwd = await bcrypt.hash('Staff@123', 10);
+  const [
+    agencyAdminRole, l1SupervisorRole, l2ProviderRole,
+    commandCenterAdminRole, auditorRole, analystRole, executiveViewerRole,
+  ] = await Promise.all([
+    prisma.role.findUnique({ where: { name: 'AGENCY_ADMIN' } }),
+    prisma.role.findUnique({ where: { name: 'L1_SUPERVISOR' } }),
+    prisma.role.findUnique({ where: { name: 'L2_PROVIDER' } }),
+    prisma.role.findUnique({ where: { name: 'COMMAND_CENTER_ADMIN' } }),
+    prisma.role.findUnique({ where: { name: 'AUDITOR' } }),
+    prisma.role.findUnique({ where: { name: 'ANALYST' } }),
+    prisma.role.findUnique({ where: { name: 'EXECUTIVE_VIEWER' } }),
+  ]);
+
+  const globalStaff = [
+    { email: 'cc.admin@ecitizen.go.ke', firstName: 'Command', lastName: 'Center', userType: UserType.COMMAND_CENTER_ADMIN, role: commandCenterAdminRole },
+    { email: 'auditor@ecitizen.go.ke', firstName: 'Compliance', lastName: 'Auditor', userType: UserType.COMMAND_CENTER_ADMIN, role: auditorRole },
+    { email: 'analyst@ecitizen.go.ke', firstName: 'Data', lastName: 'Analyst', userType: UserType.COMMAND_CENTER_ADMIN, role: analystRole },
+    { email: 'executive@ecitizen.go.ke', firstName: 'Executive', lastName: 'Viewer', userType: UserType.COMMAND_CENTER_ADMIN, role: executiveViewerRole },
+  ];
+  for (const s of globalStaff) {
+    const u = await prisma.user.upsert({ where: { email: s.email }, update: {}, create: { email: s.email, firstName: s.firstName, lastName: s.lastName, userType: s.userType, passwordHash: diversePwd, isActive: true, isVerified: true } });
+    if (s.role) {
+      const ex = await prisma.userRole.findFirst({ where: { userId: u.id, roleId: s.role.id, agencyId: null } });
+      if (!ex) await prisma.userRole.create({ data: { userId: u.id, roleId: s.role.id } });
+    }
+  }
+
+  const keyAgencyCodes = ['KRA', 'NTSA', 'NHIF', 'IMMIGRATION', 'NSSF', 'NRB'];
+  const agenciesForStaff = await prisma.agency.findMany({ where: { agencyCode: { in: keyAgencyCodes } } });
+  for (const ag of agenciesForStaff) {
+    const code = ag.agencyCode.toLowerCase().replace(/-/g, '');
+    const domain = ['nhif', 'nssf', 'helb', 'knec'].includes(code) ? `${code}.or.ke` : `${code}.go.ke`;
+
+    for (const [roleRef, suffix, firstName] of [
+      [l1SupervisorRole, 'supervisor', 'L1 Supervisor'],
+      [agencyAdminRole, 'admin', 'Agency Admin'],
+    ] as [typeof l1SupervisorRole, string, string][]) {
+      if (!roleRef) continue;
+      const email = `${suffix}@${domain}`;
+      const u = await prisma.user.upsert({ where: { email }, update: {}, create: { email, firstName, lastName: ag.agencyCode, userType: UserType.AGENCY_AGENT, passwordHash: diversePwd, isActive: true, isVerified: true } });
+      const ex = await prisma.userRole.findFirst({ where: { userId: u.id, roleId: roleRef.id, agencyId: ag.id } });
+      if (!ex) await prisma.userRole.create({ data: { userId: u.id, roleId: roleRef.id, agencyId: ag.id } });
+      await prisma.agencyUser.upsert({ where: { uq_agency_user: { userId: u.id, agencyId: ag.id } }, update: {}, create: { userId: u.id, agencyId: ag.id } });
+    }
+  }
+  console.log('✅ Additional diverse users seeded');
+
+  // ==========================================
+  // 15. Role Permissions for All Remaining Roles
+  // ==========================================
+  const allPermsNow = await prisma.permission.findMany();
+  const rolePermConfig: Record<string, string[]> = {
+    COMMAND_CENTER_ADMIN: ['ticket:create','ticket:read','ticket:update','ticket:assign','ticket:escalate','ticket:close','user:read','agency:read','sla:read','sla:configure','ai:read','ai:override','dashboard:read','report:read','report:export','knowledge_base:read','knowledge_base:create','knowledge_base:update','notification:read','notification:send','audit:read','media:upload','media:read'],
+    AGENCY_ADMIN: ['ticket:create','ticket:read','ticket:update','ticket:assign','ticket:escalate','ticket:close','ticket:delete','user:create','user:read','user:update','user:manage_roles','agency:read','agency:update','agency:configure','sla:read','sla:configure','ai:read','dashboard:read','report:read','report:export','knowledge_base:create','knowledge_base:read','knowledge_base:update','notification:read','notification:send','notification:configure','audit:read','media:upload','media:read','media:delete'],
+    L1_SUPERVISOR: ['ticket:create','ticket:read','ticket:update','ticket:assign','ticket:escalate','ticket:close','user:read','agency:read','sla:read','ai:read','dashboard:read','report:read','knowledge_base:read','knowledge_base:create','notification:read','audit:read','media:upload','media:read'],
+    L2_PROVIDER: ['ticket:read','ticket:update','ticket:close','agency:read','sla:read','knowledge_base:read','notification:read','media:upload','media:read'],
+    AUDITOR: ['ticket:read','user:read','agency:read','sla:read','audit:read','audit:export','report:read','report:export','dashboard:read','knowledge_base:read','media:read'],
+    ANALYST: ['ticket:read','agency:read','sla:read','ai:read','dashboard:read','report:read','report:export','knowledge_base:read','media:read'],
+    EXECUTIVE_VIEWER: ['ticket:read','agency:read','sla:read','dashboard:read','report:read','media:read'],
+  };
+  for (const [roleName, permKeys] of Object.entries(rolePermConfig)) {
+    const role = await prisma.role.findUnique({ where: { name: roleName } });
+    if (!role) continue;
+    for (const perm of allPermsNow.filter(p => permKeys.includes(`${p.resource}:${p.action}`))) {
+      await prisma.rolePermission.upsert({ where: { roleId_permissionId: { roleId: role.id, permissionId: perm.id } }, update: {}, create: { roleId: role.id, permissionId: perm.id } });
+    }
+  }
+  console.log('✅ Role permissions for all roles seeded');
+
+  // ==========================================
+  // 16. Knowledge Base — Categories, Articles, Tags
+  // ==========================================
+  const kbAdmin = await prisma.user.findUnique({ where: { email: 'admin@ecitizen.go.ke' } });
+
+  const globalKbCats = [
+    { name: 'Getting Started', description: 'How to use the eCitizen portal' },
+    { name: 'Account & Registration', description: 'Login, registration and account management' },
+    { name: 'Payments & Fees', description: 'Payment methods, receipts and fee disputes' },
+    { name: 'Technical Issues', description: 'Portal errors, browser issues and system problems' },
+    { name: 'Service Status', description: 'Planned maintenance and service availability' },
+    { name: 'Appeals & Escalations', description: 'How to appeal decisions or escalate complaints' },
+  ];
+  const kbCatIds: Record<string, string> = {};
+  for (const c of globalKbCats) {
+    const ex = await prisma.kbCategory.findFirst({ where: { agencyId: null, name: c.name } });
+    const rec = ex ?? await prisma.kbCategory.create({ data: { name: c.name, description: c.description, isActive: true } });
+    kbCatIds[c.name] = rec.id;
+  }
+
+  const globalTagNames = ['eCitizen', 'portal', 'payments', 'technical', 'account', 'password', 'registration', 'complaints', 'escalation', 'online-services'];
+  const kbTagIds: Record<string, string> = {};
+  for (const name of globalTagNames) {
+    const ex = await prisma.kbTag.findFirst({ where: { agencyId: null, name } });
+    const rec = ex ?? await prisma.kbTag.create({ data: { name } });
+    kbTagIds[name] = rec.id;
+  }
+
+  const kbArticles = [
+    {
+      title: 'How to Create a Support Ticket',
+      slug: 'how-to-create-support-ticket',
+      category: 'Getting Started',
+      tags: ['eCitizen', 'portal'],
+      summary: 'Step-by-step guide to creating a support ticket on the eCitizen portal.',
+      content: `## Creating a Support Ticket\n\nIf you are experiencing issues with any government service, raise a ticket through the eCitizen portal.\n\n### Steps\n1. Log in at ecitizen.go.ke\n2. Click **My Tickets** → **New Ticket**\n3. Select the government agency\n4. Choose the service category\n5. Provide a clear subject and description\n6. Attach supporting documents if available\n7. Click **Submit Ticket**\n\n### Expected Response Times\n| Priority | First Response | Resolution |\n|----------|---------------|------------|\n| Critical | 15 minutes | 2 hours |\n| High | 1 hour | 8 hours |\n| Medium | 4 hours | 24 hours |\n| Low | 8 hours | 48 hours |`,
+    },
+    {
+      title: 'Understanding Ticket Status Meanings',
+      slug: 'ticket-status-meanings',
+      category: 'Getting Started',
+      tags: ['eCitizen', 'complaints'],
+      summary: 'What each ticket status means and what action to take.',
+      content: `## Ticket Status Guide\n\n| Status | Meaning |\n|--------|--------|\n| **Open** | Received, awaiting assignment |\n| **Assigned** | Agent assigned, will contact you shortly |\n| **In Progress** | Actively being worked on |\n| **Escalated** | Elevated to senior team |\n| **Pending Citizen** | We need more information from you |\n| **Resolved** | Issue resolved — please confirm within 7 days |\n| **Closed** | Complete |\n| **Reopened** | Reopened after you raised a concern |`,
+    },
+    {
+      title: 'How to Pay Government Service Fees Online',
+      slug: 'paying-government-fees-online',
+      category: 'Payments & Fees',
+      tags: ['payments', 'portal', 'eCitizen'],
+      summary: 'How to pay government fees using M-Pesa, cards, or internet banking.',
+      content: `## Paying Government Fees on eCitizen\n\n### Payment Methods\n- **M-Pesa** (Lipa na M-Pesa / Pay Bill)\n- **Visa / Mastercard** credit and debit cards\n- **KCB, Equity, Co-op** internet banking\n- **Pesalink** bank transfers\n\n### Pay via M-Pesa\n1. Select **M-Pesa** on the payment page\n2. Enter your M-Pesa registered phone number\n3. Enter your M-Pesa PIN on the STK push\n4. Receipt sent to your registered email\n\n### Fee Disputes\nRaise a support ticket under the relevant agency, category: **Payment Issues**.`,
+    },
+    {
+      title: 'eCitizen Portal Not Loading — Troubleshooting',
+      slug: 'portal-not-loading-troubleshooting',
+      category: 'Technical Issues',
+      tags: ['technical', 'portal'],
+      summary: 'Fix common portal loading issues on desktop and mobile.',
+      content: `## eCitizen Portal Troubleshooting\n\n### Step 1: Clear Browser Cache\nPress **Ctrl+Shift+Delete** → select All time → clear Cookies and Cache.\n\n### Step 2: Try a Different Browser\nRecommended: Chrome 90+, Firefox 88+, Edge 90+, Safari 14+. IE is not supported.\n\n### Step 3: Try Incognito Mode\nDisables extensions that may interfere.\n\n### Step 4: Check Internet\nTry another website. Switch from mobile data to WiFi if needed.\n\n### Still Not Working?\nRaise a ticket under **ICT Authority → Technical Issues** and include your browser version and a screenshot.`,
+    },
+    {
+      title: 'How to Reset Your eCitizen Password',
+      slug: 'reset-ecitizen-password',
+      category: 'Account & Registration',
+      tags: ['password', 'account'],
+      summary: 'Reset your password via email OTP or phone number.',
+      content: `## Resetting Your Password\n\n### Method 1: Email Reset\n1. Click **Forgot Password?** on the login page\n2. Enter your registered email\n3. Click the reset link in your email (check spam)\n4. Set a new password (min 8 chars, uppercase, number, special character)\n\n### Method 2: Phone Reset\n1. Click **Forgot Password? → Reset via Phone**\n2. Enter your registered phone number\n3. Enter the OTP sent via SMS\n\n### Email No Longer Active?\nVisit any Huduma Centre with your National ID.`,
+    },
+    {
+      title: 'How to Escalate a Complaint',
+      slug: 'how-to-escalate-complaint',
+      category: 'Appeals & Escalations',
+      tags: ['escalation', 'complaints'],
+      summary: 'When and how to escalate a complaint to a supervisor.',
+      content: `## Escalating Your Complaint\n\n### When to Escalate\n- Ticket open longer than expected resolution time\n- Unsatisfied with response\n- Involves a legal matter or significant financial impact\n\n### Steps\n1. Open your ticket from **My Tickets**\n2. Click **Request Escalation**\n3. Select reason and add context\n4. Click **Submit Escalation**\n\n### Escalation Levels\n| Level | Team | Response Time |\n|-------|------|---------------|\n| Level 1 | Support Agent | Per SLA |\n| Level 2 | Supervisor | 4 hours |\n| Level 3 | Agency Director | 24 hours |`,
+    },
+    {
+      title: 'eCitizen Maintenance Schedule',
+      slug: 'maintenance-schedule',
+      category: 'Service Status',
+      tags: ['technical', 'portal'],
+      summary: 'Regular maintenance windows and how to check service status.',
+      content: `## Service Maintenance\n\n### Regular Window\nEvery **Sunday 01:00–05:00 EAT**. Some services may be unavailable.\n\n### How to Check Status\n- Check the homepage for banner notifications\n- Follow **@eCitizenKe** on social media\n\n### Emergency Maintenance\nNotice displayed at least 2 hours in advance where possible.\n\n### Agency Systems\nKRA iTax, NTSA TIMS, and NHIF portal have independent maintenance windows managed by each agency.`,
+    },
+    {
+      title: 'Tracking Your KRA PIN Application',
+      slug: 'tracking-kra-pin-application',
+      category: 'Getting Started',
+      tags: ['eCitizen', 'registration'],
+      summary: 'How to track your KRA PIN certificate application status.',
+      content: `## KRA PIN Application Tracking\n\n### Online Tracking\n1. Go to itax.kra.go.ke\n2. Click **PIN Checker**\n3. Enter your ID number or previous application reference\n\n### Common Issues\n- **"Invalid PIN format"**: Ensure your PIN starts with a letter (A/P) and ends with a letter\n- **Certificate not received**: Allow 5 business days. If not received after 7 days, raise a ticket under **KRA → PIN Registration**\n- **Wrong details on PIN**: Raise a ticket under **KRA → Tax Compliance** with your ID number and correct details\n\n### New PIN vs Renewal\nFirst-time applicants register at any KRA office or online. Renewals are done online only.`,
+    },
+    {
+      title: 'NTSA Driving Licence — Application and Renewal',
+      slug: 'ntsa-driving-licence-guide',
+      category: 'Getting Started',
+      tags: ['eCitizen', 'registration'],
+      summary: 'Complete guide for NTSA driving licence application and renewal.',
+      content: `## Driving Licence Guide\n\n### New Application\n1. Book a driving test at any NTSA-accredited driving school\n2. Pass the test and obtain a Test Pass Certificate\n3. Apply at NTSA eCitizen portal: select **Driving Licence Application**\n4. Pay KES 3,000\n5. Physical licence delivered within 21 days\n\n### Renewal\n1. Log in to eCitizen, select **NTSA → Renew Driving Licence**\n2. Confirm your details\n3. Pay KES 3,000\n4. Licence renewed for 3 years\n\n### Not Received?\nAllow 21 business days. If not delivered, raise a ticket under **NTSA → Driving Licence** with your application reference.`,
+    },
+    {
+      title: 'NHIF Membership — Registration and Benefits',
+      slug: 'nhif-membership-guide',
+      category: 'Account & Registration',
+      tags: ['registration', 'account'],
+      summary: 'How to register for NHIF and understand your benefits.',
+      content: `## NHIF Membership\n\n### Registration\n1. Visit nhif.or.ke or any NHIF office\n2. For formal employment: your employer registers you automatically\n3. For self-employment/informal sector: apply for **Voluntary Member** status\n   - Pay KES 500/month for individuals\n   - Covers you and up to 4 immediate family members\n\n### Adding Beneficiaries\n1. Log in to NHIF portal\n2. Click **Manage Beneficiaries → Add Beneficiary**\n3. Enter name, ID/birth certificate number, relationship\n4. Changes reflect within 48 hours\n\n### Checking Contributions\nLog in to nhif.or.ke → **Statement of Contributions** for a full history.`,
+    },
+  ];
+
+  for (const def of kbArticles) {
+    const exArticle = await prisma.kbArticle.findFirst({ where: { slug: def.slug, agencyId: null } });
+    if (exArticle) continue;
+    const article = await prisma.kbArticle.create({
+      data: { slug: def.slug, title: def.title, categoryId: kbCatIds[def.category] ?? null, visibility: KbVisibility.PUBLIC, isPublished: true, publishedAt: new Date(Date.now() - Math.random() * 30 * 86400000), createdBy: kbAdmin?.id ?? null },
+    });
+    const version = await prisma.kbArticleVersion.create({
+      data: { articleId: article.id, versionNumber: 1, content: def.content, summary: def.summary, isPublished: true, createdBy: kbAdmin?.id ?? null },
+    });
+    await prisma.kbArticle.update({ where: { id: article.id }, data: { currentVersionId: version.id } });
+    for (const tagName of def.tags) {
+      if (kbTagIds[tagName]) {
+        await prisma.kbArticleTagMapping.upsert({ where: { articleId_tagId: { articleId: article.id, tagId: kbTagIds[tagName] } }, update: {}, create: { articleId: article.id, tagId: kbTagIds[tagName] } });
+      }
+    }
+    const viewCount = 8 + Math.floor(Math.random() * 40);
+    for (let v = 0; v < viewCount; v++) {
+      await prisma.kbArticleView.create({ data: { articleId: article.id, viewedAt: new Date(Date.now() - v * 3600000 * 6) } });
+    }
+    await prisma.kbFeedback.create({ data: { articleId: article.id, wasHelpful: true, rating: 4 + (Math.random() > 0.5 ? 1 : 0), feedbackComment: 'Very helpful guide, resolved my issue.', createdAt: new Date(Date.now() - 86400000) } });
+  }
+  console.log('✅ Knowledge base articles, categories, and tags seeded');
+
+  // ==========================================
+  // 17. Ticket Tags + Mappings
+  // ==========================================
+  const ticketTagNames = ['urgent','billing','technical','documents','follow-up','awaiting-docs','escalated-ministry','legal','accessibility','duplicate'];
+  const ticketTagMap: Record<string, string> = {};
+  for (const name of ticketTagNames) {
+    const ex = await prisma.ticketTag.findFirst({ where: { agencyId: null, name } });
+    const rec = ex ?? await prisma.ticketTag.create({ data: { name } });
+    ticketTagMap[name] = rec.id;
+  }
+  const tagsForTickets = await prisma.ticket.findMany({ take: 20, orderBy: { createdAt: 'asc' } });
+  const tagMatrix = [
+    ['urgent','technical'],['billing'],['documents','follow-up'],['technical'],['awaiting-docs'],
+    ['billing','follow-up'],['urgent','escalated-ministry'],['documents'],['legal'],['technical','follow-up'],
+    ['billing','urgent'],['documents','awaiting-docs'],['follow-up'],['urgent'],['technical','duplicate'],
+    ['escalated-ministry','legal'],['billing'],['documents'],['follow-up','urgent'],['technical'],
+  ];
+  for (let i = 0; i < Math.min(tagsForTickets.length, tagMatrix.length); i++) {
+    for (const t of tagMatrix[i]) {
+      if (ticketTagMap[t]) {
+        await prisma.ticketTagMapping.upsert({ where: { ticketId_tagId: { ticketId: tagsForTickets[i].id, tagId: ticketTagMap[t] } }, update: {}, create: { ticketId: tagsForTickets[i].id, tagId: ticketTagMap[t] } });
+      }
+    }
+  }
+  console.log('✅ Ticket tags seeded and applied');
+
+  // ==========================================
+  // 18. SLA Tracking for All Tickets
+  // ==========================================
+  const slaRespMin: Record<string, number> = { LOW: 480, MEDIUM: 240, HIGH: 60, CRITICAL: 15 };
+  const slaResolMin: Record<string, number> = { LOW: 2880, MEDIUM: 1440, HIGH: 480, CRITICAL: 120 };
+  const allTicketsForSla = await prisma.ticket.findMany({ include: { priority: true, status: true } });
+
+  for (const t of allTicketsForSla) {
+    const ex = await prisma.slaTracking.findUnique({ where: { ticketId: t.id } });
+    if (ex) continue;
+    const pName = t.priority?.name ?? 'MEDIUM';
+    const respMin = slaRespMin[pName] ?? 240;
+    const resolMin = slaResolMin[pName] ?? 1440;
+    const responseDueAt = new Date(t.createdAt.getTime() + respMin * 60000);
+    const resolutionDueAt = new Date(t.createdAt.getTime() + resolMin * 60000);
+    const isClosed = ['RESOLVED', 'CLOSED'].includes(t.status.name);
+    const responseBreached = !t.firstResponseAt && new Date() > responseDueAt;
+    const resolutionBreached = !isClosed && new Date() > resolutionDueAt;
+    await prisma.slaTracking.create({
+      data: {
+        ticketId: t.id,
+        responseDueAt,
+        resolutionDueAt,
+        responseMet: t.firstResponseAt ? t.firstResponseAt <= responseDueAt : null,
+        resolutionMet: isClosed ? (t.resolvedAt ? t.resolvedAt <= resolutionDueAt : false) : null,
+        responseBreached,
+        resolutionBreached,
+        escalationLevel: t.escalationLevel,
+      },
+    });
+  }
+  console.log('✅ SLA tracking created for all tickets');
+
+  // ==========================================
+  // 19. Ticket Assignments + History Records
+  // ==========================================
+  const openStatusRec = await prisma.ticketStatus.findUnique({ where: { name: TicketStatusName.OPEN } });
+  const assignedTickets = await prisma.ticket.findMany({ where: { currentAssigneeId: { not: null } }, include: { status: true } });
+  for (const t of assignedTickets) {
+    const assignEx = await prisma.ticketAssignment.findFirst({ where: { ticketId: t.id } });
+    if (!assignEx) {
+      await prisma.ticketAssignment.create({ data: { ticketId: t.id, assignedTo: t.currentAssigneeId, assignmentReason: 'Assigned by system on ticket intake', assignedAt: new Date(t.createdAt.getTime() + 30 * 60000) } });
+    }
+    const histEx = await prisma.ticketHistory.findFirst({ where: { ticketId: t.id } });
+    if (!histEx && openStatusRec && t.statusId !== openStatusRec.id) {
+      await prisma.ticketHistory.create({ data: { ticketId: t.id, oldStatusId: openStatusRec.id, newStatusId: t.statusId, changedBy: t.currentAssigneeId, changeReason: 'Status updated on assignment', changedAt: new Date(t.createdAt.getTime() + 35 * 60000) } });
+    }
+  }
+  console.log('✅ Ticket assignments and history seeded');
+
+  // ==========================================
+  // 20. Escalation Events + Breach Logs
+  // ==========================================
+  const escalatedTicketsList = await prisma.ticket.findMany({ where: { isEscalated: true }, include: { slaTracking: true } });
+  for (const t of escalatedTicketsList) {
+    const escEx = await prisma.escalationEvent.findFirst({ where: { ticketId: t.id } });
+    if (!escEx) {
+      await prisma.escalationEvent.create({ data: { ticketId: t.id, slaTrackingId: t.slaTracking?.id ?? null, previousLevel: 0, newLevel: 1, escalatedToRole: 'L1_SUPERVISOR', escalationReason: 'SLA breach threshold exceeded — auto-escalated', triggeredBy: EscalationTrigger.SYSTEM, createdAt: new Date(t.createdAt.getTime() + 90 * 60000) } });
+    }
+    if (t.slaTracking) {
+      const breachEx = await prisma.breachLog.findFirst({ where: { ticketId: t.id } });
+      if (!breachEx) {
+        await prisma.breachLog.create({ data: { ticketId: t.id, slaTrackingId: t.slaTracking.id, breachType: BreachType.RESPONSE, breachTimestamp: t.slaTracking.responseDueAt, breachDurationMinutes: 30 + Math.floor(Math.random() * 60) } });
+      }
+    }
+  }
+  console.log('✅ Escalation events and breach logs seeded');
+
+  // ==========================================
+  // 21. AI Classification Logs
+  // ==========================================
+  const aiModelRec = await prisma.aiModel.findFirst({ where: { modelName: 'escc-classifier' } });
+  const ticketsForAi = await prisma.ticket.findMany({ take: 35, include: { category: true, priority: true } });
+  if (aiModelRec) {
+    for (const t of ticketsForAi) {
+      const aiEx = await prisma.aiClassificationLog.findFirst({ where: { ticketId: t.id } });
+      if (!aiEx) {
+        const conf = parseFloat((0.62 + Math.random() * 0.33).toFixed(2));
+        await prisma.aiClassificationLog.create({ data: { ticketId: t.id, aiModelId: aiModelRec.id, predictedCategoryId: t.categoryId, predictedPriorityId: t.priorityId, confidenceScore: conf, sentimentScore: parseFloat((0.15 + Math.random() * 0.55).toFixed(2)), autoApplied: conf > 0.80, manualOverride: false } });
+      }
+    }
+  }
+  console.log('✅ AI classification logs seeded');
+
+  // ==========================================
+  // 22. Automation Rules + Actions
+  // ==========================================
+  const automationAdmin = await prisma.user.findUnique({ where: { email: 'admin@ecitizen.go.ke' } });
+  const automationAgencies = await prisma.agency.findMany({ take: 6 });
+  const ruleDefs = [
+    { ruleName: 'Auto-escalate CRITICAL tickets after 15 minutes', triggerEvent: 'ticket.sla.response_breach', condition: { priority: 'CRITICAL', responseBreached: true }, actions: [{ actionType: 'escalate_ticket', payload: { toRole: 'L1_SUPERVISOR', reason: 'SLA breach auto-escalation' }, order: 1 }, { actionType: 'send_notification', payload: { channel: 'EMAIL', template: 'ticket_escalated' }, order: 2 }] },
+    { ruleName: 'Send SMS on ticket creation', triggerEvent: 'ticket.created', condition: { channel: ['WEB', 'MOBILE'] }, actions: [{ actionType: 'send_notification', payload: { channel: 'SMS', template: 'ticket_created' }, order: 1 }] },
+    { ruleName: 'Auto-close resolved tickets after 7 days', triggerEvent: 'ticket.resolved', condition: { resolvedDaysAgo: 7, citizenConfirmed: false }, actions: [{ actionType: 'close_ticket', payload: { reason: 'Auto-closed: no citizen response within 7 days' }, order: 1 }] },
+  ];
+  for (const ag of automationAgencies) {
+    for (const def of ruleDefs) {
+      const ex = await prisma.automationRule.findFirst({ where: { agencyId: ag.id, ruleName: def.ruleName } });
+      if (ex) continue;
+      const rule = await prisma.automationRule.create({ data: { agencyId: ag.id, ruleName: def.ruleName, triggerEvent: def.triggerEvent, conditionExpression: JSON.stringify(def.condition), isActive: true, createdBy: automationAdmin?.id ?? null } });
+      for (const a of def.actions) {
+        await prisma.automationAction.create({ data: { automationRuleId: rule.id, actionType: a.actionType, actionPayload: a.payload, executionOrder: a.order } });
+      }
+    }
+  }
+  console.log('✅ Automation rules and actions seeded');
+
+  // ==========================================
+  // 23. Daily + Hourly Metrics Backfill (30 days)
+  // ==========================================
+  const metricsAgencies = await prisma.agency.findMany({ select: { id: true } });
+  for (const ag of metricsAgencies) {
+    for (let d = 29; d >= 0; d--) {
+      const dateBucket = new Date();
+      dateBucket.setDate(dateBucket.getDate() - d);
+      dateBucket.setHours(0, 0, 0, 0);
+      const isWeekend = [0, 6].includes(dateBucket.getDay());
+      const base = isWeekend ? 2 : 7;
+      const created = base + Math.floor(Math.random() * 6);
+      const resolved = Math.floor(created * 0.72);
+      const closed = Math.floor(resolved * 0.80);
+
+      await prisma.ticketMetricDaily.upsert({
+        where: { uq_ticket_daily: { agencyId: ag.id, dateBucket } },
+        update: {},
+        create: { agencyId: ag.id, dateBucket, ticketsCreated: created, ticketsResolved: resolved, ticketsClosed: closed, openTickets: Math.max(0, created - resolved), escalatedTickets: Math.floor(created * 0.10), breachedResponse: Math.floor(created * 0.05), breachedResolution: Math.floor(created * 0.03), avgFirstResponseMinutes: parseFloat((30 + Math.random() * 50).toFixed(2)), avgResolutionMinutes: parseFloat((280 + Math.random() * 380).toFixed(2)) },
+      });
+
+      if (!isWeekend) {
+        for (let h = 8; h <= 17; h++) {
+          const hourBucket = new Date(dateBucket);
+          hourBucket.setHours(h, 0, 0, 0);
+          const hc = Math.floor(Math.random() * 3);
+          await prisma.ticketMetricHourly.upsert({
+            where: { uq_ticket_hourly: { agencyId: ag.id, hourBucket } },
+            update: {},
+            create: { agencyId: ag.id, hourBucket, ticketsCreated: hc, ticketsResolved: Math.floor(hc * 0.6), ticketsClosed: Math.floor(hc * 0.4), ticketsEscalated: hc > 1 ? 1 : 0, ticketsReopened: 0, avgFirstResponseMinutes: parseFloat((20 + Math.random() * 35).toFixed(2)), avgResolutionMinutes: parseFloat((180 + Math.random() * 280).toFixed(2)) },
+          });
+        }
+      }
+    }
+
+    for (let m = 0; m < 3; m++) {
+      const start = new Date();
+      start.setMonth(start.getMonth() - m - 1, 1);
+      start.setHours(0, 0, 0, 0);
+      const end = new Date(start);
+      end.setMonth(end.getMonth() + 1, 0);
+
+      await prisma.agencyPerformanceMetric.upsert({
+        where: { uq_agency_performance: { agencyId: ag.id, reportingPeriodStart: start, reportingPeriodEnd: end } },
+        update: {},
+        create: { agencyId: ag.id, reportingPeriodStart: start, reportingPeriodEnd: end, totalTickets: 140 + Math.floor(Math.random() * 110), avgResponseTime: parseFloat((40 + Math.random() * 55).toFixed(2)), avgResolutionTime: parseFloat((300 + Math.random() * 220).toFixed(2)), slaCompliancePercentage: parseFloat((72 + Math.random() * 22).toFixed(2)), escalationRatePercentage: parseFloat((4 + Math.random() * 11).toFixed(2)), citizenSatisfactionScore: parseFloat((3.4 + Math.random() * 1.5).toFixed(2)) },
+      });
+
+      await prisma.slaPerformanceMetric.upsert({
+        where: { uq_sla_daily: { agencyId: ag.id, dateBucket: start } },
+        update: {},
+        create: { agencyId: ag.id, dateBucket: start, totalSlaTracked: 140 + Math.floor(Math.random() * 60), responseMet: 120 + Math.floor(Math.random() * 25), responseBreached: 8 + Math.floor(Math.random() * 12), resolutionMet: 110 + Math.floor(Math.random() * 25), resolutionBreached: 12 + Math.floor(Math.random() * 14), avgBreachDurationMinutes: parseFloat((25 + Math.random() * 55).toFixed(2)) },
+      });
+    }
+  }
+  console.log('✅ Daily/hourly metrics backfilled for 30 days across all agencies');
+
+  // ==========================================
+  // 24. Kenya National Holidays 2026
+  // ==========================================
+  const allAgenciesForHols = await prisma.agency.findMany({ select: { id: true } });
+  const holidays2026 = [
+    { date: new Date('2026-01-01'), description: "New Year's Day" },
+    { date: new Date('2026-04-03'), description: 'Good Friday' },
+    { date: new Date('2026-04-06'), description: 'Easter Monday' },
+    { date: new Date('2026-05-01'), description: 'Labour Day' },
+    { date: new Date('2026-06-01'), description: 'Madaraka Day' },
+    { date: new Date('2026-10-10'), description: 'Huduma Day' },
+    { date: new Date('2026-10-20'), description: 'Mashujaa Day' },
+    { date: new Date('2026-12-12'), description: 'Jamhuri Day' },
+    { date: new Date('2026-12-25'), description: 'Christmas Day' },
+    { date: new Date('2026-12-26'), description: 'Boxing Day' },
+  ];
+  for (const ag of allAgenciesForHols) {
+    for (const h of holidays2026) {
+      await prisma.businessCalendarOverride.upsert({ where: { uq_calendar_override: { agencyId: ag.id, overrideDate: h.date } }, update: {}, create: { agencyId: ag.id, overrideDate: h.date, isWorkingDay: false, description: h.description } });
+    }
+  }
+  console.log('✅ Kenya 2026 national holidays seeded for all agencies');
+
+  // ==========================================
+  // 25. Consent Versions
+  // ==========================================
+  const consentDefs = [
+    { consentType: 'privacy_policy', versionNumber: 1, effectiveDate: new Date('2025-01-01'), consentText: 'By using the eCitizen portal, you consent to the collection and processing of your personal data to facilitate government service delivery, protected under the Kenya Data Protection Act 2019.' },
+    { consentType: 'terms_of_service', versionNumber: 1, effectiveDate: new Date('2025-01-01'), consentText: 'These Terms govern your use of the eCitizen Service Command Centre portal. By accessing this portal you agree to use it only for lawful purposes in compliance with applicable Kenyan laws.' },
+    { consentType: 'data_sharing', versionNumber: 1, effectiveDate: new Date('2025-01-01'), consentText: 'Your complaint data may be shared with relevant government agencies solely to resolve your complaint. Data is not shared with third parties outside the government.' },
+  ];
+  for (const cv of consentDefs) {
+    await prisma.consentVersion.upsert({ where: { uq_consent_version: { consentType: cv.consentType, versionNumber: cv.versionNumber } }, update: {}, create: cv });
+  }
+  console.log('✅ Consent versions seeded');
+
   console.log('\n🎉 Database seeded successfully!');
   console.log('\n📋 Test credentials:');
-  console.log('   Super Admin: admin@ecitizen.go.ke / Admin@123456');
-  console.log('   Citizen:     citizen@example.com / Citizen@123');
-  console.log('   L1 Agent:    agent@icta.go.ke / Agent@123');
+  console.log('   Super Admin:          admin@ecitizen.go.ke / Admin@123456');
+  console.log('   Command Center Admin: cc.admin@ecitizen.go.ke / Staff@123');
+  console.log('   Auditor:              auditor@ecitizen.go.ke / Staff@123');
+  console.log('   Analyst:              analyst@ecitizen.go.ke / Staff@123');
+  console.log('   Citizen:              citizen@example.com / Citizen@123');
+  console.log('   L1 Agent:             agent@icta.go.ke / Agent@123');
+  console.log('   Per-agency admins:    admin@kra.go.ke, admin@ntsa.go.ke, etc. / Staff@123');
 }
 
 main()
