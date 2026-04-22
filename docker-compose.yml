@@ -40,6 +40,7 @@ services:
       - LOG_LEVEL=${LOG_LEVEL:-debug}
       - CORS_ORIGINS=${CORS_ORIGINS:-http://localhost:3000,http://localhost:3010,http://localhost:3011,http://18.190.206.56:3010,http://18.190.206.56:3011}
       - CLIENT_URL=${CLIENT_URL:-http://18.190.206.56:3010}
+      - ADMIN_FRONTEND_URL=${ADMIN_FRONTEND_URL:-https://admin-ecitizen.wasaahost.com}
     depends_on:
       postgres:
         condition: service_healthy
