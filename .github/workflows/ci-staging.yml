@@ -1,0 +1,267 @@
+name: CI - Staging
+
+on:
+  push:
+    branches:
+      - staging
+  pull_request:
+    branches:
+      - staging
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  packages: write
+  security-events: write
+  pull-requests: write
+
+env:
+  ENVIRONMENT: staging
+  REGISTRY: ghcr.io
+  ORG: web-masters-ke
+  SERVICE_NAME: ${{ github.event.repository.name }}
+  HELM_REPO: web-masters-ke/Ventures-Helm-Charts
+  HELM_BRANCH: staging
+  HELM_CHART_PATH: charts/ecitizen-support-service
+  HELM_IMAGE_PATH: backend.image.tag
+  ARGOCD_APP_NAME: ecitizen-support-service
+  ARGOCD_URL: https://argocd.wasaachat.com
+
+jobs:
+  build-test:
+    name: Build & Test
+    runs-on: wasaa-org-runners
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci --ignore-scripts && npm rebuild
+
+      - name: Lint
+        continue-on-error: true
+        run: |
+          if npm run --silent 2>/dev/null | grep -q "^  lint"; then npm run lint; else echo "No lint script"; fi
+
+      - name: Run tests
+        run: |
+          if npm run --silent 2>/dev/null | grep -q "^  test"; then
+            npm run test -- --forceExit --testTimeout=30000 || true
+          else
+            echo "No test script"
+          fi
+
+  security-scan:
+    name: Security Scan
+    needs: build-test
+    runs-on: wasaa-org-runners
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Secret Detection (Gitleaks)
+        run: |
+          GITLEAKS_VERSION="8.24.3"
+          curl -sSfL "https://github.com/gitleaks/gitleaks/releases/download/v${GITLEAKS_VERSION}/gitleaks_${GITLEAKS_VERSION}_linux_x64.tar.gz" | tar -xz -C /tmp
+          sudo mv /tmp/gitleaks /usr/local/bin/gitleaks
+          CONFIG_ARG=""
+          [ -f .gitleaks.toml ] && CONFIG_ARG="--config .gitleaks.toml"
+          gitleaks detect --no-git --source . --report-format json --report-path gitleaks-report.json --exit-code 1 --log-level warn $CONFIG_ARG
+
+      - name: Dependency Audit
+        continue-on-error: true
+        run: npm audit --audit-level=high --json 2>/dev/null || true
+
+      - name: Filesystem Scan (Trivy)
+        uses: aquasecurity/trivy-action@0.35.0
+        with:
+          scan-type: 'fs'
+          scan-ref: '.'
+          format: 'sarif'
+          output: 'trivy-fs-results.sarif'
+          severity: 'CRITICAL,HIGH'
+          ignore-unfixed: true
+          exit-code: '0'
+
+      - name: Upload Trivy SARIF
+        uses: github/codeql-action/upload-sarif@v3
+        if: always()
+        continue-on-error: true
+        with:
+          sarif_file: trivy-fs-results.sarif
+          category: trivy-filesystem
+
+  build-push:
+    name: Build & Push Image
+    needs: security-scan
+    if: github.event_name != 'pull_request'
+    runs-on: wasaa-org-runners
+    timeout-minutes: 30
+    permissions:
+      contents: read
+      packages: write
+    outputs:
+      version_tag: ${{ steps.version.outputs.tag }}
+      image: ${{ steps.version.outputs.image }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Generate version tag
+        id: version
+        run: |
+          SHA=$(git rev-parse --short HEAD)
+          TIMESTAMP=$(date +%Y%m%d%H%M)
+          TAG="${ENVIRONMENT}-${TIMESTAMP}-${SHA}"
+          IMAGE="${REGISTRY}/${ORG}/$(echo "${SERVICE_NAME}" | tr '[:upper:]' '[:lower:]')"
+          echo "tag=${TAG}" >> $GITHUB_OUTPUT
+          echo "image=${IMAGE}" >> $GITHUB_OUTPUT
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+        with:
+          driver-opts: network=host
+
+      - name: Log in to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          tags: |
+            ${{ steps.version.outputs.image }}:${{ steps.version.outputs.tag }}
+            ${{ steps.version.outputs.image }}:latest-${{ env.ENVIRONMENT }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          provenance: false
+
+  update-helm:
+    name: Update Helm Values
+    needs: build-push
+    if: github.event_name != 'pull_request'
+    runs-on: wasaa-org-runners
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout Helm Charts
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ env.HELM_REPO }}
+          ref: ${{ env.HELM_BRANCH }}
+          token: ${{ secrets.HELM_CHARTS_PAT }}
+          path: helm-charts
+
+      - name: Update image tag
+        env:
+          NEW_TAG: ${{ needs.build-push.outputs.version_tag }}
+        run: |
+          VALUES="helm-charts/${HELM_CHART_PATH}/values.yaml"
+          python3 - <<PYEOF
+          import os, re
+          values_file = f"helm-charts/{os.environ['HELM_CHART_PATH']}/values.yaml"
+          new_tag = os.environ['NEW_TAG']
+          image_path = os.environ['HELM_IMAGE_PATH']
+          with open(values_file) as f:
+              content = f.read()
+          top_key = image_path.split('.')[0]
+          in_section = False
+          lines = content.split('\n')
+          updated = []
+          replaced = False
+          for line in lines:
+              if not replaced:
+                  if re.match(r'^' + re.escape(top_key) + r'\s*:', line):
+                      in_section = True
+                  elif in_section:
+                      if line and not line.startswith(' ') and not line.startswith('\t'):
+                          in_section = False
+                      elif re.match(r'^\s+tag\s*:', line) and in_section:
+                          indent = re.match(r'^(\s+)', line).group(1)
+                          line = f'{indent}tag: {new_tag}'
+                          replaced = True
+                          in_section = False
+              updated.append(line)
+          if not replaced:
+              raise Exception(f'Could not find tag at {image_path}')
+          with open(values_file, 'w') as f:
+              f.write('\n'.join(updated))
+          print(f'Updated {image_path} → {new_tag}')
+          PYEOF
+
+      - name: Commit and push
+        env:
+          NEW_TAG: ${{ needs.build-push.outputs.version_tag }}
+        run: |
+          cd helm-charts
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git config user.name "github-actions[bot]"
+          git add "${HELM_CHART_PATH}/values.yaml"
+          if git diff --cached --quiet; then
+            echo "No changes"
+          else
+            git commit -m "ci(staging): update ecitizen-backend → ${NEW_TAG}"
+            git push origin ${HELM_BRANCH}
+          fi
+
+  trigger-argocd:
+    name: Trigger ArgoCD Sync
+    needs: [build-push, update-helm]
+    if: github.event_name != 'pull_request'
+    runs-on: wasaa-org-runners
+    timeout-minutes: 10
+
+    steps:
+      - name: Sync ArgoCD app
+        env:
+          ARGOCD_TOKEN: ${{ secrets.ARGOCD_TOKEN }}
+        run: |
+          if [ -z "$ARGOCD_TOKEN" ]; then
+            echo "ARGOCD_TOKEN not set — skipping"
+            exit 0
+          fi
+          HTTP=$(curl -s -o /tmp/sync.json -w "%{http_code}" \
+            -X POST "${ARGOCD_URL}/api/v1/applications/${ARGOCD_APP_NAME}/sync" \
+            -H "Authorization: Bearer ${ARGOCD_TOKEN}" \
+            -H "Content-Type: application/json" \
+            -d '{"prune":true,"dryRun":false,"force":false}')
+          echo "ArgoCD sync HTTP ${HTTP}"
+          cat /tmp/sync.json | python3 -c "import sys,json; d=json.load(sys.stdin); print(d.get('status',{}).get('sync',{}).get('status',''))" 2>/dev/null || true
+
+  report:
+    name: Report
+    needs: [build-test, security-scan, build-push, update-helm, trigger-argocd]
+    if: always()
+    runs-on: wasaa-org-runners
+    timeout-minutes: 5
+    steps:
+      - name: Summary
+        env:
+          VERSION_TAG: ${{ needs.build-push.outputs.version_tag || 'N/A' }}
+        run: |
+          cat >> $GITHUB_STEP_SUMMARY << EOF
+          # eCitizen Backend — Staging Deploy
+          | Field | Value |
+          |-------|-------|
+          | Image | \`ghcr.io/web-masters-ke/ecitizen-support-backend:${VERSION_TAG}\` |
+          | Helm path | \`${HELM_CHART_PATH}\` → \`${HELM_IMAGE_PATH}\` |
+          | ArgoCD app | \`${ARGOCD_APP_NAME}\` |
+          | Build | ${{ needs.build-push.result }} |
+          | Helm update | ${{ needs.update-helm.result }} |
+          | ArgoCD | ${{ needs.trigger-argocd.result }} |
+          EOF
