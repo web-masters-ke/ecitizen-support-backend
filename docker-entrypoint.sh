@@ -5,7 +5,12 @@ echo "Running Prisma migrations..."
 npx prisma migrate deploy
 
 echo "Seeding database..."
-npx prisma db seed || echo "Seeding skipped or already done"
+if npx prisma db seed; then
+  echo "✅ Seed complete"
+else
+  seed_exit=$?
+  echo "⚠️  Seed exited with code $seed_exit — data may already exist, continuing..."
+fi
 
 echo "Starting application..."
-exec node dist/main.js
+exec node dist/src/main.js

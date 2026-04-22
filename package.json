@@ -63,7 +63,7 @@
     "uuid": "^13.0.0"
   },
   "prisma": {
-    "seed": "ts-node prisma/seed.ts"
+    "seed": "ts-node --transpile-only prisma/seed.ts"
   },
   "devDependencies": {
     "@nestjs/cli": "^11.0.16",

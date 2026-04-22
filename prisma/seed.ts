@@ -1,4 +1,4 @@
-import { PrismaClient, UserType, TicketStatusName, TicketPriorityName, AgencyType } from '@prisma/client';
+import { PrismaClient, UserType, TicketStatusName, TicketPriorityName, AgencyType, TicketChannel } from '@prisma/client';
 import * as bcrypt from 'bcryptjs';
 
 const prisma = new PrismaClient();
@@ -1021,6 +1021,205 @@ async function main() {
     });
   }
   console.log('✅ Retention policies seeded');
+
+  // ==========================================
+  // 13. Sample Tickets
+  // ==========================================
+
+  const [allTicketStatuses, allTicketPriorities, citizenForTickets] = await Promise.all([
+    prisma.ticketStatus.findMany(),
+    prisma.ticketPriorityLevel.findMany(),
+    prisma.user.findUnique({ where: { email: 'citizen@example.com' } }),
+  ]);
+
+  const statusIdMap = Object.fromEntries(allTicketStatuses.map(s => [s.name, s.id]));
+  const priorityIdMap = Object.fromEntries(allTicketPriorities.map(p => [p.name, p.id]));
+
+  const agenciesForTickets = await prisma.agency.findMany({
+    include: {
+      ticketCategories: { take: 3 },
+      departments: { take: 1 },
+      agencyUsers: { take: 3, include: { user: true } },
+    },
+  });
+  const agencyByCode = Object.fromEntries(agenciesForTickets.map(a => [a.agencyCode, a]));
+
+  const ticketDefs: Array<{
+    agencyCode: string;
+    subject: string;
+    description: string;
+    status: TicketStatusName;
+    priority: TicketPriorityName;
+    channel: TicketChannel;
+  }> = [
+    // KRA
+    { agencyCode: 'KRA', subject: 'Unable to file VAT returns on iTax', description: 'I have been trying to file my VAT returns for March 2026 but iTax keeps showing "Invalid PIN format". My PIN is A123456789X and has worked fine for 5 years.', status: TicketStatusName.OPEN, priority: TicketPriorityName.HIGH, channel: TicketChannel.WEB },
+    { agencyCode: 'KRA', subject: 'PIN certificate not received after 3 weeks', description: 'Applied for KRA PIN certificate on 1st April 2026. Three weeks later no email or postal delivery. Reference: PIN/2026/04/00123.', status: TicketStatusName.ASSIGNED, priority: TicketPriorityName.MEDIUM, channel: TicketChannel.WEB },
+    { agencyCode: 'KRA', subject: 'Tax compliance certificate needed urgently for tender', description: 'Tax compliance certificate expired 15th March 2026. Renewal submitted 10th March but not updated. Needed urgently for government tender closing 30th April.', status: TicketStatusName.IN_PROGRESS, priority: TicketPriorityName.CRITICAL, channel: TicketChannel.MOBILE },
+    { agencyCode: 'KRA', subject: 'Customs duty dispute on imported laboratory equipment', description: 'Imported lab equipment valued at KES 2.5M from Germany. Assessment shows duty of KES 1.2M but educational equipment should attract 0% under EAC tariff schedules.', status: TicketStatusName.ESCALATED, priority: TicketPriorityName.HIGH, channel: TicketChannel.EMAIL },
+    { agencyCode: 'KRA', subject: 'iTax password reset email not arriving', description: 'Requested password reset for iTax account but reset link has not arrived. Checked spam folder. Registered email: john.mwangi@gmail.com.', status: TicketStatusName.RESOLVED, priority: TicketPriorityName.LOW, channel: TicketChannel.WEB },
+    { agencyCode: 'KRA', subject: 'PAYE remittance discrepancy of KES 45,000', description: 'Company PAYE remittances for Q1 2026 show KES 45,000 discrepancy on iTax versus our payroll records. Company PIN: P051234567X.', status: TicketStatusName.CLOSED, priority: TicketPriorityName.MEDIUM, channel: TicketChannel.EMAIL },
+
+    // NTSA
+    { agencyCode: 'NTSA', subject: 'Driving licence renewal delayed 6 weeks', description: 'Renewed driving licence 1st March 2026, paid KES 3,000. Physical licence not delivered after 6 weeks. Application ref: DL/2026/03/45678.', status: TicketStatusName.IN_PROGRESS, priority: TicketPriorityName.HIGH, channel: TicketChannel.WEB },
+    { agencyCode: 'NTSA', subject: 'Vehicle logbook transfer stalled for 2 months', description: 'Purchased vehicle KCA 123X in February 2026 and submitted all transfer documents. Ownership still not updated in NTSA system after 2 months.', status: TicketStatusName.ESCALATED, priority: TicketPriorityName.HIGH, channel: TicketChannel.WEB },
+    { agencyCode: 'NTSA', subject: 'Wrong engine capacity on vehicle inspection certificate', description: 'Inspection certificate for KBZ 456Y shows 1500cc engine instead of the correct 2000cc. Error made at Mombasa inspection station during March 2026 inspection.', status: TicketStatusName.ASSIGNED, priority: TicketPriorityName.MEDIUM, channel: TicketChannel.MOBILE },
+    { agencyCode: 'NTSA', subject: 'PSV licence application pending for 2 months', description: 'Applied for PSV licence for 14-seater matatu KDG 789Z on 15th February 2026. All documents submitted. No update received.', status: TicketStatusName.OPEN, priority: TicketPriorityName.HIGH, channel: TicketChannel.WEB },
+    { agencyCode: 'NTSA', subject: 'Accident report reference not found on NTSA portal', description: 'Reported accident involving KCF 321W on 5th April 2026 at Nakuru-Nairobi highway. Reference ACC/2026/04/0089 not visible on NTSA online system.', status: TicketStatusName.RESOLVED, priority: TicketPriorityName.MEDIUM, channel: TicketChannel.CALL_CENTER },
+
+    // NHIF
+    { agencyCode: 'NHIF', subject: 'Inpatient claim at Nairobi Hospital rejected', description: 'NHIF claim for inpatient treatment at Nairobi Hospital rejected as "Facility not in NHIF panel". Nairobi Hospital is an accredited NHIF facility. Treatment: 10-15 March 2026. Claim No: CLM/2026/03/78912.', status: TicketStatusName.ESCALATED, priority: TicketPriorityName.CRITICAL, channel: TicketChannel.WEB },
+    { agencyCode: 'NHIF', subject: 'Newborn beneficiary not showing on NHIF smart card', description: 'Added newborn baby as beneficiary on NHIF portal 3 weeks ago. Baby not appearing at any accredited hospital on smart card reader. NHIF No: 1234567.', status: TicketStatusName.IN_PROGRESS, priority: TicketPriorityName.HIGH, channel: TicketChannel.MOBILE },
+    { agencyCode: 'NHIF', subject: 'Monthly contributions not posted for January and February', description: 'Employer deducting NHIF from salary since January 2026 but statement shows no contributions for January and February. Employer: ABC Company Ltd.', status: TicketStatusName.ASSIGNED, priority: TicketPriorityName.HIGH, channel: TicketChannel.WEB },
+    { agencyCode: 'NHIF', subject: 'Urgent NHIF card replacement — surgery scheduled', description: 'NHIF card stolen on 20th March 2026. Need replacement urgently as surgery is scheduled at Kenyatta National Hospital on 10th May 2026.', status: TicketStatusName.RESOLVED, priority: TicketPriorityName.MEDIUM, channel: TicketChannel.WEB },
+
+    // IMMIGRATION
+    { agencyCode: 'IMMIGRATION', subject: 'Passport renewal delayed 8 weeks — urgent travel', description: 'Applied for passport renewal on 1st February 2026. Eight weeks with no update. Application No: PP/2026/02/123456. Required for work travel on 30th May 2026.', status: TicketStatusName.ESCALATED, priority: TicketPriorityName.CRITICAL, channel: TicketChannel.WEB },
+    { agencyCode: 'IMMIGRATION', subject: 'Work permit renewal rejected — filing appeal', description: 'Work permit renewal rejected citing "insufficient documentation" despite submitting all required documents including employment contract, academic certificates and tax compliance. Reference: WP/2026/03/89012.', status: TicketStatusName.IN_PROGRESS, priority: TicketPriorityName.HIGH, channel: TicketChannel.EMAIL },
+    { agencyCode: 'IMMIGRATION', subject: 'Business visitor visa not processed after 3 weeks', description: 'Applied business visa for South Korean partner Kim Jong-su (passport M12345678) on 5th April 2026. No response after 3 weeks. Guest must arrive 5th May for board meeting.', status: TicketStatusName.ASSIGNED, priority: TicketPriorityName.HIGH, channel: TicketChannel.WEB },
+    { agencyCode: 'IMMIGRATION', subject: 'Original citizenship documents lost at immigration office', description: 'Submitted citizenship by naturalization application 15th January 2026 with original documents worth KES 50,000 including degree and birth certificate. Office says file cannot be located.', status: TicketStatusName.ESCALATED, priority: TicketPriorityName.CRITICAL, channel: TicketChannel.CALL_CENTER },
+    { agencyCode: 'IMMIGRATION', subject: 'Name misspelled on newly issued passport', description: 'Newly issued passport shows "MWANGI JOHNE" instead of "MWANGI JOHN". Error by the department. Passport No: BK123456.', status: TicketStatusName.OPEN, priority: TicketPriorityName.HIGH, channel: TicketChannel.WEB },
+
+    // NSSF
+    { agencyCode: 'NSSF', subject: 'Cannot access NSSF self service portal', description: 'Unable to log into NSSF self service portal. System shows "Account not found" despite being a member since 2015. NSSF No: 2234567.', status: TicketStatusName.OPEN, priority: TicketPriorityName.MEDIUM, channel: TicketChannel.WEB },
+    { agencyCode: 'NSSF', subject: 'Retirement benefits claim unprocessed for 6 months', description: 'Retired October 2025 and submitted retirement benefits claim. Six months with no payment or update. Ref: RET/2025/10/03456. Age 60, urgently need these funds.', status: TicketStatusName.ESCALATED, priority: TicketPriorityName.CRITICAL, channel: TicketChannel.WEB },
+    { agencyCode: 'NSSF', subject: 'Employer not remitting NSSF contributions', description: 'Employer XYZ Manufacturing Ltd has been deducting NSSF from my payslip but not remitting. KES 6,000 in deductions from Jan-Mar 2026 not received by NSSF.', status: TicketStatusName.IN_PROGRESS, priority: TicketPriorityName.HIGH, channel: TicketChannel.EMAIL },
+
+    // NRB
+    { agencyCode: 'NRB', subject: 'National ID application rejected without clear reason', description: 'Son aged 18 applied for first national ID at Westlands office on 20th March 2026. Application rejected without clear reason. All documents including birth certificate and school leaving cert were provided.', status: TicketStatusName.OPEN, priority: TicketPriorityName.MEDIUM, channel: TicketChannel.WEB },
+    { agencyCode: 'NRB', subject: 'Wrong date of birth on newly issued birth certificate', description: 'Birth certificate shows DOB as 15/06/1990 instead of 15/06/1995. Error is affecting university admission. Certificate No: BCK/2026/00123.', status: TicketStatusName.IN_PROGRESS, priority: TicketPriorityName.HIGH, channel: TicketChannel.MOBILE },
+    { agencyCode: 'NRB', subject: 'Lost ID replacement pending for 2 months', description: 'Reported lost ID and applied for replacement on 25th February 2026. Reference: LID/2026/02/4567. Two months have passed. Cannot access bank account or vote in the upcoming by-election.', status: TicketStatusName.ASSIGNED, priority: TicketPriorityName.HIGH, channel: TicketChannel.WEB },
+
+    // HELB
+    { agencyCode: 'HELB', subject: 'Semester 2 loan disbursement not received', description: 'HELB loan approved for second semester but KES 45,000 disbursement not received. Institution confirmed funds sent to my account on 15th March 2026. Nothing has reflected. Student No: UN/20/12345.', status: TicketStatusName.IN_PROGRESS, priority: TicketPriorityName.HIGH, channel: TicketChannel.WEB },
+    { agencyCode: 'HELB', subject: 'HELB clearance blocked due to employer reporting error', description: 'Clearance certificate blocked because former employer ABC Ltd reported incorrect repayment amounts. Have receipts showing KES 280,000 repaid over 5 years.', status: TicketStatusName.ESCALATED, priority: TicketPriorityName.HIGH, channel: TicketChannel.WEB },
+    { agencyCode: 'HELB', subject: 'Bursary application not visible on portal after submission', description: 'Submitted bursary application for 2026/2027 on 5th March 2026. Reference BUR/2026/03/78901. Application is not visible when logging in to check status.', status: TicketStatusName.OPEN, priority: TicketPriorityName.MEDIUM, channel: TicketChannel.MOBILE },
+
+    // ICT-AUTH
+    { agencyCode: 'ICT-AUTH', subject: 'eCitizen portal services page blank on mobile browsers', description: 'The eCitizen portal does not load properly on Chrome and Safari on Android devices. Services page shows blank content. Reproduced on multiple devices and different networks.', status: TicketStatusName.IN_PROGRESS, priority: TicketPriorityName.HIGH, channel: TicketChannel.WEB },
+    { agencyCode: 'ICT-AUTH', subject: 'Kiambu County revenue API integration failure', description: 'Kiambu County revenue collection system integration with national eCitizen API has been failing since 1st April 2026. Citizens cannot pay county rates or business permit fees online. Estimated revenue impact: KES 2M/day.', status: TicketStatusName.ESCALATED, priority: TicketPriorityName.CRITICAL, channel: TicketChannel.API },
+    { agencyCode: 'ICT-AUTH', subject: 'NGO training centre accreditation unanswered since January', description: 'Digital Kenya Foundation applied for ICT Authority accredited training centre status in January 2026. No response after 3 months despite meeting all requirements including certified trainers and equipment.', status: TicketStatusName.ASSIGNED, priority: TicketPriorityName.LOW, channel: TicketChannel.EMAIL },
+
+    // KNEC
+    { agencyCode: 'KNEC', subject: 'KCSE certificate not available for collection after 6 months', description: 'Sat KCSE in November 2025. It has been 6 months and my certificate is still not available for collection at Kiambu Boys High School. Index No: 012345/025.', status: TicketStatusName.OPEN, priority: TicketPriorityName.HIGH, channel: TicketChannel.WEB },
+    { agencyCode: 'KNEC', subject: 'Wrong grade on KCSE certificate — re-marking appeal', description: 'My KCSE certificate shows a D+ in Mathematics but I scored B+ in my school mock exams and the KNEC online results showed B-. Applied for re-marking in February 2026 but no feedback. Index No: 023456/025.', status: TicketStatusName.ESCALATED, priority: TicketPriorityName.HIGH, channel: TicketChannel.EMAIL },
+
+    // BRS
+    { agencyCode: 'BRS', subject: 'Business name registration certificate not issued after 4 weeks', description: 'Registered business name "Pamoja Traders" on eCitizen on 1st March 2026 and paid KES 950. Certificate of registration not issued after 4 weeks. Transaction ref: BRS/2026/03/45123.', status: TicketStatusName.IN_PROGRESS, priority: TicketPriorityName.MEDIUM, channel: TicketChannel.WEB },
+    { agencyCode: 'BRS', subject: 'Company annual returns filing system error', description: 'Trying to file annual returns for Mwangi Holdings Ltd (CR/2020/123456) for year 2025. System shows "Company not found" when entering company number on the portal.', status: TicketStatusName.OPEN, priority: TicketPriorityName.MEDIUM, channel: TicketChannel.WEB },
+
+    // DCI
+    { agencyCode: 'DCI', subject: 'Certificate of good conduct pending for 10 weeks', description: 'Applied for certificate of good conduct on 10th February 2026, paid KES 1,050, fingerprints taken at DCI headquarters. Ten weeks with no update. Needed for employment background check. Reference: CGC/2026/02/78901.', status: TicketStatusName.ESCALATED, priority: TicketPriorityName.HIGH, channel: TicketChannel.WEB },
+    { agencyCode: 'DCI', subject: 'Online fraud report — no acknowledgement received', description: 'Reported online fraud on the DCI online portal on 20th March 2026. Lost KES 85,000 to a fake investment scheme. Have evidence including transaction records and WhatsApp screenshots. No acknowledgement received.', status: TicketStatusName.ASSIGNED, priority: TicketPriorityName.HIGH, channel: TicketChannel.WEB },
+  ];
+
+  let ticketCounter = 1;
+  let ticketsSeeded = 0;
+
+  for (const def of ticketDefs) {
+    const agency = agencyByCode[def.agencyCode];
+    if (!agency || !citizenForTickets) continue;
+
+    const ticketNum = `TKT-2026-${String(ticketCounter).padStart(6, '0')}`;
+
+    const existing = await prisma.ticket.findUnique({ where: { ticketNumber: ticketNum } });
+    if (existing) {
+      ticketCounter++;
+      continue;
+    }
+
+    const daysAgo = (ticketCounter * 2) % 75;
+    const createdAt = new Date();
+    createdAt.setDate(createdAt.getDate() - daysAgo);
+    createdAt.setHours(8 + (ticketCounter % 9), ticketCounter % 60, 0, 0);
+
+    const agentUser = agency.agencyUsers[ticketCounter % Math.max(agency.agencyUsers.length, 1)]?.user ?? null;
+    const assigneeId = def.status !== TicketStatusName.OPEN ? (agentUser?.id ?? null) : null;
+
+    let resolvedAt: Date | null = null;
+    let closedAt: Date | null = null;
+    let firstResponseAt: Date | null = null;
+
+    if (assigneeId) {
+      firstResponseAt = new Date(createdAt);
+      firstResponseAt.setHours(firstResponseAt.getHours() + 3);
+    }
+    if (def.status === TicketStatusName.RESOLVED || def.status === TicketStatusName.CLOSED) {
+      resolvedAt = new Date(createdAt);
+      resolvedAt.setDate(resolvedAt.getDate() + 2);
+    }
+    if (def.status === TicketStatusName.CLOSED) {
+      closedAt = new Date(resolvedAt!);
+      closedAt.setDate(closedAt.getDate() + 1);
+    }
+
+    const ticket = await prisma.ticket.create({
+      data: {
+        ticketNumber: ticketNum,
+        agencyId: agency.id,
+        departmentId: agency.departments[0]?.id ?? null,
+        categoryId: agency.ticketCategories[ticketCounter % Math.max(agency.ticketCategories.length, 1)]?.id ?? null,
+        createdBy: citizenForTickets.id,
+        currentAssigneeId: assigneeId,
+        priorityId: priorityIdMap[def.priority],
+        statusId: statusIdMap[def.status],
+        channel: def.channel,
+        subject: def.subject,
+        description: def.description,
+        firstResponseAt,
+        resolvedAt,
+        closedAt,
+        isEscalated: def.status === TicketStatusName.ESCALATED,
+        createdAt,
+        updatedAt: createdAt,
+      },
+    });
+
+    // Citizen's opening message
+    await prisma.ticketMessage.create({
+      data: {
+        ticketId: ticket.id,
+        senderId: citizenForTickets.id,
+        messageType: 'COMMENT',
+        messageText: def.description,
+        isInternal: false,
+        createdAt,
+      },
+    });
+
+    // Agent acknowledgement for non-open tickets
+    if (assigneeId && firstResponseAt) {
+      await prisma.ticketMessage.create({
+        data: {
+          ticketId: ticket.id,
+          senderId: assigneeId,
+          messageType: 'COMMENT',
+          messageText: `Thank you for contacting us. We have received your complaint regarding "${def.subject}" and assigned it for review. You will receive a detailed update within 24 hours.`,
+          isInternal: false,
+          createdAt: firstResponseAt,
+        },
+      });
+    }
+
+    // Resolution message
+    if (resolvedAt && assigneeId) {
+      await prisma.ticketMessage.create({
+        data: {
+          ticketId: ticket.id,
+          senderId: assigneeId,
+          messageType: 'STATUS_CHANGE',
+          messageText: 'Your complaint has been reviewed and resolved. Please confirm if the issue has been addressed to your satisfaction. If not, you may request a re-opening within 7 days.',
+          isInternal: false,
+          createdAt: resolvedAt,
+        },
+      });
+    }
+
+    ticketCounter++;
+    ticketsSeeded++;
+  }
+
+  console.log(`✅ ${ticketsSeeded} sample tickets seeded (skipped existing)`);
 
   console.log('\n🎉 Database seeded successfully!');
   console.log('\n📋 Test credentials:');
