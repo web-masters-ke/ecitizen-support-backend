@@ -165,7 +165,7 @@ jobs:
         with:
           repository: ${{ env.HELM_REPO }}
           ref: ${{ env.HELM_BRANCH }}
-          token: ${{ secrets.HELM_CHARTS_PAT }}
+          token: ${{ secrets.ARC_GITHUB_PAT }}
           path: helm-charts
 
       - name: Update image tag
