@@ -233,6 +233,14 @@ export class AgenciesService {
         ...(dto.isActive !== undefined && { isActive: dto.isActive }),
         ...(dto.description !== undefined && { description: dto.description }),
         ...(dto.onboardingStatus && { onboardingStatus: dto.onboardingStatus }),
+        ...(dto.ministryName !== undefined && { ministryName: dto.ministryName }),
+        ...(dto.stateDepartment !== undefined && { stateDepartment: dto.stateDepartment }),
+        ...(dto.primaryContactName !== undefined && { primaryContactName: dto.primaryContactName }),
+        ...(dto.primaryContactPhone !== undefined && { primaryContactPhone: dto.primaryContactPhone }),
+        ...(dto.coordinatorId !== undefined && { coordinatorId: dto.coordinatorId }),
+        ...(dto.onboardingRemarks !== undefined && { onboardingRemarks: dto.onboardingRemarks }),
+        ...(dto.servicesIdentified !== undefined && { servicesIdentified: dto.servicesIdentified }),
+        ...(dto.servicesLive !== undefined && { servicesLive: dto.servicesLive }),
       },
       include: {
         parentAgency: {

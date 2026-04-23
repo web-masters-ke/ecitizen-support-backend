@@ -46,6 +46,10 @@ export enum WsEvent {
   AI_CLASSIFICATION_READY = 'AI_CLASSIFICATION_READY',
   HEARTBEAT = 'heartbeat',
 
+  // Chat
+  CHAT_MESSAGE = 'chat:message',
+  CHAT_JOIN = 'chat:join',
+
   // System
   SUBSCRIBED = 'subscribed',
   UNSUBSCRIBED = 'unsubscribed',
@@ -391,6 +395,11 @@ export class AppWebSocketGateway
 
     if (publicChannels.includes(channel as WsChannel)) {
       return true;
+    }
+
+    // Chat room channels: chat:{roomId}
+    if (channel.startsWith('chat:')) {
+      return true; // Room membership is enforced at the service level
     }
 
     // Agency-specific channels: agency:{agencyId}

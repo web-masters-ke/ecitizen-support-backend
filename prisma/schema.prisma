@@ -178,6 +178,11 @@ model User {
   consentRecords         ConsentRecord[]
   userActivityMetrics    UserActivityMetric[]
   userRolesAssigned      UserRole[]           @relation("AssignedBy")
+  chatParticipant        ChatParticipant[]    @relation("ChatParticipant")
+  chatParticipantAdder   ChatParticipant[]    @relation("ChatParticipantAdder")
+  chatMessages           ChatMessage[]        @relation("ChatSender")
+  chatReadReceipts       ChatReadReceipt[]    @relation("ChatReadReceipt")
+  coordinatedAgencies    Agency[]             @relation("AgencyCoordinator")
 
   @@map("users")
 }
@@ -340,6 +345,15 @@ model Agency {
   createdAt          DateTime        @default(now()) @map("created_at")
   updatedAt          DateTime        @updatedAt @map("updated_at")
 
+  ministryName           String?  @map("ministry_name") @db.VarChar(255)
+  stateDepartment        String?  @map("state_department") @db.VarChar(255)
+  primaryContactName     String?  @map("primary_contact_name") @db.VarChar(255)
+  primaryContactPhone    String?  @map("primary_contact_phone") @db.VarChar(50)
+  coordinatorId          String?  @map("coordinator_id") @db.Uuid
+  onboardingRemarks      String?  @map("onboarding_remarks")
+  servicesIdentified     Int?     @map("services_identified")
+  servicesLive           Int?     @map("services_live")
+
   parentAgency       Agency?          @relation("AgencyHierarchy", fields: [parentAgencyId], references: [id])
   childAgencies      Agency[]         @relation("AgencyHierarchy")
   departments        Department[]
@@ -369,6 +383,8 @@ model Agency {
   userActivityMetrics  UserActivityMetric[]
   dashboardSnapshots   DashboardSnapshot[]
   businessCalendarOverrides BusinessCalendarOverride[]
+  chatRooms            ChatRoom[]
+  coordinator          User?    @relation("AgencyCoordinator", fields: [coordinatorId], references: [id])
 
   @@map("agencies")
 }
@@ -593,6 +609,7 @@ model Ticket {
   automationLogs    AutomationExecutionLog[]
   workflowTriggers  WorkflowTrigger[]
   notifications     Notification[]
+  chatRoom          ChatRoom?
 
   @@index([agencyId, statusId])
   @@index([agencyId, priorityId])
@@ -1454,4 +1471,86 @@ model Media {
   updatedAt     DateTime @updatedAt @map("updated_at")
 
   @@map("media")
+}
+
+// ============================================
+// DOMAIN 12: CHAT
+// ============================================
+
+enum ChatRoomType {
+  TICKET
+  ONBOARDING
+}
+
+enum ChatMessageType {
+  TEXT
+  FILE
+  IMAGE
+  SYSTEM
+}
+
+model ChatRoom {
+  id          String       @id @default(uuid()) @db.Uuid
+  type        ChatRoomType @default(TICKET) @map("type")
+  ticketId    String?      @unique @map("ticket_id") @db.Uuid
+  agencyId    String?      @map("agency_id") @db.Uuid
+  title       String?      @db.VarChar(255)
+  isActive    Boolean      @default(true) @map("is_active")
+  createdAt   DateTime     @default(now()) @map("created_at")
+  updatedAt   DateTime     @updatedAt @map("updated_at")
+
+  ticket       Ticket?           @relation(fields: [ticketId], references: [id], onDelete: Cascade)
+  agency       Agency?           @relation(fields: [agencyId], references: [id])
+  participants ChatParticipant[]
+  messages     ChatMessage[]
+
+  @@map("chat_rooms")
+}
+
+model ChatParticipant {
+  id      String   @id @default(uuid()) @db.Uuid
+  roomId  String   @map("room_id") @db.Uuid
+  userId  String?  @map("user_id") @db.Uuid
+  email   String?  @db.VarChar(255)
+  addedAt DateTime @default(now()) @map("added_at")
+  addedBy String?  @map("added_by") @db.Uuid
+
+  room        ChatRoom @relation(fields: [roomId], references: [id], onDelete: Cascade)
+  user        User?    @relation("ChatParticipant", fields: [userId], references: [id])
+  addedByUser User?    @relation("ChatParticipantAdder", fields: [addedBy], references: [id])
+
+  @@unique([roomId, userId])
+  @@map("chat_participants")
+}
+
+model ChatMessage {
+  id          String          @id @default(uuid()) @db.Uuid
+  roomId      String          @map("room_id") @db.Uuid
+  senderId    String?         @map("sender_id") @db.Uuid
+  senderName  String?         @map("sender_name") @db.VarChar(255)
+  body        String?
+  messageType ChatMessageType @default(TEXT) @map("message_type")
+  fileUrl     String?         @map("file_url")
+  fileName    String?         @map("file_name") @db.VarChar(255)
+  createdAt   DateTime        @default(now()) @map("created_at")
+
+  room     ChatRoom          @relation(fields: [roomId], references: [id], onDelete: Cascade)
+  sender   User?             @relation("ChatSender", fields: [senderId], references: [id])
+  readBy   ChatReadReceipt[]
+
+  @@index([roomId, createdAt])
+  @@map("chat_messages")
+}
+
+model ChatReadReceipt {
+  id        String   @id @default(uuid()) @db.Uuid
+  messageId String   @map("message_id") @db.Uuid
+  userId    String   @map("user_id") @db.Uuid
+  readAt    DateTime @default(now()) @map("read_at")
+
+  message ChatMessage @relation(fields: [messageId], references: [id], onDelete: Cascade)
+  user    User        @relation("ChatReadReceipt", fields: [userId], references: [id])
+
+  @@unique([messageId, userId])
+  @@map("chat_read_receipts")
 }

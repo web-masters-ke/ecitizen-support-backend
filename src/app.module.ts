@@ -30,6 +30,7 @@ import { MediaModule } from './modules/media/media.module';
 import { AdminModule } from './modules/admin/admin.module';
 import { HealthModule } from './modules/health/health.module';
 import { WebsocketModule } from './modules/websocket/websocket.module';
+import { ChatModule } from './modules/chat/chat.module';
 
 @Module({
   imports: [
@@ -72,6 +73,7 @@ import { WebsocketModule } from './modules/websocket/websocket.module';
     AdminModule,
     HealthModule,
     WebsocketModule,
+    ChatModule,
   ],
   providers: [
     // Apply JWT auth guard globally - use @Public() to skip
