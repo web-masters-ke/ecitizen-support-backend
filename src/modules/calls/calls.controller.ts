@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Patch, Param, Body, Req, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Patch, Param, Body, Req, UseGuards, BadRequestException, Logger } from '@nestjs/common';
 import { CallsService } from './calls.service';
 import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
 import { ApiTags } from '@nestjs/swagger';
@@ -7,11 +7,20 @@ import { ApiTags } from '@nestjs/swagger';
 @Controller('calls')
 @UseGuards(JwtAuthGuard)
 export class CallsController {
+  private readonly logger = new Logger(CallsController.name);
   constructor(private readonly callsService: CallsService) {}
 
   @Post('start')
-  start(@Req() req: any, @Body() body: { targetUserId: string; ticketId?: string; agencyId?: string; direction?: string }) {
-    return this.callsService.startCall(req.user.id, body.targetUserId, body.ticketId, body.agencyId, body.direction);
+  async start(@Req() req: any, @Body() body: { targetUserId: string; ticketId?: string; agencyId?: string; direction?: string }) {
+    try {
+      return await this.callsService.startCall(req.user.id, body.targetUserId, body.ticketId, body.agencyId, body.direction);
+    } catch (err: any) {
+      this.logger.error('calls/start failed', err?.message, err?.stack);
+      if (err?.code === 'P2003' || err?.code === 'P2025') {
+        throw new BadRequestException('Referenced user, ticket, or agency not found');
+      }
+      throw err;
+    }
   }
 
   @Patch(':id/status')
