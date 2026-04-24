@@ -1306,6 +1306,15 @@ async function main() {
     { name: 'Technical Issues', description: 'Portal errors, browser issues and system problems' },
     { name: 'Service Status', description: 'Planned maintenance and service availability' },
     { name: 'Appeals & Escalations', description: 'How to appeal decisions or escalate complaints' },
+    { name: 'Passport & Immigration', description: 'Passport applications, renewals and immigration services' },
+    { name: 'Business Registration', description: 'Company registration, business permits and licences' },
+    { name: 'Land & Property', description: 'Land title deeds, searches, transfers and rates' },
+    { name: 'Health Services', description: 'NHIF, NHCR, MOH health services and facilities' },
+    { name: 'Education & HELB', description: 'HELB loans, bursaries and education services' },
+    { name: 'Civil Registration', description: 'Birth, death and marriage certificates' },
+    { name: 'County Services', description: 'County permits, rates and local government services' },
+    { name: 'Driving & Vehicles', description: 'NTSA vehicle registration, licences and transfers' },
+    { name: 'Tax Compliance', description: 'KRA tax returns, compliance certificates and payments' },
   ];
   const kbCatIds: Record<string, string> = {};
   for (const c of globalKbCats) {
@@ -1314,7 +1323,7 @@ async function main() {
     kbCatIds[c.name] = rec.id;
   }
 
-  const globalTagNames = ['eCitizen', 'portal', 'payments', 'technical', 'account', 'password', 'registration', 'complaints', 'escalation', 'online-services'];
+  const globalTagNames = ['eCitizen', 'portal', 'payments', 'technical', 'account', 'password', 'registration', 'complaints', 'escalation', 'online-services', 'passport', 'immigration', 'business', 'company', 'land', 'title-deed', 'NHIF', 'health', 'HELB', 'loan', 'birth-certificate', 'marriage', 'county', 'permits', 'NTSA', 'vehicle', 'KRA', 'tax', 'driving-licence', 'civil-registration'];
   const kbTagIds: Record<string, string> = {};
   for (const name of globalTagNames) {
     const ex = await prisma.kbTag.findFirst({ where: { agencyId: null, name } });
@@ -1398,10 +1407,155 @@ async function main() {
     {
       title: 'NHIF Membership — Registration and Benefits',
       slug: 'nhif-membership-guide',
-      category: 'Account & Registration',
-      tags: ['registration', 'account'],
+      category: 'Health Services',
+      tags: ['NHIF', 'health', 'registration'],
       summary: 'How to register for NHIF and understand your benefits.',
-      content: `## NHIF Membership\n\n### Registration\n1. Visit nhif.or.ke or any NHIF office\n2. For formal employment: your employer registers you automatically\n3. For self-employment/informal sector: apply for **Voluntary Member** status\n   - Pay KES 500/month for individuals\n   - Covers you and up to 4 immediate family members\n\n### Adding Beneficiaries\n1. Log in to NHIF portal\n2. Click **Manage Beneficiaries → Add Beneficiary**\n3. Enter name, ID/birth certificate number, relationship\n4. Changes reflect within 48 hours\n\n### Checking Contributions\nLog in to nhif.or.ke → **Statement of Contributions** for a full history.`,
+      content: `## NHIF Membership\n\n### Registration\n1. Visit nhif.or.ke or any NHIF office\n2. For formal employment: your employer registers you automatically\n3. For self-employment/informal sector: apply for **Voluntary Member** status\n   - Pay KES 500/month for individuals\n   - Covers you and up to 4 immediate family members\n\n### Adding Beneficiaries\n1. Log in to NHIF portal\n2. Click **Manage Beneficiaries → Add Beneficiary**\n3. Enter name, ID/birth certificate number, relationship\n4. Changes reflect within 48 hours\n\n### Checking Contributions\nLog in to nhif.or.ke → **Statement of Contributions** for a full history.\n\n### Hospital Cover\nNHIF covers inpatient and outpatient services at accredited hospitals. Present your NHIF card and national ID at the facility.\n\n### Common Issues\n- **Card not working**: Verify your contributions are up-to-date (3 consecutive months minimum)\n- **Wrong beneficiary details**: Visit nearest NHIF office with your ID and birth certificate\n- **Employer not remitting**: File a complaint under **NHIF → Employer Compliance**`,
+    },
+    // ── Passport & Immigration ────────────────────────────────────────────────
+    {
+      title: 'Passport Application — New & Renewal',
+      slug: 'passport-application-guide',
+      category: 'Passport & Immigration',
+      tags: ['passport', 'immigration', 'eCitizen'],
+      summary: 'How to apply for or renew a Kenyan passport on eCitizen.',
+      content: `## Kenyan Passport Application\n\n### Fees\n| Type | Fee |\n|------|-----|\n| 34-page Ordinary | KES 4,550 |\n| 50-page Ordinary | KES 7,550 |\n| Urgent (5 working days) | KES 9,100 |\n| East African e-Passport | KES 6,550 |\n\n### Steps\n1. Log in at ecitizen.go.ke → **Department of Immigration → Passport**\n2. Select **New Passport** or **Renewal**\n3. Fill in personal details (must match your National ID exactly)\n4. Upload a clear photo (white background, no glasses)\n5. Upload a scanned copy of your National ID\n6. Pay via M-Pesa, card, or bank transfer\n7. Book an appointment at your preferred Huduma Centre or immigration office\n8. Attend with original documents for biometric capture\n\n### Processing Time\n- Standard: 10–21 business days\n- Urgent: 5 business days (available at Nyayo House and major Huduma Centres)\n\n### Collection\nPassport is collected at the office where biometrics were taken. Bring your receipt and national ID.\n\n### Child Passport\nChildren under 18 require:\n- Birth certificate\n- Both parents' IDs / passports\n- Declaration of consent if one parent is absent\n\n### Common Issues\n- **"Details mismatch"**: Your eCitizen profile name must match your national ID\n- **Payment confirmed but not reflecting**: Wait 30 minutes, then raise a ticket under **Immigration → Payment Issues**\n- **Appointment not available**: Try different offices or check back next day — slots refresh daily`,
+    },
+    {
+      title: 'East African Tourist Visa — How to Apply',
+      slug: 'east-african-tourist-visa',
+      category: 'Passport & Immigration',
+      tags: ['passport', 'immigration'],
+      summary: 'Apply for an East African Tourist Visa covering Kenya, Uganda, and Rwanda.',
+      content: `## East African Tourist Visa\n\nThe **East African Tourist Visa (EATV)** allows a single entry into Kenya, Uganda, and Rwanda for USD 100.\n\n### Eligibility\nCitizens of countries that are not EAC member states or do not have bilateral visa-free agreements.\n\n### How to Apply\n1. Visit evisa.go.ke\n2. Select **East African Tourist Visa**\n3. Fill in personal and travel details\n4. Upload passport bio-data page, photo, return ticket, hotel booking, and bank statement\n5. Pay USD 100 via card\n6. Visa issued within 3–5 business days\n\n### Validity\n- 90 days from date of issue\n- Multiple entry across Kenya, Uganda, Rwanda\n\n### Kenya Single Entry\nIf visiting Kenya only, apply for a **Kenya Single Entry Visa** at USD 50.\n\n### Issues\n- **Visa rejected**: Application must show sufficient funds (min USD 100/day) and a valid return ticket\n- **Processing delay**: Raise a ticket under **Immigration → Visa Processing**`,
+    },
+    // ── Business Registration ─────────────────────────────────────────────────
+    {
+      title: 'How to Register a Business in Kenya',
+      slug: 'business-registration-kenya',
+      category: 'Business Registration',
+      tags: ['business', 'registration', 'company', 'eCitizen'],
+      summary: 'Step-by-step guide to registering a sole proprietorship, partnership, or limited company.',
+      content: `## Business Registration\n\n### Types of Business Entities\n| Type | Min. Directors | Registration Fee |\n|------|---------------|------------------|\n| Sole Proprietorship | 1 | KES 950 |\n| Partnership | 2–20 | KES 2,000 |\n| Private Limited Company | 1 | KES 17,000 |\n| Public Limited Company | 7 | KES 67,000 |\n\n### Sole Proprietorship\n1. Log in at ecitizen.go.ke → **Business Registration Service (BRS)**\n2. Select **Business Name Registration**\n3. Run a name search (KES 100)\n4. Fill in business details, nature, and location\n5. Pay KES 950\n6. Certificate issued within 3 business days\n\n### Private Limited Company\n1. Reserve company name: KES 100\n2. Fill in Memorandum and Articles of Association\n3. Provide ID and PIN for each director/shareholder\n4. Pay KES 17,000\n5. Certificate of Incorporation issued within 5–10 business days\n\n### Annual Returns\nAll registered companies must file annual returns:\n- Sole Proprietorship: KES 100/year\n- Limited Company: KES 2,000/year\nFiling via ecitizen.go.ke → BRS → Annual Returns\n\n### Business Permit\nAfter registration, obtain a county single business permit from your County Government.`,
+    },
+    {
+      title: 'Single Business Permit — County Government',
+      slug: 'single-business-permit-county',
+      category: 'County Services',
+      tags: ['business', 'county', 'permits'],
+      summary: 'How to obtain or renew a Single Business Permit from your county government.',
+      content: `## Single Business Permit\n\n### What is it?\nA **Single Business Permit (SBP)** consolidates all county business licences into one. Required by all businesses operating within a county.\n\n### Requirements\n- National ID / Certificate of Incorporation\n- Business registration certificate (BRS)\n- KRA PIN\n- Completed application form\n\n### Application\n1. Visit your county government portal (e.g., nairobi.go.ke, mombasa.go.ke)\n2. Select **Single Business Permit**\n3. Fill in business details and premises address\n4. Pay the applicable fee (varies by county and business type)\n5. Health inspection may be required for food businesses\n6. Permit issued within 5–10 business days\n\n### Nairobi Fee Structure (sample)\n| Category | Annual Fee |\n|----------|------------|\n| Small trader (under KES 500K turnover) | KES 5,000 |\n| Medium business (KES 500K–5M) | KES 10,000 |\n| Large business (over KES 5M) | KES 20,000+ |\n\n### Renewal\nPermits expire 31 December annually. Renew by 31 March to avoid penalties.`,
+    },
+    // ── Land & Property ───────────────────────────────────────────────────────
+    {
+      title: 'How to Do a Land Title Search',
+      slug: 'land-title-search',
+      category: 'Land & Property',
+      tags: ['land', 'title-deed', 'eCitizen'],
+      summary: 'How to verify land ownership online via the Ardhisasa platform.',
+      content: `## Land Title Search\n\nA title search confirms ownership, encumbrances, and caveats on a parcel of land.\n\n### Online (Ardhisasa)\n1. Visit ardhisasa.go.ke and register/log in\n2. Select **Title Search**\n3. Enter the Title Deed number or parcel number\n4. Pay KES 500\n5. Report available instantly\n\n### What the Report Shows\n- Registered owner(s) name\n- Date of registration\n- Any charges, cautions, or caveats\n- Historical transfers\n\n### Common Issues\n- **"Parcel not found"**: Older titles on green/blue cards may not yet be digitized. Visit the nearest Land Registry office\n- **Multiple owners listed**: Land was co-registered — all owners must consent to any transaction\n- **Caution/Caveat on title**: Do not proceed with purchase until caution is lifted\n\n### Title Transfer (Buying Land)\n1. Conduct a title search\n2. Engage a licensed advocate for conveyancing\n3. Sign the sale agreement\n4. File consent to transfer with the Lands Board if applicable\n5. Pay stamp duty (2% in municipalities, 4% in rural areas)\n6. Register transfer at Land Registry (Ardhisasa for digitized parcels)\n\n### Land Rates\nCounty land rates must be cleared before any transfer. Obtain a clearance certificate from the county government.`,
+    },
+    {
+      title: 'Replacing a Lost or Destroyed Title Deed',
+      slug: 'replace-lost-title-deed',
+      category: 'Land & Property',
+      tags: ['land', 'title-deed'],
+      summary: 'How to apply for a replacement title deed if the original is lost or destroyed.',
+      content: `## Replacing a Lost Title Deed\n\n### Requirements\n- Statutory Declaration (sworn before a commissioner for oaths)\n- Police abstract (OB number from nearest police station)\n- Application letter to the Land Registrar\n- Copy of ID/PIN\n- 2 passport photos\n- Application fee\n\n### Process\n1. Obtain a police abstract reporting the lost title\n2. Swear a statutory declaration before a Commissioner for Oaths (advocate)\n3. Place a **Gazette Notice** (advertised for 30 days — KES 1,500 via the Government Press)\n4. Submit all documents to the Land Registry for your area\n5. Wait 30 days (objection period)\n6. If no objection, new title issued within 30–60 days\n\n### Fees\n- Application: KES 500\n- Gazette Notice: KES 1,500\n- New title: KES 2,000\n\n### Fraud Warning\nNever share title deed details with strangers. Always use a licensed advocate for land transactions.`,
+    },
+    // ── Education & HELB ──────────────────────────────────────────────────────
+    {
+      title: 'HELB Loan Application Guide',
+      slug: 'helb-loan-application',
+      category: 'Education & HELB',
+      tags: ['HELB', 'loan', 'registration'],
+      summary: 'How to apply for a HELB student loan for undergraduate and TVET students.',
+      content: `## HELB Loan Application\n\n### Undergraduate Loan\n**Eligibility**: Kenyan citizen admitted to a public or accredited private university.\n\n#### Application Steps\n1. Register at helb.co.ke → **Portal → New Application**\n2. Fill in personal details (must match National ID)\n3. Enter admission letter details and course\n4. Provide parent/guardian income details\n5. Attach:\n   - National ID\n   - Admission letter\n   - Previous year KCSE/KUCCPS results\n   - Parent/guardian ID and KRA PIN\n6. Submit — no payment required\n\n#### Loan Bands\n| Household Income | Loan Amount/Year |\n|-----------------|------------------|\n| Under KES 30,000 | KES 60,000 |\n| KES 30,001–60,000 | KES 53,000 |\n| KES 60,001–120,000 | KES 46,000 |\n| Over KES 120,000 | KES 36,000 |\n\n#### Disbursement\nLoan is disbursed directly to your university account each semester after confirmation of registration.\n\n### TVET Loan\n- TVET students: KES 20,000–30,000/year\n- Apply via helb.co.ke → **TVET Portal**\n\n### Loan Repayment\nRepayment begins 1 year after graduation or after securing employment (whichever is sooner). Minimum KES 1,000/month.\n\n### Common Issues\n- **Application rejected**: Check that parent income details are accurate and supporting documents are legible\n- **Loan not disbursed**: Confirm registration status with your university — HELB disburses only to registered students\n- **Wrong loan band**: Appeal via helb.co.ke → **Appeals** with updated income documents`,
+    },
+    {
+      title: 'HELB Loan Repayment — How to Pay',
+      slug: 'helb-loan-repayment',
+      category: 'Education & HELB',
+      tags: ['HELB', 'loan', 'payments'],
+      summary: 'How to repay your HELB loan via M-Pesa, bank, or salary deduction.',
+      content: `## HELB Loan Repayment\n\n### Repayment Methods\n\n#### M-Pesa\n1. Go to **M-Pesa → Pay Bill**\n2. Business Number: **200999**\n3. Account Number: Your National ID number\n4. Amount: KES 1,000 minimum\n\n#### Bank Transfer\n- Bank: KCB\n- Account Name: Higher Education Loans Board\n- Account Number: **1109162753**\n- Reference: Your National ID number\n\n#### Salary Deduction (Employed)\nEmployers are required by law to deduct HELB from your salary. Submit your HELB certificate (obtained from helb.co.ke) to your HR/Payroll department.\n\n### Checking Your Balance\n1. SMS your National ID to **21101**\n2. Or log in to helb.co.ke → **Loan Statement**\n\n### Clearance Certificate\nRequested after full repayment. Apply at helb.co.ke → **Clearance Certificate** (KES 600 fee).\nNeeded for: \n- Some job applications in government\n- Professional licensing boards\n\n### Common Issues\n- **Paid but balance not updated**: Allow 3 business days. If not resolved, raise a ticket under **HELB → Payment Issues** with your M-Pesa confirmation code`,
+    },
+    // ── Civil Registration ────────────────────────────────────────────────────
+    {
+      title: 'Birth Certificate Application',
+      slug: 'birth-certificate-application',
+      category: 'Civil Registration',
+      tags: ['birth-certificate', 'civil-registration', 'eCitizen'],
+      summary: 'How to apply for a birth certificate online or at a Huduma Centre.',
+      content: `## Birth Certificate\n\n### New Birth (Under 6 Months)\n1. Obtain a **Notification of Birth** from the hospital/nurse within 28 days\n2. Visit the Civil Registration office in your area (or Sub-County hospital)\n3. Bring both parents' national IDs and the notification form\n4. Certificate issued within 7 days\n\n### Online Application (eCitizen)\n1. Log in at ecitizen.go.ke → **Department of Civil Registration → Birth Certificate**\n2. Enter the child's birth notification number\n3. Verify details and submit\n4. Pay KES 50 (standard) or KES 200 (same day)\n5. Collect at any Huduma Centre\n\n### Late Registration (Over 1 Year)\n1. Obtain an affidavit from a Chief/Sub-Chief confirming the birth\n2. Bring parent IDs, clinic card, and immunization record\n3. Visit the Civil Registration office\n4. KES 1,000 late registration fee applies\n\n### Certified Copy of Existing Certificate\n- Apply online at ecitizen.go.ke → **Civil Registration → Certified Copy**\n- Fee: KES 50 (standard), KES 200 (urgent)\n- Collection at Huduma Centre or by post\n\n### Common Issues\n- **Name spelling error**: Submit a correction form at the Civil Registration office with your parents' IDs and hospital records\n- **Father not listed**: Can be added later with an affidavit and both parents present`,
+    },
+    {
+      title: 'Marriage Certificate — Application and Recognition',
+      slug: 'marriage-certificate',
+      category: 'Civil Registration',
+      tags: ['marriage', 'civil-registration'],
+      summary: 'How to register a marriage and obtain a marriage certificate in Kenya.',
+      content: `## Marriage Registration\n\n### Types of Marriage in Kenya\n1. **Civil Marriage** (Attorney General's Office)\n2. **Christian Marriage** (licensed churches)\n3. **Islamic Marriage** (Kadhi's Courts)\n4. **Customary Marriage** (traditional)\n5. **Hindu Marriage** (licensed venues)\n\n### Registering a Civil Marriage\n1. Give **21 days notice** at any Civil Registry\n2. Both parties must be 18+ and not previously married\n3. Bring national IDs and 2 witnesses\n4. Pay KES 2,000\n5. Certificate issued same day\n\n### Online Certificate Order\n1. Log in at ecitizen.go.ke → **Civil Registration → Marriage Certificate**\n2. Enter marriage reference number\n3. Pay KES 50\n4. Collect at Huduma Centre\n\n### Foreign Marriage Recognition\nKenyan citizens married abroad must register the marriage at the AG's office within 90 days of return.\n\n### Common Issues\n- **Partner's name not matching ID**: Affidavit required from both parties with the correct names\n- **Old marriage certificate lost**: Apply for a certified copy at ecitizen.go.ke`,
+    },
+    // ── Driving & Vehicles ────────────────────────────────────────────────────
+    {
+      title: 'Motor Vehicle Transfer — Buying a Second-Hand Car',
+      slug: 'motor-vehicle-transfer',
+      category: 'Driving & Vehicles',
+      tags: ['NTSA', 'vehicle', 'registration'],
+      summary: 'How to transfer vehicle ownership after buying a second-hand car in Kenya.',
+      content: `## Motor Vehicle Transfer\n\n### Before Buying\n1. Verify ownership via NTSA portal (ntsa.go.ke → **Vehicle Search**) — confirm registered owner and check for encumbrances (logbook loans)\n2. Ensure there are no outstanding fines or NTSA penalties\n3. Confirm the vehicle has valid insurance\n\n### Transfer Process\n1. Seller and buyer must both log in to ecitizen.go.ke → **NTSA → Transfer of Ownership**\n2. Both parties fill in and sign the **Motor Vehicle Transfer Form (Form 3)**\n3. Attach:\n   - Original logbook\n   - Both parties' national IDs\n   - Certificate of Insurance\n   - KRA PIN for both parties\n4. Pay stamp duty: 2% of vehicle value for vehicles under 5 years; 1% for older\n5. Pay NTSA transfer fee: KES 2,400\n6. New logbook issued within 5–10 business days\n\n### Logbook Loan Warning\nIf the vehicle has an active log-book loan, the bank must provide a **Clearance Letter** before transfer can proceed.\n\n### Inspection\nVehicles over 4 years old require a vehicle inspection at any NTSA-approved garage.\n\n### Common Issues\n- **"Transfer blocked"**: Outstanding fines or loan on vehicle — seller must clear before transfer\n- **Seller unavailable**: Cannot complete transfer — NTSA requires both parties online`,
+    },
+    {
+      title: 'Traffic Fines — How to Check and Pay',
+      slug: 'traffic-fines-payment',
+      category: 'Driving & Vehicles',
+      tags: ['NTSA', 'payments', 'driving-licence'],
+      summary: 'How to check outstanding traffic fines and pay them online.',
+      content: `## Traffic Fines\n\n### Checking Outstanding Fines\n1. Visit ecitizen.go.ke → **NTSA → Traffic Fines**\n2. Enter your **National ID** or **Driving Licence number**\n3. All outstanding fines and pending cases will be listed\n\n### Payment via M-Pesa\n1. M-Pesa → Pay Bill\n2. Business Number: **300800**\n3. Account: Your ID number or fine reference number\n4. Amount: Fine amount\n\n### Fine Amounts (Common)\n| Offence | Fine |\n|---------|------|\n| Speeding (10–30 km/h over limit) | KES 10,000 |\n| Speeding (over 30 km/h) | KES 20,000 |\n| Using phone while driving | KES 10,000 |\n| No seatbelt | KES 5,000 |\n| Overloading | KES 30,000 |\n| No valid licence | KES 50,000 |\n\n### Disputed Fines\n1. Raise a ticket under **NTSA → Traffic Fine Dispute**\n2. Attach a copy of the fine notice and your ID\n3. NTSA investigation takes 10–21 business days\n\n### Effect on Driving Licence Renewal\nOutstanding fines will block your driving licence renewal until cleared.`,
+    },
+    // ── Tax Compliance ────────────────────────────────────────────────────────
+    {
+      title: 'KRA Tax Compliance Certificate',
+      slug: 'kra-tax-compliance-certificate',
+      category: 'Tax Compliance',
+      tags: ['KRA', 'tax', 'eCitizen'],
+      summary: 'How to apply for a KRA Tax Compliance Certificate (TCC) online.',
+      content: `## Tax Compliance Certificate (TCC)\n\n### What is it?\nA **Tax Compliance Certificate** confirms that a taxpayer is up-to-date with all KRA tax obligations. Required for:\n- Tenders and government contracts\n- Professional board membership\n- Some employment applications\n- Import/Export licences\n\n### Requirements for Issuance\n- All tax returns filed (Income Tax, VAT, PAYE if applicable)\n- No outstanding tax liabilities (or approved payment plan)\n- Active KRA PIN\n\n### How to Apply\n1. Log in at itax.kra.go.ke with your PIN and password\n2. Click **Certificates → Apply for Tax Compliance Certificate**\n3. System checks your compliance status automatically\n4. If compliant: certificate issued within 24 hours\n5. If not compliant: outstanding items are listed — resolve each before re-applying\n\n### Validity\n- TCC is valid for **12 months** from date of issue\n\n### Common Issues\n- **Pending returns**: File all outstanding returns via iTax. Employee (PAYE) returns are filed by employer\n- **Disputed assessment**: Request an amendment or file an objection at your KRA office before applying for TCC\n- **PIN forgotten**: Reset at any KRA office with your National ID\n\n### Downloading Your Certificate\nCertificates are in PDF format. Verify authenticity at itax.kra.go.ke → **Certificate Verification**.`,
+    },
+    {
+      title: 'Filing Individual Income Tax Return (iTax)',
+      slug: 'individual-income-tax-return',
+      category: 'Tax Compliance',
+      tags: ['KRA', 'tax', 'payments'],
+      summary: 'Step-by-step guide to filing your annual individual income tax return on iTax.',
+      content: `## Individual Income Tax Return\n\n### Who Must File?\n- All persons with a KRA PIN who earn income\n- Even if PAYE is deducted by employer — you must file a **Nil Return** or confirm P9 details\n\n### Filing Deadline\n- **30 June** of the following year (e.g., 2024 returns due 30 June 2025)\n- Late filing penalty: KES 2,000 per month\n\n### Steps\n1. Log in at itax.kra.go.ke\n2. Click **Returns → File Return → Income Tax → Resident Individual**\n3. Select year of income\n4. Fill in employment income from your **P9 form** (obtain from employer)\n5. Add any other income: rental, business, dividends\n6. Deductions: National Pension (NSSF), medical insurance (NHIF), mortgage interest\n7. System calculates tax liability\n8. If tax payable: pay via Paybill **222222** (Account: your PIN)\n9. Submit return and download **E-Return Acknowledgment**\n\n### Nil Return\nIf you had no income: file a Nil Return.\n1. iTax → File Return → Income Tax → Resident Individual\n2. Select year, answer all income questions as **No**\n3. Submit\n\n### Common Issues\n- **PIN locked**: Contact KRA on 020 4 999 999 or visit any KRA office\n- **Wrong PIN on P9**: Employer must issue a corrected P9\n- **System error at submission**: Try a different browser (Chrome recommended). Peak period (June) may be slow`,
+    },
+    // ── Payments & Fees (additional) ──────────────────────────────────────────
+    {
+      title: 'What to Do If Your Payment Goes Through But Service Not Activated',
+      slug: 'payment-successful-service-not-activated',
+      category: 'Payments & Fees',
+      tags: ['payments', 'eCitizen', 'technical'],
+      summary: 'Steps to take when you have paid a fee but the service status has not updated.',
+      content: `## Payment Successful — Service Not Activated\n\n### Wait Period\nFirst, allow **30–60 minutes** for payment to reconcile. Payments made via M-Pesa during peak hours can take up to 2 hours.\n\n### Verify Payment\n1. Check your M-Pesa messages for the confirmation code\n2. Log in to eCitizen → **My Payments** — confirm the transaction appears with **"Completed"** status\n3. If status shows **"Pending"**: your bank/M-Pesa may still be processing\n\n### If Still Not Updated After 2 Hours\n1. Raise a ticket on eCitizen\n2. Select the relevant agency and category: **Payment Reconciliation**\n3. Attach:\n   - M-Pesa confirmation SMS (screenshot)\n   - eCitizen payment reference number\n   - Screenshot of the unpaid/pending service\n4. Response typically within 4–8 working hours\n\n### Do NOT\n- Pay again (you may be double-charged)\n- Clear your eCitizen session/cart before the issue is resolved\n\n### M-Pesa Reversal\nIf your payment was charged but not received by eCitizen, a reversal will be processed within 3–5 business days once the support ticket is resolved.`,
+    },
+    {
+      title: 'How to Get a Receipt for Government Service Payments',
+      slug: 'government-service-payment-receipt',
+      category: 'Payments & Fees',
+      tags: ['payments', 'eCitizen', 'portal'],
+      summary: 'How to download or print official payment receipts for services paid via eCitizen.',
+      content: `## Downloading Your Payment Receipt\n\n### On eCitizen Portal\n1. Log in at ecitizen.go.ke\n2. Click your profile → **Payment History** (or **My Transactions**)\n3. Locate the payment and click **View Receipt**\n4. Download the PDF receipt\n\n### Receipt Not Appearing\n- Allow up to 2 hours for the payment to reflect\n- Ensure you are logged in with the same account used for payment\n- If receipt is missing after 24 hours: raise a ticket under the relevant agency → **Payment Receipt**\n\n### Official vs. M-Pesa Receipt\n- The **eCitizen PDF receipt** is the official government receipt\n- M-Pesa confirmation messages are proof of payment but may not be accepted for official documentation\n\n### Lost Receipt\nIf you cannot find the receipt:\n1. Go to **Payment History**\n2. Use the transaction date and amount to locate the payment\n3. Re-download from the portal\n\n### Receipt Required For\n- Passport collection\n- Certificate collection\n- Tender applications\n- Court filing confirmation`,
+    },
+    // ── Account & Registration (additional) ──────────────────────────────────
+    {
+      title: 'How to Update Your Profile and Contact Details',
+      slug: 'update-ecitizen-profile',
+      category: 'Account & Registration',
+      tags: ['account', 'eCitizen', 'portal'],
+      summary: 'How to update your name, phone number, email, and ID details on eCitizen.',
+      content: `## Updating Your eCitizen Profile\n\n### What You Can Update Online\n- Email address\n- Phone number\n- Postal address\n- Password\n\n### Updating Email\n1. Log in → click your name (top right) → **Profile Settings**\n2. Click **Edit** next to Email\n3. Enter new email and click **Send Verification Code**\n4. Enter OTP from your new email\n5. Email updated immediately\n\n### Updating Phone Number\n1. Profile Settings → **Edit** next to Phone\n2. Enter new number → OTP sent via SMS\n3. Enter OTP to confirm\n\n### Name or ID Number Changes\nName and national ID changes require:\n- Visit a Huduma Centre or eCitizen registration point\n- Bring your new ID (with the corrected details)\n- ID changes take 3–5 business days to reflect\n\n### Two-Factor Authentication (2FA)\nFor added security, enable 2FA under **Security Settings**. OTP sent to your registered phone on each login.\n\n### Linked Services\nAll government services (KRA, NHIF, NTSA, Immigration) linked to your PIN and ID — name changes affect all linked services.`,
     },
   ];
 
