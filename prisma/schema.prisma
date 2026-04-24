@@ -1487,12 +1487,16 @@ model Media {
 enum ChatRoomType {
   TICKET
   ONBOARDING
+  DIRECT
+  GROUP
+  AGENCY_CHANNEL
 }
 
 enum ChatMessageType {
   TEXT
   FILE
   IMAGE
+  VOICE
   SYSTEM
 }
 

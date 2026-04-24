@@ -1,8 +1,11 @@
-import { IsString, IsOptional, IsEnum, IsUUID, IsEmail } from 'class-validator';
+import { IsString, IsOptional, IsEnum, IsUUID, IsEmail, IsArray } from 'class-validator';
 
 export enum ChatRoomTypeDto {
   TICKET = 'TICKET',
   ONBOARDING = 'ONBOARDING',
+  DIRECT = 'DIRECT',
+  GROUP = 'GROUP',
+  AGENCY_CHANNEL = 'AGENCY_CHANNEL',
 }
 
 export class CreateChatRoomDto {
@@ -22,9 +25,24 @@ export class CreateChatRoomDto {
   title?: string;
 }
 
-export class SendMessageDto {
+export class CreateDirectRoomDto {
+  @IsUUID()
+  targetUserId: string;
+}
+
+export class CreateGroupRoomDto {
   @IsString()
-  body: string;
+  title: string;
+
+  @IsArray()
+  @IsUUID('4', { each: true })
+  memberIds: string[];
+}
+
+export class SendMessageDto {
+  @IsOptional()
+  @IsString()
+  body?: string;
 
   @IsOptional()
   @IsString()
@@ -33,6 +51,10 @@ export class SendMessageDto {
   @IsOptional()
   @IsString()
   fileName?: string;
+
+  @IsOptional()
+  @IsEnum(['TEXT', 'FILE', 'IMAGE', 'VOICE', 'SYSTEM'])
+  messageType?: string;
 }
 
 export class AddParticipantDto {
@@ -43,4 +65,12 @@ export class AddParticipantDto {
   @IsOptional()
   @IsEmail()
   email?: string;
+}
+
+export class TypingDto {
+  @IsUUID()
+  roomId: string;
+
+  @IsOptional()
+  isTyping?: boolean;
 }
