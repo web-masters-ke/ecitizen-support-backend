@@ -97,6 +97,12 @@ export class ChatController {
     return this.chatService.markRead(roomId, req.user.sub);
   }
 
+  /** Join a room via invite link (self-join) */
+  @Post('rooms/:roomId/join')
+  joinRoom(@Param('roomId') roomId: string, @Request() req: any) {
+    return this.chatService.joinRoom(roomId, req.user.sub);
+  }
+
   @Post(':roomId/participants')
   addParticipant(
     @Param('roomId') roomId: string,

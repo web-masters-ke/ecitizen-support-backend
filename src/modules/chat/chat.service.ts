@@ -281,10 +281,33 @@ export class ChatService {
     const room = await this.prisma.chatRoom.findUnique({ where: { id: roomId } });
     if (!room) throw new NotFoundException('Chat room not found');
 
+    // Resolve email to userId if needed
+    let userId = dto.userId;
+    if (!userId && dto.email) {
+      const user = await this.prisma.user.findFirst({ where: { email: dto.email } });
+      if (user) userId = user.id;
+    }
+
+    // Skip if already a participant
+    if (userId) {
+      const existing = await this.prisma.chatParticipant.findFirst({ where: { roomId, userId } });
+      if (existing) return existing;
+    }
+
     return this.prisma.chatParticipant.create({
-      data: { roomId, userId: dto.userId, email: dto.email, addedBy },
+      data: { roomId, userId: userId ?? null, email: dto.email ?? null, addedBy },
       include: { user: { select: { id: true, firstName: true, lastName: true, email: true } } },
     });
+  }
+
+  // ─── Self-join via invite link ─────────────────────────────────────────
+  async joinRoom(roomId: string, userId: string) {
+    const room = await this.prisma.chatRoom.findUnique({ where: { id: roomId }, include: { participants: true } });
+    if (!room) throw new NotFoundException('Room not found');
+    const already = room.participants.find((p) => p.userId === userId);
+    if (already) return room;
+    await this.prisma.chatParticipant.create({ data: { roomId, userId } });
+    return this.getRoom(roomId);
   }
 
   async getRoom(roomId: string) {
