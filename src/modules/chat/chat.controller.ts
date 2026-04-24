@@ -1,5 +1,5 @@
 import {
-  Controller, Get, Post, Param, Body, Request, UseGuards, Query,
+  Controller, Get, Post, Patch, Param, Body, Request, UseGuards, Query,
 } from '@nestjs/common';
 import { ChatService } from './chat.service';
 import { SendMessageDto, AddParticipantDto, CreateDirectRoomDto, CreateGroupRoomDto } from './dto/chat.dto';
@@ -44,6 +44,12 @@ export class ChatController {
   @Get('rooms/:roomId')
   getRoom(@Param('roomId') roomId: string) {
     return this.chatService.getRoom(roomId);
+  }
+
+  /** Rename a group / update room title */
+  @Patch('rooms/:roomId')
+  renameRoom(@Param('roomId') roomId: string, @Body() body: { title: string }) {
+    return this.chatService.renameRoom(roomId, body.title);
   }
 
   // ─── Ticket + Onboarding rooms (legacy) ─────────────────────────────────

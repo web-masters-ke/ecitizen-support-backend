@@ -109,6 +109,17 @@ export class ChatService {
     });
   }
 
+  // ─── Rename room ─────────────────────────────────────────────────────
+  async renameRoom(roomId: string, title: string) {
+    const room = await this.prisma.chatRoom.findUnique({ where: { id: roomId } });
+    if (!room) throw new NotFoundException('Room not found');
+    return this.prisma.chatRoom.update({
+      where: { id: roomId },
+      data: { title: title.trim() },
+      include: ROOM_INCLUDE,
+    });
+  }
+
   // ─── Agency channel ───────────────────────────────────────────────────
   async getOrCreateAgencyChannel(agencyId: string) {
     let room = await this.prisma.chatRoom.findFirst({
