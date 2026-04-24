@@ -241,6 +241,9 @@ export class AgenciesService {
         ...(dto.onboardingRemarks !== undefined && { onboardingRemarks: dto.onboardingRemarks }),
         ...(dto.servicesIdentified !== undefined && { servicesIdentified: dto.servicesIdentified }),
         ...(dto.servicesLive !== undefined && { servicesLive: dto.servicesLive }),
+        ...(dto.slaDocumentUrl !== undefined && { slaDocumentUrl: dto.slaDocumentUrl }),
+        ...(dto.slaDocumentName !== undefined && { slaDocumentName: dto.slaDocumentName }),
+        ...(dto.slaSignedAt !== undefined && { slaSignedAt: dto.slaSignedAt ? new Date(dto.slaSignedAt) : null }),
       },
       include: {
         parentAgency: {

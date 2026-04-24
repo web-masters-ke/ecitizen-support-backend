@@ -13,4 +13,4 @@ else
 fi
 
 echo "Starting application..."
-exec node dist/src/main.js
+exec node dist/main.js

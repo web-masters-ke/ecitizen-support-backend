@@ -183,6 +183,8 @@ model User {
   chatMessages           ChatMessage[]        @relation("ChatSender")
   chatReadReceipts       ChatReadReceipt[]    @relation("ChatReadReceipt")
   coordinatedAgencies    Agency[]             @relation("AgencyCoordinator")
+  callerLogs             CallLog[]            @relation("CallerLogs")
+  targetLogs             CallLog[]            @relation("TargetLogs")
 
   @@map("users")
 }
@@ -353,6 +355,9 @@ model Agency {
   onboardingRemarks      String?  @map("onboarding_remarks")
   servicesIdentified     Int?     @map("services_identified")
   servicesLive           Int?     @map("services_live")
+  slaDocumentUrl         String?  @map("sla_document_url")
+  slaDocumentName        String?  @map("sla_document_name") @db.VarChar(500)
+  slaSignedAt            DateTime? @map("sla_signed_at")
 
   parentAgency       Agency?          @relation("AgencyHierarchy", fields: [parentAgencyId], references: [id])
   childAgencies      Agency[]         @relation("AgencyHierarchy")
@@ -385,6 +390,7 @@ model Agency {
   businessCalendarOverrides BusinessCalendarOverride[]
   chatRooms            ChatRoom[]
   coordinator          User?    @relation("AgencyCoordinator", fields: [coordinatorId], references: [id])
+  callLogs             CallLog[]
 
   @@map("agencies")
 }
@@ -610,6 +616,7 @@ model Ticket {
   workflowTriggers  WorkflowTrigger[]
   notifications     Notification[]
   chatRoom          ChatRoom?
+  callLogs          CallLog[]
 
   @@index([agencyId, statusId])
   @@index([agencyId, priorityId])
@@ -1553,4 +1560,43 @@ model ChatReadReceipt {
 
   @@unique([messageId, userId])
   @@map("chat_read_receipts")
+}
+
+// ============================================
+// DOMAIN 13: CALL LOGS
+// ============================================
+
+enum CallDirection {
+  INBOUND
+  OUTBOUND
+}
+
+enum CallStatus {
+  RINGING
+  ANSWERED
+  MISSED
+  ENDED
+  FAILED
+}
+
+model CallLog {
+  id           String        @id @default(uuid()) @db.Uuid
+  ticketId     String?       @map("ticket_id") @db.Uuid
+  agencyId     String?       @map("agency_id") @db.Uuid
+  callerId     String        @map("caller_id") @db.Uuid
+  targetUserId String?       @map("target_user_id") @db.Uuid
+  direction    CallDirection
+  status       CallStatus    @default(RINGING)
+  startedAt    DateTime      @default(now()) @map("started_at")
+  endedAt      DateTime?     @map("ended_at")
+  durationSec  Int?          @map("duration_sec")
+  notes        String?
+  recordingUrl String?       @map("recording_url")
+
+  ticket  Ticket? @relation(fields: [ticketId], references: [id])
+  agency  Agency? @relation(fields: [agencyId], references: [id])
+  caller  User    @relation("CallerLogs", fields: [callerId], references: [id])
+  target  User?   @relation("TargetLogs", fields: [targetUserId], references: [id])
+
+  @@map("call_logs")
 }

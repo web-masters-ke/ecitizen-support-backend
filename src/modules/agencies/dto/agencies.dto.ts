@@ -14,6 +14,7 @@ import {
   Matches,
   ValidateNested,
   IsNotEmpty,
+  IsDateString,
 } from 'class-validator';
 import { Type } from 'class-transformer';
 import { ApiProperty, ApiPropertyOptional, PartialType } from '@nestjs/swagger';
@@ -157,6 +158,22 @@ export class UpdateAgencyDto extends PartialType(CreateAgencyDto) {
   @IsInt()
   @Min(0)
   servicesLive?: number;
+
+  @ApiPropertyOptional({ description: 'SLA document URL (uploaded file)' })
+  @IsOptional()
+  @IsString()
+  slaDocumentUrl?: string;
+
+  @ApiPropertyOptional({ description: 'SLA document filename' })
+  @IsOptional()
+  @IsString()
+  @MaxLength(500)
+  slaDocumentName?: string;
+
+  @ApiPropertyOptional({ description: 'Date the SLA was signed' })
+  @IsOptional()
+  @IsDateString()
+  slaSignedAt?: string;
 }
 
 // ──────────────────────────────────────────────

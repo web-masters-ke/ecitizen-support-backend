@@ -1,6 +1,8 @@
 import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { Cron, CronExpression } from '@nestjs/schedule';
 import { PrismaService } from '@config/prisma.service';
+import { KafkaService } from '../kafka/kafka.service';
+import { KAFKA_TOPICS, partitionKey } from '../kafka/kafka.topics';
 import {
   CreateSlaPolicyDto,
   UpdateSlaPolicyDto,
@@ -14,7 +16,10 @@ import {
 export class SlaService {
   private readonly logger = new Logger(SlaService.name);
 
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly kafkaService: KafkaService,
+  ) {}
 
   // ============================================
   // SLA Policy CRUD
@@ -300,6 +305,7 @@ export class SlaService {
             id: true,
             ticketNumber: true,
             agencyId: true,
+            createdBy: true,
             statusId: true,
             isEscalated: true,
             escalationLevel: true,
@@ -322,6 +328,7 @@ export class SlaService {
             id: true,
             ticketNumber: true,
             agencyId: true,
+            createdBy: true,
             statusId: true,
             isEscalated: true,
             escalationLevel: true,
@@ -381,6 +388,19 @@ export class SlaService {
         `RESPONSE SLA breached for ticket ${tracking.ticket.ticketNumber} (${breachDuration} minutes overdue)`,
       );
 
+      this.kafkaService.publish({
+        topic: KAFKA_TOPICS.SLA_BREACHED,
+        key: partitionKey.byTicket(tracking.ticket.id),
+        value: {
+          ticketId: tracking.ticket.id,
+          ticketNumber: tracking.ticket.ticketNumber,
+          agencyId: tracking.ticket.agencyId,
+          breachType: 'RESPONSE',
+          breachDurationMinutes: breachDuration,
+          createdBy: tracking.ticket.createdBy,
+        },
+      }).catch(() => null);
+
       // Trigger escalation
       await this.triggerEscalation(tracking.ticket.id, tracking.id, 'RESPONSE');
     }
@@ -429,6 +449,19 @@ export class SlaService {
       this.logger.warn(
         `RESOLUTION SLA breached for ticket ${tracking.ticket.ticketNumber} (${breachDuration} minutes overdue)`,
       );
+
+      this.kafkaService.publish({
+        topic: KAFKA_TOPICS.SLA_BREACHED,
+        key: partitionKey.byTicket(tracking.ticket.id),
+        value: {
+          ticketId: tracking.ticket.id,
+          ticketNumber: tracking.ticket.ticketNumber,
+          agencyId: tracking.ticket.agencyId,
+          breachType: 'RESOLUTION',
+          breachDurationMinutes: breachDuration,
+          createdBy: tracking.ticket.createdBy,
+        },
+      }).catch(() => null);
 
       await this.triggerEscalation(
         tracking.ticket.id,

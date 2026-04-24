@@ -4,9 +4,13 @@ import {
   Post,
   Body,
   Query,
+  UseGuards,
 } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
 import { ReportingService } from './reporting.service';
+import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
+import { RolesGuard } from '../../common/guards/roles.guard';
+import { Roles } from '../../common/decorators/roles.decorator';
 import {
   QueryDashboardMetricsDto,
   QuerySlaReportDto,
@@ -20,6 +24,8 @@ import {
 
 @ApiTags('Reporting')
 @ApiBearerAuth()
+@UseGuards(JwtAuthGuard, RolesGuard)
+@Roles('COMMAND_CENTER_ADMIN', 'SUPER_ADMIN')
 @Controller('reports')
 export class ReportingController {
   constructor(private readonly reportingService: ReportingService) {}
