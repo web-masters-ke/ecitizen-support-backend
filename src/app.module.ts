@@ -30,6 +30,10 @@ import { MediaModule } from './modules/media/media.module';
 import { AdminModule } from './modules/admin/admin.module';
 import { HealthModule } from './modules/health/health.module';
 import { WebsocketModule } from './modules/websocket/websocket.module';
+import { ChatModule } from './modules/chat/chat.module';
+import { CallsModule } from './modules/calls/calls.module';
+import { EmailIngestModule } from './modules/email-ingest/email-ingest.module';
+import { KafkaModule } from './modules/kafka/kafka.module';
 
 @Module({
   imports: [
@@ -72,6 +76,10 @@ import { WebsocketModule } from './modules/websocket/websocket.module';
     AdminModule,
     HealthModule,
     WebsocketModule,
+    ChatModule,
+    CallsModule,
+    EmailIngestModule,
+    KafkaModule,
   ],
   providers: [
     // Apply JWT auth guard globally - use @Public() to skip

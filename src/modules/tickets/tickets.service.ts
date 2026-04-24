@@ -8,6 +8,8 @@ import { PrismaService } from '../../config/prisma.service';
 import { PaginatedResult } from '../../common/dto/pagination.dto';
 import { NotificationsService } from '../notifications/notifications.service';
 import { SlaService } from '../sla/sla.service';
+import { KafkaService } from '../kafka/kafka.service';
+import { KAFKA_TOPICS, partitionKey } from '../kafka/kafka.topics';
 import {
   CreateTicketDto,
   UpdateTicketDto,
@@ -98,6 +100,7 @@ export class TicketsService {
     private readonly prisma: PrismaService,
     private readonly notificationsService: NotificationsService,
     private readonly slaService: SlaService,
+    private readonly kafkaService: KafkaService,
   ) {}
 
   // ============================================
@@ -530,6 +533,23 @@ export class TicketsService {
     if (!ticket) throw new NotFoundException('Ticket creation failed');
 
     this.logger.log(`Ticket created: ${ticketNumber} by user ${createdBy}`);
+
+    // Publish ticket.created event to Kafka (non-blocking)
+    this.kafkaService.publish({
+      topic: KAFKA_TOPICS.TICKET_CREATED,
+      key: partitionKey.byAgency(ticket.agencyId),
+      value: {
+        ticketId: ticket.id,
+        ticketNumber: ticket.ticketNumber,
+        agencyId: ticket.agencyId,
+        createdBy: ticket.createdBy,
+        channel: ticket.channel,
+        subject: ticket.subject,
+        priorityId: ticket.priorityId,
+        categoryId: ticket.categoryId,
+        createdAt: ticket.createdAt,
+      },
+    }).catch(() => null);
 
     // Attach SLA tracking (non-blocking — failure here must not break ticket creation)
     this.slaService.attachSlaToTicket({
@@ -1108,6 +1128,12 @@ export class TicketsService {
       }
     }
 
+    this.kafkaService.publish({
+      topic: KAFKA_TOPICS.TICKET_RESOLVED,
+      key: partitionKey.byTicket(id),
+      value: { ticketId: id, ticketNumber: updatedTicket.ticketNumber, agencyId: updatedTicket.agencyId, resolvedAt: new Date() },
+    }).catch(() => null);
+
     return updatedTicket;
   }
 
@@ -1146,6 +1172,12 @@ export class TicketsService {
           .catch((err) => this.logger.warn(`EMAIL close notify failed for ${updatedTicket.ticketNumber}: ${err?.message}`));
       }
     }
+
+    this.kafkaService.publish({
+      topic: KAFKA_TOPICS.TICKET_CLOSED,
+      key: partitionKey.byTicket(id),
+      value: { ticketId: id, ticketNumber: updatedTicket.ticketNumber, agencyId: updatedTicket.agencyId, closedAt: new Date() },
+    }).catch(() => null);
 
     return updatedTicket;
   }

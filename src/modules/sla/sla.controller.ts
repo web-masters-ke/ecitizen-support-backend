@@ -11,9 +11,13 @@ import {
   ParseUUIDPipe,
   HttpCode,
   HttpStatus,
+  UseGuards,
 } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiResponse, ApiQuery } from '@nestjs/swagger';
+import { ApiTags, ApiOperation, ApiResponse, ApiQuery, ApiBearerAuth } from '@nestjs/swagger';
 import { SlaService } from './sla.service';
+import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
+import { RolesGuard } from '../../common/guards/roles.guard';
+import { Roles } from '../../common/decorators/roles.decorator';
 import {
   CreateSlaPolicyDto,
   UpdateSlaPolicyDto,
@@ -24,6 +28,8 @@ import {
 } from './dto/sla.dto';
 
 @ApiTags('SLA')
+@ApiBearerAuth()
+@UseGuards(JwtAuthGuard, RolesGuard)
 @Controller('sla')
 export class SlaController {
   constructor(private readonly slaService: SlaService) {}
@@ -34,6 +40,7 @@ export class SlaController {
 
   @Post('policies')
   @HttpCode(HttpStatus.CREATED)
+  @Roles('COMMAND_CENTER_ADMIN', 'SUPER_ADMIN')
   @ApiOperation({ summary: 'Create a new SLA policy' })
   @ApiResponse({ status: 201, description: 'SLA policy created' })
   async createPolicy(@Body() dto: CreateSlaPolicyDto) {
@@ -46,6 +53,7 @@ export class SlaController {
   }
 
   @Get('policies')
+  @Roles('COMMAND_CENTER_ADMIN', 'SUPER_ADMIN', 'AGENCY_AGENT')
   @ApiOperation({ summary: 'List SLA policies, optionally filtered by agency' })
   @ApiQuery({ name: 'agencyId', required: false })
   async findPolicies(@Query('agencyId') agencyId?: string) {
@@ -57,6 +65,7 @@ export class SlaController {
   }
 
   @Get('policies/:id')
+  @Roles('COMMAND_CENTER_ADMIN', 'SUPER_ADMIN', 'AGENCY_AGENT')
   @ApiOperation({ summary: 'Get a single SLA policy by ID' })
   @ApiResponse({ status: 200, description: 'SLA policy found' })
   @ApiResponse({ status: 404, description: 'SLA policy not found' })
@@ -69,6 +78,7 @@ export class SlaController {
   }
 
   @Patch('policies/:id')
+  @Roles('COMMAND_CENTER_ADMIN', 'SUPER_ADMIN')
   @ApiOperation({ summary: 'Update an SLA policy' })
   async updatePolicy(
     @Param('id', ParseUUIDPipe) id: string,
@@ -84,6 +94,7 @@ export class SlaController {
 
   @Delete('policies/:id')
   @HttpCode(HttpStatus.NO_CONTENT)
+  @Roles('SUPER_ADMIN')
   @ApiOperation({ summary: 'Delete an SLA policy and its rules' })
   @ApiResponse({ status: 204, description: 'SLA policy deleted' })
   @ApiResponse({ status: 404, description: 'SLA policy not found' })
@@ -93,6 +104,7 @@ export class SlaController {
 
   @Delete('policies/:policyId/rules/:ruleId')
   @HttpCode(HttpStatus.NO_CONTENT)
+  @Roles('COMMAND_CENTER_ADMIN', 'SUPER_ADMIN')
   @ApiOperation({ summary: 'Delete a specific rule from an SLA policy' })
   @ApiResponse({ status: 204, description: 'Rule deleted' })
   @ApiResponse({ status: 404, description: 'Rule not found' })
@@ -105,6 +117,7 @@ export class SlaController {
 
   @Post('policies/:id/rules')
   @HttpCode(HttpStatus.CREATED)
+  @Roles('COMMAND_CENTER_ADMIN', 'SUPER_ADMIN')
   @ApiOperation({ summary: 'Add a rule to an SLA policy' })
   async addRule(
     @Param('id', ParseUUIDPipe) policyId: string,
@@ -123,6 +136,7 @@ export class SlaController {
   // ============================================
 
   @Get('tracking/:ticketId')
+  @Roles('COMMAND_CENTER_ADMIN', 'SUPER_ADMIN', 'AGENCY_AGENT')
   @ApiOperation({ summary: 'Get SLA tracking status for a ticket' })
   @ApiResponse({ status: 200, description: 'SLA tracking found' })
   @ApiResponse({ status: 404, description: 'No SLA tracking for this ticket' })
@@ -139,6 +153,7 @@ export class SlaController {
   // ============================================
 
   @Get('breaches')
+  @Roles('COMMAND_CENTER_ADMIN', 'SUPER_ADMIN', 'AGENCY_AGENT')
   @ApiOperation({ summary: 'List SLA breaches, optionally filtered by agency' })
   @ApiQuery({ name: 'agencyId', required: false })
   @ApiQuery({ name: 'breachType', required: false, enum: ['RESPONSE', 'RESOLUTION'] })
@@ -159,6 +174,7 @@ export class SlaController {
 
   @Post('escalation-matrix')
   @HttpCode(HttpStatus.CREATED)
+  @Roles('COMMAND_CENTER_ADMIN', 'SUPER_ADMIN')
   @ApiOperation({ summary: 'Create an escalation matrix for an agency' })
   async createEscalationMatrix(@Body() dto: CreateEscalationMatrixDto) {
     const matrix = await this.slaService.createEscalationMatrix(dto);
@@ -170,6 +186,7 @@ export class SlaController {
   }
 
   @Get('escalation-matrix')
+  @Roles('COMMAND_CENTER_ADMIN', 'SUPER_ADMIN', 'AGENCY_AGENT')
   @ApiOperation({ summary: 'List escalation matrices, optionally filtered by agency' })
   @ApiQuery({ name: 'agencyId', required: false })
   async findEscalationMatrices(@Query('agencyId') agencyId?: string) {
@@ -181,6 +198,7 @@ export class SlaController {
   }
 
   @Put('escalation-matrix/:id/levels')
+  @Roles('COMMAND_CENTER_ADMIN', 'SUPER_ADMIN')
   @ApiOperation({ summary: 'Set escalation levels for a matrix (replaces existing)' })
   async setEscalationLevels(
     @Param('id', ParseUUIDPipe) matrixId: string,

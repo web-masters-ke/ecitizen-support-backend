@@ -14,6 +14,7 @@ import {
   Matches,
   ValidateNested,
   IsNotEmpty,
+  IsDateString,
 } from 'class-validator';
 import { Type } from 'class-transformer';
 import { ApiProperty, ApiPropertyOptional, PartialType } from '@nestjs/swagger';
@@ -111,6 +112,68 @@ export class UpdateAgencyDto extends PartialType(CreateAgencyDto) {
   @IsOptional()
   @IsEnum(OnboardingStatusEnum)
   onboardingStatus?: OnboardingStatusEnum;
+
+  @ApiPropertyOptional({ description: 'Ministry name' })
+  @IsOptional()
+  @IsString()
+  @MaxLength(255)
+  ministryName?: string;
+
+  @ApiPropertyOptional({ description: 'State department' })
+  @IsOptional()
+  @IsString()
+  @MaxLength(255)
+  stateDepartment?: string;
+
+  @ApiPropertyOptional({ description: 'Primary contact name' })
+  @IsOptional()
+  @IsString()
+  @MaxLength(255)
+  primaryContactName?: string;
+
+  @ApiPropertyOptional({ description: 'Primary contact phone' })
+  @IsOptional()
+  @IsString()
+  @MaxLength(50)
+  primaryContactPhone?: string;
+
+  @ApiPropertyOptional({ description: 'Coordinator user ID', format: 'uuid' })
+  @IsOptional()
+  @IsUUID()
+  coordinatorId?: string;
+
+  @ApiPropertyOptional({ description: 'Onboarding remarks' })
+  @IsOptional()
+  @IsString()
+  onboardingRemarks?: string;
+
+  @ApiPropertyOptional({ description: 'Number of services identified' })
+  @IsOptional()
+  @IsInt()
+  @Min(0)
+  servicesIdentified?: number;
+
+  @ApiPropertyOptional({ description: 'Number of services live' })
+  @IsOptional()
+  @IsInt()
+  @Min(0)
+  servicesLive?: number;
+
+  @ApiPropertyOptional({ description: 'SLA document URL (uploaded file)' })
+  @IsOptional()
+  @IsString()
+  slaDocumentUrl?: string;
+
+  @ApiPropertyOptional({ description: 'SLA document filename' })
+  @IsOptional()
+  @IsString()
+  @MaxLength(500)
+  slaDocumentName?: string;
+
+  @ApiPropertyOptional({ description: 'Date the SLA was signed' })
+  @IsOptional()
+  @IsDateString()
+  slaSignedAt?: string;
 }
 
 // ──────────────────────────────────────────────

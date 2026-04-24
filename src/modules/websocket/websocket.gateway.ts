@@ -46,6 +46,18 @@ export enum WsEvent {
   AI_CLASSIFICATION_READY = 'AI_CLASSIFICATION_READY',
   HEARTBEAT = 'heartbeat',
 
+  // Chat
+  CHAT_MESSAGE = 'chat:message',
+  CHAT_JOIN = 'chat:join',
+
+  // Call Signaling
+  CALL_OFFER = 'call:offer',
+  CALL_ANSWER = 'call:answer',
+  CALL_ICE = 'call:ice',
+  CALL_HANGUP = 'call:hangup',
+  CALL_RING = 'call:ring',
+  CALL_REJECT = 'call:reject',
+
   // System
   SUBSCRIBED = 'subscribed',
   UNSUBSCRIBED = 'unsubscribed',
@@ -393,6 +405,11 @@ export class AppWebSocketGateway
       return true;
     }
 
+    // Chat room channels: chat:{roomId}
+    if (channel.startsWith('chat:')) {
+      return true; // Room membership is enforced at the service level
+    }
+
     // Agency-specific channels: agency:{agencyId}
     if (channel.startsWith('agency:')) {
       const agencyId = channel.replace('agency:', '');
@@ -448,6 +465,61 @@ export class AppWebSocketGateway
     }
 
     return stats;
+  }
+
+  // ============================================
+  // Call Signaling Handlers (WebRTC)
+  // ============================================
+
+  @SubscribeMessage('call:offer')
+  handleCallOffer(
+    @ConnectedSocket() client: AuthenticatedSocket,
+    @MessageBody() payload: { targetUserId: string; offer: any; callLogId: string; callerName: string },
+  ) {
+    this.server.to(`user:${payload.targetUserId}`).emit('call:ring', {
+      callLogId: payload.callLogId,
+      callerId: client.data?.userId,
+      callerName: payload.callerName,
+      offer: payload.offer,
+    });
+  }
+
+  @SubscribeMessage('call:answer')
+  handleCallAnswer(
+    @ConnectedSocket() client: AuthenticatedSocket,
+    @MessageBody() payload: { callerId: string; answer: any; callLogId: string },
+  ) {
+    this.server.to(`user:${payload.callerId}`).emit('call:answer', {
+      callLogId: payload.callLogId,
+      answer: payload.answer,
+    });
+  }
+
+  @SubscribeMessage('call:ice')
+  handleCallIce(
+    @ConnectedSocket() client: AuthenticatedSocket,
+    @MessageBody() payload: { targetUserId: string; candidate: any },
+  ) {
+    this.server.to(`user:${payload.targetUserId}`).emit('call:ice', {
+      candidate: payload.candidate,
+      fromUserId: client.data?.userId,
+    });
+  }
+
+  @SubscribeMessage('call:hangup')
+  handleCallHangup(
+    @ConnectedSocket() client: AuthenticatedSocket,
+    @MessageBody() payload: { targetUserId: string; callLogId: string },
+  ) {
+    this.server.to(`user:${payload.targetUserId}`).emit('call:hangup', { callLogId: payload.callLogId });
+  }
+
+  @SubscribeMessage('call:reject')
+  handleCallReject(
+    @ConnectedSocket() client: AuthenticatedSocket,
+    @MessageBody() payload: { callerId: string; callLogId: string },
+  ) {
+    this.server.to(`user:${payload.callerId}`).emit('call:reject', { callLogId: payload.callLogId });
   }
 
   /**

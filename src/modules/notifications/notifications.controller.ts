@@ -9,10 +9,14 @@ import {
   ParseUUIDPipe,
   HttpCode,
   HttpStatus,
+  UseGuards,
 } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiResponse, ApiQuery } from '@nestjs/swagger';
+import { ApiTags, ApiOperation, ApiResponse, ApiQuery, ApiBearerAuth } from '@nestjs/swagger';
 import { NotificationsService } from './notifications.service';
 import { CurrentUser } from '../../common/decorators/current-user.decorator';
+import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
+import { RolesGuard } from '../../common/guards/roles.guard';
+import { Roles } from '../../common/decorators/roles.decorator';
 import {
   SendNotificationDto,
   CreateNotificationTemplateDto,
@@ -23,6 +27,8 @@ import {
 } from './dto/notifications.dto';
 
 @ApiTags('Notifications')
+@ApiBearerAuth()
+@UseGuards(JwtAuthGuard, RolesGuard)
 @Controller('notifications')
 export class NotificationsController {
   constructor(
@@ -35,6 +41,7 @@ export class NotificationsController {
 
   @Post('send')
   @HttpCode(HttpStatus.CREATED)
+  @Roles('COMMAND_CENTER_ADMIN', 'SUPER_ADMIN')
   @ApiOperation({ summary: 'Send a notification' })
   @ApiResponse({ status: 201, description: 'Notification created and dispatched' })
   async sendNotification(@Body() dto: SendNotificationDto) {
@@ -52,6 +59,7 @@ export class NotificationsController {
 
   @Post('templates')
   @HttpCode(HttpStatus.CREATED)
+  @Roles('COMMAND_CENTER_ADMIN', 'SUPER_ADMIN')
   @ApiOperation({ summary: 'Create a notification template' })
   @ApiResponse({ status: 201, description: 'Template created' })
   async createTemplate(@Body() dto: CreateNotificationTemplateDto) {
@@ -64,6 +72,7 @@ export class NotificationsController {
   }
 
   @Get('templates')
+  @Roles('COMMAND_CENTER_ADMIN', 'SUPER_ADMIN', 'AGENCY_AGENT')
   @ApiOperation({ summary: 'List notification templates' })
   @ApiQuery({ name: 'agencyId', required: false })
   @ApiQuery({ name: 'channel', required: false, enum: NotificationChannelDto })
@@ -76,6 +85,7 @@ export class NotificationsController {
   }
 
   @Patch('templates/:id')
+  @Roles('COMMAND_CENTER_ADMIN', 'SUPER_ADMIN')
   @ApiOperation({ summary: 'Update a notification template' })
   @ApiResponse({ status: 200, description: 'Template updated' })
   @ApiResponse({ status: 404, description: 'Template not found' })
@@ -96,6 +106,7 @@ export class NotificationsController {
   // ============================================
 
   @Get()
+  @Roles('CITIZEN', 'BUSINESS', 'AGENCY_AGENT', 'SERVICE_PROVIDER_AGENT', 'COMMAND_CENTER_ADMIN', 'SUPER_ADMIN')
   @ApiOperation({ summary: 'List notifications — citizens see only their own' })
   @ApiQuery({ name: 'agencyId', required: false })
   @ApiQuery({ name: 'channel', required: false, enum: NotificationChannelDto })
@@ -128,6 +139,7 @@ export class NotificationsController {
   // ============================================
 
   @Get(':id')
+  @Roles('CITIZEN', 'BUSINESS', 'AGENCY_AGENT', 'SERVICE_PROVIDER_AGENT', 'COMMAND_CENTER_ADMIN', 'SUPER_ADMIN')
   @ApiOperation({
     summary: 'Get a single notification with all delivery logs',
   })
