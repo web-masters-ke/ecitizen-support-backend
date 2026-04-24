@@ -125,9 +125,4 @@ export class ChatController {
     return this.chatService.searchUsers(q || '', req.user.sub);
   }
 
-  /** Legacy: get room by roomId (kept for backwards compat) */
-  @Get(':roomId')
-  getRoomLegacy(@Param('roomId') roomId: string) {
-    return this.chatService.getRoom(roomId);
-  }
 }
