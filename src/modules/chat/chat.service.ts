@@ -161,10 +161,10 @@ export class ChatService {
       });
       if (!ticket) throw new NotFoundException('Ticket not found');
 
+      const seen = new Set<string>();
       const participants: { userId: string }[] = [];
-      if (ticket.createdBy) participants.push({ userId: ticket.createdBy });
-      if (ticket.currentAssigneeId && ticket.currentAssigneeId !== ticket.createdBy) {
-        participants.push({ userId: ticket.currentAssigneeId });
+      for (const uid of [ticket.createdBy, ticket.currentAssigneeId, creatorId]) {
+        if (uid && !seen.has(uid)) { seen.add(uid); participants.push({ userId: uid }); }
       }
 
       room = await this.prisma.chatRoom.create({
@@ -176,6 +176,16 @@ export class ChatService {
         },
         include: ROOM_INCLUDE,
       });
+    } else if (creatorId) {
+      // Auto-enroll the requesting admin if not already a participant
+      const already = await this.prisma.chatParticipant.findUnique({
+        where: { roomId_userId: { roomId: room.id, userId: creatorId } },
+      });
+      if (!already) {
+        await this.prisma.chatParticipant.create({ data: { roomId: room.id, userId: creatorId } }).catch(() => {});
+        // Reload room with the new participant
+        room = await this.prisma.chatRoom.findUnique({ where: { id: room.id }, include: ROOM_INCLUDE }) ?? room;
+      }
     }
 
     return room;
@@ -213,6 +223,13 @@ export class ChatService {
   async sendMessage(roomId: string, senderId: string, senderName: string, dto: SendMessageDto) {
     const room = await this.prisma.chatRoom.findUnique({ where: { id: roomId } });
     if (!room) throw new NotFoundException('Chat room not found');
+
+    // Auto-enroll sender as participant so the room appears in their chat history
+    await this.prisma.chatParticipant.upsert({
+      where: { roomId_userId: { roomId, userId: senderId } },
+      create: { roomId, userId: senderId },
+      update: {},
+    }).catch(() => {});
 
     let messageType: 'TEXT' | 'FILE' | 'IMAGE' | 'VOICE' = 'TEXT';
     if (dto.messageType === 'VOICE') {
@@ -332,6 +349,30 @@ export class ChatService {
 
     if (!room) throw new NotFoundException('Chat room not found');
     return room;
+  }
+
+  // ─── Delete message (soft) ───────────────────────────────────────────────
+  async deleteMessage(messageId: string, requesterId: string) {
+    const msg = await this.prisma.chatMessage.findUnique({ where: { id: messageId } });
+    if (!msg) throw new NotFoundException('Message not found');
+    if (msg.senderId !== requesterId) throw new BadRequestException('Cannot delete someone else\'s message');
+    return this.prisma.chatMessage.update({
+      where: { id: messageId },
+      data: { body: null, messageType: 'SYSTEM', fileUrl: null, fileName: null },
+    });
+  }
+
+  // ─── Leave room ──────────────────────────────────────────────────────────
+  async leaveRoom(roomId: string, userId: string) {
+    await this.prisma.chatParticipant.deleteMany({ where: { roomId, userId } });
+    return { ok: true };
+  }
+
+  // ─── Remove participant ───────────────────────────────────────────────────
+  async removeParticipant(roomId: string, targetUserId: string, requesterId: string) {
+    if (targetUserId === requesterId) return this.leaveRoom(roomId, requesterId);
+    await this.prisma.chatParticipant.deleteMany({ where: { roomId, userId: targetUserId } });
+    return { ok: true };
   }
 
   // ─── Search users (for new DM/group creation) ─────────────────────────

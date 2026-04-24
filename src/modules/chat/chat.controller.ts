@@ -1,5 +1,5 @@
 import {
-  Controller, Get, Post, Patch, Param, Body, Request, UseGuards, Query,
+  Controller, Get, Post, Patch, Delete, Param, Body, Request, UseGuards, Query,
 } from '@nestjs/common';
 import { ChatService } from './chat.service';
 import { SendMessageDto, AddParticipantDto, CreateDirectRoomDto, CreateGroupRoomDto } from './dto/chat.dto';
@@ -112,6 +112,26 @@ export class ChatController {
     const result = this.chatService.addParticipant(roomId, dto, req.user.sub);
     this.wsGateway.emitToChannel(`chat:${roomId}`, 'chat:participant_added', { addedBy: req.user.sub });
     return result;
+  }
+
+  /** Soft-delete a message (replaces body with system notice) */
+  @Delete('messages/:messageId')
+  async deleteMessage(@Param('messageId') messageId: string, @Request() req: any) {
+    const msg = await this.chatService.deleteMessage(messageId, req.user.sub);
+    this.wsGateway.emitToChannel(`chat:${msg.roomId}`, 'chat:message_deleted', { messageId, roomId: msg.roomId });
+    return msg;
+  }
+
+  /** Leave a room (removes self from participants) */
+  @Delete('rooms/:roomId/participants/me')
+  leaveRoom(@Param('roomId') roomId: string, @Request() req: any) {
+    return this.chatService.leaveRoom(roomId, req.user.sub);
+  }
+
+  /** Remove a participant from a room (admin action) */
+  @Delete('rooms/:roomId/participants/:userId')
+  removeParticipant(@Param('roomId') roomId: string, @Param('userId') userId: string, @Request() req: any) {
+    return this.chatService.removeParticipant(roomId, userId, req.user.sub);
   }
 
   // ─── Typing indicator ───────────────────────────────────────────────────

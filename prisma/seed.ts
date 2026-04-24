@@ -1828,6 +1828,117 @@ async function main() {
   }
   console.log('✅ Consent versions seeded');
 
+  // ==========================================
+  // 26. Demo Chat Rooms (for live demo)
+  // ==========================================
+
+  const superAdmin    = await prisma.user.findUnique({ where: { email: 'admin@ecitizen.go.ke' } });
+  const bKakai        = await prisma.user.findUnique({ where: { email: 'b.kakai@wasaachat.com' } });
+  const ccAdmin       = await prisma.user.findUnique({ where: { email: 'cc.admin@ecitizen.go.ke' } });
+  const auditorUser   = await prisma.user.findUnique({ where: { email: 'auditor@ecitizen.go.ke' } });
+  const analystUser   = await prisma.user.findUnique({ where: { email: 'analyst@ecitizen.go.ke' } });
+
+  if (superAdmin && bKakai) {
+    // ── 1:1 DM between Super Admin & Benjamin ──────────────────────────
+    let dmRoom = await prisma.chatRoom.findFirst({
+      where: {
+        type: 'DIRECT',
+        AND: [
+          { participants: { some: { userId: superAdmin.id } } },
+          { participants: { some: { userId: bKakai.id } } },
+        ],
+      },
+    });
+
+    if (!dmRoom) {
+      dmRoom = await prisma.chatRoom.create({
+        data: {
+          type: 'DIRECT',
+          title: 'Super Admin & B. Kakai',
+          participants: {
+            create: [
+              { userId: superAdmin.id },
+              { userId: bKakai.id },
+            ],
+          },
+        },
+      });
+    }
+
+    // Seed DM messages (idempotent — only if room has no messages yet)
+    const dmMsgCount = await prisma.chatMessage.count({ where: { roomId: dmRoom.id } });
+    if (dmMsgCount === 0) {
+      const dmMessages = [
+        { senderId: superAdmin.id, senderName: 'Super Admin', body: 'Benjamin, the new command centre is looking great!', minutesAgo: 45 },
+        { senderId: bKakai.id,     senderName: 'Benjamin Kakai', body: 'Thanks! Just finished the chat module. Ready for the demo 🔥', minutesAgo: 42 },
+        { senderId: superAdmin.id, senderName: 'Super Admin', body: 'The real-time messaging works perfectly. Ticket escalations are also live.', minutesAgo: 40 },
+        { senderId: bKakai.id,     senderName: 'Benjamin Kakai', body: 'Voice notes and file uploads are wired too. Want a quick walkthrough before the meeting?', minutesAgo: 38 },
+        { senderId: superAdmin.id, senderName: 'Super Admin', body: 'Yes! Let\'s sync at 2pm. Can you also confirm the ML pipeline is connected?', minutesAgo: 35 },
+        { senderId: bKakai.id,     senderName: 'Benjamin Kakai', body: '✅ All good on ML — ticket classification + SLA breach prediction are live. SLA is at 94% 💪', minutesAgo: 32 },
+        { senderId: superAdmin.id, senderName: 'Super Admin', body: 'Excellent. See you at the demo.', minutesAgo: 30 },
+      ];
+
+      for (const m of dmMessages) {
+        const createdAt = new Date(Date.now() - m.minutesAgo * 60_000);
+        await prisma.chatMessage.create({
+          data: { roomId: dmRoom.id, senderId: m.senderId, senderName: m.senderName, body: m.body, messageType: 'TEXT', createdAt },
+        });
+      }
+    }
+
+    // ── Leadership Group Chat ──────────────────────────────────────────
+    let groupRoom = await prisma.chatRoom.findFirst({
+      where: { type: 'GROUP', title: 'eCitizen Leadership' },
+    });
+
+    if (!groupRoom) {
+      const groupMembers = [superAdmin.id, bKakai.id, ccAdmin?.id, auditorUser?.id, analystUser?.id].filter(Boolean) as string[];
+      groupRoom = await prisma.chatRoom.create({
+        data: {
+          type: 'GROUP',
+          title: 'eCitizen Leadership',
+          participants: { create: groupMembers.map((uid) => ({ userId: uid, addedBy: superAdmin.id })) },
+        },
+      });
+    } else {
+      // Ensure all users are participants
+      const existingParticipants = await prisma.chatParticipant.findMany({ where: { roomId: groupRoom.id } });
+      const existingIds = new Set(existingParticipants.map((p) => p.userId));
+      const needed = [superAdmin.id, bKakai.id, ccAdmin?.id, auditorUser?.id, analystUser?.id].filter(Boolean) as string[];
+      for (const uid of needed) {
+        if (!existingIds.has(uid)) {
+          await prisma.chatParticipant.create({ data: { roomId: groupRoom.id, userId: uid, addedBy: superAdmin.id } });
+        }
+      }
+    }
+
+    const grpMsgCount = await prisma.chatMessage.count({ where: { roomId: groupRoom.id } });
+    if (grpMsgCount === 0) {
+      const grpMessages = [
+        { senderId: superAdmin.id,  senderName: 'Super Admin',       body: 'Good morning team 🇰🇪 Welcome to the eCitizen Command Centre.', minutesAgo: 120 },
+        { senderId: ccAdmin?.id,    senderName: 'Command Admin',     body: 'Morning! Ticket volume is normal — 142 open, 23 escalated. SLA compliance at 94%.', minutesAgo: 117 },
+        { senderId: auditorUser?.id, senderName: 'Compliance Auditor', body: 'Audit logs are running clean. No anomalies flagged overnight.', minutesAgo: 115 },
+        { senderId: bKakai.id,      senderName: 'Benjamin Kakai',    body: 'Chat and calling modules are live ✅ Everyone test this group right now 😄', minutesAgo: 110 },
+        { senderId: analystUser?.id, senderName: 'Data Analyst',     body: 'ML models classified 98% of overnight tickets automatically. Routing accuracy is up.', minutesAgo: 105 },
+        { senderId: superAdmin.id,  senderName: 'Super Admin',       body: 'Great work everyone. Let\'s aim for 96% SLA by end of month. Anything blocking anyone?', minutesAgo: 100 },
+        { senderId: ccAdmin?.id,    senderName: 'Command Admin',     body: 'Immigration tickets are spiking — passport processing delays. I\'ll escalate to the agency.', minutesAgo: 95 },
+        { senderId: bKakai.id,      senderName: 'Benjamin Kakai',    body: 'I can pull a forecast from the ML module. Give me 2 minutes 🔍', minutesAgo: 93 },
+        { senderId: bKakai.id,      senderName: 'Benjamin Kakai',    body: 'ML forecast shows a 34% spike expected Thursday–Friday. Recommend pre-allocating 3 extra agents to immigration.', minutesAgo: 90 },
+        { senderId: superAdmin.id,  senderName: 'Super Admin',       body: 'Approved. CC Admin — action that please. Benjamin, excellent work on this platform 🏆', minutesAgo: 85 },
+      ];
+
+      for (const m of grpMessages) {
+        if (!m.senderId) continue;
+        const createdAt = new Date(Date.now() - m.minutesAgo * 60_000);
+        await prisma.chatMessage.create({
+          data: { roomId: groupRoom.id, senderId: m.senderId, senderName: m.senderName, body: m.body, messageType: 'TEXT', createdAt },
+        });
+      }
+    }
+
+    console.log('✅ Demo chat rooms seeded (1:1 DM + eCitizen Leadership group)');
+  }
+
   console.log('\n🎉 Database seeded successfully!');
   console.log('\n📋 Test credentials:');
   console.log('   Super Admin:          admin@ecitizen.go.ke / Admin@123456');
