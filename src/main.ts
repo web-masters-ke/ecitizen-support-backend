@@ -1,5 +1,5 @@
-import { NestFactory } from '@nestjs/core';
-import { ValidationPipe } from '@nestjs/common';
+import { NestFactory, HttpAdapterHost } from '@nestjs/core';
+import { ValidationPipe, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import cookieParser from 'cookie-parser';
@@ -8,6 +8,20 @@ import compression from 'compression';
 import { AppModule } from './app.module';
 import { HttpExceptionFilter } from './common/filters/http-exception.filter';
 import { TransformInterceptor } from './common/interceptors/transform.interceptor';
+
+const logger = new Logger('Bootstrap');
+
+// ─── Process-level crash guards ────────────────────────────────────────────────
+// These ensure Node never exits on unhandled async errors or stray exceptions.
+process.on('unhandledRejection', (reason: unknown) => {
+  logger.error('Unhandled promise rejection — continuing', reason instanceof Error ? reason.stack : String(reason));
+  // Do NOT re-throw — we log and carry on. NestJS exception filters handle HTTP-layer errors.
+});
+
+process.on('uncaughtException', (err: Error) => {
+  logger.error('Uncaught exception — continuing', err.stack);
+  // Same policy: log but do not exit. Critical for high-concurrency environments.
+});
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -68,12 +82,18 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, swaggerConfig);
   SwaggerModule.setup('api/docs', app, document);
 
+  // Graceful shutdown — drains in-flight requests before process exits
+  app.enableShutdownHooks();
+
   const port = configService.get('PORT', 4000);
   // Listen on 0.0.0.0 so physical devices on the same network can reach the server
   await app.listen(port, '0.0.0.0');
 
-  console.log(`🏛️  eCitizen SCC Backend running on http://localhost:${port}`);
-  console.log(`📚 Swagger docs at http://localhost:${port}/api/docs`);
+  logger.log(`🏛️  eCitizen SCC Backend running on http://0.0.0.0:${port}`);
+  logger.log(`📚 Swagger docs at http://localhost:${port}/api/docs`);
 }
 
-bootstrap();
+bootstrap().catch((err) => {
+  logger.error('Bootstrap failed — exiting', err);
+  process.exit(1);
+});

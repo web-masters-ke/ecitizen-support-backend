@@ -1,6 +1,12 @@
 #!/bin/sh
 set -e
 
+# Append connection pool settings to DATABASE_URL if not already set.
+# connection_limit=20 supports many concurrent super-admin sessions without exhausting DB.
+if [ -n "$DATABASE_URL" ] && ! echo "$DATABASE_URL" | grep -q "connection_limit"; then
+  export DATABASE_URL="${DATABASE_URL}?connection_limit=20&pool_timeout=30"
+fi
+
 echo "Running Prisma migrations..."
 npx prisma migrate deploy
 

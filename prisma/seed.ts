@@ -211,6 +211,27 @@ async function main() {
   }
   console.log('✅ Super Admin user created (admin@ecitizen.go.ke / Admin@123456)');
 
+  // ─── Personal super admin (Benjamin Kakai) ─────────────────────────────────
+  const bkHash = await bcrypt.hash('BKakai@SCC2026!', 10);
+  const bkAdmin = await prisma.user.upsert({
+    where: { email: 'b.kakai@wasaachat.com' },
+    update: { passwordHash: bkHash, isActive: true, isVerified: true, userType: UserType.SUPER_ADMIN },
+    create: {
+      email: 'b.kakai@wasaachat.com',
+      firstName: 'Benjamin',
+      lastName: 'Kakai',
+      userType: UserType.SUPER_ADMIN,
+      passwordHash: bkHash,
+      isActive: true,
+      isVerified: true,
+    },
+  });
+  if (superAdminRole) {
+    const bkRoleExists = await prisma.userRole.findFirst({ where: { userId: bkAdmin.id, roleId: superAdminRole.id } });
+    if (!bkRoleExists) await prisma.userRole.create({ data: { userId: bkAdmin.id, roleId: superAdminRole.id } });
+  }
+  console.log('✅ Personal super admin created (b.kakai@wasaachat.com / BKakai@SCC2026!)');
+
   // ==========================================
   // 7. Create Sample Agency
   // ==========================================
