@@ -8,6 +8,7 @@ import { ConfigService } from '@nestjs/config';
 import { v4 as uuidv4 } from 'uuid';
 import * as fs from 'fs';
 import * as path from 'path';
+import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3';
 import { PrismaService } from '../../config/prisma.service';
 import {
   MediaType,
@@ -23,6 +24,7 @@ export class MediaService {
   private readonly uploadDir: string;
   private readonly storageMode: string;
   private readonly baseUrl: string;
+  private s3Client: S3Client | null = null;
 
   // In-memory presign tokens (production would use Redis)
   private presignTokens: Map<string, {
@@ -38,26 +40,39 @@ export class MediaService {
     private readonly prisma: PrismaService,
     private readonly configService: ConfigService,
   ) {
-    this.storageMode = this.configService.get<string>('STORAGE_MODE', 'local');
     this.baseUrl = this.configService.get<string>('BASE_URL', 'http://localhost:4000');
     this.uploadDir = path.resolve(
       this.configService.get<string>('UPLOAD_DIR', './uploads'),
     );
 
-    // Ensure upload directory exists for local storage
-    if (this.storageMode === 'local') {
+    // Auto-detect storage mode: use S3 if AWS credentials are present
+    const awsKeyId = this.configService.get<string>('AWS_ACCESS_KEY_ID', '');
+    const hasAwsCreds = awsKeyId && !awsKeyId.startsWith('your-');
+    this.storageMode = this.configService.get<string>(
+      'STORAGE_MODE',
+      hasAwsCreds ? 's3' : 'local',
+    );
+
+    if (this.storageMode === 's3') {
+      this.s3Client = new S3Client({
+        region: this.configService.get<string>('AWS_REGION', 'af-south-1'),
+        credentials: {
+          accessKeyId: awsKeyId,
+          secretAccessKey: this.configService.get<string>('AWS_SECRET_ACCESS_KEY', ''),
+        },
+      });
+      this.logger.log('Storage mode: S3');
+    } else {
       this.ensureUploadDirectory();
+      this.logger.log('Storage mode: local disk');
     }
   }
 
   private ensureUploadDirectory(): void {
+    // Directory names match MediaType enum values exactly
     const dirs = [
       this.uploadDir,
-      path.join(this.uploadDir, 'images'),
-      path.join(this.uploadDir, 'videos'),
-      path.join(this.uploadDir, 'audio'),
-      path.join(this.uploadDir, 'documents'),
-      path.join(this.uploadDir, 'other'),
+      ...Object.values(MediaType).map((t) => path.join(this.uploadDir, t)),
     ];
 
     for (const dir of dirs) {
@@ -110,7 +125,7 @@ export class MediaService {
   }
 
   /**
-   * Write file to S3 (placeholder - would use @aws-sdk/client-s3 in production)
+   * Write file to S3
    */
   private async writeToS3(
     buffer: Buffer,
@@ -118,24 +133,29 @@ export class MediaService {
     mediaType: MediaType,
     mimeType: string,
   ): Promise<string> {
-    const bucket = this.configService.get<string>('S3_BUCKET', 'ecitizen-media');
-    const region = this.configService.get<string>('S3_REGION', 'af-south-1');
+    const bucket = this.configService.get<string>('S3_BUCKET', 'ecitizen-scc-media');
+    const region = this.configService.get<string>('AWS_REGION', 'af-south-1');
     const keyPrefix = this.configService.get<string>('S3_KEY_PREFIX', 'uploads');
+    const cloudfrontDomain = this.configService.get<string>('CLOUDFRONT_DOMAIN', '');
 
     const s3Key = `${keyPrefix}/${mediaType}/${fileName}`;
+    // Strip codec suffix for Content-Type (S3 requires clean MIME)
+    const contentType = mimeType.split(';')[0].trim();
 
-    // In production, this would use the AWS SDK:
-    // const s3Client = new S3Client({ region });
-    // await s3Client.send(new PutObjectCommand({
-    //   Bucket: bucket,
-    //   Key: s3Key,
-    //   Body: buffer,
-    //   ContentType: mimeType,
-    // }));
+    await this.s3Client!.send(
+      new PutObjectCommand({
+        Bucket: bucket,
+        Key: s3Key,
+        Body: buffer,
+        ContentType: contentType,
+      }),
+    );
 
-    this.logger.log(`[S3 STUB] Would upload to s3://${bucket}/${s3Key}`);
+    this.logger.log(`Uploaded to s3://${bucket}/${s3Key}`);
 
-    // Return the S3 URL
+    if (cloudfrontDomain) {
+      return `https://${cloudfrontDomain}/${s3Key}`;
+    }
     return `https://${bucket}.s3.${region}.amazonaws.com/${s3Key}`;
   }
 
