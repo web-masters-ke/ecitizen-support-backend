@@ -60,6 +60,10 @@ const multerOptions = {
       'audio/mpeg',
       'audio/wav',
       'audio/ogg',
+      'audio/webm',       // MediaRecorder default (Chrome/Firefox voice notes)
+      'audio/mp4',        // iOS voice notes
+      'audio/aac',
+      'audio/x-m4a',
       'application/pdf',
       'application/msword',
       'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
