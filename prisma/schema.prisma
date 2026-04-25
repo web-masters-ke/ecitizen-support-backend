@@ -185,6 +185,7 @@ model User {
   coordinatedAgencies    Agency[]             @relation("AgencyCoordinator")
   callerLogs             CallLog[]            @relation("CallerLogs")
   targetLogs             CallLog[]            @relation("TargetLogs")
+  meetingsStarted        Meeting[]            @relation("MeetingStarter")
 
   @@map("users")
 }
@@ -617,6 +618,7 @@ model Ticket {
   notifications     Notification[]
   chatRoom          ChatRoom?
   callLogs          CallLog[]
+  meetings          Meeting[]
 
   @@index([agencyId, statusId])
   @@index([agencyId, priorityId])
@@ -1603,4 +1605,26 @@ model CallLog {
   target  User?   @relation("TargetLogs", fields: [targetUserId], references: [id])
 
   @@map("call_logs")
+}
+
+enum MeetingStatus {
+  ACTIVE
+  ENDED
+}
+
+model Meeting {
+  id           String        @id @default(uuid()) @db.Uuid
+  ticketId     String        @map("ticket_id") @db.Uuid
+  roomName     String        @unique @map("room_name") @db.VarChar(100)
+  jitsiUrl     String        @map("jitsi_url") @db.VarChar(500)
+  startedById  String        @map("started_by_id") @db.Uuid
+  status       MeetingStatus @default(ACTIVE)
+  startedAt    DateTime      @default(now()) @map("started_at")
+  endedAt      DateTime?     @map("ended_at")
+
+  ticket     Ticket @relation(fields: [ticketId], references: [id])
+  startedBy  User   @relation("MeetingStarter", fields: [startedById], references: [id])
+
+  @@index([ticketId])
+  @@map("meetings")
 }

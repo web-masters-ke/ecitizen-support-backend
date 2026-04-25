@@ -32,6 +32,7 @@ import { HealthModule } from './modules/health/health.module';
 import { WebsocketModule } from './modules/websocket/websocket.module';
 import { ChatModule } from './modules/chat/chat.module';
 import { CallsModule } from './modules/calls/calls.module';
+import { MeetingsModule } from './modules/meetings/meetings.module';
 import { EmailIngestModule } from './modules/email-ingest/email-ingest.module';
 import { KafkaModule } from './modules/kafka/kafka.module';
 
@@ -78,6 +79,7 @@ import { KafkaModule } from './modules/kafka/kafka.module';
     WebsocketModule,
     ChatModule,
     CallsModule,
+    MeetingsModule,
     EmailIngestModule,
     KafkaModule,
   ],
