@@ -9,6 +9,7 @@ import { PaginatedResult } from '../../common/dto/pagination.dto';
 import { NotificationsService } from '../notifications/notifications.service';
 import { SlaService } from '../sla/sla.service';
 import { KafkaService } from '../kafka/kafka.service';
+import { AppWebSocketGateway } from '../websocket/websocket.gateway';
 import { KAFKA_TOPICS, partitionKey } from '../kafka/kafka.topics';
 import {
   CreateTicketDto,
@@ -101,6 +102,7 @@ export class TicketsService {
     private readonly notificationsService: NotificationsService,
     private readonly slaService: SlaService,
     private readonly kafkaService: KafkaService,
+    private readonly wsGateway: AppWebSocketGateway,
   ) {}
 
   // ============================================
@@ -1246,6 +1248,17 @@ export class TicketsService {
     }
 
     this.logger.log(`Message added to ticket ${ticket.ticketNumber} by ${senderId}`);
+
+    // Push real-time event to ticket creator and assignee
+    const recipients = [ticket.createdBy, ticket.currentAssigneeId].filter(Boolean) as string[];
+    for (const userId of recipients) {
+      if (userId !== senderId) {
+        this.wsGateway.emitToUser(userId, 'ticket:newMessage', {
+          ticketId,
+          message,
+        });
+      }
+    }
 
     return message;
   }
