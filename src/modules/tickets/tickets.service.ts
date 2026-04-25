@@ -1264,7 +1264,13 @@ export class TicketsService {
 
     this.logger.log(`Message added to ticket ${ticket.ticketNumber} by ${senderId}`);
 
-    // Push real-time event to ticket creator and assignee
+    // Push to all viewers subscribed to this ticket room (admins, agents watching the ticket)
+    this.wsGateway.emitToChannel(`ticket:${ticketId}`, 'ticket:newMessage', {
+      ticketId,
+      message,
+    });
+
+    // Also push directly to creator and assignee who may not have the ticket open
     const recipients = [ticket.createdBy, ticket.currentAssigneeId].filter(Boolean) as string[];
     for (const userId of recipients) {
       if (userId !== senderId) {

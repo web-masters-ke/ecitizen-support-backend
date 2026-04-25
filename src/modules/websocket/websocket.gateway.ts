@@ -410,6 +410,11 @@ export class AppWebSocketGateway
       return true; // Room membership is enforced at the service level
     }
 
+    // Ticket-specific channels: ticket:{ticketId} — any authenticated user can watch a ticket
+    if (channel.startsWith('ticket:')) {
+      return true;
+    }
+
     // Agency-specific channels: agency:{agencyId}
     if (channel.startsWith('agency:')) {
       const agencyId = channel.replace('agency:', '');
