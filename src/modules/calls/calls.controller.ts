@@ -13,7 +13,7 @@ export class CallsController {
   @Post('start')
   async start(@Req() req: any, @Body() body: { targetUserId: string; ticketId?: string; agencyId?: string; direction?: string }) {
     try {
-      return await this.callsService.startCall(req.user.id, body.targetUserId, body.ticketId, body.agencyId, body.direction);
+      return await this.callsService.startCall(req.user.sub, body.targetUserId, body.ticketId, body.agencyId, body.direction);
     } catch (err: any) {
       this.logger.error('calls/start failed', err?.message, err?.stack);
       if (err?.code === 'P2003' || err?.code === 'P2025') {
@@ -40,6 +40,6 @@ export class CallsController {
 
   @Get('recent')
   recent(@Req() req: any) {
-    return this.callsService.getRecentCalls(req.user.id);
+    return this.callsService.getRecentCalls(req.user.sub);
   }
 }
