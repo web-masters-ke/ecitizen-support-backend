@@ -73,7 +73,9 @@ const multerOptions = {
       'text/csv',
     ];
 
-    if (allowedMimes.includes(file.mimetype)) {
+    // Strip codec suffix (e.g. "audio/webm; codecs=opus" → "audio/webm")
+    const baseType = file.mimetype.split(';')[0].trim();
+    if (allowedMimes.includes(baseType)) {
       callback(null, true);
     } else {
       callback(
