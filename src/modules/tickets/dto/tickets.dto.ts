@@ -237,10 +237,10 @@ export class ReopenTicketDto {
 // ============================================
 
 export class CreateMessageDto {
-  @ApiProperty({ description: 'Message text' })
+  @ApiPropertyOptional({ description: 'Message text' })
+  @IsOptional()
   @IsString()
-  @MinLength(1)
-  messageText: string;
+  messageText?: string;
 
   @ApiPropertyOptional({
     description: 'Message type',
@@ -255,6 +255,21 @@ export class CreateMessageDto {
   @IsOptional()
   @IsBoolean()
   isInternal?: boolean;
+
+  @ApiPropertyOptional({ description: 'File URL (S3) for attachment' })
+  @IsOptional()
+  @IsString()
+  fileUrl?: string;
+
+  @ApiPropertyOptional({ description: 'Original file name' })
+  @IsOptional()
+  @IsString()
+  fileName?: string;
+
+  @ApiPropertyOptional({ description: 'File MIME type' })
+  @IsOptional()
+  @IsString()
+  fileType?: string;
 }
 
 // ============================================

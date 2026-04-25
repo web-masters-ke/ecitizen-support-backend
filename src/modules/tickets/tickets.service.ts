@@ -1223,7 +1223,7 @@ export class TicketsService {
         ticketId,
         senderId,
         messageType: dto.messageType || 'COMMENT',
-        messageText: dto.messageText,
+        messageText: dto.messageText || null,
         isInternal: dto.isInternal || false,
       },
       include: {
@@ -1236,8 +1236,23 @@ export class TicketsService {
             userType: true,
           },
         },
+        attachments: true,
       },
     });
+
+    // Save attachment record if a file was uploaded
+    if (dto.fileUrl) {
+      await this.prisma.ticketAttachment.create({
+        data: {
+          ticketId,
+          messageId: message.id,
+          storageUrl: dto.fileUrl,
+          fileName: dto.fileName || null,
+          fileType: dto.fileType || null,
+          uploadedBy: senderId,
+        },
+      });
+    }
 
     // Track first response time if this is the first agent response
     if (!ticket.firstResponseAt && senderId !== ticket.createdBy) {
