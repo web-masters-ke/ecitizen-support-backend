@@ -7,6 +7,7 @@ const ROOM_INCLUDE = {
     include: {
       user: { select: { id: true, firstName: true, lastName: true, email: true, userType: true } },
     },
+    orderBy: [{ role: 'asc' as const }, { addedAt: 'asc' as const }],
   },
   messages: {
     orderBy: { createdAt: 'asc' as const },
@@ -375,6 +376,17 @@ export class ChatService {
     if (targetUserId === requesterId) return this.leaveRoom(roomId, requesterId);
     await this.prisma.chatParticipant.deleteMany({ where: { roomId, userId: targetUserId } });
     return { ok: true };
+  }
+
+  // ─── Set participant role (MEMBER / ADMIN) ────────────────────────────────
+  async setParticipantRole(roomId: string, targetUserId: string, role: string) {
+    const validRoles = ['MEMBER', 'ADMIN'];
+    const safeRole = validRoles.includes(role?.toUpperCase()) ? role.toUpperCase() : 'MEMBER';
+    await this.prisma.chatParticipant.updateMany({
+      where: { roomId, userId: targetUserId },
+      data: { role: safeRole },
+    });
+    return { ok: true, role: safeRole };
   }
 
   // ─── Search users (for new DM/group creation) ─────────────────────────

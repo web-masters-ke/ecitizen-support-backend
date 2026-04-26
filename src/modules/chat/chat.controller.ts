@@ -134,6 +134,16 @@ export class ChatController {
     return this.chatService.removeParticipant(roomId, userId, req.user.sub);
   }
 
+  /** Promote / demote a participant role: PATCH { role: "ADMIN" | "MEMBER" } */
+  @Patch('rooms/:roomId/participants/:userId/role')
+  setParticipantRole(
+    @Param('roomId') roomId: string,
+    @Param('userId') userId: string,
+    @Body() body: { role: string },
+  ) {
+    return this.chatService.setParticipantRole(roomId, userId, body.role);
+  }
+
   // ─── Typing indicator ───────────────────────────────────────────────────
 
   @Post(':roomId/typing')

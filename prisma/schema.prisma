@@ -1525,6 +1525,7 @@ model ChatParticipant {
   roomId  String   @map("room_id") @db.Uuid
   userId  String?  @map("user_id") @db.Uuid
   email   String?  @db.VarChar(255)
+  role    String   @default("MEMBER") @db.VarChar(20)
   addedAt DateTime @default(now()) @map("added_at")
   addedBy String?  @map("added_by") @db.Uuid
 
