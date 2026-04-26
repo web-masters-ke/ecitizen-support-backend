@@ -409,6 +409,15 @@ export class ChatService {
     return { ok: true, role: safeRole };
   }
 
+  // ─── Get participant user IDs for a room ────────────────────────────────
+  async getRoomParticipantIds(roomId: string): Promise<string[]> {
+    const rows = await this.prisma.chatParticipant.findMany({
+      where: { roomId, userId: { not: null } },
+      select: { userId: true },
+    });
+    return rows.map((r) => r.userId).filter(Boolean) as string[];
+  }
+
   // ─── Search users (for new DM/group creation) ─────────────────────────
   async searchUsers(query: string, excludeUserId: string) {
     return this.prisma.user.findMany({

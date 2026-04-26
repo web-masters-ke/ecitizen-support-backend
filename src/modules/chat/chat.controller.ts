@@ -86,8 +86,17 @@ export class ChatController {
 
     const message = await this.chatService.sendMessage(roomId, req.user.sub, senderName, dto);
 
-    // Broadcast to all room subscribers in real-time
+    // Broadcast to clients subscribed to this room channel
     this.wsGateway.emitToChannel(`chat:${roomId}`, 'chat:message', message);
+
+    // Also push to every participant's personal channel so the room list
+    // preview and unread badge update even when the room is not active.
+    const participantIds = await this.chatService.getRoomParticipantIds(roomId);
+    for (const uid of participantIds) {
+      if (uid !== req.user.sub) {
+        this.wsGateway.emitToChannel(`user:${uid}`, 'chat:message', message);
+      }
+    }
 
     return message;
   }
