@@ -174,6 +174,9 @@ export class AppWebSocketGateway
         agencyId: payload.agencyId,
         timestamp: new Date().toISOString(),
       });
+
+      // Broadcast presence to everyone in shared rooms
+      this.server.emit('presence:online', { userId: payload.sub });
     } catch (error) {
       this.logger.warn(
         `Connection rejected: invalid token (${client.id}): ${error.message}`,
@@ -190,6 +193,9 @@ export class AppWebSocketGateway
     const userId = client.data?.userId || 'unknown';
     this.connectedClients.delete(client.id);
     this.logger.log(`Client disconnected: ${client.id} (user: ${userId})`);
+    if (client.data?.userId) {
+      this.server.emit('presence:offline', { userId: client.data.userId });
+    }
   }
 
   // ============================================
@@ -403,6 +409,12 @@ export class AppWebSocketGateway
 
     if (publicChannels.includes(channel as WsChannel)) {
       return true;
+    }
+
+    // User personal channel: user:{userId} — only own channel allowed
+    if (channel.startsWith('user:')) {
+      const targetUserId = channel.replace('user:', '');
+      return targetUserId === client.data?.userId;
     }
 
     // Chat room channels: chat:{roomId}

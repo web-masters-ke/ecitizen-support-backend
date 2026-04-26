@@ -215,7 +215,7 @@ async function main() {
   const bkHash = await bcrypt.hash('BKakai@SCC2026!', 10);
   const bkAdmin = await prisma.user.upsert({
     where: { email: 'b.kakai@wasaachat.com' },
-    update: { passwordHash: bkHash, isActive: true, isVerified: true, userType: UserType.SUPER_ADMIN },
+    update: { passwordHash: bkHash, isActive: true, isVerified: true, userType: UserType.SUPER_ADMIN, firstName: 'Benjamin', lastName: 'Kakai' },
     create: {
       email: 'b.kakai@wasaachat.com',
       firstName: 'Benjamin',
@@ -226,6 +226,8 @@ async function main() {
       isVerified: true,
     },
   });
+  // Force-update password in case upsert matched an existing row with stale hash
+  await prisma.user.update({ where: { email: 'b.kakai@wasaachat.com' }, data: { passwordHash: bkHash, isActive: true, isVerified: true } });
   if (superAdminRole) {
     const bkRoleExists = await prisma.userRole.findFirst({ where: { userId: bkAdmin.id, roleId: superAdminRole.id } });
     if (!bkRoleExists) await prisma.userRole.create({ data: { userId: bkAdmin.id, roleId: superAdminRole.id } });
@@ -236,7 +238,7 @@ async function main() {
   const callHash = await bcrypt.hash('CallTest2026', 10);
   const callAdmin = await prisma.user.upsert({
     where: { email: 'call.test@ecitizen.go.ke' },
-    update: { passwordHash: callHash, isActive: true, isVerified: true, userType: UserType.SUPER_ADMIN },
+    update: { passwordHash: callHash, isActive: true, isVerified: true, userType: UserType.SUPER_ADMIN, firstName: 'Call', lastName: 'Test' },
     create: {
       email: 'call.test@ecitizen.go.ke',
       firstName: 'Call',
@@ -247,6 +249,8 @@ async function main() {
       isVerified: true,
     },
   });
+  // Force-update password in case upsert matched an existing row with stale hash
+  await prisma.user.update({ where: { email: 'call.test@ecitizen.go.ke' }, data: { passwordHash: callHash, isActive: true, isVerified: true } });
   if (superAdminRole) {
     const callRoleExists = await prisma.userRole.findFirst({ where: { userId: callAdmin.id, roleId: superAdminRole.id } });
     if (!callRoleExists) await prisma.userRole.create({ data: { userId: callAdmin.id, roleId: superAdminRole.id } });
