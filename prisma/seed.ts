@@ -254,6 +254,38 @@ async function main() {
   console.log('✅ Call test super admin created (call.test@ecitizen.go.ke / CallTest@2026!)');
 
   // ==========================================
+  // Staff agents — for group chat testing
+  // ==========================================
+  const agentRole = await prisma.role.findUnique({ where: { name: 'L1_AGENT' } });
+  const supervisorRole = await prisma.role.findUnique({ where: { name: 'L1_SUPERVISOR' } });
+  const agencyAdminRole = await prisma.role.findUnique({ where: { name: 'AGENCY_ADMIN' } });
+
+  const staffUsers = [
+    { email: 'amina.wanjiku@ecitizen.go.ke',   firstName: 'Amina',   lastName: 'Wanjiku',   role: agentRole,      pw: 'Agent@2026!' },
+    { email: 'brian.otieno@ecitizen.go.ke',     firstName: 'Brian',   lastName: 'Otieno',    role: agentRole,      pw: 'Agent@2026!' },
+    { email: 'grace.mutua@ecitizen.go.ke',      firstName: 'Grace',   lastName: 'Mutua',     role: agentRole,      pw: 'Agent@2026!' },
+    { email: 'david.kamau@ecitizen.go.ke',      firstName: 'David',   lastName: 'Kamau',     role: supervisorRole, pw: 'Super@2026!' },
+    { email: 'fatuma.ali@ecitizen.go.ke',       firstName: 'Fatuma',  lastName: 'Ali',       role: agentRole,      pw: 'Agent@2026!' },
+    { email: 'james.mwangi@ecitizen.go.ke',     firstName: 'James',   lastName: 'Mwangi',    role: supervisorRole, pw: 'Super@2026!' },
+    { email: 'lucy.njeri@ecitizen.go.ke',       firstName: 'Lucy',    lastName: 'Njeri',     role: agentRole,      pw: 'Agent@2026!' },
+    { email: 'peter.odhiambo@ecitizen.go.ke',   firstName: 'Peter',   lastName: 'Odhiambo',  role: agencyAdminRole,pw: 'AgAdmin@2026!' },
+  ];
+
+  for (const s of staffUsers) {
+    const hash = await bcrypt.hash(s.pw, 10);
+    const u = await prisma.user.upsert({
+      where: { email: s.email },
+      update: { passwordHash: hash, isActive: true, isVerified: true },
+      create: { email: s.email, firstName: s.firstName, lastName: s.lastName, userType: UserType.AGENT, passwordHash: hash, isActive: true, isVerified: true },
+    });
+    if (s.role) {
+      const exists = await prisma.userRole.findFirst({ where: { userId: u.id, roleId: s.role.id } });
+      if (!exists) await prisma.userRole.create({ data: { userId: u.id, roleId: s.role.id } });
+    }
+    console.log(`✅ Staff: ${s.firstName} ${s.lastName} (${s.email} / ${s.pw})`);
+  }
+
+  // ==========================================
   // 7. Create Sample Agency
   // ==========================================
   const sampleAgency = await prisma.agency.upsert({
