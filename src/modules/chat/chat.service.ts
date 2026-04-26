@@ -46,12 +46,18 @@ export class ChatService {
       orderBy: { room: { updatedAt: 'desc' } },
     });
 
-    return participations.map((p) => {
+    return Promise.all(participations.map(async (p) => {
       const room = p.room;
       const lastMsg = room.messages[0] ?? null;
-      const unread = 0; // computed client-side from readBy
-      return { ...room, lastMessage: lastMsg, unreadCount: unread };
-    });
+      const unreadCount = await this.prisma.chatMessage.count({
+        where: {
+          roomId: room.id,
+          senderId: { not: userId },
+          readBy: { none: { userId } },
+        },
+      });
+      return { ...room, lastMessage: lastMsg, unreadCount };
+    }));
   }
 
   // ─── Direct (1:1) room ────────────────────────────────────────────────
