@@ -231,8 +231,10 @@ export class ChatService {
       update: {},
     }).catch(() => {});
 
-    let messageType: 'TEXT' | 'FILE' | 'IMAGE' | 'VOICE' = 'TEXT';
-    if (dto.messageType === 'VOICE') {
+    let messageType: 'TEXT' | 'FILE' | 'IMAGE' | 'VOICE' | 'SYSTEM' = 'TEXT';
+    if (dto.messageType === 'SYSTEM') {
+      messageType = 'SYSTEM';
+    } else if (dto.messageType === 'VOICE') {
       messageType = 'VOICE';
     } else if (dto.fileUrl) {
       messageType = dto.fileName?.match(/\.(jpg|jpeg|png|gif|webp)$/i) ? 'IMAGE' : 'FILE';
