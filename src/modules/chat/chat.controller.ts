@@ -122,6 +122,12 @@ export class ChatController {
     return msg;
   }
 
+  /** Delete a room and all its messages (group rooms only) */
+  @Delete('rooms/:roomId')
+  deleteRoom(@Param('roomId') roomId: string) {
+    return this.chatService.deleteRoom(roomId);
+  }
+
   /** Leave a room (removes self from participants) */
   @Delete('rooms/:roomId/participants/me')
   leaveRoom(@Param('roomId') roomId: string, @Request() req: any) {

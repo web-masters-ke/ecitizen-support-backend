@@ -365,6 +365,20 @@ export class ChatService {
     });
   }
 
+  // ─── Delete room ─────────────────────────────────────────────────────────
+  async deleteRoom(roomId: string) {
+    const room = await this.prisma.chatRoom.findUnique({ where: { id: roomId } });
+    if (!room) throw new NotFoundException('Room not found');
+    const msgs = await this.prisma.chatMessage.findMany({ where: { roomId }, select: { id: true } });
+    if (msgs.length) {
+      await this.prisma.chatReadReceipt.deleteMany({ where: { messageId: { in: msgs.map((m) => m.id) } } });
+    }
+    await this.prisma.chatMessage.deleteMany({ where: { roomId } });
+    await this.prisma.chatParticipant.deleteMany({ where: { roomId } });
+    await this.prisma.chatRoom.delete({ where: { id: roomId } });
+    return { ok: true };
+  }
+
   // ─── Leave room ──────────────────────────────────────────────────────────
   async leaveRoom(roomId: string, userId: string) {
     await this.prisma.chatParticipant.deleteMany({ where: { roomId, userId } });
