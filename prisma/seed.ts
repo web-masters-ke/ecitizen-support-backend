@@ -233,7 +233,7 @@ async function main() {
   console.log('✅ Personal super admin created (b.kakai@wasaachat.com / BKakai@SCC2026!)');
 
   // ─── Call test super admin ─────────────────────────────────────────────────
-  const callHash = await bcrypt.hash('CallTest@2026!', 10);
+  const callHash = await bcrypt.hash('CallTest2026', 10);
   const callAdmin = await prisma.user.upsert({
     where: { email: 'call.test@ecitizen.go.ke' },
     update: { passwordHash: callHash, isActive: true, isVerified: true, userType: UserType.SUPER_ADMIN },
@@ -251,7 +251,7 @@ async function main() {
     const callRoleExists = await prisma.userRole.findFirst({ where: { userId: callAdmin.id, roleId: superAdminRole.id } });
     if (!callRoleExists) await prisma.userRole.create({ data: { userId: callAdmin.id, roleId: superAdminRole.id } });
   }
-  console.log('✅ Call test super admin created (call.test@ecitizen.go.ke / CallTest@2026!)');
+  console.log('✅ Call test super admin created (call.test@ecitizen.go.ke / CallTest2026)');
 
   // ==========================================
   // Staff agents — for group chat testing
