@@ -5,6 +5,8 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import cookieParser from 'cookie-parser';
 import helmet from 'helmet';
 import compression from 'compression';
+import * as express from 'express';
+import * as path from 'path';
 import { AppModule } from './app.module';
 import { HttpExceptionFilter } from './common/filters/http-exception.filter';
 import { TransformInterceptor } from './common/interceptors/transform.interceptor';
@@ -31,9 +33,18 @@ async function bootstrap() {
   app.setGlobalPrefix('api/v1');
 
   // Security
-  app.use(helmet());
+  app.use(helmet({ crossOriginResourcePolicy: { policy: 'cross-origin' } }));
   app.use(compression());
   app.use(cookieParser());
+
+  // Serve uploaded files statically — cross-origin allowed so admin/webclient can load media
+  const uploadDir = path.resolve(configService.get<string>('UPLOAD_DIR', './uploads'));
+  app.use('/uploads', express.static(uploadDir, {
+    setHeaders: (res) => {
+      res.setHeader('Access-Control-Allow-Origin', '*');
+      res.setHeader('Cross-Origin-Resource-Policy', 'cross-origin');
+    },
+  }));
 
   // CORS
   app.enableCors({
