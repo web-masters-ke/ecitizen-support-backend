@@ -1,0 +1,4666 @@
+[
+  {
+    "agencyCode": "CABINET-OFFICE",
+    "agencyName": "Cabinet Office",
+    "email": "cabinet-office@ecitizen.go.ke",
+    "firstName": "Cabinet",
+    "lastName": "Office",
+    "password": "CabinetOffice@2026!"
+  },
+  {
+    "agencyCode": "NATIONAL-SECURITY-COUNCIL",
+    "agencyName": "National Security Council",
+    "email": "national-security-council@ecitizen.go.ke",
+    "firstName": "National",
+    "lastName": "Security",
+    "password": "NationalSecurity@2026!"
+  },
+  {
+    "agencyCode": "ASSUMPTION-OF-THE-OFFICE-OF-PRESIDENT-CO",
+    "agencyName": "Assumption of the Office of President Committee",
+    "email": "assumption-of-the-office-of-president-co@ecitizen.go.ke",
+    "firstName": "Assumption",
+    "lastName": "of",
+    "password": "AssumptionOf@2026!"
+  },
+  {
+    "agencyCode": "NATIONAL-SECURITY-ADVISORY-COMMITTEE-NSA",
+    "agencyName": "National Security Advisory Committee (NSAC)",
+    "email": "national-security-advisory-committee-nsa@ecitizen.go.ke",
+    "firstName": "National",
+    "lastName": "Security",
+    "password": "NationalSecurity@2026!"
+  },
+  {
+    "agencyCode": "NATIONAL-INTELLIGENCE-SERVICE",
+    "agencyName": "National Intelligence Service",
+    "email": "national-intelligence-service@ecitizen.go.ke",
+    "firstName": "National",
+    "lastName": "Intelligence",
+    "password": "NationalIntelligence@2026!"
+  },
+  {
+    "agencyCode": "KENYA-INTERNATIONAL-BOUNDARIES-OFFICE",
+    "agencyName": "Kenya International Boundaries Office",
+    "email": "kenya-international-boundaries-office@ecitizen.go.ke",
+    "firstName": "Kenya",
+    "lastName": "International",
+    "password": "KenyaInternational@2026!"
+  },
+  {
+    "agencyCode": "JOINT-SECURITY-SECRETARIAT",
+    "agencyName": "Joint Security Secretariat",
+    "email": "joint-security-secretariat@ecitizen.go.ke",
+    "firstName": "Joint",
+    "lastName": "Security",
+    "password": "JointSecurity@2026!"
+  },
+  {
+    "agencyCode": "NATIONAL-COUNTER-TERRORISM-CENTRE-NCTC",
+    "agencyName": "National Counter Terrorism Centre (NCTC)",
+    "email": "national-counter-terrorism-centre-nctc@ecitizen.go.ke",
+    "firstName": "National",
+    "lastName": "Counter",
+    "password": "NationalCounter@2026!"
+  },
+  {
+    "agencyCode": "GOVERNMENT-PRESS",
+    "agencyName": "Government Press",
+    "email": "government-press@ecitizen.go.ke",
+    "firstName": "Government",
+    "lastName": "Press",
+    "password": "GovernmentPress@2026!"
+  },
+  {
+    "agencyCode": "BETTING-CONTROL-AND-LICENSING-BOARD",
+    "agencyName": "Betting Control and Licensing Board",
+    "email": "betting-control-and-licensing-board@ecitizen.go.ke",
+    "firstName": "Betting",
+    "lastName": "Control",
+    "password": "BettingControl@2026!"
+  },
+  {
+    "agencyCode": "NATIONAL-ECONOMIC-AND-SOCIAL-COUNCIL-NES",
+    "agencyName": "National Economic and Social Council (NESC)",
+    "email": "national-economic-and-social-council-nes@ecitizen.go.ke",
+    "firstName": "National",
+    "lastName": "Economic",
+    "password": "NationalEconomic@2026!"
+  },
+  {
+    "agencyCode": "PRESIDENTIAL-ADVISORY-COUNCIL-ON-SCIENCE",
+    "agencyName": "Presidential Advisory Council on Science and Technology",
+    "email": "presidential-advisory-council-on-science@ecitizen.go.ke",
+    "firstName": "Presidential",
+    "lastName": "Advisory",
+    "password": "PresidentialAdvisory@2026!"
+  },
+  {
+    "agencyCode": "PRESIDENTS-BUDGET-OFFICE",
+    "agencyName": "President’s Budget Office",
+    "email": "presidents-budget-office@ecitizen.go.ke",
+    "firstName": "Presidents",
+    "lastName": "Budget",
+    "password": "PresidentsBudget@2026!"
+  },
+  {
+    "agencyCode": "FINANCIAL-REPORTING-CENTRE",
+    "agencyName": "Financial Reporting Centre",
+    "email": "financial-reporting-centre@ecitizen.go.ke",
+    "firstName": "Financial",
+    "lastName": "Reporting",
+    "password": "FinancialReporting@2026!"
+  },
+  {
+    "agencyCode": "PRESIDENTS-COUNCIL-OF-ECONOMIC-ADVISORS",
+    "agencyName": "President's Council of Economic Advisors",
+    "email": "presidents-council-of-economic-advisors@ecitizen.go.ke",
+    "firstName": "Presidents",
+    "lastName": "Council",
+    "password": "PresidentsCouncil@2026!"
+  },
+  {
+    "agencyCode": "NATIONAL-AND-COUNTY-GOVERNMENT-SUMMIT",
+    "agencyName": "National and County Government Summit",
+    "email": "national-and-county-government-summit@ecitizen.go.ke",
+    "firstName": "National",
+    "lastName": "and",
+    "password": "NationalAnd@2026!"
+  },
+  {
+    "agencyCode": "POWER-OF-MERCY-ADVISORY-COMMITTEE-POMAC",
+    "agencyName": "Power of Mercy Advisory Committee (POMAC)",
+    "email": "power-of-mercy-advisory-committee-pomac@ecitizen.go.ke",
+    "firstName": "Power",
+    "lastName": "of",
+    "password": "PowerOf@2026!"
+  },
+  {
+    "agencyCode": "DIRECTORATE-OF-RESOURCE-SURVEYS-AND-REMO",
+    "agencyName": "Directorate of Resource Surveys and Remote Sensing",
+    "email": "directorate-of-resource-surveys-and-remo@ecitizen.go.ke",
+    "firstName": "Directorate",
+    "lastName": "of",
+    "password": "DirectorateOf@2026!"
+  },
+  {
+    "agencyCode": "DIRECTORATE-OF-NATIONAL-COHESION-AND-VAL",
+    "agencyName": "Directorate of National Cohesion and Values",
+    "email": "directorate-of-national-cohesion-and-val@ecitizen.go.ke",
+    "firstName": "Directorate",
+    "lastName": "of",
+    "password": "DirectorateOf@2026!"
+  },
+  {
+    "agencyCode": "KENYA-SOUTH-SUDAN-LIAISON-OFFICE-KESSULO",
+    "agencyName": "Kenya South Sudan Liaison Office (KESSULO)",
+    "email": "kenya-south-sudan-liaison-office-kessulo@ecitizen.go.ke",
+    "firstName": "Kenya",
+    "lastName": "South",
+    "password": "KenyaSouth@2026!"
+  },
+  {
+    "agencyCode": "PUBLIC-ENTITIES-OVERSIGHT-OFFICE",
+    "agencyName": "Public Entities Oversight Office",
+    "email": "public-entities-oversight-office@ecitizen.go.ke",
+    "firstName": "Public",
+    "lastName": "Entities",
+    "password": "PublicEntities@2026!"
+  },
+  {
+    "agencyCode": "STATE-CORPORATIONS-ADVISORY-COMMITTEE-SC",
+    "agencyName": "State Corporations Advisory Committee (SCAC)",
+    "email": "state-corporations-advisory-committee-sc@ecitizen.go.ke",
+    "firstName": "State",
+    "lastName": "Corporations",
+    "password": "StateCorporations@2026!"
+  },
+  {
+    "agencyCode": "INSPECTORATE-OF-STATE-CORPORATIONS",
+    "agencyName": "Inspectorate of State Corporations",
+    "email": "inspectorate-of-state-corporations@ecitizen.go.ke",
+    "firstName": "Inspectorate",
+    "lastName": "of",
+    "password": "InspectorateOf@2026!"
+  },
+  {
+    "agencyCode": "INTERNATIONAL-DEVELOPMENT-PARTNERSHIPS-C",
+    "agencyName": "International Development Partnerships Co-ordination",
+    "email": "international-development-partnerships-c@ecitizen.go.ke",
+    "firstName": "International",
+    "lastName": "Development",
+    "password": "InternationalDevelopment@2026!"
+  },
+  {
+    "agencyCode": "NAIROBI-RIVERS-COMMISSION",
+    "agencyName": "Nairobi Rivers Commission",
+    "email": "nairobi-rivers-commission@ecitizen.go.ke",
+    "firstName": "Nairobi",
+    "lastName": "Rivers",
+    "password": "NairobiRivers@2026!"
+  },
+  {
+    "agencyCode": "INTERGOVERNMENT-BUDGET-AND-ECONOMIC-COUN",
+    "agencyName": "Inter-Government Budget and Economic Council (IBEC)",
+    "email": "intergovernment-budget-and-economic-coun@ecitizen.go.ke",
+    "firstName": "InterGovernment",
+    "lastName": "Budget",
+    "password": "IntergovernmentBudget@2026!"
+  },
+  {
+    "agencyCode": "INTERGOVERNMENTAL-RELATIONS-TECHNICAL-CO",
+    "agencyName": "Inter-Governmental Relations Technical Committee",
+    "email": "intergovernmental-relations-technical-co@ecitizen.go.ke",
+    "firstName": "InterGovernmental",
+    "lastName": "Relations",
+    "password": "IntergovernmentalRelations@2026!"
+  },
+  {
+    "agencyCode": "NATIONAL-AND-COUNTY-GOVERNMENTS-HONOURS",
+    "agencyName": "National and County Governments Honours Advisory Committee",
+    "email": "national-and-county-governments-honours@ecitizen.go.ke",
+    "firstName": "National",
+    "lastName": "and",
+    "password": "NationalAnd@2026!"
+  },
+  {
+    "agencyCode": "COFFEE-SUBSECTOR-REFORMS-IMPLEMENTATION",
+    "agencyName": "Coffee Sub-Sector Reforms Implementation Standing Committee",
+    "email": "coffee-subsector-reforms-implementation@ecitizen.go.ke",
+    "firstName": "Coffee",
+    "lastName": "SubSector",
+    "password": "CoffeeSubsector@2026!"
+  },
+  {
+    "agencyCode": "STATE-DEPARTMENT-OF-CABINET-AFFAIRS",
+    "agencyName": "State Department of Cabinet Affairs",
+    "email": "state-department-of-cabinet-affairs@ecitizen.go.ke",
+    "firstName": "State",
+    "lastName": "Department",
+    "password": "StateDepartment@2026!"
+  },
+  {
+    "agencyCode": "KENYA-FOREIGN-SERVICE-INSTITUTE",
+    "agencyName": "Kenya Foreign Service Institute",
+    "email": "kenya-foreign-service-institute@ecitizen.go.ke",
+    "firstName": "Kenya",
+    "lastName": "Foreign",
+    "password": "KenyaForeign@2026!"
+  },
+  {
+    "agencyCode": "ALL-KENYA-MISSIONS-ABROAD",
+    "agencyName": "All Kenya Missions Abroad",
+    "email": "all-kenya-missions-abroad@ecitizen.go.ke",
+    "firstName": "All",
+    "lastName": "Kenya",
+    "password": "AllKenya@2026!"
+  },
+  {
+    "agencyCode": "STATE-DEPARTMENT-FOR-DIASPORA-AFFAIRS",
+    "agencyName": "State Department for Diaspora Affairs",
+    "email": "state-department-for-diaspora-affairs@ecitizen.go.ke",
+    "firstName": "State",
+    "lastName": "Department",
+    "password": "StateDepartment@2026!"
+  },
+  {
+    "agencyCode": "DIASPORA-PLACEMENT-AGENCY",
+    "agencyName": "Diaspora Placement Agency",
+    "email": "diaspora-placement-agency@ecitizen.go.ke",
+    "firstName": "Diaspora",
+    "lastName": "Placement",
+    "password": "DiasporaPlacement@2026!"
+  },
+  {
+    "agencyCode": "THE-STEERING-COMMITTEE-ON-THE-GOVERNMENT",
+    "agencyName": "The Steering Committee on the Government Legislative Agenda and Parliamentary Liaison",
+    "email": "the-steering-committee-on-the-government@ecitizen.go.ke",
+    "firstName": "Steering",
+    "lastName": "Committee",
+    "password": "TheSteering@2026!"
+  },
+  {
+    "agencyCode": "NATIONAL-GOVERNMENT-ADMINISTRATION-OFFIC",
+    "agencyName": "National Government Administration Officers",
+    "email": "national-government-administration-offic@ecitizen.go.ke",
+    "firstName": "National",
+    "lastName": "Government",
+    "password": "NationalGovernment@2026!"
+  },
+  {
+    "agencyCode": "SECURITY-TRAINING-INSTITUTIONS",
+    "agencyName": "Security Training Institutions;",
+    "email": "security-training-institutions@ecitizen.go.ke",
+    "firstName": "Security",
+    "lastName": "Training",
+    "password": "SecurityTraining@2026!"
+  },
+  {
+    "agencyCode": "NATIONAL-CRIME-RESEARCH-CENTRE",
+    "agencyName": "National Crime Research Centre",
+    "email": "national-crime-research-centre@ecitizen.go.ke",
+    "firstName": "National",
+    "lastName": "Crime",
+    "password": "NationalCrime@2026!"
+  },
+  {
+    "agencyCode": "GOVERNMENT-CHEMIST",
+    "agencyName": "Government Chemist",
+    "email": "government-chemist@ecitizen.go.ke",
+    "firstName": "Government",
+    "lastName": "Chemist",
+    "password": "GovernmentChemist@2026!"
+  },
+  {
+    "agencyCode": "NGO-COORDINATION-BOARD",
+    "agencyName": "NGO Coordination Board",
+    "email": "ngo-coordination-board@ecitizen.go.ke",
+    "firstName": "NGO",
+    "lastName": "Coordination",
+    "password": "NgoCoordination@2026!"
+  },
+  {
+    "agencyCode": "MT-KENYA-SCHOOL-OF-LEADERSHIP-KENYA-SCHO",
+    "agencyName": "Mt. Kenya School of Leadership (Kenya School of Adventure and Leadership)",
+    "email": "mt-kenya-school-of-leadership-kenya-scho@ecitizen.go.ke",
+    "firstName": "Mt",
+    "lastName": "Kenya",
+    "password": "MtKenya@2026!"
+  },
+  {
+    "agencyCode": "NATIONAL-AUTHORITY-FOR-THE-CAMPAIGN-AGAI",
+    "agencyName": "National Authority for the Campaign Against Alcohol and Drug Abuse (NACADA)",
+    "email": "national-authority-for-the-campaign-agai@ecitizen.go.ke",
+    "firstName": "National",
+    "lastName": "Authority",
+    "password": "NationalAuthority@2026!"
+  },
+  {
+    "agencyCode": "INDEPENDENT-POLICING-OVERSIGHT-AUTHORITY",
+    "agencyName": "Independent Policing Oversight Authority",
+    "email": "independent-policing-oversight-authority@ecitizen.go.ke",
+    "firstName": "Independent",
+    "lastName": "Policing",
+    "password": "IndependentPolicing@2026!"
+  },
+  {
+    "agencyCode": "PRIVATE-SECURITY-REGULATORY-AUTHORITY",
+    "agencyName": "Private Security Regulatory Authority",
+    "email": "private-security-regulatory-authority@ecitizen.go.ke",
+    "firstName": "Private",
+    "lastName": "Security",
+    "password": "PrivateSecurity@2026!"
+  },
+  {
+    "agencyCode": "NATIONAL-COHESION-AND-INTEGRATION-COMMIS",
+    "agencyName": "National Cohesion and Integration Commission",
+    "email": "national-cohesion-and-integration-commis@ecitizen.go.ke",
+    "firstName": "National",
+    "lastName": "Cohesion",
+    "password": "NationalCohesion@2026!"
+  },
+  {
+    "agencyCode": "KENYA-COAST-GUARD-SERVICE",
+    "agencyName": "Kenya Coast Guard Service",
+    "email": "kenya-coast-guard-service@ecitizen.go.ke",
+    "firstName": "Kenya",
+    "lastName": "Coast",
+    "password": "KenyaCoast@2026!"
+  },
+  {
+    "agencyCode": "NATIONAL-COMPUTER-COORDINATION-COMMITEE",
+    "agencyName": "National Computer Coordination Commitee and Secretariat",
+    "email": "national-computer-coordination-commitee@ecitizen.go.ke",
+    "firstName": "National",
+    "lastName": "Computer",
+    "password": "NationalComputer@2026!"
+  },
+  {
+    "agencyCode": "KENYA-PRISONS-SERVICE",
+    "agencyName": "Kenya Prisons Service",
+    "email": "kenya-prisons-service@ecitizen.go.ke",
+    "firstName": "Kenya",
+    "lastName": "Prisons",
+    "password": "KenyaPrisons@2026!"
+  },
+  {
+    "agencyCode": "BORSTAL-INSTITUTIONS",
+    "agencyName": "Borstal Institutions",
+    "email": "borstal-institutions@ecitizen.go.ke",
+    "firstName": "Borstal",
+    "lastName": "Institutions",
+    "password": "BorstalInstitutions@2026!"
+  },
+  {
+    "agencyCode": "PRISONS-ENTERPRISE-FUND",
+    "agencyName": "Prisons Enterprise Fund",
+    "email": "prisons-enterprise-fund@ecitizen.go.ke",
+    "firstName": "Prisons",
+    "lastName": "Enterprise",
+    "password": "PrisonsEnterprise@2026!"
+  },
+  {
+    "agencyCode": "PROBATION-AND-AFTERCARE-SERVICE",
+    "agencyName": "Probation and Aftercare Service",
+    "email": "probation-and-aftercare-service@ecitizen.go.ke",
+    "firstName": "Probation",
+    "lastName": "and",
+    "password": "ProbationAnd@2026!"
+  },
+  {
+    "agencyCode": "NATIONAL-POLICE-SERVICE",
+    "agencyName": "National Police Service",
+    "email": "national-police-service@ecitizen.go.ke",
+    "firstName": "National",
+    "lastName": "Police",
+    "password": "NationalPolice@2026!"
+  },
+  {
+    "agencyCode": "NATIONAL-REGISTRATION-BUREAU",
+    "agencyName": "National Registration Bureau",
+    "email": "national-registration-bureau@ecitizen.go.ke",
+    "firstName": "National",
+    "lastName": "Registration",
+    "password": "NationalRegistration@2026!"
+  },
+  {
+    "agencyCode": "CIVIL-REGISTRATION-SERVICES",
+    "agencyName": "Civil Registration Services",
+    "email": "civil-registration-services@ecitizen.go.ke",
+    "firstName": "Civil",
+    "lastName": "Registration",
+    "password": "CivilRegistration@2026!"
+  },
+  {
+    "agencyCode": "DIRECTORATE-OF-IMMIGRATION",
+    "agencyName": "Directorate of Immigration",
+    "email": "directorate-of-immigration@ecitizen.go.ke",
+    "firstName": "Directorate",
+    "lastName": "of",
+    "password": "DirectorateOf@2026!"
+  },
+  {
+    "agencyCode": "REFUGEE-AFFAIRS-SECRETARIAT",
+    "agencyName": "Refugee Affairs Secretariat",
+    "email": "refugee-affairs-secretariat@ecitizen.go.ke",
+    "firstName": "Refugee",
+    "lastName": "Affairs",
+    "password": "RefugeeAffairs@2026!"
+  },
+  {
+    "agencyCode": "THE-REFUGEE-AFFAIRS-COMMITTEE",
+    "agencyName": "The Refugee Affairs Committee",
+    "email": "the-refugee-affairs-committee@ecitizen.go.ke",
+    "firstName": "Refugee",
+    "lastName": "Affairs",
+    "password": "TheRefugee@2026!"
+  },
+  {
+    "agencyCode": "DIRECTORATE-OF-ECITIZEN-SERVICES",
+    "agencyName": "Directorate of e-Citizen Services",
+    "email": "directorate-of-ecitizen-services@ecitizen.go.ke",
+    "firstName": "Directorate",
+    "lastName": "of",
+    "password": "DirectorateOf@2026!"
+  },
+  {
+    "agencyCode": "MINISTRY-OF-DEFENCE",
+    "agencyName": "Ministry of Defence",
+    "email": "ministry-of-defence@ecitizen.go.ke",
+    "firstName": "Ministry",
+    "lastName": "of",
+    "password": "MinistryOf@2026!"
+  },
+  {
+    "agencyCode": "KENYA-DEFENCE-FORCES",
+    "agencyName": "Kenya Defence Forces",
+    "email": "kenya-defence-forces@ecitizen.go.ke",
+    "firstName": "Kenya",
+    "lastName": "Defence",
+    "password": "KenyaDefence@2026!"
+  },
+  {
+    "agencyCode": "NATIONAL-DEFENCE-COUNCIL",
+    "agencyName": "National Defence Council",
+    "email": "national-defence-council@ecitizen.go.ke",
+    "firstName": "National",
+    "lastName": "Defence",
+    "password": "NationalDefence@2026!"
+  },
+  {
+    "agencyCode": "NATIONAL-DEFENCE-UNIVERSITY-OF-KENYA",
+    "agencyName": "National Defence University of Kenya",
+    "email": "national-defence-university-of-kenya@ecitizen.go.ke",
+    "firstName": "National",
+    "lastName": "Defence",
+    "password": "NationalDefence@2026!"
+  },
+  {
+    "agencyCode": "DEFENCE-STAFF-COLLEGE",
+    "agencyName": "Defence Staff College",
+    "email": "defence-staff-college@ecitizen.go.ke",
+    "firstName": "Defence",
+    "lastName": "Staff",
+    "password": "DefenceStaff@2026!"
+  },
+  {
+    "agencyCode": "KENYA-ORDINANCE-FACTORY-CORPORATION",
+    "agencyName": "Kenya Ordinance Factory Corporation",
+    "email": "kenya-ordinance-factory-corporation@ecitizen.go.ke",
+    "firstName": "Kenya",
+    "lastName": "Ordinance",
+    "password": "KenyaOrdinance@2026!"
+  },
+  {
+    "agencyCode": "KENYA-SPACE-AGENCY",
+    "agencyName": "Kenya Space Agency",
+    "email": "kenya-space-agency@ecitizen.go.ke",
+    "firstName": "Kenya",
+    "lastName": "Space",
+    "password": "KenyaSpace@2026!"
+  },
+  {
+    "agencyCode": "KENYA-MEAT-COMMISSION",
+    "agencyName": "Kenya Meat Commission",
+    "email": "kenya-meat-commission@ecitizen.go.ke",
+    "firstName": "Kenya",
+    "lastName": "Meat",
+    "password": "KenyaMeat@2026!"
+  },
+  {
+    "agencyCode": "KENYA-SHIPYARDS-LIMITED",
+    "agencyName": "Kenya Shipyards Limited",
+    "email": "kenya-shipyards-limited@ecitizen.go.ke",
+    "firstName": "Kenya",
+    "lastName": "Shipyards",
+    "password": "KenyaShipyards@2026!"
+  },
+  {
+    "agencyCode": "ULINZI-PRIME-HEALTH-SERVICES-FUND",
+    "agencyName": "Ulinzi Prime Health Services Fund",
+    "email": "ulinzi-prime-health-services-fund@ecitizen.go.ke",
+    "firstName": "Ulinzi",
+    "lastName": "Prime",
+    "password": "UlinziPrime@2026!"
+  },
+  {
+    "agencyCode": "CENTRAL-BANK-OF-KENYA",
+    "agencyName": "Central Bank of Kenya",
+    "email": "central-bank-of-kenya@ecitizen.go.ke",
+    "firstName": "Central",
+    "lastName": "Bank",
+    "password": "CentralBank@2026!"
+  },
+  {
+    "agencyCode": "KENYA-REVENUE-AUTHORITY",
+    "agencyName": "Kenya Revenue Authority",
+    "email": "kenya-revenue-authority@ecitizen.go.ke",
+    "firstName": "Kenya",
+    "lastName": "Revenue",
+    "password": "KenyaRevenue@2026!"
+  },
+  {
+    "agencyCode": "CAPITAL-MARKETS-AUTHORITY",
+    "agencyName": "Capital Markets Authority",
+    "email": "capital-markets-authority@ecitizen.go.ke",
+    "firstName": "Capital",
+    "lastName": "Markets",
+    "password": "CapitalMarkets@2026!"
+  },
+  {
+    "agencyCode": "COMPETITION-AUTHORITY-OF-KENYA",
+    "agencyName": "Competition Authority of Kenya",
+    "email": "competition-authority-of-kenya@ecitizen.go.ke",
+    "firstName": "Competition",
+    "lastName": "Authority",
+    "password": "CompetitionAuthority@2026!"
+  },
+  {
+    "agencyCode": "INSURANCE-REGULATORY-AUTHORITY",
+    "agencyName": "Insurance Regulatory Authority",
+    "email": "insurance-regulatory-authority@ecitizen.go.ke",
+    "firstName": "Insurance",
+    "lastName": "Regulatory",
+    "password": "InsuranceRegulatory@2026!"
+  },
+  {
+    "agencyCode": "RETIREMENT-BENEFITS-AUTHORITY",
+    "agencyName": "Retirement Benefits Authority",
+    "email": "retirement-benefits-authority@ecitizen.go.ke",
+    "firstName": "Retirement",
+    "lastName": "Benefits",
+    "password": "RetirementBenefits@2026!"
+  },
+  {
+    "agencyCode": "UNCLAIMED-FINANCIAL-ASSET-AUTHORITY",
+    "agencyName": "Unclaimed Financial Asset Authority",
+    "email": "unclaimed-financial-asset-authority@ecitizen.go.ke",
+    "firstName": "Unclaimed",
+    "lastName": "Financial",
+    "password": "UnclaimedFinancial@2026!"
+  },
+  {
+    "agencyCode": "KENYA-DEPOSIT-INSURANCE-CORPORATION",
+    "agencyName": "Kenya Deposit Insurance Corporation",
+    "email": "kenya-deposit-insurance-corporation@ecitizen.go.ke",
+    "firstName": "Kenya",
+    "lastName": "Deposit",
+    "password": "KenyaDeposit@2026!"
+  },
+  {
+    "agencyCode": "EQUALIZATION-FUND",
+    "agencyName": "Equalization Fund",
+    "email": "equalization-fund@ecitizen.go.ke",
+    "firstName": "Equalization",
+    "lastName": "Fund",
+    "password": "EqualizationFund@2026!"
+  },
+  {
+    "agencyCode": "CONTINGENCIES-FUND",
+    "agencyName": "Contingencies Fund",
+    "email": "contingencies-fund@ecitizen.go.ke",
+    "firstName": "Contingencies",
+    "lastName": "Fund",
+    "password": "ContingenciesFund@2026!"
+  },
+  {
+    "agencyCode": "NAIROBI-INTERNATIONAL-FINANCIAL-CENTRE",
+    "agencyName": "Nairobi International Financial Centre",
+    "email": "nairobi-international-financial-centre@ecitizen.go.ke",
+    "firstName": "Nairobi",
+    "lastName": "International",
+    "password": "NairobiInternational@2026!"
+  },
+  {
+    "agencyCode": "PRIVATIZATION-COMMISSION",
+    "agencyName": "Privatization Commission",
+    "email": "privatization-commission@ecitizen.go.ke",
+    "firstName": "Privatization",
+    "lastName": "Commission",
+    "password": "PrivatizationCommission@2026!"
+  },
+  {
+    "agencyCode": "PUBLIC-PRIVATE-PARTNERSHIP-UNIT",
+    "agencyName": "Public Private Partnership Unit",
+    "email": "public-private-partnership-unit@ecitizen.go.ke",
+    "firstName": "Public",
+    "lastName": "Private",
+    "password": "PublicPrivate@2026!"
+  },
+  {
+    "agencyCode": "PUBLIC-PROCUREMENT-REGULATORY-AUTHORITY",
+    "agencyName": "Public Procurement Regulatory Authority",
+    "email": "public-procurement-regulatory-authority@ecitizen.go.ke",
+    "firstName": "Public",
+    "lastName": "Procurement",
+    "password": "PublicProcurement@2026!"
+  },
+  {
+    "agencyCode": "KENYA-REINSURANCE-CORPORATION",
+    "agencyName": "Kenya Reinsurance Corporation",
+    "email": "kenya-reinsurance-corporation@ecitizen.go.ke",
+    "firstName": "Kenya",
+    "lastName": "Reinsurance",
+    "password": "KenyaReinsurance@2026!"
+  },
+  {
+    "agencyCode": "ANTIMONEY-LAUNDERING-ADVISORY-BOARD",
+    "agencyName": "Anti-Money Laundering Advisory Board",
+    "email": "antimoney-laundering-advisory-board@ecitizen.go.ke",
+    "firstName": "AntiMoney",
+    "lastName": "Laundering",
+    "password": "AntimoneyLaundering@2026!"
+  },
+  {
+    "agencyCode": "FINANCIAL-REPORTING-CENTRE-2",
+    "agencyName": "Financial Reporting Centre",
+    "email": "financial-reporting-centre-2@ecitizen.go.ke",
+    "firstName": "Financial",
+    "lastName": "Reporting",
+    "password": "FinancialReporting@2026!"
+  },
+  {
+    "agencyCode": "KENYA-INSTITUTE-OF-SUPPLIES-MANAGEMENT",
+    "agencyName": "Kenya Institute of Supplies Management",
+    "email": "kenya-institute-of-supplies-management@ecitizen.go.ke",
+    "firstName": "Kenya",
+    "lastName": "Institute",
+    "password": "KenyaInstitute@2026!"
+  },
+  {
+    "agencyCode": "KENYA-INSTITUTE-OF-SUPPLIES-EXAMINATION",
+    "agencyName": "Kenya Institute of Supplies Examination Board",
+    "email": "kenya-institute-of-supplies-examination@ecitizen.go.ke",
+    "firstName": "Kenya",
+    "lastName": "Institute",
+    "password": "KenyaInstitute@2026!"
+  },
+  {
+    "agencyCode": "KENYA-TRADE-NETWORK-AGENCY-KENTRADE",
+    "agencyName": "Kenya Trade Network Agency (KenTrade)",
+    "email": "kenya-trade-network-agency-kentrade@ecitizen.go.ke",
+    "firstName": "Kenya",
+    "lastName": "Trade",
+    "password": "KenyaTrade@2026!"
+  },
+  {
+    "agencyCode": "KENYA-NATIONAL-ASSURANCE-2001-CO",
+    "agencyName": "Kenya National Assurance (2001) Co.",
+    "email": "kenya-national-assurance-2001-co@ecitizen.go.ke",
+    "firstName": "Kenya",
+    "lastName": "National",
+    "password": "KenyaNational@2026!"
+  },
+  {
+    "agencyCode": "POLICY-HOLDERS-COMPENSATION-FUND",
+    "agencyName": "Policy Holders Compensation Fund",
+    "email": "policy-holders-compensation-fund@ecitizen.go.ke",
+    "firstName": "Policy",
+    "lastName": "Holders",
+    "password": "PolicyHolders@2026!"
+  },
+  {
+    "agencyCode": "LOCAL-AUTHORITIES-PROVIDENT-FUND",
+    "agencyName": "Local Authorities Provident Fund",
+    "email": "local-authorities-provident-fund@ecitizen.go.ke",
+    "firstName": "Local",
+    "lastName": "Authorities",
+    "password": "LocalAuthorities@2026!"
+  },
+  {
+    "agencyCode": "CONSOLIDATED-BANK-OF-KENYA",
+    "agencyName": "Consolidated Bank of Kenya",
+    "email": "consolidated-bank-of-kenya@ecitizen.go.ke",
+    "firstName": "Consolidated",
+    "lastName": "Bank",
+    "password": "ConsolidatedBank@2026!"
+  },
+  {
+    "agencyCode": "DEVELOPMENT-BANK-OF-KENYA",
+    "agencyName": "Development Bank of Kenya",
+    "email": "development-bank-of-kenya@ecitizen.go.ke",
+    "firstName": "Development",
+    "lastName": "Bank",
+    "password": "DevelopmentBank@2026!"
+  },
+  {
+    "agencyCode": "KENYA-POST-OFFICE-SAVINGS-BANK",
+    "agencyName": "Kenya Post Office Savings Bank",
+    "email": "kenya-post-office-savings-bank@ecitizen.go.ke",
+    "firstName": "Kenya",
+    "lastName": "Post",
+    "password": "KenyaPost@2026!"
+  },
+  {
+    "agencyCode": "THE-EAST-AFRICAN-DEVELOPMENT-BANK",
+    "agencyName": "The East African Development Bank",
+    "email": "the-east-african-development-bank@ecitizen.go.ke",
+    "firstName": "East",
+    "lastName": "African",
+    "password": "TheEast@2026!"
+  },
+  {
+    "agencyCode": "INDUSTRIAL-AND-COMMERCIAL-DEVELOPMENT-CO",
+    "agencyName": "Industrial and Commercial Development Corporation (ICDC)",
+    "email": "industrial-and-commercial-development-co@ecitizen.go.ke",
+    "firstName": "Industrial",
+    "lastName": "and",
+    "password": "IndustrialAnd@2026!"
+  },
+  {
+    "agencyCode": "GOVERNMENT-DIGITAL-PAYMENTS-ECITIZEN",
+    "agencyName": "Government Digital Payments (eCitizen)",
+    "email": "government-digital-payments-ecitizen@ecitizen.go.ke",
+    "firstName": "Government",
+    "lastName": "Digital",
+    "password": "GovernmentDigital@2026!"
+  },
+  {
+    "agencyCode": "KENYA-ACCOUNTANTS-AND-SECRETARIES-NATION",
+    "agencyName": "Kenya Accountants and Secretaries National Examination Board (KASNEB)",
+    "email": "kenya-accountants-and-secretaries-nation@ecitizen.go.ke",
+    "firstName": "Kenya",
+    "lastName": "Accountants",
+    "password": "KenyaAccountants@2026!"
+  },
+  {
+    "agencyCode": "PUBLIC-SECTOR-ACCOUNTING-STANDARDS-BOARD",
+    "agencyName": "Public Sector Accounting Standards Board",
+    "email": "public-sector-accounting-standards-board@ecitizen.go.ke",
+    "firstName": "Public",
+    "lastName": "Sector",
+    "password": "PublicSector@2026!"
+  },
+  {
+    "agencyCode": "REGISTRATION-OF-CERTIFIED-PUBLIC-SECRETA",
+    "agencyName": "Registration of Certified Public Secretaries Board",
+    "email": "registration-of-certified-public-secreta@ecitizen.go.ke",
+    "firstName": "Registration",
+    "lastName": "of",
+    "password": "RegistrationOf@2026!"
+  },
+  {
+    "agencyCode": "ACCOUNTANTS-DISCIPLINARY-COMMITTEE",
+    "agencyName": "Accountants Disciplinary Committee",
+    "email": "accountants-disciplinary-committee@ecitizen.go.ke",
+    "firstName": "Accountants",
+    "lastName": "Disciplinary",
+    "password": "AccountantsDisciplinary@2026!"
+  },
+  {
+    "agencyCode": "INSTITUTE-OF-CERTIFIED-PUBLIC-ACCOUNTANT",
+    "agencyName": "Institute of Certified Public Accountants",
+    "email": "institute-of-certified-public-accountant@ecitizen.go.ke",
+    "firstName": "Institute",
+    "lastName": "of",
+    "password": "InstituteOf@2026!"
+  },
+  {
+    "agencyCode": "KENYA-PROCUREMENT-AND-DISPOSAL-AGENCY",
+    "agencyName": "Kenya Procurement and Disposal Agency",
+    "email": "kenya-procurement-and-disposal-agency@ecitizen.go.ke",
+    "firstName": "Kenya",
+    "lastName": "Procurement",
+    "password": "KenyaProcurement@2026!"
+  },
+  {
+    "agencyCode": "KENYA-NATIONAL-ENTREPRENEURSHIP-SAVINGS",
+    "agencyName": "Kenya National Entrepreneurship Savings Trust (KNEST)",
+    "email": "kenya-national-entrepreneurship-savings@ecitizen.go.ke",
+    "firstName": "Kenya",
+    "lastName": "National",
+    "password": "KenyaNational@2026!"
+  },
+  {
+    "agencyCode": "NATIONAL-TREASURY-PENSIONS-DEPARTMENT",
+    "agencyName": "National Treasury - Pensions Department",
+    "email": "national-treasury-pensions-department@ecitizen.go.ke",
+    "firstName": "National",
+    "lastName": "Treasury",
+    "password": "NationalTreasury@2026!"
+  },
+  {
+    "agencyCode": "PUBLIC-SERVICE-SUPERANNUATION-SCHEME",
+    "agencyName": "Public Service Superannuation Scheme",
+    "email": "public-service-superannuation-scheme@ecitizen.go.ke",
+    "firstName": "Public",
+    "lastName": "Service",
+    "password": "PublicService@2026!"
+  },
+  {
+    "agencyCode": "MAKIBA",
+    "agencyName": "M-Akiba",
+    "email": "makiba@ecitizen.go.ke",
+    "firstName": "MAkiba",
+    "lastName": "Admin",
+    "password": "MakibaAdmin@2026!"
+  },
+  {
+    "agencyCode": "IFMIS-DEPARTMENT",
+    "agencyName": "IFMIS Department",
+    "email": "ifmis-department@ecitizen.go.ke",
+    "firstName": "IFMIS",
+    "lastName": "Department",
+    "password": "IfmisDepartment@2026!"
+  },
+  {
+    "agencyCode": "KENYA-INSTITUTE-FOR-PUBLIC-POLICY-RESEAR",
+    "agencyName": "Kenya Institute for Public Policy Research and Analysis (KIPPRA)",
+    "email": "kenya-institute-for-public-policy-resear@ecitizen.go.ke",
+    "firstName": "Kenya",
+    "lastName": "Institute",
+    "password": "KenyaInstitute@2026!"
+  },
+  {
+    "agencyCode": "KENYA-VISION-2030-BOARD",
+    "agencyName": "Kenya Vision 2030 Board",
+    "email": "kenya-vision-2030-board@ecitizen.go.ke",
+    "firstName": "Kenya",
+    "lastName": "Vision",
+    "password": "KenyaVision@2026!"
+  },
+  {
+    "agencyCode": "NATIONAL-GOVERNMENT-CONSTITUENCY-DEVELOP",
+    "agencyName": "National Government Constituency Development Fund",
+    "email": "national-government-constituency-develop@ecitizen.go.ke",
+    "firstName": "National",
+    "lastName": "Government",
+    "password": "NationalGovernment@2026!"
+  },
+  {
+    "agencyCode": "KENYA-NATIONAL-BUREAU-OF-STATISTICS",
+    "agencyName": "Kenya National Bureau of Statistics",
+    "email": "kenya-national-bureau-of-statistics@ecitizen.go.ke",
+    "firstName": "Kenya",
+    "lastName": "National",
+    "password": "KenyaNational@2026!"
+  },
+  {
+    "agencyCode": "NATIONAL-COORDINATING-AGENCY-FOR-POPULAT",
+    "agencyName": "National Co-ordinating Agency for Population and Development",
+    "email": "national-coordinating-agency-for-populat@ecitizen.go.ke",
+    "firstName": "National",
+    "lastName": "Coordinating",
+    "password": "NationalCoordinating@2026!"
+  },
+  {
+    "agencyCode": "NEW-PARTNERSHIP-FOR-AFRICAN-DEVELOPMENT",
+    "agencyName": "New Partnership for African Development (NEPAD)/Annual Peer\n Review Mechanism (APRM)",
+    "email": "new-partnership-for-african-development@ecitizen.go.ke",
+    "firstName": "New",
+    "lastName": "Partnership",
+    "password": "NewPartnership@2026!"
+  },
+  {
+    "agencyCode": "COMMUNITY-DEVELOPMENT-TRUST-FUND-ACPEU-P",
+    "agencyName": "Community Development Trust Fund (ACP/EU Protocol)",
+    "email": "community-development-trust-fund-acpeu-p@ecitizen.go.ke",
+    "firstName": "Community",
+    "lastName": "Development",
+    "password": "CommunityDevelopment@2026!"
+  },
+  {
+    "agencyCode": "NATIONAL-COUNCIL-FOR-POPULATION-AND-DEVE",
+    "agencyName": "National Council for Population and Development",
+    "email": "national-council-for-population-and-deve@ecitizen.go.ke",
+    "firstName": "National",
+    "lastName": "Council",
+    "password": "NationalCouncil@2026!"
+  },
+  {
+    "agencyCode": "KENYA-SCHOOL-OF-GOVERNMENT-KSG",
+    "agencyName": "Kenya School of Government (KSG)",
+    "email": "kenya-school-of-government-ksg@ecitizen.go.ke",
+    "firstName": "Kenya",
+    "lastName": "School",
+    "password": "KenyaSchool@2026!"
+  },
+  {
+    "agencyCode": "NATIONAL-YOUTH-SERVICE",
+    "agencyName": "National Youth Service",
+    "email": "national-youth-service@ecitizen.go.ke",
+    "firstName": "National",
+    "lastName": "Youth",
+    "password": "NationalYouth@2026!"
+  },
+  {
+    "agencyCode": "HUDUMA-CENTRES",
+    "agencyName": "Huduma Centres",
+    "email": "huduma-centres@ecitizen.go.ke",
+    "firstName": "Huduma",
+    "lastName": "Centres",
+    "password": "HudumaCentres@2026!"
+  },
+  {
+    "agencyCode": "INSTITUTE-OF-HUMAN-RESOURCE-MANAGEMENT",
+    "agencyName": "Institute of Human Resource Management",
+    "email": "institute-of-human-resource-management@ecitizen.go.ke",
+    "firstName": "Institute",
+    "lastName": "of",
+    "password": "InstituteOf@2026!"
+  },
+  {
+    "agencyCode": "PUBLIC-SERVICE-COMMISSION",
+    "agencyName": "Public Service Commission",
+    "email": "public-service-commission@ecitizen.go.ke",
+    "firstName": "Public",
+    "lastName": "Service",
+    "password": "PublicService@2026!"
+  },
+  {
+    "agencyCode": "HUMAN-RESOURCE-MANAGEMENT-PROFESSIONALS",
+    "agencyName": "Human Resource Management Professionals Examinations Board",
+    "email": "human-resource-management-professionals@ecitizen.go.ke",
+    "firstName": "Human",
+    "lastName": "Resource",
+    "password": "HumanResource@2026!"
+  },
+  {
+    "agencyCode": "PUBLIC-SERVICE-PERFORMANCE-MANAGEMENT-UN",
+    "agencyName": "Public Service Performance Management Unit",
+    "email": "public-service-performance-management-un@ecitizen.go.ke",
+    "firstName": "Public",
+    "lastName": "Service",
+    "password": "PublicService@2026!"
+  },
+  {
+    "agencyCode": "GOVERNMENT-DELIVERY-SERVICES-GDS",
+    "agencyName": "Government Delivery Services (GDS)",
+    "email": "government-delivery-services-gds@ecitizen.go.ke",
+    "firstName": "Government",
+    "lastName": "Delivery",
+    "password": "GovernmentDelivery@2026!"
+  },
+  {
+    "agencyCode": "MATERIAL-TESTING-AND-RESEARCH-DIVISION",
+    "agencyName": "Material Testing and Research Division",
+    "email": "material-testing-and-research-division@ecitizen.go.ke",
+    "firstName": "Material",
+    "lastName": "Testing",
+    "password": "MaterialTesting@2026!"
+  },
+  {
+    "agencyCode": "KENYA-ROADS-BOARD",
+    "agencyName": "Kenya Roads Board",
+    "email": "kenya-roads-board@ecitizen.go.ke",
+    "firstName": "Kenya",
+    "lastName": "Roads",
+    "password": "KenyaRoads@2026!"
+  },
+  {
+    "agencyCode": "KENYA-NATIONAL-HIGHWAY-AUTHORITY",
+    "agencyName": "Kenya National Highway Authority",
+    "email": "kenya-national-highway-authority@ecitizen.go.ke",
+    "firstName": "Kenya",
+    "lastName": "National",
+    "password": "KenyaNational@2026!"
+  },
+  {
+    "agencyCode": "KENYA-URBAN-ROADS-AUTHORITY",
+    "agencyName": "Kenya Urban Roads Authority",
+    "email": "kenya-urban-roads-authority@ecitizen.go.ke",
+    "firstName": "Kenya",
+    "lastName": "Urban",
+    "password": "KenyaUrban@2026!"
+  },
+  {
+    "agencyCode": "KENYA-RURAL-ROADS-AUTHORITY-KERRA",
+    "agencyName": "Kenya Rural Roads Authority – KeRRA",
+    "email": "kenya-rural-roads-authority-kerra@ecitizen.go.ke",
+    "firstName": "Kenya",
+    "lastName": "Rural",
+    "password": "KenyaRural@2026!"
+  },
+  {
+    "agencyCode": "KENYA-INSTITUTE-OF-HIGHWAYS-AND-BUILDING",
+    "agencyName": "Kenya Institute of Highways and Building Technology",
+    "email": "kenya-institute-of-highways-and-building@ecitizen.go.ke",
+    "firstName": "Kenya",
+    "lastName": "Institute",
+    "password": "KenyaInstitute@2026!"
+  },
+  {
+    "agencyCode": "KENYA-INSTITUTE-OF-TECHNOLOGY",
+    "agencyName": "Kenya Institute of Technology",
+    "email": "kenya-institute-of-technology@ecitizen.go.ke",
+    "firstName": "Kenya",
+    "lastName": "Institute",
+    "password": "KenyaInstitute@2026!"
+  },
+  {
+    "agencyCode": "ENGINEERS-BOARD-OF-KENYA",
+    "agencyName": "Engineers Board of Kenya",
+    "email": "engineers-board-of-kenya@ecitizen.go.ke",
+    "firstName": "Engineers",
+    "lastName": "Board",
+    "password": "EngineersBoard@2026!"
+  },
+  {
+    "agencyCode": "KENYA-ENGINEERING-TECHNOLOGISTS-REGISTRA",
+    "agencyName": "Kenya Engineering Technologists Registration Board",
+    "email": "kenya-engineering-technologists-registra@ecitizen.go.ke",
+    "firstName": "Kenya",
+    "lastName": "Engineering",
+    "password": "KenyaEngineering@2026!"
+  },
+  {
+    "agencyCode": "MECHANICAL-AND-TRANSPORT-FUND",
+    "agencyName": "Mechanical and Transport Fund",
+    "email": "mechanical-and-transport-fund@ecitizen.go.ke",
+    "firstName": "Mechanical",
+    "lastName": "and",
+    "password": "MechanicalAnd@2026!"
+  },
+  {
+    "agencyCode": "KENYA-RAILWAYS-CORPORATION",
+    "agencyName": "Kenya Railways Corporation",
+    "email": "kenya-railways-corporation@ecitizen.go.ke",
+    "firstName": "Kenya",
+    "lastName": "Railways",
+    "password": "KenyaRailways@2026!"
+  },
+  {
+    "agencyCode": "NORTHERN-CORRIDOR-TRANSIT-AND-TRANSPORT",
+    "agencyName": "Northern Corridor Transit and Transport Co-ordination (NCTTCA)",
+    "email": "northern-corridor-transit-and-transport@ecitizen.go.ke",
+    "firstName": "Northern",
+    "lastName": "Corridor",
+    "password": "NorthernCorridor@2026!"
+  },
+  {
+    "agencyCode": "LAPSSET-DEVELOPMENT-AUTHORITY",
+    "agencyName": "LAPSSET Development Authority",
+    "email": "lapsset-development-authority@ecitizen.go.ke",
+    "firstName": "LAPSSET",
+    "lastName": "Development",
+    "password": "LapssetDevelopment@2026!"
+  },
+  {
+    "agencyCode": "KENYA-AIRPORTS-AUTHORITY-KAA",
+    "agencyName": "Kenya Airports Authority (KAA)",
+    "email": "kenya-airports-authority-kaa@ecitizen.go.ke",
+    "firstName": "Kenya",
+    "lastName": "Airports",
+    "password": "KenyaAirports@2026!"
+  },
+  {
+    "agencyCode": "KENYA-CIVIL-AVIATION-AUTHORITY",
+    "agencyName": "Kenya Civil Aviation Authority",
+    "email": "kenya-civil-aviation-authority@ecitizen.go.ke",
+    "firstName": "Kenya",
+    "lastName": "Civil",
+    "password": "KenyaCivil@2026!"
+  },
+  {
+    "agencyCode": "EAST-AFRICAN-SCHOOL-OF-AVIATION",
+    "agencyName": "East African School of Aviation",
+    "email": "east-african-school-of-aviation@ecitizen.go.ke",
+    "firstName": "East",
+    "lastName": "African",
+    "password": "EastAfrican@2026!"
+  },
+  {
+    "agencyCode": "KENYA-PORTS-AUTHORITY",
+    "agencyName": "Kenya Ports Authority",
+    "email": "kenya-ports-authority@ecitizen.go.ke",
+    "firstName": "Kenya",
+    "lastName": "Ports",
+    "password": "KenyaPorts@2026!"
+  },
+  {
+    "agencyCode": "NATIONAL-TRANSPORT-AND-SAFETY-AUTHORITY",
+    "agencyName": "National Transport and Safety Authority",
+    "email": "national-transport-and-safety-authority@ecitizen.go.ke",
+    "firstName": "National",
+    "lastName": "Transport",
+    "password": "NationalTransport@2026!"
+  },
+  {
+    "agencyCode": "THE-NAIROBI-METROPOLITAN-AREA-TRANSPORT",
+    "agencyName": "The Nairobi Metropolitan Area Transport Authority",
+    "email": "the-nairobi-metropolitan-area-transport@ecitizen.go.ke",
+    "firstName": "Nairobi",
+    "lastName": "Metropolitan",
+    "password": "TheNairobi@2026!"
+  },
+  {
+    "agencyCode": "THE-RAILWAY-CITY-DEVELOPMENT-AUTHORITY",
+    "agencyName": "The Railway City Development Authority",
+    "email": "the-railway-city-development-authority@ecitizen.go.ke",
+    "firstName": "Railway",
+    "lastName": "City",
+    "password": "TheRailway@2026!"
+  },
+  {
+    "agencyCode": "RAILWAYS-TRAINING-INSTITUTE",
+    "agencyName": "Railways Training Institute",
+    "email": "railways-training-institute@ecitizen.go.ke",
+    "firstName": "Railways",
+    "lastName": "Training",
+    "password": "RailwaysTraining@2026!"
+  },
+  {
+    "agencyCode": "STATE-DEPARTMENT-FOR-LANDS",
+    "agencyName": "State Department for Lands",
+    "email": "state-department-for-lands@ecitizen.go.ke",
+    "firstName": "State",
+    "lastName": "Department",
+    "password": "StateDepartment@2026!"
+  },
+  {
+    "agencyCode": "PHYSICAL-PLANNERS-REGISTRATION-BOARD",
+    "agencyName": "Physical Planners Registration Board",
+    "email": "physical-planners-registration-board@ecitizen.go.ke",
+    "firstName": "Physical",
+    "lastName": "Planners",
+    "password": "PhysicalPlanners@2026!"
+  },
+  {
+    "agencyCode": "VALUERS-REGISTRATION-BOARD",
+    "agencyName": "Valuers Registration Board",
+    "email": "valuers-registration-board@ecitizen.go.ke",
+    "firstName": "Valuers",
+    "lastName": "Registration",
+    "password": "ValuersRegistration@2026!"
+  },
+  {
+    "agencyCode": "SETTLEMENT-TRUSTEE-FUND",
+    "agencyName": "Settlement Trustee Fund",
+    "email": "settlement-trustee-fund@ecitizen.go.ke",
+    "firstName": "Settlement",
+    "lastName": "Trustee",
+    "password": "SettlementTrustee@2026!"
+  },
+  {
+    "agencyCode": "LAND-SURVEYORS-BOARD",
+    "agencyName": "Land Surveyors Board",
+    "email": "land-surveyors-board@ecitizen.go.ke",
+    "firstName": "Land",
+    "lastName": "Surveyors",
+    "password": "LandSurveyors@2026!"
+  },
+  {
+    "agencyCode": "KENYA-INSTITUTE-OF-SURVEYING-AND-MAPPING",
+    "agencyName": "Kenya Institute of Surveying and Mapping",
+    "email": "kenya-institute-of-surveying-and-mapping@ecitizen.go.ke",
+    "firstName": "Kenya",
+    "lastName": "Institute",
+    "password": "KenyaInstitute@2026!"
+  },
+  {
+    "agencyCode": "LAND-SETTLEMENT-FUND",
+    "agencyName": "Land Settlement Fund",
+    "email": "land-settlement-fund@ecitizen.go.ke",
+    "firstName": "Land",
+    "lastName": "Settlement",
+    "password": "LandSettlement@2026!"
+  },
+  {
+    "agencyCode": "NATIONAL-HOUSING-CORPORATION",
+    "agencyName": "National Housing Corporation",
+    "email": "national-housing-corporation@ecitizen.go.ke",
+    "firstName": "National",
+    "lastName": "Housing",
+    "password": "NationalHousing@2026!"
+  },
+  {
+    "agencyCode": "NATIONAL-HOUSING-DEVELOPMENT-FUND",
+    "agencyName": "National Housing Development Fund",
+    "email": "national-housing-development-fund@ecitizen.go.ke",
+    "firstName": "National",
+    "lastName": "Housing",
+    "password": "NationalHousing@2026!"
+  },
+  {
+    "agencyCode": "CIVIL-SERVANTS-HOUSING-SCHEME-FUND",
+    "agencyName": "Civil Servants Housing Scheme Fund",
+    "email": "civil-servants-housing-scheme-fund@ecitizen.go.ke",
+    "firstName": "Civil",
+    "lastName": "Servants",
+    "password": "CivilServants@2026!"
+  },
+  {
+    "agencyCode": "INTEGRATED-PROJECT-DELIVERY-UNIT",
+    "agencyName": "Integrated Project Delivery Unit",
+    "email": "integrated-project-delivery-unit@ecitizen.go.ke",
+    "firstName": "Integrated",
+    "lastName": "Project",
+    "password": "IntegratedProject@2026!"
+  },
+  {
+    "agencyCode": "METROPOLITAN-DEPARTMENT",
+    "agencyName": "Metropolitan Department",
+    "email": "metropolitan-department@ecitizen.go.ke",
+    "firstName": "Metropolitan",
+    "lastName": "Department",
+    "password": "MetropolitanDepartment@2026!"
+  },
+  {
+    "agencyCode": "ESTATE-AGENTS-REGISTRATION-BOARD",
+    "agencyName": "Estate Agents Registration Board",
+    "email": "estate-agents-registration-board@ecitizen.go.ke",
+    "firstName": "Estate",
+    "lastName": "Agents",
+    "password": "EstateAgents@2026!"
+  },
+  {
+    "agencyCode": "ESTATE-MANAGEMENT-DEPARTMENT",
+    "agencyName": "Estate Management Department",
+    "email": "estate-management-department@ecitizen.go.ke",
+    "firstName": "Estate",
+    "lastName": "Management",
+    "password": "EstateManagement@2026!"
+  },
+  {
+    "agencyCode": "BOMA-YANGU",
+    "agencyName": "Boma Yangu",
+    "email": "boma-yangu@ecitizen.go.ke",
+    "firstName": "Boma",
+    "lastName": "Yangu",
+    "password": "BomaYangu@2026!"
+  },
+  {
+    "agencyCode": "SLUM-UPGRADING-DEPARTMENT",
+    "agencyName": "Slum Upgrading Department",
+    "email": "slum-upgrading-department@ecitizen.go.ke",
+    "firstName": "Slum",
+    "lastName": "Upgrading",
+    "password": "SlumUpgrading@2026!"
+  },
+  {
+    "agencyCode": "NATIONAL-CONSTRUCTION-AUTHORITY",
+    "agencyName": "National Construction Authority",
+    "email": "national-construction-authority@ecitizen.go.ke",
+    "firstName": "National",
+    "lastName": "Construction",
+    "password": "NationalConstruction@2026!"
+  },
+  {
+    "agencyCode": "KENYA-BUILDING-RESEARCH-CENTRE",
+    "agencyName": "Kenya Building Research Centre",
+    "email": "kenya-building-research-centre@ecitizen.go.ke",
+    "firstName": "Kenya",
+    "lastName": "Building",
+    "password": "KenyaBuilding@2026!"
+  },
+  {
+    "agencyCode": "THE-NATIONAL-BUILDING-INSPECTORATE",
+    "agencyName": "The National Building Inspectorate",
+    "email": "the-national-building-inspectorate@ecitizen.go.ke",
+    "firstName": "National",
+    "lastName": "Building",
+    "password": "TheNational@2026!"
+  },
+  {
+    "agencyCode": "BOARD-OF-REGISTERED-ARCHITECTS-AND-QUANT",
+    "agencyName": "Board of Registered Architects and Quantity Surveyors",
+    "email": "board-of-registered-architects-and-quant@ecitizen.go.ke",
+    "firstName": "Board",
+    "lastName": "of",
+    "password": "BoardOf@2026!"
+  },
+  {
+    "agencyCode": "CONTRACTORS-AND-BUILDERS-RETENTION-FUND",
+    "agencyName": "Contractors and Builders Retention Fund",
+    "email": "contractors-and-builders-retention-fund@ecitizen.go.ke",
+    "firstName": "Contractors",
+    "lastName": "and",
+    "password": "ContractorsAnd@2026!"
+  },
+  {
+    "agencyCode": "BUILDING-SURVEYORS-REGISTRATION-BOARD",
+    "agencyName": "Building Surveyors Registration Board",
+    "email": "building-surveyors-registration-board@ecitizen.go.ke",
+    "firstName": "Building",
+    "lastName": "Surveyors",
+    "password": "BuildingSurveyors@2026!"
+  },
+  {
+    "agencyCode": "COMMUNICATIONS-AUTHORITY-OF-KENYA",
+    "agencyName": "Communications Authority of Kenya",
+    "email": "communications-authority-of-kenya@ecitizen.go.ke",
+    "firstName": "Communications",
+    "lastName": "Authority",
+    "password": "CommunicationsAuthority@2026!"
+  },
+  {
+    "agencyCode": "UNIVERSAL-SERVICE-FUND-ADVISORY-COUNCIL",
+    "agencyName": "Universal Service Fund Advisory Council",
+    "email": "universal-service-fund-advisory-council@ecitizen.go.ke",
+    "firstName": "Universal",
+    "lastName": "Service",
+    "password": "UniversalService@2026!"
+  },
+  {
+    "agencyCode": "KENYA-BROADCASTING-CORPORATION",
+    "agencyName": "Kenya Broadcasting Corporation",
+    "email": "kenya-broadcasting-corporation@ecitizen.go.ke",
+    "firstName": "Kenya",
+    "lastName": "Broadcasting",
+    "password": "KenyaBroadcasting@2026!"
+  },
+  {
+    "agencyCode": "THE-POSTAL-CORPORATION-OF-KENYA",
+    "agencyName": "The Postal Corporation of Kenya",
+    "email": "the-postal-corporation-of-kenya@ecitizen.go.ke",
+    "firstName": "Postal",
+    "lastName": "Corporation",
+    "password": "ThePostal@2026!"
+  },
+  {
+    "agencyCode": "MEDIA-COUNCIL-OF-KENYA",
+    "agencyName": "Media Council of Kenya",
+    "email": "media-council-of-kenya@ecitizen.go.ke",
+    "firstName": "Media",
+    "lastName": "Council",
+    "password": "MediaCouncil@2026!"
+  },
+  {
+    "agencyCode": "KENYA-INSTITUTE-OF-MASS-COMMUNICATION-KI",
+    "agencyName": "Kenya Institute of Mass Communication (KIMC)",
+    "email": "kenya-institute-of-mass-communication-ki@ecitizen.go.ke",
+    "firstName": "Kenya",
+    "lastName": "Institute",
+    "password": "KenyaInstitute@2026!"
+  },
+  {
+    "agencyCode": "KENYA-NEWS-AGENCY",
+    "agencyName": "Kenya News Agency",
+    "email": "kenya-news-agency@ecitizen.go.ke",
+    "firstName": "Kenya",
+    "lastName": "News",
+    "password": "KenyaNews@2026!"
+  },
+  {
+    "agencyCode": "GOVERNMENT-ADVERTISING-AGENCY",
+    "agencyName": "Government Advertising Agency",
+    "email": "government-advertising-agency@ecitizen.go.ke",
+    "firstName": "Government",
+    "lastName": "Advertising",
+    "password": "GovernmentAdvertising@2026!"
+  },
+  {
+    "agencyCode": "KENYA-YEAR-BOOK-EDITORIAL-BOARD",
+    "agencyName": "Kenya Year Book Editorial Board",
+    "email": "kenya-year-book-editorial-board@ecitizen.go.ke",
+    "firstName": "Kenya",
+    "lastName": "Year",
+    "password": "KenyaYear@2026!"
+  },
+  {
+    "agencyCode": "OFFICE-OF-THE-DATA-PROTECTION-COMMISSION",
+    "agencyName": "Office of the Data Protection Commissioner",
+    "email": "office-of-the-data-protection-commission@ecitizen.go.ke",
+    "firstName": "Office",
+    "lastName": "of",
+    "password": "OfficeOf@2026!"
+  },
+  {
+    "agencyCode": "KONZA-TECHNOPOLIS-DEVELOPMENT-AUTHORITY",
+    "agencyName": "Konza Technopolis Development Authority",
+    "email": "konza-technopolis-development-authority@ecitizen.go.ke",
+    "firstName": "Konza",
+    "lastName": "Technopolis",
+    "password": "KonzaTechnopolis@2026!"
+  },
+  {
+    "agencyCode": "KENYA-ICT-AUTHORITY",
+    "agencyName": "Kenya ICT Authority",
+    "email": "kenya-ict-authority@ecitizen.go.ke",
+    "firstName": "Kenya",
+    "lastName": "ICT",
+    "password": "KenyaIct@2026!"
+  },
+  {
+    "agencyCode": "KENYA-ADVANCED-INSTITUTE-OF-SCIENCE-AND",
+    "agencyName": "Kenya Advanced Institute of Science and Technology (KAIST)",
+    "email": "kenya-advanced-institute-of-science-and@ecitizen.go.ke",
+    "firstName": "Kenya",
+    "lastName": "Advanced",
+    "password": "KenyaAdvanced@2026!"
+  },
+  {
+    "agencyCode": "THE-EAST-AFRICAN-MARINE-CABLE-SYSTEM-LIM",
+    "agencyName": "The East African Marine Cable System Limited \"TEAMS\"",
+    "email": "the-east-african-marine-cable-system-lim@ecitizen.go.ke",
+    "firstName": "East",
+    "lastName": "African",
+    "password": "TheEast@2026!"
+  },
+  {
+    "agencyCode": "SOCIAL-HEALTH-AUTHORITY",
+    "agencyName": "Social Health Authority",
+    "email": "social-health-authority@ecitizen.go.ke",
+    "firstName": "Social",
+    "lastName": "Health",
+    "password": "SocialHealth@2026!"
+  },
+  {
+    "agencyCode": "NATIONAL-HEALTH-INSURANCE-FUND-NHIF",
+    "agencyName": "National Health Insurance Fund (NHIF)",
+    "email": "national-health-insurance-fund-nhif@ecitizen.go.ke",
+    "firstName": "National",
+    "lastName": "Health",
+    "password": "NationalHealth@2026!"
+  },
+  {
+    "agencyCode": "KENYA-MEDICAL-SUPPLIES-AUTHORITY",
+    "agencyName": "Kenya Medical Supplies Authority",
+    "email": "kenya-medical-supplies-authority@ecitizen.go.ke",
+    "firstName": "Kenya",
+    "lastName": "Medical",
+    "password": "KenyaMedical@2026!"
+  },
+  {
+    "agencyCode": "KENYA-MEDICAL-RESEARCH-INSTITUTEKEMRI",
+    "agencyName": "Kenya Medical Research Institute(KEMRI)",
+    "email": "kenya-medical-research-institutekemri@ecitizen.go.ke",
+    "firstName": "Kenya",
+    "lastName": "Medical",
+    "password": "KenyaMedical@2026!"
+  },
+  {
+    "agencyCode": "DIGITAL-HEALTH-AUTHORITY",
+    "agencyName": "Digital Health Authority",
+    "email": "digital-health-authority@ecitizen.go.ke",
+    "firstName": "Digital",
+    "lastName": "Health",
+    "password": "DigitalHealth@2026!"
+  },
+  {
+    "agencyCode": "KENYA-BIOVAX-INSTITUTE-LIMITED",
+    "agencyName": "Kenya BioVax Institute Limited",
+    "email": "kenya-biovax-institute-limited@ecitizen.go.ke",
+    "firstName": "Kenya",
+    "lastName": "BioVax",
+    "password": "KenyaBiovax@2026!"
+  },
+  {
+    "agencyCode": "KENYATTA-NATIONAL-HOSPITAL",
+    "agencyName": "Kenyatta National Hospital",
+    "email": "kenyatta-national-hospital@ecitizen.go.ke",
+    "firstName": "Kenyatta",
+    "lastName": "National",
+    "password": "KenyattaNational@2026!"
+  },
+  {
+    "agencyCode": "MWAI-KIBAKI-HOSPITAL",
+    "agencyName": "Mwai Kibaki Hospital",
+    "email": "mwai-kibaki-hospital@ecitizen.go.ke",
+    "firstName": "Mwai",
+    "lastName": "Kibaki",
+    "password": "MwaiKibaki@2026!"
+  },
+  {
+    "agencyCode": "MOI-TEACHING-AND-REFERRAL-HOSPITAL",
+    "agencyName": "Moi Teaching and Referral Hospital",
+    "email": "moi-teaching-and-referral-hospital@ecitizen.go.ke",
+    "firstName": "Moi",
+    "lastName": "Teaching",
+    "password": "MoiTeaching@2026!"
+  },
+  {
+    "agencyCode": "KENYATTA-UNIVERSITY-TEACHING-REFERRAL-AN",
+    "agencyName": "Kenyatta University Teaching, Referral and Research Hospital",
+    "email": "kenyatta-university-teaching-referral-an@ecitizen.go.ke",
+    "firstName": "Kenyatta",
+    "lastName": "University",
+    "password": "KenyattaUniversity@2026!"
+  },
+  {
+    "agencyCode": "MATHARI-NATIONAL-TEACHING-AND-REFERRAL-M",
+    "agencyName": "Mathari National Teaching and Referral Mental Hospital",
+    "email": "mathari-national-teaching-and-referral-m@ecitizen.go.ke",
+    "firstName": "Mathari",
+    "lastName": "National",
+    "password": "MathariNational@2026!"
+  },
+  {
+    "agencyCode": "NATIONAL-SPINAL-INJURY-REFERRAL-HOSPITAL",
+    "agencyName": "National Spinal Injury Referral Hospital",
+    "email": "national-spinal-injury-referral-hospital@ecitizen.go.ke",
+    "firstName": "National",
+    "lastName": "Spinal",
+    "password": "NationalSpinal@2026!"
+  },
+  {
+    "agencyCode": "JARAMOGI-OGINGA-ODINGA-TEACHING-AND-REFE",
+    "agencyName": "Jaramogi Oginga Odinga Teaching and Referral Hospital",
+    "email": "jaramogi-oginga-odinga-teaching-and-refe@ecitizen.go.ke",
+    "firstName": "Jaramogi",
+    "lastName": "Oginga",
+    "password": "JaramogiOginga@2026!"
+  },
+  {
+    "agencyCode": "THE-NATIONAL-CANCER-INSTITUTE-OF-KENYA",
+    "agencyName": "The National Cancer Institute of Kenya",
+    "email": "the-national-cancer-institute-of-kenya@ecitizen.go.ke",
+    "firstName": "National",
+    "lastName": "Cancer",
+    "password": "TheNational@2026!"
+  },
+  {
+    "agencyCode": "KENYA-TISSUE-AND-TRANSPLANT-AUTHORITY",
+    "agencyName": "Kenya Tissue and Transplant Authority",
+    "email": "kenya-tissue-and-transplant-authority@ecitizen.go.ke",
+    "firstName": "Kenya",
+    "lastName": "Tissue",
+    "password": "KenyaTissue@2026!"
+  },
+  {
+    "agencyCode": "NATIONAL-SYNDEMIC-DISEASES-CONTROL-COUNC",
+    "agencyName": "National Syndemic Diseases Control Council",
+    "email": "national-syndemic-diseases-control-counc@ecitizen.go.ke",
+    "firstName": "National",
+    "lastName": "Syndemic",
+    "password": "NationalSyndemic@2026!"
+  },
+  {
+    "agencyCode": "KENYA-MEDICAL-PRACTITIONERS-AND-DENTIST",
+    "agencyName": "Kenya Medical Practitioners and Dentist Council",
+    "email": "kenya-medical-practitioners-and-dentist@ecitizen.go.ke",
+    "firstName": "Kenya",
+    "lastName": "Medical",
+    "password": "KenyaMedical@2026!"
+  },
+  {
+    "agencyCode": "KENYA-HEALTH-PROFESSIONS-OVERSIGHT-AUTHO",
+    "agencyName": "Kenya Health Professions Oversight Authority",
+    "email": "kenya-health-professions-oversight-autho@ecitizen.go.ke",
+    "firstName": "Kenya",
+    "lastName": "Health",
+    "password": "KenyaHealth@2026!"
+  },
+  {
+    "agencyCode": "KENYA-MEDICAL-TRAINING-COLLEGE",
+    "agencyName": "Kenya Medical Training College",
+    "email": "kenya-medical-training-college@ecitizen.go.ke",
+    "firstName": "Kenya",
+    "lastName": "Medical",
+    "password": "KenyaMedical@2026!"
+  },
+  {
+    "agencyCode": "KENYA-NATIONAL-PUBLIC-HEALTH-INSTITUTE",
+    "agencyName": "Kenya National Public Health Institute",
+    "email": "kenya-national-public-health-institute@ecitizen.go.ke",
+    "firstName": "Kenya",
+    "lastName": "National",
+    "password": "KenyaNational@2026!"
+  },
+  {
+    "agencyCode": "PORT-HEALTH",
+    "agencyName": "Port Health",
+    "email": "port-health@ecitizen.go.ke",
+    "firstName": "Port",
+    "lastName": "Health",
+    "password": "PortHealth@2026!"
+  },
+  {
+    "agencyCode": "DIVISION-OF-NATIONAL-LABORATORY-SERVICES",
+    "agencyName": "Division of National Laboratory Services",
+    "email": "division-of-national-laboratory-services@ecitizen.go.ke",
+    "firstName": "Division",
+    "lastName": "of",
+    "password": "DivisionOf@2026!"
+  },
+  {
+    "agencyCode": "KENYA-HOSPITAL-AUTHORITY-TRUST-FUND",
+    "agencyName": "Kenya Hospital Authority Trust Fund",
+    "email": "kenya-hospital-authority-trust-fund@ecitizen.go.ke",
+    "firstName": "Kenya",
+    "lastName": "Hospital",
+    "password": "KenyaHospital@2026!"
+  },
+  {
+    "agencyCode": "COUNSELORS-AND-PSYCHOLOGISTS-BOARD",
+    "agencyName": "Counselors and Psychologists Board",
+    "email": "counselors-and-psychologists-board@ecitizen.go.ke",
+    "firstName": "Counselors",
+    "lastName": "and",
+    "password": "CounselorsAnd@2026!"
+  },
+  {
+    "agencyCode": "PHYSIOTHERAPY-COUNCIL-OF-KENYA",
+    "agencyName": "Physiotherapy Council of Kenya",
+    "email": "physiotherapy-council-of-kenya@ecitizen.go.ke",
+    "firstName": "Physiotherapy",
+    "lastName": "Council",
+    "password": "PhysiotherapyCouncil@2026!"
+  },
+  {
+    "agencyCode": "CLINICAL-OFFICERS-COUNCIL-OF-KENYA",
+    "agencyName": "Clinical Officers Council of Kenya",
+    "email": "clinical-officers-council-of-kenya@ecitizen.go.ke",
+    "firstName": "Clinical",
+    "lastName": "Officers",
+    "password": "ClinicalOfficers@2026!"
+  },
+  {
+    "agencyCode": "KENYA-MEDICAL-LABORATORY-TECHNICIANS-AND",
+    "agencyName": "Kenya Medical Laboratory Technicians and Technologists Board",
+    "email": "kenya-medical-laboratory-technicians-and@ecitizen.go.ke",
+    "firstName": "Kenya",
+    "lastName": "Medical",
+    "password": "KenyaMedical@2026!"
+  },
+  {
+    "agencyCode": "NURSING-COUNCIL-OF-KENYA",
+    "agencyName": "Nursing Council of Kenya",
+    "email": "nursing-council-of-kenya@ecitizen.go.ke",
+    "firstName": "Nursing",
+    "lastName": "Council",
+    "password": "NursingCouncil@2026!"
+  },
+  {
+    "agencyCode": "KENYA-NUTRITIONISTS-AND-DIETICIANS-INSTI",
+    "agencyName": "Kenya Nutritionists and Dieticians Institute",
+    "email": "kenya-nutritionists-and-dieticians-insti@ecitizen.go.ke",
+    "firstName": "Kenya",
+    "lastName": "Nutritionists",
+    "password": "KenyaNutritionists@2026!"
+  },
+  {
+    "agencyCode": "HEALTH-RECORDS-AND-INFORMATION-MANAGERS",
+    "agencyName": "Health Records and Information Managers Board",
+    "email": "health-records-and-information-managers@ecitizen.go.ke",
+    "firstName": "Health",
+    "lastName": "Records",
+    "password": "HealthRecords@2026!"
+  },
+  {
+    "agencyCode": "PHARMACY-AND-POISONS-BOARD",
+    "agencyName": "Pharmacy and Poisons Board",
+    "email": "pharmacy-and-poisons-board@ecitizen.go.ke",
+    "firstName": "Pharmacy",
+    "lastName": "and",
+    "password": "PharmacyAnd@2026!"
+  },
+  {
+    "agencyCode": "NATIONAL-QUALITY-CONTROL-LABORATORIES",
+    "agencyName": "National Quality Control Laboratories",
+    "email": "national-quality-control-laboratories@ecitizen.go.ke",
+    "firstName": "National",
+    "lastName": "Quality",
+    "password": "NationalQuality@2026!"
+  },
+  {
+    "agencyCode": "PUBLIC-HEALTH-OFFICERS-AND-TECHNICIANS-C",
+    "agencyName": "Public Health Officers and Technicians Council",
+    "email": "public-health-officers-and-technicians-c@ecitizen.go.ke",
+    "firstName": "Public",
+    "lastName": "Health",
+    "password": "PublicHealth@2026!"
+  },
+  {
+    "agencyCode": "KENYA-NUCLEAR-REGULATORY-AUTHORITY",
+    "agencyName": "Kenya Nuclear Regulatory Authority",
+    "email": "kenya-nuclear-regulatory-authority@ecitizen.go.ke",
+    "firstName": "Kenya",
+    "lastName": "Nuclear",
+    "password": "KenyaNuclear@2026!"
+  },
+  {
+    "agencyCode": "TOBACCO-CONTROL-BOARD",
+    "agencyName": "Tobacco Control Board",
+    "email": "tobacco-control-board@ecitizen.go.ke",
+    "firstName": "Tobacco",
+    "lastName": "Control",
+    "password": "TobaccoControl@2026!"
+  },
+  {
+    "agencyCode": "KENYA-INSTITUTE-OF-PRIMATE-RESEARCH",
+    "agencyName": "Kenya Institute of Primate Research",
+    "email": "kenya-institute-of-primate-research@ecitizen.go.ke",
+    "firstName": "Kenya",
+    "lastName": "Institute",
+    "password": "KenyaInstitute@2026!"
+  },
+  {
+    "agencyCode": "STATE-DEPARTMENT-FOR-BASIC-EDUCATION",
+    "agencyName": "State Department for Basic Education",
+    "email": "state-department-for-basic-education@ecitizen.go.ke",
+    "firstName": "State",
+    "lastName": "Department",
+    "password": "StateDepartment@2026!"
+  },
+  {
+    "agencyCode": "KENYA-NATIONAL-EXAMINATIONS-COUNCIL",
+    "agencyName": "Kenya National Examinations Council",
+    "email": "kenya-national-examinations-council@ecitizen.go.ke",
+    "firstName": "Kenya",
+    "lastName": "National",
+    "password": "KenyaNational@2026!"
+  },
+  {
+    "agencyCode": "KENYA-INSTITUTE-OF-CURRICULUM-DEVELOPMEN",
+    "agencyName": "Kenya Institute of Curriculum Development",
+    "email": "kenya-institute-of-curriculum-developmen@ecitizen.go.ke",
+    "firstName": "Kenya",
+    "lastName": "Institute",
+    "password": "KenyaInstitute@2026!"
+  },
+  {
+    "agencyCode": "KENYA-INSTITUTE-OF-SPECIAL-EDUCATION",
+    "agencyName": "Kenya Institute of Special Education",
+    "email": "kenya-institute-of-special-education@ecitizen.go.ke",
+    "firstName": "Kenya",
+    "lastName": "Institute",
+    "password": "KenyaInstitute@2026!"
+  },
+  {
+    "agencyCode": "KENYA-LITERATURE-BUREAU",
+    "agencyName": "Kenya Literature Bureau",
+    "email": "kenya-literature-bureau@ecitizen.go.ke",
+    "firstName": "Kenya",
+    "lastName": "Literature",
+    "password": "KenyaLiterature@2026!"
+  },
+  {
+    "agencyCode": "KENYA-INSTITUTE-FOR-THE-BLIND",
+    "agencyName": "Kenya Institute for the Blind",
+    "email": "kenya-institute-for-the-blind@ecitizen.go.ke",
+    "firstName": "Kenya",
+    "lastName": "Institute",
+    "password": "KenyaInstitute@2026!"
+  },
+  {
+    "agencyCode": "CENTRE-FOR-MATHEMATICS-SCIENCE-AND-TECHN",
+    "agencyName": "Centre for Mathematics, Science and Technology in Africa",
+    "email": "centre-for-mathematics-science-and-techn@ecitizen.go.ke",
+    "firstName": "Centre",
+    "lastName": "for",
+    "password": "CentreFor@2026!"
+  },
+  {
+    "agencyCode": "KENYA-NATIONAL-COMMISSION-FOR-UNESCO",
+    "agencyName": "Kenya National Commission for UNESCO",
+    "email": "kenya-national-commission-for-unesco@ecitizen.go.ke",
+    "firstName": "Kenya",
+    "lastName": "National",
+    "password": "KenyaNational@2026!"
+  },
+  {
+    "agencyCode": "KENYA-EDUCATION-MANAGEMENT-INSTITUTE-KEM",
+    "agencyName": "Kenya Education Management Institute (KEMI)",
+    "email": "kenya-education-management-institute-kem@ecitizen.go.ke",
+    "firstName": "Kenya",
+    "lastName": "Education",
+    "password": "KenyaEducation@2026!"
+  },
+  {
+    "agencyCode": "SCHOOL-EQUIPMENT-PRODUCTION-UNIT",
+    "agencyName": "School Equipment Production Unit",
+    "email": "school-equipment-production-unit@ecitizen.go.ke",
+    "firstName": "School",
+    "lastName": "Equipment",
+    "password": "SchoolEquipment@2026!"
+  },
+  {
+    "agencyCode": "JOMO-KENYATTA-FOUNDATION",
+    "agencyName": "Jomo Kenyatta Foundation",
+    "email": "jomo-kenyatta-foundation@ecitizen.go.ke",
+    "firstName": "Jomo",
+    "lastName": "Kenyatta",
+    "password": "JomoKenyatta@2026!"
+  },
+  {
+    "agencyCode": "NATIONAL-COMMISSION-FOR-NOMADIC-EDUCATIO",
+    "agencyName": "National Commission for Nomadic Education (NACONEC)",
+    "email": "national-commission-for-nomadic-educatio@ecitizen.go.ke",
+    "firstName": "National",
+    "lastName": "Commission",
+    "password": "NationalCommission@2026!"
+  },
+  {
+    "agencyCode": "TECHNICAL-AND-VOCATIONAL-EDUCATION-AND-T",
+    "agencyName": "Technical and Vocational Education and Training Authority",
+    "email": "technical-and-vocational-education-and-t@ecitizen.go.ke",
+    "firstName": "Technical",
+    "lastName": "and",
+    "password": "TechnicalAnd@2026!"
+  },
+  {
+    "agencyCode": "TECHNICAL-VOCATIONAL-EDUCATION-TRAINING",
+    "agencyName": "Technical Vocational Education Training Fund Board",
+    "email": "technical-vocational-education-training@ecitizen.go.ke",
+    "firstName": "Technical",
+    "lastName": "Vocational",
+    "password": "TechnicalVocational@2026!"
+  },
+  {
+    "agencyCode": "CURRICULUM-DEVELOPMENT-ASSESSMENT-AND-CE",
+    "agencyName": "Curriculum Development Assessment and Certification Council",
+    "email": "curriculum-development-assessment-and-ce@ecitizen.go.ke",
+    "firstName": "Curriculum",
+    "lastName": "Development",
+    "password": "CurriculumDevelopment@2026!"
+  },
+  {
+    "agencyCode": "KENYA-NATIONAL-QUALIFICATIONS-AUTHORITY",
+    "agencyName": "Kenya National Qualifications Authority",
+    "email": "kenya-national-qualifications-authority@ecitizen.go.ke",
+    "firstName": "Kenya",
+    "lastName": "National",
+    "password": "KenyaNational@2026!"
+  },
+  {
+    "agencyCode": "KENYA-SCHOOL-OF-TVET",
+    "agencyName": "Kenya School of TVET",
+    "email": "kenya-school-of-tvet@ecitizen.go.ke",
+    "firstName": "Kenya",
+    "lastName": "School",
+    "password": "KenyaSchool@2026!"
+  },
+  {
+    "agencyCode": "NAIROBI-TECHNICAL-TRAINING-INSTITUTE",
+    "agencyName": "Nairobi Technical Training Institute",
+    "email": "nairobi-technical-training-institute@ecitizen.go.ke",
+    "firstName": "Nairobi",
+    "lastName": "Technical",
+    "password": "NairobiTechnical@2026!"
+  },
+  {
+    "agencyCode": "KAREN-TECHNICAL-TRAINING-INSTITUTE-FOR-T",
+    "agencyName": "Karen Technical Training Institute for the Deaf",
+    "email": "karen-technical-training-institute-for-t@ecitizen.go.ke",
+    "firstName": "Karen",
+    "lastName": "Technical",
+    "password": "KarenTechnical@2026!"
+  },
+  {
+    "agencyCode": "SEME-VOCATIONAL-COLLEGE",
+    "agencyName": "Seme Vocational College",
+    "email": "seme-vocational-college@ecitizen.go.ke",
+    "firstName": "Seme",
+    "lastName": "Vocational",
+    "password": "SemeVocational@2026!"
+  },
+  {
+    "agencyCode": "PC-KINYANJUI-TRAINING-INSTITUTE",
+    "agencyName": "PC Kinyanjui Training Institute",
+    "email": "pc-kinyanjui-training-institute@ecitizen.go.ke",
+    "firstName": "PC",
+    "lastName": "Kinyanjui",
+    "password": "PcKinyanjui@2026!"
+  },
+  {
+    "agencyCode": "ELDORET-NATIONAL-POLYTECHNIC",
+    "agencyName": "Eldoret National Polytechnic",
+    "email": "eldoret-national-polytechnic@ecitizen.go.ke",
+    "firstName": "Eldoret",
+    "lastName": "National",
+    "password": "EldoretNational@2026!"
+  },
+  {
+    "agencyCode": "LUGARI-DIPLOMA-TEACHERS-TRAINING-COLLEGE",
+    "agencyName": "Lugari Diploma Teachers' Training College.",
+    "email": "lugari-diploma-teachers-training-college@ecitizen.go.ke",
+    "firstName": "Lugari",
+    "lastName": "Diploma",
+    "password": "LugariDiploma@2026!"
+  },
+  {
+    "agencyCode": "MAASAI-NATIONAL-POLYTECHNIC",
+    "agencyName": "Maasai National Polytechnic",
+    "email": "maasai-national-polytechnic@ecitizen.go.ke",
+    "firstName": "Maasai",
+    "lastName": "National",
+    "password": "MaasaiNational@2026!"
+  },
+  {
+    "agencyCode": "RIFT-VALLEY-TECHNICAL-TRAINING-INSTITUTE",
+    "agencyName": "Rift Valley Technical Training Institute",
+    "email": "rift-valley-technical-training-institute@ecitizen.go.ke",
+    "firstName": "Rift",
+    "lastName": "Valley",
+    "password": "RiftValley@2026!"
+  },
+  {
+    "agencyCode": "KONOIN-TECHNICAL-TRAINING-INSTITUTE",
+    "agencyName": "Konoin Technical Training Institute",
+    "email": "konoin-technical-training-institute@ecitizen.go.ke",
+    "firstName": "Konoin",
+    "lastName": "Technical",
+    "password": "KonoinTechnical@2026!"
+  },
+  {
+    "agencyCode": "ENDEBESS-TECHNICAL-TRAINING-INSTITUTE",
+    "agencyName": "Endebess Technical Training Institute",
+    "email": "endebess-technical-training-institute@ecitizen.go.ke",
+    "firstName": "Endebess",
+    "lastName": "Technical",
+    "password": "EndebessTechnical@2026!"
+  },
+  {
+    "agencyCode": "SIAYA-INSTITUTE-OF-TECHNOLOGY",
+    "agencyName": "Siaya Institute of Technology",
+    "email": "siaya-institute-of-technology@ecitizen.go.ke",
+    "firstName": "Siaya",
+    "lastName": "Institute",
+    "password": "SiayaInstitute@2026!"
+  },
+  {
+    "agencyCode": "KIAMBU-NATIONAL-POLYTECHNIC",
+    "agencyName": "Kiambu National Polytechnic",
+    "email": "kiambu-national-polytechnic@ecitizen.go.ke",
+    "firstName": "Kiambu",
+    "lastName": "National",
+    "password": "KiambuNational@2026!"
+  },
+  {
+    "agencyCode": "KABETE-NATIONAL-POLYTECHNIC",
+    "agencyName": "Kabete National Polytechnic",
+    "email": "kabete-national-polytechnic@ecitizen.go.ke",
+    "firstName": "Kabete",
+    "lastName": "National",
+    "password": "KabeteNational@2026!"
+  },
+  {
+    "agencyCode": "KENYA-COAST-POLYTECHNIC",
+    "agencyName": "Kenya Coast Polytechnic",
+    "email": "kenya-coast-polytechnic@ecitizen.go.ke",
+    "firstName": "Kenya",
+    "lastName": "Coast",
+    "password": "KenyaCoast@2026!"
+  },
+  {
+    "agencyCode": "SIGALAGALA-NATIONAL-POLYTECHNIC",
+    "agencyName": "Sigalagala National Polytechnic",
+    "email": "sigalagala-national-polytechnic@ecitizen.go.ke",
+    "firstName": "Sigalagala",
+    "lastName": "National",
+    "password": "SigalagalaNational@2026!"
+  },
+  {
+    "agencyCode": "OLLESSOS-POLYTECHNIC",
+    "agencyName": "Ollessos Polytechnic",
+    "email": "ollessos-polytechnic@ecitizen.go.ke",
+    "firstName": "Ollessos",
+    "lastName": "Polytechnic",
+    "password": "OllessosPolytechnic@2026!"
+  },
+  {
+    "agencyCode": "NYANDARUA-NATIONAL-POLYTECHNIC",
+    "agencyName": "Nyandarua National Polytechnic",
+    "email": "nyandarua-national-polytechnic@ecitizen.go.ke",
+    "firstName": "Nyandarua",
+    "lastName": "National",
+    "password": "NyandaruaNational@2026!"
+  },
+  {
+    "agencyCode": "OKAME-TECHNICAL-VOCATIONAL-COLLEGE",
+    "agencyName": "Okame Technical Vocational College",
+    "email": "okame-technical-vocational-college@ecitizen.go.ke",
+    "firstName": "Okame",
+    "lastName": "Technical",
+    "password": "OkameTechnical@2026!"
+  },
+  {
+    "agencyCode": "BARINGO-NATIONAL-POLYTECHNIC",
+    "agencyName": "Baringo National Polytechnic",
+    "email": "baringo-national-polytechnic@ecitizen.go.ke",
+    "firstName": "Baringo",
+    "lastName": "National",
+    "password": "BaringoNational@2026!"
+  },
+  {
+    "agencyCode": "RUIRU-TECHNICAL-VOCATIONAL-COLLEGE",
+    "agencyName": "Ruiru Technical Vocational College",
+    "email": "ruiru-technical-vocational-college@ecitizen.go.ke",
+    "firstName": "Ruiru",
+    "lastName": "Technical",
+    "password": "RuiruTechnical@2026!"
+  },
+  {
+    "agencyCode": "WOTE-TECHNICAL-TRAINING-INSTITUTE",
+    "agencyName": "Wote Technical Training Institute",
+    "email": "wote-technical-training-institute@ecitizen.go.ke",
+    "firstName": "Wote",
+    "lastName": "Technical",
+    "password": "WoteTechnical@2026!"
+  },
+  {
+    "agencyCode": "SABATIA-TECHNICAL-VOCATIONAL-COLLEGE",
+    "agencyName": "Sabatia Technical Vocational College",
+    "email": "sabatia-technical-vocational-college@ecitizen.go.ke",
+    "firstName": "Sabatia",
+    "lastName": "Technical",
+    "password": "SabatiaTechnical@2026!"
+  },
+  {
+    "agencyCode": "THE-NYERI-POLYTECHNIC",
+    "agencyName": "The Nyeri Polytechnic",
+    "email": "the-nyeri-polytechnic@ecitizen.go.ke",
+    "firstName": "Nyeri",
+    "lastName": "Polytechnic",
+    "password": "TheNyeri@2026!"
+  },
+  {
+    "agencyCode": "KISII-NATIONAL-POLYTECHNIC",
+    "agencyName": "Kisii National Polytechnic",
+    "email": "kisii-national-polytechnic@ecitizen.go.ke",
+    "firstName": "Kisii",
+    "lastName": "National",
+    "password": "KisiiNational@2026!"
+  },
+  {
+    "agencyCode": "SOT-TECHNICAL-TRAINING-INSTITUTE",
+    "agencyName": "SOT Technical Training Institute",
+    "email": "sot-technical-training-institute@ecitizen.go.ke",
+    "firstName": "SOT",
+    "lastName": "Technical",
+    "password": "SotTechnical@2026!"
+  },
+  {
+    "agencyCode": "KAIBOI-NATIONAL-POLYTECHNIC",
+    "agencyName": "Kaiboi National Polytechnic",
+    "email": "kaiboi-national-polytechnic@ecitizen.go.ke",
+    "firstName": "Kaiboi",
+    "lastName": "National",
+    "password": "KaiboiNational@2026!"
+  },
+  {
+    "agencyCode": "KASARANI-TECHNICAL-AND-VOCATIONAL-COLLEG",
+    "agencyName": "Kasarani Technical and Vocational College",
+    "email": "kasarani-technical-and-vocational-colleg@ecitizen.go.ke",
+    "firstName": "Kasarani",
+    "lastName": "Technical",
+    "password": "KasaraniTechnical@2026!"
+  },
+  {
+    "agencyCode": "KERICHO-NATIONAL-POLYTECNIC",
+    "agencyName": "Kericho National Polytecnic",
+    "email": "kericho-national-polytecnic@ecitizen.go.ke",
+    "firstName": "Kericho",
+    "lastName": "National",
+    "password": "KerichoNational@2026!"
+  },
+  {
+    "agencyCode": "STATE-DEPARTMENT-FOR-HIGHER-EDUCATION-AN",
+    "agencyName": "State Department for Higher Education and Research",
+    "email": "state-department-for-higher-education-an@ecitizen.go.ke",
+    "firstName": "State",
+    "lastName": "Department",
+    "password": "StateDepartment@2026!"
+  },
+  {
+    "agencyCode": "COMMISSION-FOR-UNIVERSITY-EDUCATION",
+    "agencyName": "Commission for University Education",
+    "email": "commission-for-university-education@ecitizen.go.ke",
+    "firstName": "Commission",
+    "lastName": "for",
+    "password": "CommissionFor@2026!"
+  },
+  {
+    "agencyCode": "KENYA-UNIVERSITIES-AND-COLLEGES-PLACEMEN",
+    "agencyName": "Kenya Universities and Colleges Placement Service",
+    "email": "kenya-universities-and-colleges-placemen@ecitizen.go.ke",
+    "firstName": "Kenya",
+    "lastName": "Universities",
+    "password": "KenyaUniversities@2026!"
+  },
+  {
+    "agencyCode": "NATIONAL-COMMISSION-FOR-SCIENCE-TECHNOLO",
+    "agencyName": "National Commission for Science Technology and Innovation",
+    "email": "national-commission-for-science-technolo@ecitizen.go.ke",
+    "firstName": "National",
+    "lastName": "Commission",
+    "password": "NationalCommission@2026!"
+  },
+  {
+    "agencyCode": "HIGHER-EDUCATION-LOANS-BOARD",
+    "agencyName": "Higher Education Loans Board",
+    "email": "higher-education-loans-board@ecitizen.go.ke",
+    "firstName": "Higher",
+    "lastName": "Education",
+    "password": "HigherEducation@2026!"
+  },
+  {
+    "agencyCode": "NATIONAL-RESEARCH-FUND",
+    "agencyName": "National Research Fund",
+    "email": "national-research-fund@ecitizen.go.ke",
+    "firstName": "National",
+    "lastName": "Research",
+    "password": "NationalResearch@2026!"
+  },
+  {
+    "agencyCode": "UNIVERSITIES-FUNDING-BOARD",
+    "agencyName": "Universities Funding Board",
+    "email": "universities-funding-board@ecitizen.go.ke",
+    "firstName": "Universities",
+    "lastName": "Funding",
+    "password": "UniversitiesFunding@2026!"
+  },
+  {
+    "agencyCode": "KENYATTA-UNIVERSITY",
+    "agencyName": "Kenyatta University",
+    "email": "kenyatta-university@ecitizen.go.ke",
+    "firstName": "Kenyatta",
+    "lastName": "University",
+    "password": "KenyattaUniversity@2026!"
+  },
+  {
+    "agencyCode": "UNIVERSITY-OF-NAIROBI",
+    "agencyName": "University of Nairobi",
+    "email": "university-of-nairobi@ecitizen.go.ke",
+    "firstName": "University",
+    "lastName": "of",
+    "password": "UniversityOf@2026!"
+  },
+  {
+    "agencyCode": "JOMO-KENYATTA-UNIVERSITY-OF-AGRICULTURE",
+    "agencyName": "Jomo Kenyatta University of Agriculture and Technology",
+    "email": "jomo-kenyatta-university-of-agriculture@ecitizen.go.ke",
+    "firstName": "Jomo",
+    "lastName": "Kenyatta",
+    "password": "JomoKenyatta@2026!"
+  },
+  {
+    "agencyCode": "MOI-UNIVERSITY",
+    "agencyName": "Moi University",
+    "email": "moi-university@ecitizen.go.ke",
+    "firstName": "Moi",
+    "lastName": "University",
+    "password": "MoiUniversity@2026!"
+  },
+  {
+    "agencyCode": "UNIVERSITY-OF-ELDORET",
+    "agencyName": "University of Eldoret",
+    "email": "university-of-eldoret@ecitizen.go.ke",
+    "firstName": "University",
+    "lastName": "of",
+    "password": "UniversityOf@2026!"
+  },
+  {
+    "agencyCode": "KARATINA-UNIVERSITY",
+    "agencyName": "Karatina University",
+    "email": "karatina-university@ecitizen.go.ke",
+    "firstName": "Karatina",
+    "lastName": "University",
+    "password": "KaratinaUniversity@2026!"
+  },
+  {
+    "agencyCode": "TAITA-TAVETA-UNIVERSITY",
+    "agencyName": "Taita Taveta University",
+    "email": "taita-taveta-university@ecitizen.go.ke",
+    "firstName": "Taita",
+    "lastName": "Taveta",
+    "password": "TaitaTaveta@2026!"
+  },
+  {
+    "agencyCode": "KIRINYAGA-UNIVERSITY",
+    "agencyName": "Kirinyaga University",
+    "email": "kirinyaga-university@ecitizen.go.ke",
+    "firstName": "Kirinyaga",
+    "lastName": "University",
+    "password": "KirinyagaUniversity@2026!"
+  },
+  {
+    "agencyCode": "MURANGA-UNIVERSITY-OF-TECHNOLOGY",
+    "agencyName": "Muranga University of Technology",
+    "email": "muranga-university-of-technology@ecitizen.go.ke",
+    "firstName": "Muranga",
+    "lastName": "University",
+    "password": "MurangaUniversity@2026!"
+  },
+  {
+    "agencyCode": "EGERTON-UNIVERSITY",
+    "agencyName": "Egerton University",
+    "email": "egerton-university@ecitizen.go.ke",
+    "firstName": "Egerton",
+    "lastName": "University",
+    "password": "EgertonUniversity@2026!"
+  },
+  {
+    "agencyCode": "MASENO-UNIVERSITY",
+    "agencyName": "Maseno University",
+    "email": "maseno-university@ecitizen.go.ke",
+    "firstName": "Maseno",
+    "lastName": "University",
+    "password": "MasenoUniversity@2026!"
+  },
+  {
+    "agencyCode": "MASINDE-MULIRO-UNIVERSITY-OF-SCIENCE-AND",
+    "agencyName": "Masinde Muliro University of Science and Technology",
+    "email": "masinde-muliro-university-of-science-and@ecitizen.go.ke",
+    "firstName": "Masinde",
+    "lastName": "Muliro",
+    "password": "MasindeMuliro@2026!"
+  },
+  {
+    "agencyCode": "TECHNICAL-UNIVERSITY-OF-KENYA",
+    "agencyName": "Technical University of Kenya",
+    "email": "technical-university-of-kenya@ecitizen.go.ke",
+    "firstName": "Technical",
+    "lastName": "University",
+    "password": "TechnicalUniversity@2026!"
+  },
+  {
+    "agencyCode": "TECHNICAL-UNIVERSITY-OF-MOMBASA",
+    "agencyName": "Technical University of Mombasa",
+    "email": "technical-university-of-mombasa@ecitizen.go.ke",
+    "firstName": "Technical",
+    "lastName": "University",
+    "password": "TechnicalUniversity@2026!"
+  },
+  {
+    "agencyCode": "PWANI-UNIVERSITY",
+    "agencyName": "Pwani University",
+    "email": "pwani-university@ecitizen.go.ke",
+    "firstName": "Pwani",
+    "lastName": "University",
+    "password": "PwaniUniversity@2026!"
+  },
+  {
+    "agencyCode": "SOUTH-EASTERN-KENYA-UNIVERSITY",
+    "agencyName": "South Eastern Kenya University",
+    "email": "south-eastern-kenya-university@ecitizen.go.ke",
+    "firstName": "South",
+    "lastName": "Eastern",
+    "password": "SouthEastern@2026!"
+  },
+  {
+    "agencyCode": "DEDAN-KIMATHI-UNIVERSITY-OF-TECHNOLOGY",
+    "agencyName": "Dedan Kimathi University of Technology",
+    "email": "dedan-kimathi-university-of-technology@ecitizen.go.ke",
+    "firstName": "Dedan",
+    "lastName": "Kimathi",
+    "password": "DedanKimathi@2026!"
+  },
+  {
+    "agencyCode": "UNIVERSITY-OF-KABIANGA",
+    "agencyName": "University of Kabianga",
+    "email": "university-of-kabianga@ecitizen.go.ke",
+    "firstName": "University",
+    "lastName": "of",
+    "password": "UniversityOf@2026!"
+  },
+  {
+    "agencyCode": "MAASAI-MARA-UNIVERSITY",
+    "agencyName": "Maasai Mara University",
+    "email": "maasai-mara-university@ecitizen.go.ke",
+    "firstName": "Maasai",
+    "lastName": "Mara",
+    "password": "MaasaiMara@2026!"
+  },
+  {
+    "agencyCode": "UNIVERSITY-OF-KIBABII",
+    "agencyName": "University of Kibabii",
+    "email": "university-of-kibabii@ecitizen.go.ke",
+    "firstName": "University",
+    "lastName": "of",
+    "password": "UniversityOf@2026!"
+  },
+  {
+    "agencyCode": "JARAMOGI-OGINGA-ODINGA-UNIVERSITY-OF-SCI",
+    "agencyName": "Jaramogi Oginga Odinga University of Science and Technology",
+    "email": "jaramogi-oginga-odinga-university-of-sci@ecitizen.go.ke",
+    "firstName": "Jaramogi",
+    "lastName": "Oginga",
+    "password": "JaramogiOginga@2026!"
+  },
+  {
+    "agencyCode": "LAIKIPIA-UNIVERSITY",
+    "agencyName": "Laikipia University",
+    "email": "laikipia-university@ecitizen.go.ke",
+    "firstName": "Laikipia",
+    "lastName": "University",
+    "password": "LaikipiaUniversity@2026!"
+  },
+  {
+    "agencyCode": "MERU-UNIVERSITY-OF-SCIENCE-AND-TECHNOLOG",
+    "agencyName": "Meru University of Science and Technology",
+    "email": "meru-university-of-science-and-technolog@ecitizen.go.ke",
+    "firstName": "Meru",
+    "lastName": "University",
+    "password": "MeruUniversity@2026!"
+  },
+  {
+    "agencyCode": "GARISSA-UNIVERSITY",
+    "agencyName": "Garissa University",
+    "email": "garissa-university@ecitizen.go.ke",
+    "firstName": "Garissa",
+    "lastName": "University",
+    "password": "GarissaUniversity@2026!"
+  },
+  {
+    "agencyCode": "MACHAKOS-UNIVERSITY",
+    "agencyName": "Machakos University",
+    "email": "machakos-university@ecitizen.go.ke",
+    "firstName": "Machakos",
+    "lastName": "University",
+    "password": "MachakosUniversity@2026!"
+  },
+  {
+    "agencyCode": "MULTIMEDIA-UNIVERSITY",
+    "agencyName": "Multi-Media University",
+    "email": "multimedia-university@ecitizen.go.ke",
+    "firstName": "MultiMedia",
+    "lastName": "University",
+    "password": "MultimediaUniversity@2026!"
+  },
+  {
+    "agencyCode": "KISII-UNIVERSITY",
+    "agencyName": "Kisii University",
+    "email": "kisii-university@ecitizen.go.ke",
+    "firstName": "Kisii",
+    "lastName": "University",
+    "password": "KisiiUniversity@2026!"
+  },
+  {
+    "agencyCode": "RONGO-UNIVERSITY",
+    "agencyName": "Rongo University",
+    "email": "rongo-university@ecitizen.go.ke",
+    "firstName": "Rongo",
+    "lastName": "University",
+    "password": "RongoUniversity@2026!"
+  },
+  {
+    "agencyCode": "UNIVERSITY-OF-EMBU",
+    "agencyName": "University of Embu",
+    "email": "university-of-embu@ecitizen.go.ke",
+    "firstName": "University",
+    "lastName": "of",
+    "password": "UniversityOf@2026!"
+  },
+  {
+    "agencyCode": "CHUKA-UNIVERSITY",
+    "agencyName": "Chuka University",
+    "email": "chuka-university@ecitizen.go.ke",
+    "firstName": "Chuka",
+    "lastName": "University",
+    "password": "ChukaUniversity@2026!"
+  },
+  {
+    "agencyCode": "THARAKA-UNIVERSITY",
+    "agencyName": "Tharaka University",
+    "email": "tharaka-university@ecitizen.go.ke",
+    "firstName": "Tharaka",
+    "lastName": "University",
+    "password": "TharakaUniversity@2026!"
+  },
+  {
+    "agencyCode": "COOPERATIVE-UNIVERSITY-OF-KENYA",
+    "agencyName": "Cooperative University of Kenya",
+    "email": "cooperative-university-of-kenya@ecitizen.go.ke",
+    "firstName": "Cooperative",
+    "lastName": "University",
+    "password": "CooperativeUniversity@2026!"
+  },
+  {
+    "agencyCode": "KAIMOSI-FRIENDS-UNIVERSITY",
+    "agencyName": "Kaimosi Friends University",
+    "email": "kaimosi-friends-university@ecitizen.go.ke",
+    "firstName": "Kaimosi",
+    "lastName": "Friends",
+    "password": "KaimosiFriends@2026!"
+  },
+  {
+    "agencyCode": "ALUPE-UNIVERSITY",
+    "agencyName": "Alupe University",
+    "email": "alupe-university@ecitizen.go.ke",
+    "firstName": "Alupe",
+    "lastName": "University",
+    "password": "AlupeUniversity@2026!"
+  },
+  {
+    "agencyCode": "MAMA-NGINA-UNIVERSITY-COLLEGE",
+    "agencyName": "Mama Ngina University College",
+    "email": "mama-ngina-university-college@ecitizen.go.ke",
+    "firstName": "Mama",
+    "lastName": "Ngina",
+    "password": "MamaNgina@2026!"
+  },
+  {
+    "agencyCode": "BOMET-UNIVERSITY-COLLEGE",
+    "agencyName": "Bomet University College",
+    "email": "bomet-university-college@ecitizen.go.ke",
+    "firstName": "Bomet",
+    "lastName": "University",
+    "password": "BometUniversity@2026!"
+  },
+  {
+    "agencyCode": "TOM-MBOYA-UNIVERSITY",
+    "agencyName": "Tom Mboya University",
+    "email": "tom-mboya-university@ecitizen.go.ke",
+    "firstName": "Tom",
+    "lastName": "Mboya",
+    "password": "TomMboya@2026!"
+  },
+  {
+    "agencyCode": "TURKANA-UNIVERSITY-COLLEGE",
+    "agencyName": "Turkana University College",
+    "email": "turkana-university-college@ecitizen.go.ke",
+    "firstName": "Turkana",
+    "lastName": "University",
+    "password": "TurkanaUniversity@2026!"
+  },
+  {
+    "agencyCode": "KOITALEL-ARAP-SAMOEI-UNIVERSITY-COLLEGE",
+    "agencyName": "Koitalel Arap Samoei University College",
+    "email": "koitalel-arap-samoei-university-college@ecitizen.go.ke",
+    "firstName": "Koitalel",
+    "lastName": "Arap",
+    "password": "KoitalelArap@2026!"
+  },
+  {
+    "agencyCode": "UNIVERSITY-OF-NAIROBI-ENTERPRISES",
+    "agencyName": "University of Nairobi Enterprises",
+    "email": "university-of-nairobi-enterprises@ecitizen.go.ke",
+    "firstName": "University",
+    "lastName": "of",
+    "password": "UniversityOf@2026!"
+  },
+  {
+    "agencyCode": "UNIVERSITY-OF-NAIROBI-PRESS",
+    "agencyName": "University of Nairobi Press",
+    "email": "university-of-nairobi-press@ecitizen.go.ke",
+    "firstName": "University",
+    "lastName": "of",
+    "password": "UniversityOf@2026!"
+  },
+  {
+    "agencyCode": "OPEN-UNIVERSITY-OF-KENYA",
+    "agencyName": "Open University of Kenya",
+    "email": "open-university-of-kenya@ecitizen.go.ke",
+    "firstName": "Open",
+    "lastName": "University",
+    "password": "OpenUniversity@2026!"
+  },
+  {
+    "agencyCode": "UNIVERSITIES-FUND",
+    "agencyName": "Universities Fund",
+    "email": "universities-fund@ecitizen.go.ke",
+    "firstName": "Universities",
+    "lastName": "Fund",
+    "password": "UniversitiesFund@2026!"
+  },
+  {
+    "agencyCode": "STATE-DEPARTMENT-FOR-AGRICULTURE",
+    "agencyName": "State Department for Agriculture",
+    "email": "state-department-for-agriculture@ecitizen.go.ke",
+    "firstName": "State",
+    "lastName": "Department",
+    "password": "StateDepartment@2026!"
+  },
+  {
+    "agencyCode": "AGRICULTURE-AND-FOOD-AUTHORITY-AFA",
+    "agencyName": "Agriculture and Food Authority (AFA)",
+    "email": "agriculture-and-food-authority-afa@ecitizen.go.ke",
+    "firstName": "Agriculture",
+    "lastName": "and",
+    "password": "AgricultureAnd@2026!"
+  },
+  {
+    "agencyCode": "KENYA-SUGAR-BOARD",
+    "agencyName": "Kenya Sugar Board",
+    "email": "kenya-sugar-board@ecitizen.go.ke",
+    "firstName": "Kenya",
+    "lastName": "Sugar",
+    "password": "KenyaSugar@2026!"
+  },
+  {
+    "agencyCode": "TEA-BOARD-OF-KENYA",
+    "agencyName": "Tea Board of Kenya",
+    "email": "tea-board-of-kenya@ecitizen.go.ke",
+    "firstName": "Tea",
+    "lastName": "Board",
+    "password": "TeaBoard@2026!"
+  },
+  {
+    "agencyCode": "AGRICULTURAL-FINANCE-CORPORATION",
+    "agencyName": "Agricultural Finance Corporation",
+    "email": "agricultural-finance-corporation@ecitizen.go.ke",
+    "firstName": "Agricultural",
+    "lastName": "Finance",
+    "password": "AgriculturalFinance@2026!"
+  },
+  {
+    "agencyCode": "AGRICULTURAL-DEVELOPMENT-CORPORATION",
+    "agencyName": "Agricultural Development Corporation",
+    "email": "agricultural-development-corporation@ecitizen.go.ke",
+    "firstName": "Agricultural",
+    "lastName": "Development",
+    "password": "AgriculturalDevelopment@2026!"
+  },
+  {
+    "agencyCode": "KENYA-SEED-COMPANY",
+    "agencyName": "Kenya Seed Company",
+    "email": "kenya-seed-company@ecitizen.go.ke",
+    "firstName": "Kenya",
+    "lastName": "Seed",
+    "password": "KenyaSeed@2026!"
+  },
+  {
+    "agencyCode": "KENYA-PLANT-HEALTH-INSPECTORATE-SERVICES",
+    "agencyName": "Kenya Plant Health InspecTorate Services (KEPHIS)",
+    "email": "kenya-plant-health-inspectorate-services@ecitizen.go.ke",
+    "firstName": "Kenya",
+    "lastName": "Plant",
+    "password": "KenyaPlant@2026!"
+  },
+  {
+    "agencyCode": "NYAYO-TEA-ZONES-DEVELOPMENT-CORPORATION",
+    "agencyName": "Nyayo Tea Zones Development Corporation",
+    "email": "nyayo-tea-zones-development-corporation@ecitizen.go.ke",
+    "firstName": "Nyayo",
+    "lastName": "Tea",
+    "password": "NyayoTea@2026!"
+  },
+  {
+    "agencyCode": "SOUTH-NYANZA-SUGAR-COMPANY",
+    "agencyName": "South Nyanza Sugar Company",
+    "email": "south-nyanza-sugar-company@ecitizen.go.ke",
+    "firstName": "South",
+    "lastName": "Nyanza",
+    "password": "SouthNyanza@2026!"
+  },
+  {
+    "agencyCode": "NZOIA-SUGAR-COMPANY",
+    "agencyName": "Nzoia Sugar Company",
+    "email": "nzoia-sugar-company@ecitizen.go.ke",
+    "firstName": "Nzoia",
+    "lastName": "Sugar",
+    "password": "NzoiaSugar@2026!"
+  },
+  {
+    "agencyCode": "CHEMELIL-SUGAR-COMPANY",
+    "agencyName": "Chemelil Sugar Company",
+    "email": "chemelil-sugar-company@ecitizen.go.ke",
+    "firstName": "Chemelil",
+    "lastName": "Sugar",
+    "password": "ChemelilSugar@2026!"
+  },
+  {
+    "agencyCode": "MUHORONI-SUGAR-FACTORY",
+    "agencyName": "Muhoroni Sugar Factory",
+    "email": "muhoroni-sugar-factory@ecitizen.go.ke",
+    "firstName": "Muhoroni",
+    "lastName": "Sugar",
+    "password": "MuhoroniSugar@2026!"
+  },
+  {
+    "agencyCode": "MIWANI-SUGAR-COMPANY",
+    "agencyName": "Miwani Sugar Company",
+    "email": "miwani-sugar-company@ecitizen.go.ke",
+    "firstName": "Miwani",
+    "lastName": "Sugar",
+    "password": "MiwaniSugar@2026!"
+  },
+  {
+    "agencyCode": "BUKURA-AGRICULTURAL-COLLEGE",
+    "agencyName": "Bukura Agricultural College",
+    "email": "bukura-agricultural-college@ecitizen.go.ke",
+    "firstName": "Bukura",
+    "lastName": "Agricultural",
+    "password": "BukuraAgricultural@2026!"
+  },
+  {
+    "agencyCode": "AGRICULTURAL-INFORMATION-RESOURCE-CENTER",
+    "agencyName": "Agricultural Information Resource Center",
+    "email": "agricultural-information-resource-center@ecitizen.go.ke",
+    "firstName": "Agricultural",
+    "lastName": "Information",
+    "password": "AgriculturalInformation@2026!"
+  },
+  {
+    "agencyCode": "KENYA-SCHOOL-OF-AGRICULTURE",
+    "agencyName": "Kenya School of Agriculture",
+    "email": "kenya-school-of-agriculture@ecitizen.go.ke",
+    "firstName": "Kenya",
+    "lastName": "School",
+    "password": "KenyaSchool@2026!"
+  },
+  {
+    "agencyCode": "NATIONAL-CEREALS-AND-PRODUCE-BOARD",
+    "agencyName": "National Cereals and Produce Board",
+    "email": "national-cereals-and-produce-board@ecitizen.go.ke",
+    "firstName": "National",
+    "lastName": "Cereals",
+    "password": "NationalCereals@2026!"
+  },
+  {
+    "agencyCode": "COMMODITIES-FUND",
+    "agencyName": "Commodities Fund",
+    "email": "commodities-fund@ecitizen.go.ke",
+    "firstName": "Commodities",
+    "lastName": "Fund",
+    "password": "CommoditiesFund@2026!"
+  },
+  {
+    "agencyCode": "AGROCHEMICAL-AND-FOOD-COMPANY",
+    "agencyName": "Agro-Chemical and Food Company",
+    "email": "agrochemical-and-food-company@ecitizen.go.ke",
+    "firstName": "AgroChemical",
+    "lastName": "and",
+    "password": "AgrochemicalAnd@2026!"
+  },
+  {
+    "agencyCode": "AGRICULTURE-INFORMATION-RESOURCE-CENTRE",
+    "agencyName": "Agriculture Information Resource Centre Revolving Fund",
+    "email": "agriculture-information-resource-centre@ecitizen.go.ke",
+    "firstName": "Agriculture",
+    "lastName": "Information",
+    "password": "AgricultureInformation@2026!"
+  },
+  {
+    "agencyCode": "PEST-CONTROL-PRODUCTS-BOARD",
+    "agencyName": "Pest Control Products Board",
+    "email": "pest-control-products-board@ecitizen.go.ke",
+    "firstName": "Pest",
+    "lastName": "Control",
+    "password": "PestControl@2026!"
+  },
+  {
+    "agencyCode": "PYRETHRUM-PROCESSING-COMPANY-OF-KENYA",
+    "agencyName": "Pyrethrum Processing Company of Kenya",
+    "email": "pyrethrum-processing-company-of-kenya@ecitizen.go.ke",
+    "firstName": "Pyrethrum",
+    "lastName": "Processing",
+    "password": "PyrethrumProcessing@2026!"
+  },
+  {
+    "agencyCode": "KENYA-AGRICULTURE-AND-LIVESTOCK-RESEARCH",
+    "agencyName": "Kenya Agriculture and Livestock Research Organisation (KALRO)",
+    "email": "kenya-agriculture-and-livestock-research@ecitizen.go.ke",
+    "firstName": "Kenya",
+    "lastName": "Agriculture",
+    "password": "KenyaAgriculture@2026!"
+  },
+  {
+    "agencyCode": "KENYA-SUGAR-RESEARCH-AND-TRAINING-INSTIT",
+    "agencyName": "Kenya Sugar Research and Training Institute",
+    "email": "kenya-sugar-research-and-training-instit@ecitizen.go.ke",
+    "firstName": "Kenya",
+    "lastName": "Sugar",
+    "password": "KenyaSugar@2026!"
+  },
+  {
+    "agencyCode": "NATIONAL-BIOSAFETY-AUTHORITY",
+    "agencyName": "National Biosafety Authority",
+    "email": "national-biosafety-authority@ecitizen.go.ke",
+    "firstName": "National",
+    "lastName": "Biosafety",
+    "password": "NationalBiosafety@2026!"
+  },
+  {
+    "agencyCode": "BIOSAFETY-APPEALS-BOARD",
+    "agencyName": "Biosafety Appeals Board",
+    "email": "biosafety-appeals-board@ecitizen.go.ke",
+    "firstName": "Biosafety",
+    "lastName": "Appeals",
+    "password": "BiosafetyAppeals@2026!"
+  },
+  {
+    "agencyCode": "KENYA-VETERINARY-VACCINE-PRODUCTION-INST",
+    "agencyName": "Kenya Veterinary Vaccine Production Institute",
+    "email": "kenya-veterinary-vaccine-production-inst@ecitizen.go.ke",
+    "firstName": "Kenya",
+    "lastName": "Veterinary",
+    "password": "KenyaVeterinary@2026!"
+  },
+  {
+    "agencyCode": "KENYA-VETERINARY-BOARD",
+    "agencyName": "Kenya Veterinary Board",
+    "email": "kenya-veterinary-board@ecitizen.go.ke",
+    "firstName": "Kenya",
+    "lastName": "Veterinary",
+    "password": "KenyaVeterinary@2026!"
+  },
+  {
+    "agencyCode": "VETERINARY-MEDICINES-DIRECTORATE",
+    "agencyName": "Veterinary Medicines Directorate",
+    "email": "veterinary-medicines-directorate@ecitizen.go.ke",
+    "firstName": "Veterinary",
+    "lastName": "Medicines",
+    "password": "VeterinaryMedicines@2026!"
+  },
+  {
+    "agencyCode": "VETERINARY-SERVICES-DEVELOPMENT-FUND",
+    "agencyName": "Veterinary Services Development Fund",
+    "email": "veterinary-services-development-fund@ecitizen.go.ke",
+    "firstName": "Veterinary",
+    "lastName": "Services",
+    "password": "VeterinaryServices@2026!"
+  },
+  {
+    "agencyCode": "ANIMAL-TECHNICIANS-COUNCIL",
+    "agencyName": "Animal Technicians Council",
+    "email": "animal-technicians-council@ecitizen.go.ke",
+    "firstName": "Animal",
+    "lastName": "Technicians",
+    "password": "AnimalTechnicians@2026!"
+  },
+  {
+    "agencyCode": "KENYA-LEATHER-DEVELOPMENT-COUNCIL",
+    "agencyName": "Kenya Leather Development Council",
+    "email": "kenya-leather-development-council@ecitizen.go.ke",
+    "firstName": "Kenya",
+    "lastName": "Leather",
+    "password": "KenyaLeather@2026!"
+  },
+  {
+    "agencyCode": "KENYA-DAIRY-BOARD",
+    "agencyName": "Kenya dairy board",
+    "email": "kenya-dairy-board@ecitizen.go.ke",
+    "firstName": "Kenya",
+    "lastName": "dairy",
+    "password": "KenyaDairy@2026!"
+  },
+  {
+    "agencyCode": "KENYA-ANIMAL-GENETIC-RESOURCES-CENTRE",
+    "agencyName": "Kenya Animal Genetic Resources Centre",
+    "email": "kenya-animal-genetic-resources-centre@ecitizen.go.ke",
+    "firstName": "Kenya",
+    "lastName": "Animal",
+    "password": "KenyaAnimal@2026!"
+  },
+  {
+    "agencyCode": "KENYA-TSETSE-AND-TRYPANOSOMIASIS-ERADICA",
+    "agencyName": "Kenya Tsetse and Trypanosomiasis Eradication Council (KENTTEC)",
+    "email": "kenya-tsetse-and-trypanosomiasis-eradica@ecitizen.go.ke",
+    "firstName": "Kenya",
+    "lastName": "Tsetse",
+    "password": "KenyaTsetse@2026!"
+  },
+  {
+    "agencyCode": "NATIONAL-BEEKEEPING-INSTITUTE-LENANA",
+    "agencyName": "National Beekeeping Institute Lenana",
+    "email": "national-beekeeping-institute-lenana@ecitizen.go.ke",
+    "firstName": "National",
+    "lastName": "Beekeeping",
+    "password": "NationalBeekeeping@2026!"
+  },
+  {
+    "agencyCode": "DAIRY-TRAINING-INSTITUTE-NAIVASHA",
+    "agencyName": "Dairy Training Institute, Naivasha",
+    "email": "dairy-training-institute-naivasha@ecitizen.go.ke",
+    "firstName": "Dairy",
+    "lastName": "Training",
+    "password": "DairyTraining@2026!"
+  },
+  {
+    "agencyCode": "NATIONAL-RABBIT-INSTITUTE",
+    "agencyName": "National Rabbit Institute",
+    "email": "national-rabbit-institute@ecitizen.go.ke",
+    "firstName": "National",
+    "lastName": "Rabbit",
+    "password": "NationalRabbit@2026!"
+  },
+  {
+    "agencyCode": "NATIONAL-LIVESTOCK-RECORDING-CENTER",
+    "agencyName": "National Livestock Recording Center",
+    "email": "national-livestock-recording-center@ecitizen.go.ke",
+    "firstName": "National",
+    "lastName": "Livestock",
+    "password": "NationalLivestock@2026!"
+  },
+  {
+    "agencyCode": "REGIONAL-PASTORAL-TRAINING-CENTER-NAROK",
+    "agencyName": "Regional Pastoral Training Center - Narok",
+    "email": "regional-pastoral-training-center-narok@ecitizen.go.ke",
+    "firstName": "Regional",
+    "lastName": "Pastoral",
+    "password": "RegionalPastoral@2026!"
+  },
+  {
+    "agencyCode": "MEAT-TRAINING-INSTITUTE",
+    "agencyName": "Meat Training Institute",
+    "email": "meat-training-institute@ecitizen.go.ke",
+    "firstName": "Meat",
+    "lastName": "Training",
+    "password": "MeatTraining@2026!"
+  },
+  {
+    "agencyCode": "ANIMAL-HEALTH-AND-INDUSTRY-TRAINING-INST",
+    "agencyName": "Animal Health and Industry Training Institute - Kabete",
+    "email": "animal-health-and-industry-training-inst@ecitizen.go.ke",
+    "firstName": "Animal",
+    "lastName": "Health",
+    "password": "AnimalHealth@2026!"
+  },
+  {
+    "agencyCode": "ANIMAL-HEALTH-AND-INDUSTRY-TRAINING-I-2",
+    "agencyName": "Animal Health and Industry Training Institute - Ndomba",
+    "email": "animal-health-and-industry-training-i-2@ecitizen.go.ke",
+    "firstName": "Animal",
+    "lastName": "Health",
+    "password": "AnimalHealth@2026!"
+  },
+  {
+    "agencyCode": "ANIMAL-HEALTH-AND-INDUSTRY-TRAINING-I-3",
+    "agencyName": "Animal Health and Industry Training Institute - Nyahururu",
+    "email": "animal-health-and-industry-training-i-3@ecitizen.go.ke",
+    "firstName": "Animal",
+    "lastName": "Health",
+    "password": "AnimalHealth@2026!"
+  },
+  {
+    "agencyCode": "LIVESTOCK-TRAINING-INSTITUTE-WAJIR",
+    "agencyName": "Livestock Training Institute - Wajir",
+    "email": "livestock-training-institute-wajir@ecitizen.go.ke",
+    "firstName": "Livestock",
+    "lastName": "Training",
+    "password": "LivestockTraining@2026!"
+  },
+  {
+    "agencyCode": "LIVESTOCK-FARMS-AND-STATIONS-14",
+    "agencyName": "Livestock Farms and stations (14)",
+    "email": "livestock-farms-and-stations-14@ecitizen.go.ke",
+    "firstName": "Livestock",
+    "lastName": "Farms",
+    "password": "LivestockFarms@2026!"
+  },
+  {
+    "agencyCode": "STATE-DEPARTMENT-FOR-INVESTMENTS-PROMOTI",
+    "agencyName": "State Department for Investments Promotion",
+    "email": "state-department-for-investments-promoti@ecitizen.go.ke",
+    "firstName": "State",
+    "lastName": "Department",
+    "password": "StateDepartment@2026!"
+  },
+  {
+    "agencyCode": "KENYA-INVESTMENT-AUTHORITY",
+    "agencyName": "Kenya Investment Authority",
+    "email": "kenya-investment-authority@ecitizen.go.ke",
+    "firstName": "Kenya",
+    "lastName": "Investment",
+    "password": "KenyaInvestment@2026!"
+  },
+  {
+    "agencyCode": "EXPORT-PROCESSING-ZONES-AUTHORITY",
+    "agencyName": "Export Processing Zones Authority",
+    "email": "export-processing-zones-authority@ecitizen.go.ke",
+    "firstName": "Export",
+    "lastName": "Processing",
+    "password": "ExportProcessing@2026!"
+  },
+  {
+    "agencyCode": "SPECIAL-ECONOMIC-ZONES-AUTHORITY",
+    "agencyName": "Special Economic Zones Authority",
+    "email": "special-economic-zones-authority@ecitizen.go.ke",
+    "firstName": "Special",
+    "lastName": "Economic",
+    "password": "SpecialEconomic@2026!"
+  },
+  {
+    "agencyCode": "KENYA-DEVELOPMENT-CORPORATION-KDC",
+    "agencyName": "Kenya Development Corporation (KDC)",
+    "email": "kenya-development-corporation-kdc@ecitizen.go.ke",
+    "firstName": "Kenya",
+    "lastName": "Development",
+    "password": "KenyaDevelopment@2026!"
+  },
+  {
+    "agencyCode": "SUNSET-HOTEL-LIMITED",
+    "agencyName": "Sunset Hotel Limited",
+    "email": "sunset-hotel-limited@ecitizen.go.ke",
+    "firstName": "Sunset",
+    "lastName": "Hotel",
+    "password": "SunsetHotel@2026!"
+  },
+  {
+    "agencyCode": "DEPARTMENT-OF-BUSINESS-REFORMS-AND-TRANS",
+    "agencyName": "Department of Business Reforms and Transformation",
+    "email": "department-of-business-reforms-and-trans@ecitizen.go.ke",
+    "firstName": "Department",
+    "lastName": "of",
+    "password": "DepartmentOf@2026!"
+  },
+  {
+    "agencyCode": "KENYA-NATIONAL-TRADING-CORPORATION",
+    "agencyName": "Kenya National Trading Corporation",
+    "email": "kenya-national-trading-corporation@ecitizen.go.ke",
+    "firstName": "Kenya",
+    "lastName": "National",
+    "password": "KenyaNational@2026!"
+  },
+  {
+    "agencyCode": "AFRICA-TRADE-INSURANCE",
+    "agencyName": "Africa Trade Insurance",
+    "email": "africa-trade-insurance@ecitizen.go.ke",
+    "firstName": "Africa",
+    "lastName": "Trade",
+    "password": "AfricaTrade@2026!"
+  },
+  {
+    "agencyCode": "THE-NATIONAL-TRADE-NEGOTIATIONS-COUNCIL",
+    "agencyName": "The National Trade Negotiations Council (NTNC)",
+    "email": "the-national-trade-negotiations-council@ecitizen.go.ke",
+    "firstName": "National",
+    "lastName": "Trade",
+    "password": "TheNational@2026!"
+  },
+  {
+    "agencyCode": "KENYA-TRADE-REMEDIES-AGENCY-KETRA",
+    "agencyName": "Kenya Trade Remedies Agency (KETRA)",
+    "email": "kenya-trade-remedies-agency-ketra@ecitizen.go.ke",
+    "firstName": "Kenya",
+    "lastName": "Trade",
+    "password": "KenyaTrade@2026!"
+  },
+  {
+    "agencyCode": "KENYA-EXPORT-PROMOTION-AND-BRANDING-AGEN",
+    "agencyName": "Kenya Export Promotion and Branding Agency",
+    "email": "kenya-export-promotion-and-branding-agen@ecitizen.go.ke",
+    "firstName": "Kenya",
+    "lastName": "Export",
+    "password": "KenyaExport@2026!"
+  },
+  {
+    "agencyCode": "WAREHOUSE-RECEIPT-SYSTEM-COUNCIL",
+    "agencyName": "Warehouse Receipt System Council",
+    "email": "warehouse-receipt-system-council@ecitizen.go.ke",
+    "firstName": "Warehouse",
+    "lastName": "Receipt",
+    "password": "WarehouseReceipt@2026!"
+  },
+  {
+    "agencyCode": "KENYA-NATIONAL-MULTI-COMMODITIES-EXCHANG",
+    "agencyName": "Kenya National Multi- Commodities Exchange Limited",
+    "email": "kenya-national-multi-commodities-exchang@ecitizen.go.ke",
+    "firstName": "Kenya",
+    "lastName": "National",
+    "password": "KenyaNational@2026!"
+  },
+  {
+    "agencyCode": "WEIGHTS-AND-MEASURES",
+    "agencyName": "Weights and Measures",
+    "email": "weights-and-measures@ecitizen.go.ke",
+    "firstName": "Weights",
+    "lastName": "and",
+    "password": "WeightsAnd@2026!"
+  },
+  {
+    "agencyCode": "STATE-DEPARTMENT-FOR-INDUSTRY",
+    "agencyName": "State Department for Industry",
+    "email": "state-department-for-industry@ecitizen.go.ke",
+    "firstName": "State",
+    "lastName": "Department",
+    "password": "StateDepartment@2026!"
+  },
+  {
+    "agencyCode": "KENYA-BUREAU-OF-STANDARDS-KEBS",
+    "agencyName": "Kenya Bureau of Standards (KEBS)",
+    "email": "kenya-bureau-of-standards-kebs@ecitizen.go.ke",
+    "firstName": "Kenya",
+    "lastName": "Bureau",
+    "password": "KenyaBureau@2026!"
+  },
+  {
+    "agencyCode": "KENYA-ACCREDITATION-SERVICE",
+    "agencyName": "Kenya Accreditation Service",
+    "email": "kenya-accreditation-service@ecitizen.go.ke",
+    "firstName": "Kenya",
+    "lastName": "Accreditation",
+    "password": "KenyaAccreditation@2026!"
+  },
+  {
+    "agencyCode": "RIVATEX",
+    "agencyName": "Rivatex",
+    "email": "rivatex@ecitizen.go.ke",
+    "firstName": "Rivatex",
+    "lastName": "Admin",
+    "password": "RivatexAdmin@2026!"
+  },
+  {
+    "agencyCode": "EAST-AFRICAN-PORTLAND-CEMENT-CO-LTD",
+    "agencyName": "East African Portland Cement Co. Ltd",
+    "email": "east-african-portland-cement-co-ltd@ecitizen.go.ke",
+    "firstName": "East",
+    "lastName": "African",
+    "password": "EastAfrican@2026!"
+  },
+  {
+    "agencyCode": "NUMERICAL-MACHINING-COMPLEX-NMC",
+    "agencyName": "Numerical Machining Complex (NMC)",
+    "email": "numerical-machining-complex-nmc@ecitizen.go.ke",
+    "firstName": "Numerical",
+    "lastName": "Machining",
+    "password": "NumericalMachining@2026!"
+  },
+  {
+    "agencyCode": "KENYA-INDUSTRIAL-RESEARCH-AND-DEVELOPMEN",
+    "agencyName": "Kenya Industrial Research and Development Institute (KIRDI)",
+    "email": "kenya-industrial-research-and-developmen@ecitizen.go.ke",
+    "firstName": "Kenya",
+    "lastName": "Industrial",
+    "password": "KenyaIndustrial@2026!"
+  },
+  {
+    "agencyCode": "KENYA-INDUSTRIAL-PROPERTY-INSTITUTE",
+    "agencyName": "Kenya Industrial Property Institute",
+    "email": "kenya-industrial-property-institute@ecitizen.go.ke",
+    "firstName": "Kenya",
+    "lastName": "Industrial",
+    "password": "KenyaIndustrial@2026!"
+  },
+  {
+    "agencyCode": "SCRAP-METAL-COUNCIL",
+    "agencyName": "Scrap Metal Council",
+    "email": "scrap-metal-council@ecitizen.go.ke",
+    "firstName": "Scrap",
+    "lastName": "Metal",
+    "password": "ScrapMetal@2026!"
+  },
+  {
+    "agencyCode": "KENYA-INDUSTRIAL-TRAINING-INSTITUTE-KITI",
+    "agencyName": "Kenya Industrial Training Institute (KITI)",
+    "email": "kenya-industrial-training-institute-kiti@ecitizen.go.ke",
+    "firstName": "Kenya",
+    "lastName": "Industrial",
+    "password": "KenyaIndustrial@2026!"
+  },
+  {
+    "agencyCode": "ANTI-COUNTERFEIT-AUTHORITY-ACA",
+    "agencyName": "Anti Counterfeit Authority (ACA)",
+    "email": "anti-counterfeit-authority-aca@ecitizen.go.ke",
+    "firstName": "Anti",
+    "lastName": "Counterfeit",
+    "password": "AntiCounterfeit@2026!"
+  },
+  {
+    "agencyCode": "STATE-DEPARTMENT-FOR-COOPERATIVES",
+    "agencyName": "State Department for Co-operatives",
+    "email": "state-department-for-cooperatives@ecitizen.go.ke",
+    "firstName": "State",
+    "lastName": "Department",
+    "password": "StateDepartment@2026!"
+  },
+  {
+    "agencyCode": "SACCO-SOCIETIES-REGULATORY-AUTHORITY-SAS",
+    "agencyName": "Sacco Societies Regulatory Authority (SASRA)",
+    "email": "sacco-societies-regulatory-authority-sas@ecitizen.go.ke",
+    "firstName": "Sacco",
+    "lastName": "Societies",
+    "password": "SaccoSocieties@2026!"
+  },
+  {
+    "agencyCode": "NEW-KENYA-PLANTERS-COOPERATIVE-UNION",
+    "agencyName": "New Kenya Planters Cooperative Union",
+    "email": "new-kenya-planters-cooperative-union@ecitizen.go.ke",
+    "firstName": "New",
+    "lastName": "Kenya",
+    "password": "NewKenya@2026!"
+  },
+  {
+    "agencyCode": "NEW-KENYA-COOPERATIVE-CREAMERIES",
+    "agencyName": "New Kenya Cooperative Creameries",
+    "email": "new-kenya-cooperative-creameries@ecitizen.go.ke",
+    "firstName": "New",
+    "lastName": "Kenya",
+    "password": "NewKenya@2026!"
+  },
+  {
+    "agencyCode": "KENYA-INDUSTRIAL-ESTATES",
+    "agencyName": "Kenya Industrial Estates",
+    "email": "kenya-industrial-estates@ecitizen.go.ke",
+    "firstName": "Kenya",
+    "lastName": "Industrial",
+    "password": "KenyaIndustrial@2026!"
+  },
+  {
+    "agencyCode": "MICRO-AND-SMALL-ENTERPRISE-AUTHORITY",
+    "agencyName": "Micro and Small Enterprise Authority",
+    "email": "micro-and-small-enterprise-authority@ecitizen.go.ke",
+    "firstName": "Micro",
+    "lastName": "and",
+    "password": "MicroAnd@2026!"
+  },
+  {
+    "agencyCode": "UWEZO-FUND",
+    "agencyName": "Uwezo Fund",
+    "email": "uwezo-fund@ecitizen.go.ke",
+    "firstName": "Uwezo",
+    "lastName": "Fund",
+    "password": "UwezoFund@2026!"
+  },
+  {
+    "agencyCode": "KENYA-INSTITUTE-OF-BUSINESS-TRAINING-KIB",
+    "agencyName": "Kenya Institute of Business Training (KIBT)",
+    "email": "kenya-institute-of-business-training-kib@ecitizen.go.ke",
+    "firstName": "Kenya",
+    "lastName": "Institute",
+    "password": "KenyaInstitute@2026!"
+  },
+  {
+    "agencyCode": "STATE-DEPARTMENT-FOR-YOUTH-AFFAIRS-AND-C",
+    "agencyName": "State Department for Youth Affairs and Creative Economy",
+    "email": "state-department-for-youth-affairs-and-c@ecitizen.go.ke",
+    "firstName": "State",
+    "lastName": "Department",
+    "password": "StateDepartment@2026!"
+  },
+  {
+    "agencyCode": "KENYA-NATIONAL-YOUTH-COUNCIL",
+    "agencyName": "Kenya National Youth Council",
+    "email": "kenya-national-youth-council@ecitizen.go.ke",
+    "firstName": "Kenya",
+    "lastName": "National",
+    "password": "KenyaNational@2026!"
+  },
+  {
+    "agencyCode": "YOUTH-ADVISORY-BOARD",
+    "agencyName": "Youth Advisory Board",
+    "email": "youth-advisory-board@ecitizen.go.ke",
+    "firstName": "Youth",
+    "lastName": "Advisory",
+    "password": "YouthAdvisory@2026!"
+  },
+  {
+    "agencyCode": "KENYA-ASSOCIATION-OF-YOUTH-CENTRES",
+    "agencyName": "Kenya Association of Youth Centres",
+    "email": "kenya-association-of-youth-centres@ecitizen.go.ke",
+    "firstName": "Kenya",
+    "lastName": "Association",
+    "password": "KenyaAssociation@2026!"
+  },
+  {
+    "agencyCode": "KENYA-NATIONAL-INNOVATION-AGENCY",
+    "agencyName": "Kenya National Innovation Agency",
+    "email": "kenya-national-innovation-agency@ecitizen.go.ke",
+    "firstName": "Kenya",
+    "lastName": "National",
+    "password": "KenyaNational@2026!"
+  },
+  {
+    "agencyCode": "THE-REGIONAL-YOUTH-FORUM-SECRETARIAT-OF",
+    "agencyName": "The Regional Youth Forum Secretariat of the International Conference\n on the Great Lakes Region (ICGLR)",
+    "email": "the-regional-youth-forum-secretariat-of@ecitizen.go.ke",
+    "firstName": "Regional",
+    "lastName": "Youth",
+    "password": "TheRegional@2026!"
+  },
+  {
+    "agencyCode": "THE-PRESIDENTS-AWARD-KENYA",
+    "agencyName": "The President’s Award Kenya",
+    "email": "the-presidents-award-kenya@ecitizen.go.ke",
+    "firstName": "Presidents",
+    "lastName": "Award",
+    "password": "ThePresidents@2026!"
+  },
+  {
+    "agencyCode": "YOUTH-ENTERPRISE-DEVELOPMENT-FUND-YEDF",
+    "agencyName": "Youth Enterprise Development Fund (YEDF)",
+    "email": "youth-enterprise-development-fund-yedf@ecitizen.go.ke",
+    "firstName": "Youth",
+    "lastName": "Enterprise",
+    "password": "YouthEnterprise@2026!"
+  },
+  {
+    "agencyCode": "KENYA-FILM-CLASSIFICATION-BOARD",
+    "agencyName": "Kenya film classification Board",
+    "email": "kenya-film-classification-board@ecitizen.go.ke",
+    "firstName": "Kenya",
+    "lastName": "film",
+    "password": "KenyaFilm@2026!"
+  },
+  {
+    "agencyCode": "KENYA-FILM-COMMMISSION",
+    "agencyName": "Kenya Film Commmission",
+    "email": "kenya-film-commmission@ecitizen.go.ke",
+    "firstName": "Kenya",
+    "lastName": "Film",
+    "password": "KenyaFilm@2026!"
+  },
+  {
+    "agencyCode": "KENYA-NATIONAL-THEATRE",
+    "agencyName": "Kenya National Theatre",
+    "email": "kenya-national-theatre@ecitizen.go.ke",
+    "firstName": "Kenya",
+    "lastName": "National",
+    "password": "KenyaNational@2026!"
+  },
+  {
+    "agencyCode": "SPORTS-KENYA",
+    "agencyName": "Sports Kenya",
+    "email": "sports-kenya@ecitizen.go.ke",
+    "firstName": "Sports",
+    "lastName": "Kenya",
+    "password": "SportsKenya@2026!"
+  },
+  {
+    "agencyCode": "KENYA-ANTI-DOPING-AGENCY",
+    "agencyName": "Kenya Anti Doping Agency",
+    "email": "kenya-anti-doping-agency@ecitizen.go.ke",
+    "firstName": "Kenya",
+    "lastName": "Anti",
+    "password": "KenyaAnti@2026!"
+  },
+  {
+    "agencyCode": "SPORTS-ARTS-AND-SOCIAL-DEVELOPMENT-FUND",
+    "agencyName": "Sports Arts and Social Development Fund",
+    "email": "sports-arts-and-social-development-fund@ecitizen.go.ke",
+    "firstName": "Sports",
+    "lastName": "Arts",
+    "password": "SportsArts@2026!"
+  },
+  {
+    "agencyCode": "KENYA-ACADEMY-OF-SPORTS",
+    "agencyName": "Kenya Academy of Sports",
+    "email": "kenya-academy-of-sports@ecitizen.go.ke",
+    "firstName": "Kenya",
+    "lastName": "Academy",
+    "password": "KenyaAcademy@2026!"
+  },
+  {
+    "agencyCode": "REGISTRAR-OF-SPORTS",
+    "agencyName": "Registrar of Sports",
+    "email": "registrar-of-sports@ecitizen.go.ke",
+    "firstName": "Registrar",
+    "lastName": "of",
+    "password": "RegistrarOf@2026!"
+  },
+  {
+    "agencyCode": "NATIONAL-ENVIRONMENTAL-MANAGEMENT-AUTHOR",
+    "agencyName": "National Environmental Management Authority",
+    "email": "national-environmental-management-author@ecitizen.go.ke",
+    "firstName": "National",
+    "lastName": "Environmental",
+    "password": "NationalEnvironmental@2026!"
+  },
+  {
+    "agencyCode": "NATIONAL-CLIMATE-CHANGE-COUNCIL",
+    "agencyName": "National Climate Change Council",
+    "email": "national-climate-change-council@ecitizen.go.ke",
+    "firstName": "National",
+    "lastName": "Climate",
+    "password": "NationalClimate@2026!"
+  },
+  {
+    "agencyCode": "NATIONAL-ENVIRONMENT-TRUST-FUND",
+    "agencyName": "National Environment Trust Fund",
+    "email": "national-environment-trust-fund@ecitizen.go.ke",
+    "firstName": "National",
+    "lastName": "Environment",
+    "password": "NationalEnvironment@2026!"
+  },
+  {
+    "agencyCode": "NATIONAL-ENVIRONMENTAL-COMPLAINTS-COMMIT",
+    "agencyName": "National Environmental Complaints Committee (NECC)",
+    "email": "national-environmental-complaints-commit@ecitizen.go.ke",
+    "firstName": "National",
+    "lastName": "Environmental",
+    "password": "NationalEnvironmental@2026!"
+  },
+  {
+    "agencyCode": "KENYA-METEOROLOGICAL-DEPARTMENT",
+    "agencyName": "Kenya Meteorological Department",
+    "email": "kenya-meteorological-department@ecitizen.go.ke",
+    "firstName": "Kenya",
+    "lastName": "Meteorological",
+    "password": "KenyaMeteorological@2026!"
+  },
+  {
+    "agencyCode": "KENYA-METEOROLOGICAL-TRAINING-COLLEGE",
+    "agencyName": "Kenya Meteorological Training College",
+    "email": "kenya-meteorological-training-college@ecitizen.go.ke",
+    "firstName": "Kenya",
+    "lastName": "Meteorological",
+    "password": "KenyaMeteorological@2026!"
+  },
+  {
+    "agencyCode": "KENYA-FOREST-SERVICE",
+    "agencyName": "Kenya Forest Service",
+    "email": "kenya-forest-service@ecitizen.go.ke",
+    "firstName": "Kenya",
+    "lastName": "Forest",
+    "password": "KenyaForest@2026!"
+  },
+  {
+    "agencyCode": "KENYA-FORESTRY-RESEARCH-INSTITUTE",
+    "agencyName": "Kenya Forestry Research Institute",
+    "email": "kenya-forestry-research-institute@ecitizen.go.ke",
+    "firstName": "Kenya",
+    "lastName": "Forestry",
+    "password": "KenyaForestry@2026!"
+  },
+  {
+    "agencyCode": "STATE-DEPARTMENT-OF-TOURISM",
+    "agencyName": "State Department of Tourism",
+    "email": "state-department-of-tourism@ecitizen.go.ke",
+    "firstName": "State",
+    "lastName": "Department",
+    "password": "StateDepartment@2026!"
+  },
+  {
+    "agencyCode": "TOURISM-REGULATORY-AUTHORITY",
+    "agencyName": "Tourism Regulatory Authority",
+    "email": "tourism-regulatory-authority@ecitizen.go.ke",
+    "firstName": "Tourism",
+    "lastName": "Regulatory",
+    "password": "TourismRegulatory@2026!"
+  },
+  {
+    "agencyCode": "KENYA-UTALII-COLLEGE",
+    "agencyName": "Kenya Utalii College",
+    "email": "kenya-utalii-college@ecitizen.go.ke",
+    "firstName": "Kenya",
+    "lastName": "Utalii",
+    "password": "KenyaUtalii@2026!"
+  },
+  {
+    "agencyCode": "THE-TOURISM-FUND",
+    "agencyName": "The Tourism Fund",
+    "email": "the-tourism-fund@ecitizen.go.ke",
+    "firstName": "Tourism",
+    "lastName": "Fund",
+    "password": "TheTourism@2026!"
+  },
+  {
+    "agencyCode": "TOURISM-RESEARCH-INSTITUTE-AND-MONITORIN",
+    "agencyName": "Tourism Research Institute and Monitoring Mechanism",
+    "email": "tourism-research-institute-and-monitorin@ecitizen.go.ke",
+    "firstName": "Tourism",
+    "lastName": "Research",
+    "password": "TourismResearch@2026!"
+  },
+  {
+    "agencyCode": "TOURISM-PROTECTION-SERVICE",
+    "agencyName": "Tourism Protection Service",
+    "email": "tourism-protection-service@ecitizen.go.ke",
+    "firstName": "Tourism",
+    "lastName": "Protection",
+    "password": "TourismProtection@2026!"
+  },
+  {
+    "agencyCode": "KENYA-TOURISM-BOARD",
+    "agencyName": "Kenya Tourism Board",
+    "email": "kenya-tourism-board@ecitizen.go.ke",
+    "firstName": "Kenya",
+    "lastName": "Tourism",
+    "password": "KenyaTourism@2026!"
+  },
+  {
+    "agencyCode": "KENYATTA-INTERNATIONAL-CONVENTION-CENTER",
+    "agencyName": "Kenyatta International Convention Center (KICC)",
+    "email": "kenyatta-international-convention-center@ecitizen.go.ke",
+    "firstName": "Kenyatta",
+    "lastName": "International",
+    "password": "KenyattaInternational@2026!"
+  },
+  {
+    "agencyCode": "KENYA-WILDLIFE-SERVICE",
+    "agencyName": "Kenya Wildlife Service",
+    "email": "kenya-wildlife-service@ecitizen.go.ke",
+    "firstName": "Kenya",
+    "lastName": "Wildlife",
+    "password": "KenyaWildlife@2026!"
+  },
+  {
+    "agencyCode": "KENYA-WILDLIFE-RESEARCH-AND-TRAINING-INS",
+    "agencyName": "Kenya Wildlife Research and Training Institute",
+    "email": "kenya-wildlife-research-and-training-ins@ecitizen.go.ke",
+    "firstName": "Kenya",
+    "lastName": "Wildlife",
+    "password": "KenyaWildlife@2026!"
+  },
+  {
+    "agencyCode": "WILDLIFE-CONSERVATION-TRUST-FUND",
+    "agencyName": "Wildlife Conservation Trust Fund",
+    "email": "wildlife-conservation-trust-fund@ecitizen.go.ke",
+    "firstName": "Wildlife",
+    "lastName": "Conservation",
+    "password": "WildlifeConservation@2026!"
+  },
+  {
+    "agencyCode": "WILDLIFE-CLUBS-OF-KENYA",
+    "agencyName": "Wildlife Clubs of Kenya",
+    "email": "wildlife-clubs-of-kenya@ecitizen.go.ke",
+    "firstName": "Wildlife",
+    "lastName": "Clubs",
+    "password": "WildlifeClubs@2026!"
+  },
+  {
+    "agencyCode": "KENYA-SAFARI-LODGES-AND-HOTELS",
+    "agencyName": "Kenya Safari Lodges and Hotels",
+    "email": "kenya-safari-lodges-and-hotels@ecitizen.go.ke",
+    "firstName": "Kenya",
+    "lastName": "Safari",
+    "password": "KenyaSafari@2026!"
+  },
+  {
+    "agencyCode": "THE-NATIONAL-GOVERNMENT-AFFIRMATIVE-ACTI",
+    "agencyName": "The National Government Affirmative Action Fund",
+    "email": "the-national-government-affirmative-acti@ecitizen.go.ke",
+    "firstName": "National",
+    "lastName": "Government",
+    "password": "TheNational@2026!"
+  },
+  {
+    "agencyCode": "ANTIFEMALE-GENITAL-MUTILATION-BOARD",
+    "agencyName": "Anti-Female Genital Mutilation Board",
+    "email": "antifemale-genital-mutilation-board@ecitizen.go.ke",
+    "firstName": "AntiFemale",
+    "lastName": "Genital",
+    "password": "AntifemaleGenital@2026!"
+  },
+  {
+    "agencyCode": "GENDER-VIOLENCE-PROTECTION-CENTRES",
+    "agencyName": "Gender Violence Protection Centres",
+    "email": "gender-violence-protection-centres@ecitizen.go.ke",
+    "firstName": "Gender",
+    "lastName": "Violence",
+    "password": "GenderViolence@2026!"
+  },
+  {
+    "agencyCode": "WOMEN-ENTERPRISE-FUND",
+    "agencyName": "Women Enterprise Fund",
+    "email": "women-enterprise-fund@ecitizen.go.ke",
+    "firstName": "Women",
+    "lastName": "Enterprise",
+    "password": "WomenEnterprise@2026!"
+  },
+  {
+    "agencyCode": "NATIONAL-GENDER-AND-EQUALITY-COMMISSION",
+    "agencyName": "National Gender and Equality Commission",
+    "email": "national-gender-and-equality-commission@ecitizen.go.ke",
+    "firstName": "National",
+    "lastName": "Gender",
+    "password": "NationalGender@2026!"
+  },
+  {
+    "agencyCode": "STATE-DEPARTMENT-FOR-CULTURE-THE-ARTS-AN",
+    "agencyName": "State Department for Culture, the Arts and Heritage",
+    "email": "state-department-for-culture-the-arts-an@ecitizen.go.ke",
+    "firstName": "State",
+    "lastName": "Department",
+    "password": "StateDepartment@2026!"
+  },
+  {
+    "agencyCode": "THE-NATIONAL-HEROES-COUNCIL",
+    "agencyName": "The National Heroes Council",
+    "email": "the-national-heroes-council@ecitizen.go.ke",
+    "firstName": "National",
+    "lastName": "Heroes",
+    "password": "TheNational@2026!"
+  },
+  {
+    "agencyCode": "KENYA-NATIONAL-ARCHIVES-AND-DOCUMENTATIO",
+    "agencyName": "Kenya National Archives and Documentation Service",
+    "email": "kenya-national-archives-and-documentatio@ecitizen.go.ke",
+    "firstName": "Kenya",
+    "lastName": "National",
+    "password": "KenyaNational@2026!"
+  },
+  {
+    "agencyCode": "NATIONAL-MUSEUMS-OF-KENYA",
+    "agencyName": "National Museums of Kenya",
+    "email": "national-museums-of-kenya@ecitizen.go.ke",
+    "firstName": "National",
+    "lastName": "Museums",
+    "password": "NationalMuseums@2026!"
+  },
+  {
+    "agencyCode": "BOMAS-OF-KENYA",
+    "agencyName": "Bomas of Kenya",
+    "email": "bomas-of-kenya@ecitizen.go.ke",
+    "firstName": "Bomas",
+    "lastName": "of",
+    "password": "BomasOf@2026!"
+  },
+  {
+    "agencyCode": "PERMANENT-PRESIDENTIAL-MUSIC-COMMISSION",
+    "agencyName": "Permanent Presidential Music Commission",
+    "email": "permanent-presidential-music-commission@ecitizen.go.ke",
+    "firstName": "Permanent",
+    "lastName": "Presidential",
+    "password": "PermanentPresidential@2026!"
+  },
+  {
+    "agencyCode": "KENYA-COPYRIGHT-BOARD-KECOBO",
+    "agencyName": "Kenya Copyright Board (KECOBO)",
+    "email": "kenya-copyright-board-kecobo@ecitizen.go.ke",
+    "firstName": "Kenya",
+    "lastName": "Copyright",
+    "password": "KenyaCopyright@2026!"
+  },
+  {
+    "agencyCode": "KENYA-NATIONAL-LIBRARY-SEVICES",
+    "agencyName": "Kenya National Library Sevices",
+    "email": "kenya-national-library-sevices@ecitizen.go.ke",
+    "firstName": "Kenya",
+    "lastName": "National",
+    "password": "KenyaNational@2026!"
+  },
+  {
+    "agencyCode": "KENYA-CULTURAL-CENTRE",
+    "agencyName": "Kenya Cultural Centre",
+    "email": "kenya-cultural-centre@ecitizen.go.ke",
+    "firstName": "Kenya",
+    "lastName": "Cultural",
+    "password": "KenyaCultural@2026!"
+  },
+  {
+    "agencyCode": "KENYA-NATIONAL-COMMISSION-FOR-CULTURE-AN",
+    "agencyName": "Kenya National Commission for Culture and Social Services",
+    "email": "kenya-national-commission-for-culture-an@ecitizen.go.ke",
+    "firstName": "Kenya",
+    "lastName": "National",
+    "password": "KenyaNational@2026!"
+  },
+  {
+    "agencyCode": "USHANGA-KENYA-INITIATIVE",
+    "agencyName": "Ushanga Kenya Initiative",
+    "email": "ushanga-kenya-initiative@ecitizen.go.ke",
+    "firstName": "Ushanga",
+    "lastName": "Kenya",
+    "password": "UshangaKenya@2026!"
+  },
+  {
+    "agencyCode": "MINISTRY-FOR-WATER-AND-SANITATION",
+    "agencyName": "Ministry for Water and Sanitation",
+    "email": "ministry-for-water-and-sanitation@ecitizen.go.ke",
+    "firstName": "Ministry",
+    "lastName": "for",
+    "password": "MinistryFor@2026!"
+  },
+  {
+    "agencyCode": "WATER-SERVICES-REGULATORY-BOARD",
+    "agencyName": "Water Services Regulatory Board",
+    "email": "water-services-regulatory-board@ecitizen.go.ke",
+    "firstName": "Water",
+    "lastName": "Services",
+    "password": "WaterServices@2026!"
+  },
+  {
+    "agencyCode": "KENYA-WATER-INSTITUTE",
+    "agencyName": "Kenya Water Institute",
+    "email": "kenya-water-institute@ecitizen.go.ke",
+    "firstName": "Kenya",
+    "lastName": "Water",
+    "password": "KenyaWater@2026!"
+  },
+  {
+    "agencyCode": "ATHI-WATER-WORKS-DEVELOPMENT-AGENCY",
+    "agencyName": "Athi Water Works Development Agency",
+    "email": "athi-water-works-development-agency@ecitizen.go.ke",
+    "firstName": "Athi",
+    "lastName": "Water",
+    "password": "AthiWater@2026!"
+  },
+  {
+    "agencyCode": "TANA-WATER-WORKS-DEVELOPMENT-AGENCY",
+    "agencyName": "Tana Water Works Development Agency",
+    "email": "tana-water-works-development-agency@ecitizen.go.ke",
+    "firstName": "Tana",
+    "lastName": "Water",
+    "password": "TanaWater@2026!"
+  },
+  {
+    "agencyCode": "TANATHI-WATER-WORKS-DEVELOPMENT-AGENCY",
+    "agencyName": "Tanathi Water Works Development Agency",
+    "email": "tanathi-water-works-development-agency@ecitizen.go.ke",
+    "firstName": "Tanathi",
+    "lastName": "Water",
+    "password": "TanathiWater@2026!"
+  },
+  {
+    "agencyCode": "LAKE-VICTORIA-NORTH-WATER-WORKS-DEVELOPM",
+    "agencyName": "Lake Victoria North Water Works Development Agency",
+    "email": "lake-victoria-north-water-works-developm@ecitizen.go.ke",
+    "firstName": "Lake",
+    "lastName": "Victoria",
+    "password": "LakeVictoria@2026!"
+  },
+  {
+    "agencyCode": "LAKE-VICTORIA-SOUTH-WORKS-DEVELOPMENT-AG",
+    "agencyName": "Lake Victoria South Works Development Agency",
+    "email": "lake-victoria-south-works-development-ag@ecitizen.go.ke",
+    "firstName": "Lake",
+    "lastName": "Victoria",
+    "password": "LakeVictoria@2026!"
+  },
+  {
+    "agencyCode": "CENTRAL-RIFT-VALLEY-WATER-WORKS-DEVELOPM",
+    "agencyName": "Central Rift Valley Water Works Development Agency",
+    "email": "central-rift-valley-water-works-developm@ecitizen.go.ke",
+    "firstName": "Central",
+    "lastName": "Rift",
+    "password": "CentralRift@2026!"
+  },
+  {
+    "agencyCode": "NORTH-RIFT-VALLEY-WATER-WORKS-DEVELOPMEN",
+    "agencyName": "North Rift Valley Water Works Development Agency",
+    "email": "north-rift-valley-water-works-developmen@ecitizen.go.ke",
+    "firstName": "North",
+    "lastName": "Rift",
+    "password": "NorthRift@2026!"
+  },
+  {
+    "agencyCode": "COAST-WATER-WORKS-DEVELOPMENT-AGENCY",
+    "agencyName": "Coast Water Works Development Agency",
+    "email": "coast-water-works-development-agency@ecitizen.go.ke",
+    "firstName": "Coast",
+    "lastName": "Water",
+    "password": "CoastWater@2026!"
+  },
+  {
+    "agencyCode": "NOTHERN-WATER-WORKS-DEVELOPMENT-AGENCY",
+    "agencyName": "Nothern Water Works Development Agency",
+    "email": "nothern-water-works-development-agency@ecitizen.go.ke",
+    "firstName": "Nothern",
+    "lastName": "Water",
+    "password": "NothernWater@2026!"
+  },
+  {
+    "agencyCode": "WATER-SECTOR-TRUST-FUND",
+    "agencyName": "Water Sector Trust Fund",
+    "email": "water-sector-trust-fund@ecitizen.go.ke",
+    "firstName": "Water",
+    "lastName": "Sector",
+    "password": "WaterSector@2026!"
+  },
+  {
+    "agencyCode": "REGIONAL-CENTRE-ON-GROUND-WATER-RESOURCE",
+    "agencyName": "Regional Centre on Ground Water Resources Education, Training and Research",
+    "email": "regional-centre-on-ground-water-resource@ecitizen.go.ke",
+    "firstName": "Regional",
+    "lastName": "Centre",
+    "password": "RegionalCentre@2026!"
+  },
+  {
+    "agencyCode": "WATER-RESOURCES-AUTHORITY",
+    "agencyName": "Water Resources Authority",
+    "email": "water-resources-authority@ecitizen.go.ke",
+    "firstName": "Water",
+    "lastName": "Resources",
+    "password": "WaterResources@2026!"
+  },
+  {
+    "agencyCode": "HYDROLOGISTS-REGISTRATION-BOARD",
+    "agencyName": "Hydrologists Registration Board",
+    "email": "hydrologists-registration-board@ecitizen.go.ke",
+    "firstName": "Hydrologists",
+    "lastName": "Registration",
+    "password": "HydrologistsRegistration@2026!"
+  },
+  {
+    "agencyCode": "STATE-DEPARTMENT-FOR-IRRIGATION",
+    "agencyName": "State Department for Irrigation",
+    "email": "state-department-for-irrigation@ecitizen.go.ke",
+    "firstName": "State",
+    "lastName": "Department",
+    "password": "StateDepartment@2026!"
+  },
+  {
+    "agencyCode": "NATIONAL-WATER-HARVESTING-AND-STORAGE-AU",
+    "agencyName": "National Water Harvesting and Storage Authority",
+    "email": "national-water-harvesting-and-storage-au@ecitizen.go.ke",
+    "firstName": "National",
+    "lastName": "Water",
+    "password": "NationalWater@2026!"
+  },
+  {
+    "agencyCode": "NATIONAL-IRRIGATION-AUTHORITY",
+    "agencyName": "National Irrigation Authority",
+    "email": "national-irrigation-authority@ecitizen.go.ke",
+    "firstName": "National",
+    "lastName": "Irrigation",
+    "password": "NationalIrrigation@2026!"
+  },
+  {
+    "agencyCode": "STATE-DEPARTMENT-FOR-ENERGY",
+    "agencyName": "State Department for Energy",
+    "email": "state-department-for-energy@ecitizen.go.ke",
+    "firstName": "State",
+    "lastName": "Department",
+    "password": "StateDepartment@2026!"
+  },
+  {
+    "agencyCode": "ENERGY-AND-PETROLEUM-REGULATORY-AUTHORIT",
+    "agencyName": "Energy and Petroleum Regulatory Authority",
+    "email": "energy-and-petroleum-regulatory-authorit@ecitizen.go.ke",
+    "firstName": "Energy",
+    "lastName": "and",
+    "password": "EnergyAnd@2026!"
+  },
+  {
+    "agencyCode": "KENYA-POWER-COMPANY-LIMITED",
+    "agencyName": "Kenya Power Company Limited",
+    "email": "kenya-power-company-limited@ecitizen.go.ke",
+    "firstName": "Kenya",
+    "lastName": "Power",
+    "password": "KenyaPower@2026!"
+  },
+  {
+    "agencyCode": "KENYA-ELECTRICITY-GENERATING-COMPANY-LIM",
+    "agencyName": "Kenya Electricity Generating Company Limited",
+    "email": "kenya-electricity-generating-company-lim@ecitizen.go.ke",
+    "firstName": "Kenya",
+    "lastName": "Electricity",
+    "password": "KenyaElectricity@2026!"
+  },
+  {
+    "agencyCode": "KENYA-ELECTRICITY-TRANSMISSION-COMPANY-K",
+    "agencyName": "Kenya Electricity Transmission Company (KETRACO)",
+    "email": "kenya-electricity-transmission-company-k@ecitizen.go.ke",
+    "firstName": "Kenya",
+    "lastName": "Electricity",
+    "password": "KenyaElectricity@2026!"
+  },
+  {
+    "agencyCode": "RURAL-ELECTRIFICATION-AND-RENEWABLE-ENER",
+    "agencyName": "Rural Electrification and Renewable Energy",
+    "email": "rural-electrification-and-renewable-ener@ecitizen.go.ke",
+    "firstName": "Rural",
+    "lastName": "Electrification",
+    "password": "RuralElectrification@2026!"
+  },
+  {
+    "agencyCode": "NUCLEAR-POWER-AND-ENERGY-AGENCY",
+    "agencyName": "Nuclear Power and Energy Agency",
+    "email": "nuclear-power-and-energy-agency@ecitizen.go.ke",
+    "firstName": "Nuclear",
+    "lastName": "Power",
+    "password": "NuclearPower@2026!"
+  },
+  {
+    "agencyCode": "GEOTHERMAL-DEVELOPMENT-COMPANY",
+    "agencyName": "Geothermal Development Company",
+    "email": "geothermal-development-company@ecitizen.go.ke",
+    "firstName": "Geothermal",
+    "lastName": "Development",
+    "password": "GeothermalDevelopment@2026!"
+  },
+  {
+    "agencyCode": "NATIONAL-OIL-CORPORATION-OF-KENYA",
+    "agencyName": "National Oil Corporation of Kenya",
+    "email": "national-oil-corporation-of-kenya@ecitizen.go.ke",
+    "firstName": "National",
+    "lastName": "Oil",
+    "password": "NationalOil@2026!"
+  },
+  {
+    "agencyCode": "KENYA-PIPELINE-COMPANY",
+    "agencyName": "Kenya Pipeline Company",
+    "email": "kenya-pipeline-company@ecitizen.go.ke",
+    "firstName": "Kenya",
+    "lastName": "Pipeline",
+    "password": "KenyaPipeline@2026!"
+  },
+  {
+    "agencyCode": "PETROLEUM-DEVELOPMENT-LEVY-FUND",
+    "agencyName": "Petroleum Development Levy Fund",
+    "email": "petroleum-development-levy-fund@ecitizen.go.ke",
+    "firstName": "Petroleum",
+    "lastName": "Development",
+    "password": "PetroleumDevelopment@2026!"
+  },
+  {
+    "agencyCode": "KENYA-PETROLEUM-REFINERIES",
+    "agencyName": "Kenya Petroleum Refineries",
+    "email": "kenya-petroleum-refineries@ecitizen.go.ke",
+    "firstName": "Kenya",
+    "lastName": "Petroleum",
+    "password": "KenyaPetroleum@2026!"
+  },
+  {
+    "agencyCode": "STATE-DEPARTMENT-FOR-LABOUR-AND-SKILLS-D",
+    "agencyName": "State Department for Labour and Skills Development",
+    "email": "state-department-for-labour-and-skills-d@ecitizen.go.ke",
+    "firstName": "State",
+    "lastName": "Department",
+    "password": "StateDepartment@2026!"
+  },
+  {
+    "agencyCode": "NATIONAL-SOCIAL-SECURITY-FUND-NSSF",
+    "agencyName": "National Social Security Fund (NSSF)",
+    "email": "national-social-security-fund-nssf@ecitizen.go.ke",
+    "firstName": "National",
+    "lastName": "Social",
+    "password": "NationalSocial@2026!"
+  },
+  {
+    "agencyCode": "NATIONAL-EMPLOYMENT-AUTHORITY",
+    "agencyName": "National Employment Authority",
+    "email": "national-employment-authority@ecitizen.go.ke",
+    "firstName": "National",
+    "lastName": "Employment",
+    "password": "NationalEmployment@2026!"
+  },
+  {
+    "agencyCode": "NATIONAL-INDUSTRIAL-TRAINING-AUTHORITY",
+    "agencyName": "National Industrial Training Authority",
+    "email": "national-industrial-training-authority@ecitizen.go.ke",
+    "firstName": "National",
+    "lastName": "Industrial",
+    "password": "NationalIndustrial@2026!"
+  },
+  {
+    "agencyCode": "NATIONAL-PRODUCTIVITY-AND-COMPETITIVENES",
+    "agencyName": "National Productivity and Competitiveness Centre",
+    "email": "national-productivity-and-competitivenes@ecitizen.go.ke",
+    "firstName": "National",
+    "lastName": "Productivity",
+    "password": "NationalProductivity@2026!"
+  },
+  {
+    "agencyCode": "KENYA-NATIONAL-LABOUR-BOARD-AND-THE-WAGE",
+    "agencyName": "Kenya National Labour Board and the Wages Council",
+    "email": "kenya-national-labour-board-and-the-wage@ecitizen.go.ke",
+    "firstName": "Kenya",
+    "lastName": "National",
+    "password": "KenyaNational@2026!"
+  },
+  {
+    "agencyCode": "NATIONAL-COUNCIL-FOR-OCCUPATIONAL-SAFETY",
+    "agencyName": "National Council for Occupational Safety and Health",
+    "email": "national-council-for-occupational-safety@ecitizen.go.ke",
+    "firstName": "National",
+    "lastName": "Council",
+    "password": "NationalCouncil@2026!"
+  },
+  {
+    "agencyCode": "DIRECTORATE-OF-OCCUPATIONAL-SAFETY-AND-H",
+    "agencyName": "Directorate of Occupational Safety and Health",
+    "email": "directorate-of-occupational-safety-and-h@ecitizen.go.ke",
+    "firstName": "Directorate",
+    "lastName": "of",
+    "password": "DirectorateOf@2026!"
+  },
+  {
+    "agencyCode": "MIGRANT-WORKERS-WELFARE-FUND",
+    "agencyName": "Migrant Workers Welfare Fund",
+    "email": "migrant-workers-welfare-fund@ecitizen.go.ke",
+    "firstName": "Migrant",
+    "lastName": "Workers",
+    "password": "MigrantWorkers@2026!"
+  },
+  {
+    "agencyCode": "DEPARTMENT-OF-LABOUR-MIGRATION-MANAGEMEN",
+    "agencyName": "Department of Labour Migration Management",
+    "email": "department-of-labour-migration-managemen@ecitizen.go.ke",
+    "firstName": "Department",
+    "lastName": "of",
+    "password": "DepartmentOf@2026!"
+  },
+  {
+    "agencyCode": "STATE-DEPARTMENT-FOR-SOCIAL-PROTECTION",
+    "agencyName": "State Department for Social Protection",
+    "email": "state-department-for-social-protection@ecitizen.go.ke",
+    "firstName": "State",
+    "lastName": "Department",
+    "password": "StateDepartment@2026!"
+  },
+  {
+    "agencyCode": "CHILD-WELFARE-SOCIETY-OF-KENYA",
+    "agencyName": "Child welfare society of Kenya",
+    "email": "child-welfare-society-of-kenya@ecitizen.go.ke",
+    "firstName": "Child",
+    "lastName": "welfare",
+    "password": "ChildWelfare@2026!"
+  },
+  {
+    "agencyCode": "NATIONAL-COUNCIL-FOR-PERSONS-WITH-DISABI",
+    "agencyName": "National Council for Persons with Disabilities",
+    "email": "national-council-for-persons-with-disabi@ecitizen.go.ke",
+    "firstName": "National",
+    "lastName": "Council",
+    "password": "NationalCouncil@2026!"
+  },
+  {
+    "agencyCode": "NATIONAL-COUNCIL-FOR-CHILDRENS-SERVICES",
+    "agencyName": "National Council for Children's Services",
+    "email": "national-council-for-childrens-services@ecitizen.go.ke",
+    "firstName": "National",
+    "lastName": "Council",
+    "password": "NationalCouncil@2026!"
+  },
+  {
+    "agencyCode": "STREET-FAMILIES-REHABILITATION-TRUST-FUN",
+    "agencyName": "Street families Rehabilitation Trust Fund",
+    "email": "street-families-rehabilitation-trust-fun@ecitizen.go.ke",
+    "firstName": "Street",
+    "lastName": "families",
+    "password": "StreetFamilies@2026!"
+  },
+  {
+    "agencyCode": "STATE-DEPARTMENT-FOR-EAST-AFRICAN-COMMUN",
+    "agencyName": "State Department for East African Community",
+    "email": "state-department-for-east-african-commun@ecitizen.go.ke",
+    "firstName": "State",
+    "lastName": "Department",
+    "password": "StateDepartment@2026!"
+  },
+  {
+    "agencyCode": "THE-SUMMIT",
+    "agencyName": "The Summit",
+    "email": "the-summit@ecitizen.go.ke",
+    "firstName": "Summit",
+    "lastName": "Admin",
+    "password": "TheSummit@2026!"
+  },
+  {
+    "agencyCode": "THE-COUNCIL-OF-MINISTERS",
+    "agencyName": "The Council of Ministers",
+    "email": "the-council-of-ministers@ecitizen.go.ke",
+    "firstName": "Council",
+    "lastName": "of",
+    "password": "TheCouncil@2026!"
+  },
+  {
+    "agencyCode": "THE-COORDINATING-COMMITTEE",
+    "agencyName": "The Co-ordinating Committee",
+    "email": "the-coordinating-committee@ecitizen.go.ke",
+    "firstName": "Coordinating",
+    "lastName": "Committee",
+    "password": "TheCoordinating@2026!"
+  },
+  {
+    "agencyCode": "SECTORAL-COMMITTEES",
+    "agencyName": "Sectoral Committees",
+    "email": "sectoral-committees@ecitizen.go.ke",
+    "firstName": "Sectoral",
+    "lastName": "Committees",
+    "password": "SectoralCommittees@2026!"
+  },
+  {
+    "agencyCode": "THE-EAST-AFRICAN-COURT-OF-JUSTICE",
+    "agencyName": "The East African Court of Justice",
+    "email": "the-east-african-court-of-justice@ecitizen.go.ke",
+    "firstName": "East",
+    "lastName": "African",
+    "password": "TheEast@2026!"
+  },
+  {
+    "agencyCode": "THE-EAST-AFRICAN-LEGISLATIVE-ASSEMBLY",
+    "agencyName": "The East African Legislative Assembly",
+    "email": "the-east-african-legislative-assembly@ecitizen.go.ke",
+    "firstName": "East",
+    "lastName": "African",
+    "password": "TheEast@2026!"
+  },
+  {
+    "agencyCode": "THE-SECRETARIAT",
+    "agencyName": "The Secretariat",
+    "email": "the-secretariat@ecitizen.go.ke",
+    "firstName": "Secretariat",
+    "lastName": "Admin",
+    "password": "TheSecretariat@2026!"
+  },
+  {
+    "agencyCode": "THE-EAC",
+    "agencyName": "The EAC",
+    "email": "the-eac@ecitizen.go.ke",
+    "firstName": "EAC",
+    "lastName": "Admin",
+    "password": "TheEac@2026!"
+  },
+  {
+    "agencyCode": "THE-CIVIL-AVIATION-SAFETY-AND-SECURITY-O",
+    "agencyName": "The Civil Aviation Safety and Security Oversight Agency",
+    "email": "the-civil-aviation-safety-and-security-o@ecitizen.go.ke",
+    "firstName": "Civil",
+    "lastName": "Aviation",
+    "password": "TheCivil@2026!"
+  },
+  {
+    "agencyCode": "THE-EAST-AFRICAN-HEALTH-RESEARCH-COMMISS",
+    "agencyName": "The East African Health Research Commission (EAHRC)",
+    "email": "the-east-african-health-research-commiss@ecitizen.go.ke",
+    "firstName": "East",
+    "lastName": "African",
+    "password": "TheEast@2026!"
+  },
+  {
+    "agencyCode": "THE-EAST-AFRICAN-KISWAHILI-COMMISSION-EA",
+    "agencyName": "The East African Kiswahili Commission (EAKC)",
+    "email": "the-east-african-kiswahili-commission-ea@ecitizen.go.ke",
+    "firstName": "East",
+    "lastName": "African",
+    "password": "TheEast@2026!"
+  },
+  {
+    "agencyCode": "THE-EAST-AFRICAN-SCIENCE-AND-TECHNOLOGY",
+    "agencyName": "The East African Science and Technology Commission (EASTECO)",
+    "email": "the-east-african-science-and-technology@ecitizen.go.ke",
+    "firstName": "East",
+    "lastName": "African",
+    "password": "TheEast@2026!"
+  },
+  {
+    "agencyCode": "THE-INTERUNIVERSITY-COUNCIL-FOR-EAST-AFR",
+    "agencyName": "The Inter-University Council for East Africa (IUCEA)",
+    "email": "the-interuniversity-council-for-east-afr@ecitizen.go.ke",
+    "firstName": "InterUniversity",
+    "lastName": "Council",
+    "password": "TheInteruniversity@2026!"
+  },
+  {
+    "agencyCode": "THE-LAKE-VICTORIA-BASIN-COMMISSION-LVBC",
+    "agencyName": "The Lake Victoria Basin Commission (LVBC)",
+    "email": "the-lake-victoria-basin-commission-lvbc@ecitizen.go.ke",
+    "firstName": "Lake",
+    "lastName": "Victoria",
+    "password": "TheLake@2026!"
+  },
+  {
+    "agencyCode": "THE-LAKE-VICTORIA-FISHERIES-ORGANIZATION",
+    "agencyName": "The Lake Victoria Fisheries Organization (LVFO)",
+    "email": "the-lake-victoria-fisheries-organization@ecitizen.go.ke",
+    "firstName": "Lake",
+    "lastName": "Victoria",
+    "password": "TheLake@2026!"
+  },
+  {
+    "agencyCode": "STATE-DEPARTMENT-FOR-THE-ASALS-REGIONAL",
+    "agencyName": "STATE DEPARTMENT FOR THE ASALs & REGIONAL DEVELOPMENT",
+    "email": "state-department-for-the-asals-regional@ecitizen.go.ke",
+    "firstName": "STATE",
+    "lastName": "DEPARTMENT",
+    "password": "StateDepartment@2026!"
+  },
+  {
+    "agencyCode": "NATIONAL-DROUGHT-MANAGEMENT-AUTHORITY",
+    "agencyName": "National Drought Management Authority",
+    "email": "national-drought-management-authority@ecitizen.go.ke",
+    "firstName": "National",
+    "lastName": "Drought",
+    "password": "NationalDrought@2026!"
+  },
+  {
+    "agencyCode": "NATIONAL-DROUGHT-EMERGENCY-FUND",
+    "agencyName": "National Drought Emergency Fund",
+    "email": "national-drought-emergency-fund@ecitizen.go.ke",
+    "firstName": "National",
+    "lastName": "Drought",
+    "password": "NationalDrought@2026!"
+  },
+  {
+    "agencyCode": "TANA-AND-ATHI-RIVERS-DEVELOPMENT-AUTHORI",
+    "agencyName": "Tana and Athi Rivers Development Authority",
+    "email": "tana-and-athi-rivers-development-authori@ecitizen.go.ke",
+    "firstName": "Tana",
+    "lastName": "and",
+    "password": "TanaAnd@2026!"
+  },
+  {
+    "agencyCode": "LAKE-BASIN-DEVELOPMENT-AUTHORITY",
+    "agencyName": "Lake Basin Development Authority",
+    "email": "lake-basin-development-authority@ecitizen.go.ke",
+    "firstName": "Lake",
+    "lastName": "Basin",
+    "password": "LakeBasin@2026!"
+  },
+  {
+    "agencyCode": "KERIO-VALLEY-DEVELOPMENT-AUTHORITY",
+    "agencyName": "Kerio Valley Development Authority",
+    "email": "kerio-valley-development-authority@ecitizen.go.ke",
+    "firstName": "Kerio",
+    "lastName": "Valley",
+    "password": "KerioValley@2026!"
+  },
+  {
+    "agencyCode": "EWASO-NYIRO-NORTH-DEVELOPMENT-AUTHORITY",
+    "agencyName": "Ewaso Nyiro North Development Authority",
+    "email": "ewaso-nyiro-north-development-authority@ecitizen.go.ke",
+    "firstName": "Ewaso",
+    "lastName": "Nyiro",
+    "password": "EwasoNyiro@2026!"
+  },
+  {
+    "agencyCode": "EWASO-NYIRO-SOUTH-DEVELOPMENT-AUTHORITY",
+    "agencyName": "Ewaso Nyiro South Development Authority",
+    "email": "ewaso-nyiro-south-development-authority@ecitizen.go.ke",
+    "firstName": "Ewaso",
+    "lastName": "Nyiro",
+    "password": "EwasoNyiro@2026!"
+  },
+  {
+    "agencyCode": "COAST-DEVELOPMENT-AUTHORITY",
+    "agencyName": "Coast Development Authority",
+    "email": "coast-development-authority@ecitizen.go.ke",
+    "firstName": "Coast",
+    "lastName": "Development",
+    "password": "CoastDevelopment@2026!"
+  },
+  {
+    "agencyCode": "KENYA-DEVELOPMENT-RESPONSE-TO-DISPLACEME",
+    "agencyName": "Kenya Development Response to Displacement Impacts Project\n (KDRDIP)",
+    "email": "kenya-development-response-to-displaceme@ecitizen.go.ke",
+    "firstName": "Kenya",
+    "lastName": "Development",
+    "password": "KenyaDevelopment@2026!"
+  },
+  {
+    "agencyCode": "STATE-DEPARTMENT-FOR-MINING",
+    "agencyName": "State department for mining",
+    "email": "state-department-for-mining@ecitizen.go.ke",
+    "firstName": "State",
+    "lastName": "department",
+    "password": "StateDepartment@2026!"
+  },
+  {
+    "agencyCode": "NATIONAL-MINING-CORPORATION",
+    "agencyName": "National Mining Corporation",
+    "email": "national-mining-corporation@ecitizen.go.ke",
+    "firstName": "National",
+    "lastName": "Mining",
+    "password": "NationalMining@2026!"
+  },
+  {
+    "agencyCode": "MINERAL-RIGHTS-BOARD",
+    "agencyName": "Mineral Rights Board",
+    "email": "mineral-rights-board@ecitizen.go.ke",
+    "firstName": "Mineral",
+    "lastName": "Rights",
+    "password": "MineralRights@2026!"
+  },
+  {
+    "agencyCode": "THE-GEOLOGISTS-REGISTRATION-BOARD",
+    "agencyName": "The Geologists Registration Board",
+    "email": "the-geologists-registration-board@ecitizen.go.ke",
+    "firstName": "Geologists",
+    "lastName": "Registration",
+    "password": "TheGeologists@2026!"
+  },
+  {
+    "agencyCode": "KENYA-MARINE-AND-FISHERIES-RESEARCH-INST",
+    "agencyName": "Kenya Marine and Fisheries Research Institute",
+    "email": "kenya-marine-and-fisheries-research-inst@ecitizen.go.ke",
+    "firstName": "Kenya",
+    "lastName": "Marine",
+    "password": "KenyaMarine@2026!"
+  },
+  {
+    "agencyCode": "KENYA-FISHERIES-SERVICE",
+    "agencyName": "Kenya Fisheries Service",
+    "email": "kenya-fisheries-service@ecitizen.go.ke",
+    "firstName": "Kenya",
+    "lastName": "Fisheries",
+    "password": "KenyaFisheries@2026!"
+  },
+  {
+    "agencyCode": "KENYA-FISH-MARKETING-AUTHORITY-KFMA",
+    "agencyName": "Kenya Fish Marketing Authority (KFMA)",
+    "email": "kenya-fish-marketing-authority-kfma@ecitizen.go.ke",
+    "firstName": "Kenya",
+    "lastName": "Fish",
+    "password": "KenyaFish@2026!"
+  },
+  {
+    "agencyCode": "KENYA-FISHING-INDUSTRIES-CORPORATION",
+    "agencyName": "Kenya Fishing Industries Corporation",
+    "email": "kenya-fishing-industries-corporation@ecitizen.go.ke",
+    "firstName": "Kenya",
+    "lastName": "Fishing",
+    "password": "KenyaFishing@2026!"
+  },
+  {
+    "agencyCode": "FISH-LEVY-TRUST-FUND",
+    "agencyName": "Fish Levy Trust Fund",
+    "email": "fish-levy-trust-fund@ecitizen.go.ke",
+    "firstName": "Fish",
+    "lastName": "Levy",
+    "password": "FishLevy@2026!"
+  },
+  {
+    "agencyCode": "THE-KENYA-NATIONAL-SHIPPING-LINE",
+    "agencyName": "The Kenya National Shipping Line",
+    "email": "the-kenya-national-shipping-line@ecitizen.go.ke",
+    "firstName": "Kenya",
+    "lastName": "National",
+    "password": "TheKenya@2026!"
+  },
+  {
+    "agencyCode": "KENYA-MARITIME-AUTHORITY",
+    "agencyName": "Kenya Maritime Authority",
+    "email": "kenya-maritime-authority@ecitizen.go.ke",
+    "firstName": "Kenya",
+    "lastName": "Maritime",
+    "password": "KenyaMaritime@2026!"
+  },
+  {
+    "agencyCode": "BANDARI-MARITIME-ACADEMY",
+    "agencyName": "Bandari Maritime Academy",
+    "email": "bandari-maritime-academy@ecitizen.go.ke",
+    "firstName": "Bandari",
+    "lastName": "Maritime",
+    "password": "BandariMaritime@2026!"
+  },
+  {
+    "agencyCode": "GOVERNMENT-CLEARING-AGENCY",
+    "agencyName": "Government Clearing Agency",
+    "email": "government-clearing-agency@ecitizen.go.ke",
+    "firstName": "Government",
+    "lastName": "Clearing",
+    "password": "GovernmentClearing@2026!"
+  },
+  {
+    "agencyCode": "BUSINESS-REGISTRATION-SERVICES",
+    "agencyName": "Business Registration Services",
+    "email": "business-registration-services@ecitizen.go.ke",
+    "firstName": "Business",
+    "lastName": "Registration",
+    "password": "BusinessRegistration@2026!"
+  },
+  {
+    "agencyCode": "COUNCIL-FOR-LEGAL-EDUCATION",
+    "agencyName": "Council for Legal Education",
+    "email": "council-for-legal-education@ecitizen.go.ke",
+    "firstName": "Council",
+    "lastName": "for",
+    "password": "CouncilFor@2026!"
+  },
+  {
+    "agencyCode": "NATIONAL-ANTICORRUPTION-CAMPAIGN-STEERIN",
+    "agencyName": "National Anti-Corruption Campaign Steering Committee",
+    "email": "national-anticorruption-campaign-steerin@ecitizen.go.ke",
+    "firstName": "National",
+    "lastName": "AntiCorruption",
+    "password": "NationalAnticorruption@2026!"
+  },
+  {
+    "agencyCode": "ASSETS-RECOVERY-AGENCY",
+    "agencyName": "Assets Recovery Agency",
+    "email": "assets-recovery-agency@ecitizen.go.ke",
+    "firstName": "Assets",
+    "lastName": "Recovery",
+    "password": "AssetsRecovery@2026!"
+  },
+  {
+    "agencyCode": "KENYA-SCHOOL-OF-LAW",
+    "agencyName": "Kenya School of Law",
+    "email": "kenya-school-of-law@ecitizen.go.ke",
+    "firstName": "Kenya",
+    "lastName": "School",
+    "password": "KenyaSchool@2026!"
+  },
+  {
+    "agencyCode": "AUCTIONEERS-LICENSING-BOARD",
+    "agencyName": "Auctioneers Licensing Board",
+    "email": "auctioneers-licensing-board@ecitizen.go.ke",
+    "firstName": "Auctioneers",
+    "lastName": "Licensing",
+    "password": "AuctioneersLicensing@2026!"
+  },
+  {
+    "agencyCode": "WITNESS-PROTECTION-AGENCY",
+    "agencyName": "Witness Protection Agency",
+    "email": "witness-protection-agency@ecitizen.go.ke",
+    "firstName": "Witness",
+    "lastName": "Protection",
+    "password": "WitnessProtection@2026!"
+  },
+  {
+    "agencyCode": "VICTIMS-PROTECTION-BOARD",
+    "agencyName": "Victims Protection Board",
+    "email": "victims-protection-board@ecitizen.go.ke",
+    "firstName": "Victims",
+    "lastName": "Protection",
+    "password": "VictimsProtection@2026!"
+  },
+  {
+    "agencyCode": "NAIROBI-CENTRE-FOR-INTERNATIONAL-ARBITRA",
+    "agencyName": "Nairobi Centre for International Arbitration",
+    "email": "nairobi-centre-for-international-arbitra@ecitizen.go.ke",
+    "firstName": "Nairobi",
+    "lastName": "Centre",
+    "password": "NairobiCentre@2026!"
+  },
+  {
+    "agencyCode": "ADVOCATES-DISCIPLINARY-TRIBUNAL",
+    "agencyName": "Advocates Disciplinary Tribunal",
+    "email": "advocates-disciplinary-tribunal@ecitizen.go.ke",
+    "firstName": "Advocates",
+    "lastName": "Disciplinary",
+    "password": "AdvocatesDisciplinary@2026!"
+  },
+  {
+    "agencyCode": "ADVOCATES-COMPLAINTS-COMMISSION",
+    "agencyName": "Advocates Complaints Commission",
+    "email": "advocates-complaints-commission@ecitizen.go.ke",
+    "firstName": "Advocates",
+    "lastName": "Complaints",
+    "password": "AdvocatesComplaints@2026!"
+  },
+  {
+    "agencyCode": "CAR-LOAN-SCHEME-FOR-ELECTORAL-COMMISSION",
+    "agencyName": "Car Loan Scheme for Electoral Commissioners Fund",
+    "email": "car-loan-scheme-for-electoral-commission@ecitizen.go.ke",
+    "firstName": "Car",
+    "lastName": "Loan",
+    "password": "CarLoan@2026!"
+  },
+  {
+    "agencyCode": "KENYA-LAW-REFORM-COMMISSION",
+    "agencyName": "Kenya Law Reform Commission",
+    "email": "kenya-law-reform-commission@ecitizen.go.ke",
+    "firstName": "Kenya",
+    "lastName": "Law",
+    "password": "KenyaLaw@2026!"
+  },
+  {
+    "agencyCode": "OFFICE-OF-THE-REGISTRAR-OF-POLITICAL-PAR",
+    "agencyName": "Office of the Registrar of Political Parties",
+    "email": "office-of-the-registrar-of-political-par@ecitizen.go.ke",
+    "firstName": "Office",
+    "lastName": "of",
+    "password": "OfficeOf@2026!"
+  },
+  {
+    "agencyCode": "NATIONAL-COMMITTEE-ON-IMPLEMENTATION-OF",
+    "agencyName": "National Committee on Implementation of National Humanitarian Law",
+    "email": "national-committee-on-implementation-of@ecitizen.go.ke",
+    "firstName": "National",
+    "lastName": "Committee",
+    "password": "NationalCommittee@2026!"
+  },
+  {
+    "agencyCode": "NATIONAL-CORONERS-SERVICE",
+    "agencyName": "National Coroners Service",
+    "email": "national-coroners-service@ecitizen.go.ke",
+    "firstName": "National",
+    "lastName": "Coroners",
+    "password": "NationalCoroners@2026!"
+  },
+  {
+    "agencyCode": "NATIONAL-LEGAL-AID-SERVICE",
+    "agencyName": "National Legal Aid Service",
+    "email": "national-legal-aid-service@ecitizen.go.ke",
+    "firstName": "National",
+    "lastName": "Legal",
+    "password": "NationalLegal@2026!"
+  },
+  {
+    "agencyCode": "REGISTRAR-OF-SOCIETIES",
+    "agencyName": "Registrar of societies",
+    "email": "registrar-of-societies@ecitizen.go.ke",
+    "firstName": "Registrar",
+    "lastName": "of",
+    "password": "RegistrarOf@2026!"
+  },
+  {
+    "agencyCode": "REGISTRAR-OF-MARRIAGES",
+    "agencyName": "Registrar of marriages",
+    "email": "registrar-of-marriages@ecitizen.go.ke",
+    "firstName": "Registrar",
+    "lastName": "of",
+    "password": "RegistrarOf@2026!"
+  },
+  {
+    "agencyCode": "REGISTRAR-OF-COAT-OF-ARMS",
+    "agencyName": "Registrar of Coat of Arms",
+    "email": "registrar-of-coat-of-arms@ecitizen.go.ke",
+    "firstName": "Registrar",
+    "lastName": "of",
+    "password": "RegistrarOf@2026!"
+  },
+  {
+    "agencyCode": "PUBLIC-TRUSTEE",
+    "agencyName": "Public Trustee",
+    "email": "public-trustee@ecitizen.go.ke",
+    "firstName": "Public",
+    "lastName": "Trustee",
+    "password": "PublicTrustee@2026!"
+  },
+  {
+    "agencyCode": "THE-NATIONAL-COUNCIL-FOR-LAW-REPORTING",
+    "agencyName": "The National Council for Law Reporting",
+    "email": "the-national-council-for-law-reporting@ecitizen.go.ke",
+    "firstName": "National",
+    "lastName": "Council",
+    "password": "TheNational@2026!"
+  },
+  {
+    "agencyCode": "THE-JUDICIARY",
+    "agencyName": "The Judiciary",
+    "email": "the-judiciary@ecitizen.go.ke",
+    "firstName": "Judiciary",
+    "lastName": "Admin",
+    "password": "TheJudiciary@2026!"
+  },
+  {
+    "agencyCode": "NATIONAL-ASSEMBLY",
+    "agencyName": "National Assembly",
+    "email": "national-assembly@ecitizen.go.ke",
+    "firstName": "National",
+    "lastName": "Assembly",
+    "password": "NationalAssembly@2026!"
+  },
+  {
+    "agencyCode": "PARLIAMENT-OF-KENYATHE-SENATE",
+    "agencyName": "Parliament of Kenya-The Senate",
+    "email": "parliament-of-kenyathe-senate@ecitizen.go.ke",
+    "firstName": "Parliament",
+    "lastName": "of",
+    "password": "ParliamentOf@2026!"
+  },
+  {
+    "agencyCode": "ETHICS-AND-ANTICORRUPTION-COMMISSION",
+    "agencyName": "Ethics and Anti-Corruption Commission",
+    "email": "ethics-and-anticorruption-commission@ecitizen.go.ke",
+    "firstName": "Ethics",
+    "lastName": "and",
+    "password": "EthicsAnd@2026!"
+  },
+  {
+    "agencyCode": "FIREARMS-LICENSING-BOARD",
+    "agencyName": "Firearms Licensing Board",
+    "email": "firearms-licensing-board@ecitizen.go.ke",
+    "firstName": "Firearms",
+    "lastName": "Licensing",
+    "password": "FirearmsLicensing@2026!"
+  },
+  {
+    "agencyCode": "OFFICE-OF-THE-AUDITOR-GENERAL",
+    "agencyName": "Office of the Auditor General",
+    "email": "office-of-the-auditor-general@ecitizen.go.ke",
+    "firstName": "Office",
+    "lastName": "of",
+    "password": "OfficeOf@2026!"
+  },
+  {
+    "agencyCode": "TEACHERS-SERVICE-COMMISSION",
+    "agencyName": "Teachers Service Commission",
+    "email": "teachers-service-commission@ecitizen.go.ke",
+    "firstName": "Teachers",
+    "lastName": "Service",
+    "password": "TeachersService@2026!"
+  },
+  {
+    "agencyCode": "STATE-DEPARTMENT-FOR-PARLIAMENTARY-AFFAI",
+    "agencyName": "State Department for Parliamentary Affairs",
+    "email": "state-department-for-parliamentary-affai@ecitizen.go.ke",
+    "firstName": "State",
+    "lastName": "Department",
+    "password": "StateDepartment@2026!"
+  },
+  {
+    "agencyCode": "COMMISSION-ON-ADMINISTRATIVE-JUSTICE",
+    "agencyName": "Commission on Administrative Justice",
+    "email": "commission-on-administrative-justice@ecitizen.go.ke",
+    "firstName": "Commission",
+    "lastName": "on",
+    "password": "CommissionOn@2026!"
+  },
+  {
+    "agencyCode": "DIRECTORATE-OF-CRIMINAL-INVESTIGATIONS",
+    "agencyName": "Directorate of Criminal Investigations",
+    "email": "directorate-of-criminal-investigations@ecitizen.go.ke",
+    "firstName": "Directorate",
+    "lastName": "of",
+    "password": "DirectorateOf@2026!"
+  },
+  {
+    "agencyCode": "INSTITUTE-OF-CERTIFIED-PUBLIC-SECRETARIE",
+    "agencyName": "Institute of Certified Public Secretaries of Kenya",
+    "email": "institute-of-certified-public-secretarie@ecitizen.go.ke",
+    "firstName": "Institute",
+    "lastName": "of",
+    "password": "InstituteOf@2026!"
+  },
+  {
+    "agencyCode": "INSTITUTE-OF-CERTIFIED-INVESTMENTS-AND-F",
+    "agencyName": "Institute of Certified Investments and Financial Analysts",
+    "email": "institute-of-certified-investments-and-f@ecitizen.go.ke",
+    "firstName": "Institute",
+    "lastName": "of",
+    "password": "InstituteOf@2026!"
+  },
+  {
+    "agencyCode": "GOVERNMENT-CLEARANCE-AGENCY-FUND",
+    "agencyName": "Government Clearance Agency Fund",
+    "email": "government-clearance-agency-fund@ecitizen.go.ke",
+    "firstName": "Government",
+    "lastName": "Clearance",
+    "password": "GovernmentClearance@2026!"
+  },
+  {
+    "agencyCode": "CIVIL-SERVANTS-ACCIDENT-CLAIM-FUND",
+    "agencyName": "Civil Servants Accident Claim Fund",
+    "email": "civil-servants-accident-claim-fund@ecitizen.go.ke",
+    "firstName": "Civil",
+    "lastName": "Servants",
+    "password": "CivilServants@2026!"
+  },
+  {
+    "agencyCode": "COMPETITION-TRIBUNAL-SECRETARIAT",
+    "agencyName": "Competition Tribunal Secretariat",
+    "email": "competition-tribunal-secretariat@ecitizen.go.ke",
+    "firstName": "Competition",
+    "lastName": "Tribunal",
+    "password": "CompetitionTribunal@2026!"
+  },
+  {
+    "agencyCode": "GOVERNMENT-VEHICLE-CHECK-UNIT",
+    "agencyName": "Government Vehicle Check Unit",
+    "email": "government-vehicle-check-unit@ecitizen.go.ke",
+    "firstName": "Government",
+    "lastName": "Vehicle",
+    "password": "GovernmentVehicle@2026!"
+  },
+  {
+    "agencyCode": "STATE-CORPORATIONS-APPEAL-TRIBUNAL",
+    "agencyName": "State Corporations Appeal Tribunal",
+    "email": "state-corporations-appeal-tribunal@ecitizen.go.ke",
+    "firstName": "State",
+    "lastName": "Corporations",
+    "password": "StateCorporations@2026!"
+  },
+  {
+    "agencyCode": "INDEPENDENT-ELECTORAL-AND-BOUNDARIES-COM",
+    "agencyName": "Independent Electoral and Boundaries Commission (IEBC)",
+    "email": "independent-electoral-and-boundaries-com@ecitizen.go.ke",
+    "firstName": "Independent",
+    "lastName": "Electoral",
+    "password": "IndependentElectoral@2026!"
+  },
+  {
+    "agencyCode": "OCCUPATIONAL-THERAPISTS-OF-KENYA",
+    "agencyName": "Occupational Therapists of Kenya",
+    "email": "occupational-therapists-of-kenya@ecitizen.go.ke",
+    "firstName": "Occupational",
+    "lastName": "Therapists",
+    "password": "OccupationalTherapists@2026!"
+  },
+  {
+    "agencyCode": "MERU-JAMBOPAY",
+    "agencyName": "Meru - Jambopay",
+    "email": "meru-jambopay@ecitizen.go.ke",
+    "firstName": "Meru",
+    "lastName": "Jambopay",
+    "password": "MeruJambopay@2026!"
+  },
+  {
+    "agencyCode": "BOMET",
+    "agencyName": "Bomet",
+    "email": "bomet@ecitizen.go.ke",
+    "firstName": "Bomet",
+    "lastName": "Admin",
+    "password": "BometAdmin@2026!"
+  },
+  {
+    "agencyCode": "EMBU",
+    "agencyName": "Embu",
+    "email": "embu@ecitizen.go.ke",
+    "firstName": "Embu",
+    "lastName": "Admin",
+    "password": "EmbuAdmin@2026!"
+  },
+  {
+    "agencyCode": "KAJIADO",
+    "agencyName": "Kajiado",
+    "email": "kajiado@ecitizen.go.ke",
+    "firstName": "Kajiado",
+    "lastName": "Admin",
+    "password": "KajiadoAdmin@2026!"
+  },
+  {
+    "agencyCode": "THARAKA-NITHI",
+    "agencyName": "Tharaka Nithi",
+    "email": "tharaka-nithi@ecitizen.go.ke",
+    "firstName": "Tharaka",
+    "lastName": "Nithi",
+    "password": "TharakaNithi@2026!"
+  },
+  {
+    "agencyCode": "NAROK",
+    "agencyName": "Narok",
+    "email": "narok@ecitizen.go.ke",
+    "firstName": "Narok",
+    "lastName": "Admin",
+    "password": "NarokAdmin@2026!"
+  },
+  {
+    "agencyCode": "UASIN-GISHU",
+    "agencyName": "Uasin Gishu",
+    "email": "uasin-gishu@ecitizen.go.ke",
+    "firstName": "Uasin",
+    "lastName": "Gishu",
+    "password": "UasinGishu@2026!"
+  },
+  {
+    "agencyCode": "MOMBASA",
+    "agencyName": "Mombasa",
+    "email": "mombasa@ecitizen.go.ke",
+    "firstName": "Mombasa",
+    "lastName": "Admin",
+    "password": "MombasaAdmin@2026!"
+  },
+  {
+    "agencyCode": "KISUMU",
+    "agencyName": "Kisumu",
+    "email": "kisumu@ecitizen.go.ke",
+    "firstName": "Kisumu",
+    "lastName": "Admin",
+    "password": "KisumuAdmin@2026!"
+  },
+  {
+    "agencyCode": "NYERI",
+    "agencyName": "Nyeri",
+    "email": "nyeri@ecitizen.go.ke",
+    "firstName": "Nyeri",
+    "lastName": "Admin",
+    "password": "NyeriAdmin@2026!"
+  },
+  {
+    "agencyCode": "PRE-5000",
+    "agencyName": "Pre 5000",
+    "email": "pre-5000@ecitizen.go.ke",
+    "firstName": "Pre",
+    "lastName": "5000",
+    "password": "Pre5000@2026!"
+  }
+]
