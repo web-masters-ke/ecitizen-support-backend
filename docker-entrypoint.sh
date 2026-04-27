@@ -18,5 +18,26 @@ else
   echo "⚠️  Seed exited with code $seed_exit — data may already exist, continuing..."
 fi
 
+echo "Seeding all 583 agencies..."
+if npx ts-node --transpile-only prisma/seed-agencies.ts; then
+  echo "✅ Agencies seeded"
+else
+  echo "⚠️  Agency seed failed or already seeded, continuing..."
+fi
+
+echo "Seeding agency admin users..."
+if npx ts-node --transpile-only prisma/seed-agency-users.ts; then
+  echo "✅ Agency users seeded"
+else
+  echo "⚠️  Agency user seed failed or already seeded, continuing..."
+fi
+
+echo "Updating agencies with onboarding report data..."
+if npx ts-node --transpile-only prisma/seed-agency-updates.ts; then
+  echo "✅ Agency onboarding data updated"
+else
+  echo "⚠️  Agency update failed, continuing..."
+fi
+
 echo "Starting application..."
 exec node dist/main.js
