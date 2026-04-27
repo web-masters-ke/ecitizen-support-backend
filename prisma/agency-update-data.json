@@ -1,0 +1,4666 @@
+[
+  {
+    "agencyCode": "CABINET-OFFICE",
+    "agencyName": "Cabinet Office",
+    "servicesIdentified": null,
+    "servicesLive": null,
+    "onboardingStatus": "PENDING",
+    "onboardingRemarks": "Never Engaged"
+  },
+  {
+    "agencyCode": "NATIONAL-SECURITY-COUNCIL",
+    "agencyName": "National Security Council",
+    "servicesIdentified": null,
+    "servicesLive": null,
+    "onboardingStatus": "PENDING",
+    "onboardingRemarks": "Never Engaged"
+  },
+  {
+    "agencyCode": "ASSUMPTION-OF-THE-OFFICE-OF-PRESIDENT-CO",
+    "agencyName": "Assumption of the Office of President Committee",
+    "servicesIdentified": null,
+    "servicesLive": null,
+    "onboardingStatus": "PENDING",
+    "onboardingRemarks": "Never Engaged"
+  },
+  {
+    "agencyCode": "NATIONAL-SECURITY-ADVISORY-COMMITTEE-NSA",
+    "agencyName": "National Security Advisory Committee (NSAC)",
+    "servicesIdentified": null,
+    "servicesLive": null,
+    "onboardingStatus": "PENDING",
+    "onboardingRemarks": "Never Engaged"
+  },
+  {
+    "agencyCode": "NATIONAL-INTELLIGENCE-SERVICE",
+    "agencyName": "National Intelligence Service",
+    "servicesIdentified": null,
+    "servicesLive": null,
+    "onboardingStatus": "PENDING",
+    "onboardingRemarks": "Never Engaged"
+  },
+  {
+    "agencyCode": "KENYA-INTERNATIONAL-BOUNDARIES-OFFICE",
+    "agencyName": "Kenya International Boundaries Office",
+    "servicesIdentified": null,
+    "servicesLive": null,
+    "onboardingStatus": "PENDING",
+    "onboardingRemarks": "Never Engaged"
+  },
+  {
+    "agencyCode": "JOINT-SECURITY-SECRETARIAT",
+    "agencyName": "Joint Security Secretariat",
+    "servicesIdentified": null,
+    "servicesLive": null,
+    "onboardingStatus": "PENDING",
+    "onboardingRemarks": "Never Engaged"
+  },
+  {
+    "agencyCode": "NATIONAL-COUNTER-TERRORISM-CENTRE-NCTC",
+    "agencyName": "National Counter Terrorism Centre (NCTC)",
+    "servicesIdentified": null,
+    "servicesLive": null,
+    "onboardingStatus": "PENDING",
+    "onboardingRemarks": "Never Engaged"
+  },
+  {
+    "agencyCode": "GOVERNMENT-PRESS",
+    "agencyName": "Government Press",
+    "servicesIdentified": 84,
+    "servicesLive": 84,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE (42 Direct to Paybill), 34 end-end"
+  },
+  {
+    "agencyCode": "BETTING-CONTROL-AND-LICENSING-BOARD",
+    "agencyName": "Betting Control and Licensing Board",
+    "servicesIdentified": 40,
+    "servicesLive": 40,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE"
+  },
+  {
+    "agencyCode": "NATIONAL-ECONOMIC-AND-SOCIAL-COUNCIL-NES",
+    "agencyName": "National Economic and Social Council (NESC)",
+    "servicesIdentified": null,
+    "servicesLive": null,
+    "onboardingStatus": "PENDING",
+    "onboardingRemarks": "Never Engaged"
+  },
+  {
+    "agencyCode": "PRESIDENTIAL-ADVISORY-COUNCIL-ON-SCIENCE",
+    "agencyName": "Presidential Advisory Council on Science and Technology",
+    "servicesIdentified": null,
+    "servicesLive": null,
+    "onboardingStatus": "PENDING",
+    "onboardingRemarks": "Never Engaged"
+  },
+  {
+    "agencyCode": "FINANCIAL-REPORTING-CENTRE-2",
+    "agencyName": "Financial Reporting Centre",
+    "servicesIdentified": null,
+    "servicesLive": null,
+    "onboardingStatus": "PENDING",
+    "onboardingRemarks": "Never Engaged"
+  },
+  {
+    "agencyCode": "PRESIDENTS-COUNCIL-OF-ECONOMIC-ADVISORS",
+    "agencyName": "President's Council of Economic Advisors",
+    "servicesIdentified": null,
+    "servicesLive": null,
+    "onboardingStatus": "PENDING",
+    "onboardingRemarks": "Never Engaged"
+  },
+  {
+    "agencyCode": "NATIONAL-AND-COUNTY-GOVERNMENT-SUMMIT",
+    "agencyName": "National and County Government Summit",
+    "servicesIdentified": null,
+    "servicesLive": null,
+    "onboardingStatus": "PENDING",
+    "onboardingRemarks": "Never Engaged"
+  },
+  {
+    "agencyCode": "POWER-OF-MERCY-ADVISORY-COMMITTEE-POMAC",
+    "agencyName": "Power of Mercy Advisory Committee (POMAC)",
+    "servicesIdentified": 2,
+    "servicesLive": 2,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE(URL) FREE"
+  },
+  {
+    "agencyCode": "DIRECTORATE-OF-RESOURCE-SURVEYS-AND-REMO",
+    "agencyName": "Directorate of Resource Surveys and Remote Sensing",
+    "servicesIdentified": null,
+    "servicesLive": null,
+    "onboardingStatus": "PENDING",
+    "onboardingRemarks": "Never Engaged"
+  },
+  {
+    "agencyCode": "DIRECTORATE-OF-NATIONAL-COHESION-AND-VAL",
+    "agencyName": "Directorate of National Cohesion and Values",
+    "servicesIdentified": null,
+    "servicesLive": null,
+    "onboardingStatus": "PENDING",
+    "onboardingRemarks": "Never Engaged"
+  },
+  {
+    "agencyCode": "KENYA-SOUTH-SUDAN-LIAISON-OFFICE-KESSULO",
+    "agencyName": "Kenya South Sudan Liaison Office (KESSULO)",
+    "servicesIdentified": null,
+    "servicesLive": null,
+    "onboardingStatus": "PENDING",
+    "onboardingRemarks": "Never Engaged"
+  },
+  {
+    "agencyCode": "PUBLIC-ENTITIES-OVERSIGHT-OFFICE",
+    "agencyName": "Public Entities Oversight Office",
+    "servicesIdentified": null,
+    "servicesLive": null,
+    "onboardingStatus": "PENDING",
+    "onboardingRemarks": "Never Engaged"
+  },
+  {
+    "agencyCode": "STATE-CORPORATIONS-ADVISORY-COMMITTEE-SC",
+    "agencyName": "State Corporations Advisory Committee (SCAC)",
+    "servicesIdentified": null,
+    "servicesLive": null,
+    "onboardingStatus": "PENDING",
+    "onboardingRemarks": "Never Engaged"
+  },
+  {
+    "agencyCode": "INSPECTORATE-OF-STATE-CORPORATIONS",
+    "agencyName": "Inspectorate of State Corporations",
+    "servicesIdentified": 1,
+    "servicesLive": null,
+    "onboardingStatus": "SUSPENDED",
+    "onboardingRemarks": "No Communication"
+  },
+  {
+    "agencyCode": "INTERNATIONAL-DEVELOPMENT-PARTNERSHIPS-C",
+    "agencyName": "International Development Partnerships Co-ordination",
+    "servicesIdentified": null,
+    "servicesLive": null,
+    "onboardingStatus": "PENDING",
+    "onboardingRemarks": "Never Engaged"
+  },
+  {
+    "agencyCode": "NAIROBI-RIVERS-COMMISSION",
+    "agencyName": "Nairobi Rivers Commission",
+    "servicesIdentified": 20,
+    "servicesLive": null,
+    "onboardingStatus": "IN_PROGRESS",
+    "onboardingRemarks": "Their system is still under development"
+  },
+  {
+    "agencyCode": "INTERGOVERNMENT-BUDGET-AND-ECONOMIC-COUN",
+    "agencyName": "Inter-Government Budget and Economic Council (IBEC)",
+    "servicesIdentified": null,
+    "servicesLive": null,
+    "onboardingStatus": "PENDING",
+    "onboardingRemarks": "Never Engaged"
+  },
+  {
+    "agencyCode": "INTERGOVERNMENTAL-RELATIONS-TECHNICAL-CO",
+    "agencyName": "Inter-Governmental Relations Technical Committee",
+    "servicesIdentified": 0,
+    "servicesLive": 0,
+    "onboardingStatus": "PENDING",
+    "onboardingRemarks": "Not citizen facing"
+  },
+  {
+    "agencyCode": "NATIONAL-AND-COUNTY-GOVERNMENTS-HONOURS",
+    "agencyName": "National and County Governments Honours Advisory Committee",
+    "servicesIdentified": null,
+    "servicesLive": null,
+    "onboardingStatus": "PENDING",
+    "onboardingRemarks": "Never Engaged"
+  },
+  {
+    "agencyCode": "COFFEE-SUBSECTOR-REFORMS-IMPLEMENTATION",
+    "agencyName": "Coffee Sub-Sector Reforms Implementation Standing Committee",
+    "servicesIdentified": null,
+    "servicesLive": null,
+    "onboardingStatus": "PENDING",
+    "onboardingRemarks": "Never Engaged"
+  },
+  {
+    "agencyCode": "STATE-DEPARTMENT-OF-CABINET-AFFAIRS",
+    "agencyName": "State Department of Cabinet Affairs",
+    "servicesIdentified": 6,
+    "servicesLive": 0,
+    "onboardingStatus": "IN_PROGRESS",
+    "onboardingRemarks": "Digitization ongoing"
+  },
+  {
+    "agencyCode": "KENYA-FOREIGN-SERVICE-INSTITUTE",
+    "agencyName": "Kenya Foreign Service Institute",
+    "servicesIdentified": null,
+    "servicesLive": null,
+    "onboardingStatus": "PENDING",
+    "onboardingRemarks": "Never Engaged"
+  },
+  {
+    "agencyCode": "ALL-KENYA-MISSIONS-ABROAD",
+    "agencyName": "All Kenya Missions Abroad",
+    "servicesIdentified": 1056,
+    "servicesLive": 14,
+    "onboardingStatus": "IN_PROGRESS",
+    "onboardingRemarks": "LIVE(14). Awaiting dollar account for the rest to go live"
+  },
+  {
+    "agencyCode": "STATE-DEPARTMENT-FOR-DIASPORA-AFFAIRS",
+    "agencyName": "State Department for Diaspora Affairs",
+    "servicesIdentified": 9,
+    "servicesLive": 9,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE (URL) FREE"
+  },
+  {
+    "agencyCode": "DIASPORA-PLACEMENT-AGENCY",
+    "agencyName": "Diaspora Placement Agency",
+    "servicesIdentified": null,
+    "servicesLive": null,
+    "onboardingStatus": "PENDING",
+    "onboardingRemarks": "Never Engaged"
+  },
+  {
+    "agencyCode": "THE-STEERING-COMMITTEE-ON-THE-GOVERNMENT",
+    "agencyName": "The Steering Committee on the Government Legislative Agenda and Parliamentary Liaison",
+    "servicesIdentified": null,
+    "servicesLive": null,
+    "onboardingStatus": "PENDING",
+    "onboardingRemarks": "Never Engaged"
+  },
+  {
+    "agencyCode": "NATIONAL-GOVERNMENT-ADMINISTRATION-OFFIC",
+    "agencyName": "National Government Administration Officers",
+    "servicesIdentified": null,
+    "servicesLive": null,
+    "onboardingStatus": "PENDING",
+    "onboardingRemarks": "Never Engaged"
+  },
+  {
+    "agencyCode": "SECURITY-TRAINING-INSTITUTIONS",
+    "agencyName": "Security Training Institutions;",
+    "servicesIdentified": null,
+    "servicesLive": null,
+    "onboardingStatus": "PENDING",
+    "onboardingRemarks": "Never Engaged"
+  },
+  {
+    "agencyCode": "NATIONAL-CRIME-RESEARCH-CENTRE",
+    "agencyName": "National Crime Research Centre",
+    "servicesIdentified": 11,
+    "servicesLive": 9,
+    "onboardingStatus": "IN_PROGRESS",
+    "onboardingRemarks": "LIVE (9 URL) Configurations complete for remaining services; await ing servers to go live"
+  },
+  {
+    "agencyCode": "GOVERNMENT-CHEMIST",
+    "agencyName": "Government Chemist",
+    "servicesIdentified": 70,
+    "servicesLive": 70,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE (16 Direct to Paybill) 54 End to End"
+  },
+  {
+    "agencyCode": "NGO-COORDINATION-BOARD",
+    "agencyName": "NGO Coordination Board",
+    "servicesIdentified": 50,
+    "servicesLive": 50,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE"
+  },
+  {
+    "agencyCode": "MT-KENYA-SCHOOL-OF-LEADERSHIP-KENYA-SCHO",
+    "agencyName": "Mt. Kenya School of Leadership (Kenya School of Adventure and Leadership)",
+    "servicesIdentified": 34,
+    "servicesLive": 34,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE"
+  },
+  {
+    "agencyCode": "NATIONAL-AUTHORITY-FOR-THE-CAMPAIGN-AGAI",
+    "agencyName": "National Authority for the Campaign Against Alcohol and Drug Abuse (NACADA)",
+    "servicesIdentified": 11,
+    "servicesLive": 11,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE (3 URL) 6 End to end 2 USSD"
+  },
+  {
+    "agencyCode": "INDEPENDENT-POLICING-OVERSIGHT-AUTHORITY",
+    "agencyName": "Independent Policing Oversight Authority",
+    "servicesIdentified": 13,
+    "servicesLive": 13,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE (URL) FREE"
+  },
+  {
+    "agencyCode": "PRIVATE-SECURITY-REGULATORY-AUTHORITY",
+    "agencyName": "Private Security Regulatory Authority",
+    "servicesIdentified": 2,
+    "servicesLive": 2,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE (FREE)"
+  },
+  {
+    "agencyCode": "NATIONAL-COHESION-AND-INTEGRATION-COMMIS",
+    "agencyName": "National Cohesion and Integration Commission",
+    "servicesIdentified": 1,
+    "servicesLive": 1,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE (URL)"
+  },
+  {
+    "agencyCode": "KENYA-COAST-GUARD-SERVICE",
+    "agencyName": "Kenya Coast Guard Service",
+    "servicesIdentified": 1,
+    "servicesLive": 0,
+    "onboardingStatus": "SUSPENDED",
+    "onboardingRemarks": "Stalled"
+  },
+  {
+    "agencyCode": "NATIONAL-COMPUTER-COORDINATION-COMMITEE",
+    "agencyName": "National Computer Coordination Commitee and Secretariat",
+    "servicesIdentified": null,
+    "servicesLive": null,
+    "onboardingStatus": "PENDING",
+    "onboardingRemarks": "Never Engaged"
+  },
+  {
+    "agencyCode": "KENYA-PRISONS-SERVICE",
+    "agencyName": "Kenya Prisons Service",
+    "servicesIdentified": 215,
+    "servicesLive": 215,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE"
+  },
+  {
+    "agencyCode": "BORSTAL-INSTITUTIONS",
+    "agencyName": "Borstal Institutions",
+    "servicesIdentified": null,
+    "servicesLive": null,
+    "onboardingStatus": "PENDING",
+    "onboardingRemarks": "Never Engaged"
+  },
+  {
+    "agencyCode": "PRISONS-ENTERPRISE-FUND",
+    "agencyName": "Prisons Enterprise Fund",
+    "servicesIdentified": null,
+    "servicesLive": null,
+    "onboardingStatus": "PENDING",
+    "onboardingRemarks": "Never Engaged"
+  },
+  {
+    "agencyCode": "PROBATION-AND-AFTERCARE-SERVICE",
+    "agencyName": "Probation and Aftercare Service",
+    "servicesIdentified": 5,
+    "servicesLive": 5,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE Direct to Paybill"
+  },
+  {
+    "agencyCode": "NATIONAL-POLICE-SERVICE",
+    "agencyName": "National Police Service",
+    "servicesIdentified": 1219,
+    "servicesLive": 1211,
+    "onboardingStatus": "IN_PROGRESS",
+    "onboardingRemarks": "LIVE (16  end to end) 1195 USSD. Digitization for 8  services ongoing"
+  },
+  {
+    "agencyCode": "NATIONAL-REGISTRATION-BUREAU",
+    "agencyName": "National Registration Bureau",
+    "servicesIdentified": 338,
+    "servicesLive": 338,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE"
+  },
+  {
+    "agencyCode": "CIVIL-REGISTRATION-SERVICES",
+    "agencyName": "Civil Registration Services",
+    "servicesIdentified": 14,
+    "servicesLive": 14,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE"
+  },
+  {
+    "agencyCode": "DIRECTORATE-OF-IMMIGRATION",
+    "agencyName": "Directorate of Immigration",
+    "servicesIdentified": 68,
+    "servicesLive": 68,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE"
+  },
+  {
+    "agencyCode": "REFUGEE-AFFAIRS-SECRETARIAT",
+    "agencyName": "Refugee Affairs Secretariat",
+    "servicesIdentified": null,
+    "servicesLive": null,
+    "onboardingStatus": "PENDING",
+    "onboardingRemarks": "Never Engaged"
+  },
+  {
+    "agencyCode": "THE-REFUGEE-AFFAIRS-COMMITTEE",
+    "agencyName": "The Refugee Affairs Committee",
+    "servicesIdentified": null,
+    "servicesLive": null,
+    "onboardingStatus": "PENDING",
+    "onboardingRemarks": "Never Engaged"
+  },
+  {
+    "agencyCode": "DIRECTORATE-OF-ECITIZEN-SERVICES",
+    "agencyName": "Directorate of e-Citizen Services",
+    "servicesIdentified": null,
+    "servicesLive": null,
+    "onboardingStatus": "PENDING",
+    "onboardingRemarks": "Never Engaged"
+  },
+  {
+    "agencyCode": "MINISTRY-OF-DEFENCE",
+    "agencyName": "Ministry of Defence",
+    "servicesIdentified": 1,
+    "servicesLive": 1,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE (FREE)"
+  },
+  {
+    "agencyCode": "KENYA-DEFENCE-FORCES",
+    "agencyName": "Kenya Defence Forces",
+    "servicesIdentified": null,
+    "servicesLive": null,
+    "onboardingStatus": "PENDING",
+    "onboardingRemarks": "Never Engaged"
+  },
+  {
+    "agencyCode": "NATIONAL-DEFENCE-COUNCIL",
+    "agencyName": "National Defence Council",
+    "servicesIdentified": null,
+    "servicesLive": null,
+    "onboardingStatus": "PENDING",
+    "onboardingRemarks": "Never Engaged"
+  },
+  {
+    "agencyCode": "NATIONAL-DEFENCE-UNIVERSITY-OF-KENYA",
+    "agencyName": "National Defence University of Kenya",
+    "servicesIdentified": 31,
+    "servicesLive": 31,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE."
+  },
+  {
+    "agencyCode": "DEFENCE-STAFF-COLLEGE",
+    "agencyName": "Defence Staff College",
+    "servicesIdentified": null,
+    "servicesLive": null,
+    "onboardingStatus": "PENDING",
+    "onboardingRemarks": "Never Engaged"
+  },
+  {
+    "agencyCode": "KENYA-ORDINANCE-FACTORY-CORPORATION",
+    "agencyName": "Kenya Ordinance Factory Corporation",
+    "servicesIdentified": null,
+    "servicesLive": null,
+    "onboardingStatus": "PENDING",
+    "onboardingRemarks": "Never Engaged"
+  },
+  {
+    "agencyCode": "KENYA-SPACE-AGENCY",
+    "agencyName": "Kenya Space Agency",
+    "servicesIdentified": 10,
+    "servicesLive": 10,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "Live URL. Requirements gathering ongoing"
+  },
+  {
+    "agencyCode": "KENYA-MEAT-COMMISSION",
+    "agencyName": "Kenya Meat Commission",
+    "servicesIdentified": 4,
+    "servicesLive": 4,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE (4 stations)"
+  },
+  {
+    "agencyCode": "KENYA-SHIPYARDS-LIMITED",
+    "agencyName": "Kenya Shipyards Limited",
+    "servicesIdentified": 1,
+    "servicesLive": 1,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE URL"
+  },
+  {
+    "agencyCode": "ULINZI-PRIME-HEALTH-SERVICES-FUND",
+    "agencyName": "Ulinzi Prime Health Services Fund",
+    "servicesIdentified": 169,
+    "servicesLive": 169,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE (USSD)"
+  },
+  {
+    "agencyCode": "CENTRAL-BANK-OF-KENYA",
+    "agencyName": "Central Bank of Kenya",
+    "servicesIdentified": null,
+    "servicesLive": null,
+    "onboardingStatus": "PENDING",
+    "onboardingRemarks": "Never Engaged"
+  },
+  {
+    "agencyCode": "KENYA-REVENUE-AUTHORITY",
+    "agencyName": "Kenya Revenue Authority",
+    "servicesIdentified": 252,
+    "servicesLive": 252,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE"
+  },
+  {
+    "agencyCode": "CAPITAL-MARKETS-AUTHORITY",
+    "agencyName": "Capital Markets Authority",
+    "servicesIdentified": 40,
+    "servicesLive": 40,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE (39 end to end 1 integration)"
+  },
+  {
+    "agencyCode": "COMPETITION-AUTHORITY-OF-KENYA",
+    "agencyName": "Competition Authority of Kenya",
+    "servicesIdentified": 15,
+    "servicesLive": 15,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE"
+  },
+  {
+    "agencyCode": "INSURANCE-REGULATORY-AUTHORITY",
+    "agencyName": "Insurance Regulatory Authority",
+    "servicesIdentified": 45,
+    "servicesLive": 45,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE"
+  },
+  {
+    "agencyCode": "RETIREMENT-BENEFITS-AUTHORITY",
+    "agencyName": "Retirement Benefits Authority",
+    "servicesIdentified": 11,
+    "servicesLive": 11,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE"
+  },
+  {
+    "agencyCode": "UNCLAIMED-FINANCIAL-ASSET-AUTHORITY",
+    "agencyName": "Unclaimed Financial Asset Authority",
+    "servicesIdentified": 6,
+    "servicesLive": 6,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE(SSO)"
+  },
+  {
+    "agencyCode": "KENYA-DEPOSIT-INSURANCE-CORPORATION",
+    "agencyName": "Kenya Deposit Insurance Corporation",
+    "servicesIdentified": 43,
+    "servicesLive": 40,
+    "onboardingStatus": "IN_PROGRESS",
+    "onboardingRemarks": "LIVE. Awaiting client sign-off for the end-to-end service"
+  },
+  {
+    "agencyCode": "EQUALIZATION-FUND",
+    "agencyName": "Equalization Fund",
+    "servicesIdentified": 1,
+    "servicesLive": 1,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE SSO URL"
+  },
+  {
+    "agencyCode": "CONTINGENCIES-FUND",
+    "agencyName": "Contingencies Fund",
+    "servicesIdentified": null,
+    "servicesLive": null,
+    "onboardingStatus": "PENDING",
+    "onboardingRemarks": "Never Engaged"
+  },
+  {
+    "agencyCode": "NAIROBI-INTERNATIONAL-FINANCIAL-CENTRE",
+    "agencyName": "Nairobi International Financial Centre",
+    "servicesIdentified": 10,
+    "servicesLive": 10,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE USSD"
+  },
+  {
+    "agencyCode": "PRIVATIZATION-COMMISSION",
+    "agencyName": "Privatization Commission",
+    "servicesIdentified": 9,
+    "servicesLive": 9,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE (URL)"
+  },
+  {
+    "agencyCode": "PUBLIC-PRIVATE-PARTNERSHIP-UNIT",
+    "agencyName": "Public Private Partnership Unit",
+    "servicesIdentified": null,
+    "servicesLive": null,
+    "onboardingStatus": "PENDING",
+    "onboardingRemarks": "Never Engaged"
+  },
+  {
+    "agencyCode": "PUBLIC-PROCUREMENT-REGULATORY-AUTHORITY",
+    "agencyName": "Public Procurement Regulatory Authority",
+    "servicesIdentified": 6,
+    "servicesLive": 6,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE (4 Direct to Paybill) 1 URL; 1 End to End"
+  },
+  {
+    "agencyCode": "KENYA-REINSURANCE-CORPORATION",
+    "agencyName": "Kenya Reinsurance Corporation",
+    "servicesIdentified": 5,
+    "servicesLive": null,
+    "onboardingStatus": "IN_PROGRESS",
+    "onboardingRemarks": "Integration test ongoing."
+  },
+  {
+    "agencyCode": "ANTIMONEY-LAUNDERING-ADVISORY-BOARD",
+    "agencyName": "Anti-Money Laundering Advisory Board",
+    "servicesIdentified": null,
+    "servicesLive": null,
+    "onboardingStatus": "PENDING",
+    "onboardingRemarks": "Never Engaged"
+  },
+  {
+    "agencyCode": "FINANCIAL-REPORTING-CENTRE-2",
+    "agencyName": "Financial Reporting Centre",
+    "servicesIdentified": null,
+    "servicesLive": null,
+    "onboardingStatus": "PENDING",
+    "onboardingRemarks": "Never Engaged"
+  },
+  {
+    "agencyCode": "KENYA-INSTITUTE-OF-SUPPLIES-MANAGEMENT",
+    "agencyName": "Kenya Institute of Supplies Management",
+    "servicesIdentified": 6,
+    "servicesLive": 6,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE (Payment Integration)"
+  },
+  {
+    "agencyCode": "KENYA-INSTITUTE-OF-SUPPLIES-EXAMINATION",
+    "agencyName": "Kenya Institute of Supplies Examination Board",
+    "servicesIdentified": 15,
+    "servicesLive": 15,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE"
+  },
+  {
+    "agencyCode": "KENYA-TRADE-NETWORK-AGENCY-KENTRADE",
+    "agencyName": "Kenya Trade Network Agency (KenTrade)",
+    "servicesIdentified": 238,
+    "servicesLive": 238,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE"
+  },
+  {
+    "agencyCode": "KENYA-NATIONAL-ASSURANCE-2001-CO",
+    "agencyName": "Kenya National Assurance (2001) Co.",
+    "servicesIdentified": null,
+    "servicesLive": null,
+    "onboardingStatus": "PENDING",
+    "onboardingRemarks": "Never Engaged"
+  },
+  {
+    "agencyCode": "POLICY-HOLDERS-COMPENSATION-FUND",
+    "agencyName": "Policy Holders Compensation Fund",
+    "servicesIdentified": 4,
+    "servicesLive": 4,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE 3 USSD; 1 URL Integration to Commence"
+  },
+  {
+    "agencyCode": "LOCAL-AUTHORITIES-PROVIDENT-FUND",
+    "agencyName": "Local Authorities Provident Fund",
+    "servicesIdentified": 1,
+    "servicesLive": 1,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE URL"
+  },
+  {
+    "agencyCode": "CONSOLIDATED-BANK-OF-KENYA",
+    "agencyName": "Consolidated Bank of Kenya",
+    "servicesIdentified": null,
+    "servicesLive": null,
+    "onboardingStatus": "PENDING",
+    "onboardingRemarks": "Never Engaged"
+  },
+  {
+    "agencyCode": "DEVELOPMENT-BANK-OF-KENYA",
+    "agencyName": "Development Bank of Kenya",
+    "servicesIdentified": null,
+    "servicesLive": null,
+    "onboardingStatus": "PENDING",
+    "onboardingRemarks": "Never Engaged"
+  },
+  {
+    "agencyCode": "KENYA-POST-OFFICE-SAVINGS-BANK",
+    "agencyName": "Kenya Post Office Savings Bank",
+    "servicesIdentified": null,
+    "servicesLive": null,
+    "onboardingStatus": "PENDING",
+    "onboardingRemarks": "Never Engaged"
+  },
+  {
+    "agencyCode": "THE-EAST-AFRICAN-DEVELOPMENT-BANK",
+    "agencyName": "The East African Development Bank",
+    "servicesIdentified": null,
+    "servicesLive": null,
+    "onboardingStatus": "PENDING",
+    "onboardingRemarks": "Never Engaged"
+  },
+  {
+    "agencyCode": "INDUSTRIAL-AND-COMMERCIAL-DEVELOPMENT-CO",
+    "agencyName": "Industrial and Commercial Development Corporation (ICDC)",
+    "servicesIdentified": null,
+    "servicesLive": null,
+    "onboardingStatus": "PENDING",
+    "onboardingRemarks": "Never Engaged"
+  },
+  {
+    "agencyCode": "GOVERNMENT-DIGITAL-PAYMENTS-ECITIZEN",
+    "agencyName": "Government Digital Payments (eCitizen)",
+    "servicesIdentified": null,
+    "servicesLive": null,
+    "onboardingStatus": "PENDING",
+    "onboardingRemarks": "Never Engaged"
+  },
+  {
+    "agencyCode": "KENYA-ACCOUNTANTS-AND-SECRETARIES-NATION",
+    "agencyName": "Kenya Accountants and Secretaries National Examination Board (KASNEB)",
+    "servicesIdentified": 26,
+    "servicesLive": 26,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE"
+  },
+  {
+    "agencyCode": "PUBLIC-SECTOR-ACCOUNTING-STANDARDS-BOARD",
+    "agencyName": "Public Sector Accounting Standards Board",
+    "servicesIdentified": 2,
+    "servicesLive": 2,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE URL"
+  },
+  {
+    "agencyCode": "REGISTRATION-OF-CERTIFIED-PUBLIC-SECRETA",
+    "agencyName": "Registration of Certified Public Secretaries Board",
+    "servicesIdentified": 4,
+    "servicesLive": 4,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE USSD"
+  },
+  {
+    "agencyCode": "ACCOUNTANTS-DISCIPLINARY-COMMITTEE",
+    "agencyName": "Accountants Disciplinary Committee",
+    "servicesIdentified": null,
+    "servicesLive": null,
+    "onboardingStatus": "PENDING",
+    "onboardingRemarks": "Never Engaged"
+  },
+  {
+    "agencyCode": "INSTITUTE-OF-CERTIFIED-PUBLIC-ACCOUNTANT",
+    "agencyName": "Institute of Certified Public Accountants",
+    "servicesIdentified": null,
+    "servicesLive": null,
+    "onboardingStatus": "PENDING",
+    "onboardingRemarks": "Never Engaged"
+  },
+  {
+    "agencyCode": "KENYA-PROCUREMENT-AND-DISPOSAL-AGENCY",
+    "agencyName": "Kenya Procurement and Disposal Agency",
+    "servicesIdentified": null,
+    "servicesLive": null,
+    "onboardingStatus": "PENDING",
+    "onboardingRemarks": "Never Engaged"
+  },
+  {
+    "agencyCode": "KENYA-NATIONAL-ENTREPRENEURSHIP-SAVINGS",
+    "agencyName": "Kenya National Entrepreneurship Savings Trust (KNEST)",
+    "servicesIdentified": 6,
+    "servicesLive": 6,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE"
+  },
+  {
+    "agencyCode": "NATIONAL-TREASURY-PENSIONS-DEPARTMENT",
+    "agencyName": "National Treasury - Pensions Department",
+    "servicesIdentified": 25,
+    "servicesLive": 1,
+    "onboardingStatus": "SUSPENDED",
+    "onboardingRemarks": "LIVE 1 URL. Stalled"
+  },
+  {
+    "agencyCode": "PUBLIC-SERVICE-SUPERANNUATION-SCHEME",
+    "agencyName": "Public Service Superannuation Scheme",
+    "servicesIdentified": 1,
+    "servicesLive": 1,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE URL"
+  },
+  {
+    "agencyCode": "MAKIBA",
+    "agencyName": "M-Akiba",
+    "servicesIdentified": 7,
+    "servicesLive": null,
+    "onboardingStatus": "SUSPENDED",
+    "onboardingRemarks": "Stalled"
+  },
+  {
+    "agencyCode": "IFMIS-DEPARTMENT",
+    "agencyName": "IFMIS Department",
+    "servicesIdentified": null,
+    "servicesLive": null,
+    "onboardingStatus": "SUSPENDED",
+    "onboardingRemarks": "To be onboarded however there is no communication"
+  },
+  {
+    "agencyCode": "KENYA-INSTITUTE-FOR-PUBLIC-POLICY-RESEAR",
+    "agencyName": "Kenya Institute for Public Policy Research and Analysis (KIPPRA)",
+    "servicesIdentified": 44,
+    "servicesLive": 44,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE 39 integration, 5 End to End"
+  },
+  {
+    "agencyCode": "KENYA-VISION-2030-BOARD",
+    "agencyName": "Kenya Vision 2030 Board",
+    "servicesIdentified": 1,
+    "servicesLive": 1,
+    "onboardingStatus": "PENDING",
+    "onboardingRemarks": "LIVE URL. Not Citizen Facing."
+  },
+  {
+    "agencyCode": "NATIONAL-GOVERNMENT-CONSTITUENCY-DEVELOP",
+    "agencyName": "National Government Constituency Development Fund",
+    "servicesIdentified": 3,
+    "servicesLive": 3,
+    "onboardingStatus": "PENDING",
+    "onboardingRemarks": "LIVE (URL). Not Citizen Facing"
+  },
+  {
+    "agencyCode": "KENYA-NATIONAL-BUREAU-OF-STATISTICS",
+    "agencyName": "Kenya National Bureau of Statistics",
+    "servicesIdentified": 4,
+    "servicesLive": 4,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE (Direct to Paybill). Configurations complete; awaiting servers to go live"
+  },
+  {
+    "agencyCode": "NATIONAL-COORDINATING-AGENCY-FOR-POPULAT",
+    "agencyName": "National Co-ordinating Agency for Population and Development",
+    "servicesIdentified": null,
+    "servicesLive": null,
+    "onboardingStatus": "PENDING",
+    "onboardingRemarks": "Never Engaged"
+  },
+  {
+    "agencyCode": "NEW-PARTNERSHIP-FOR-AFRICAN-DEVELOPMENT",
+    "agencyName": "New Partnership for African Development (NEPAD)/Annual Peer\n Review Mechanism (APRM)",
+    "servicesIdentified": null,
+    "servicesLive": null,
+    "onboardingStatus": "PENDING",
+    "onboardingRemarks": null
+  },
+  {
+    "agencyCode": "COMMUNITY-DEVELOPMENT-TRUST-FUND-ACPEU-P",
+    "agencyName": "Community Development Trust Fund (ACP/EU Protocol)",
+    "servicesIdentified": null,
+    "servicesLive": null,
+    "onboardingStatus": "PENDING",
+    "onboardingRemarks": "Never Engaged"
+  },
+  {
+    "agencyCode": "NATIONAL-COUNCIL-FOR-POPULATION-AND-DEVE",
+    "agencyName": "National Council for Population and Development",
+    "servicesIdentified": 10,
+    "servicesLive": 10,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE (URL) 9; 1 Direct to Paybill"
+  },
+  {
+    "agencyCode": "KENYA-SCHOOL-OF-GOVERNMENT-KSG",
+    "agencyName": "Kenya School of Government (KSG)",
+    "servicesIdentified": 606,
+    "servicesLive": 606,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE"
+  },
+  {
+    "agencyCode": "NATIONAL-YOUTH-SERVICE",
+    "agencyName": "National Youth Service",
+    "servicesIdentified": 206,
+    "servicesLive": 173,
+    "onboardingStatus": "IN_PROGRESS",
+    "onboardingRemarks": "LIVE 150 end-to-end; 23 Direct to Pyabill; Configurations for the 33 in validation stage"
+  },
+  {
+    "agencyCode": "HUDUMA-CENTRES",
+    "agencyName": "Huduma Centres",
+    "servicesIdentified": 1,
+    "servicesLive": 1,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE (URL)"
+  },
+  {
+    "agencyCode": "INSTITUTE-OF-HUMAN-RESOURCE-MANAGEMENT",
+    "agencyName": "Institute of Human Resource Management",
+    "servicesIdentified": 6,
+    "servicesLive": 6,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE"
+  },
+  {
+    "agencyCode": "PUBLIC-SERVICE-COMMISSION",
+    "agencyName": "Public Service Commission",
+    "servicesIdentified": 10,
+    "servicesLive": 10,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE"
+  },
+  {
+    "agencyCode": "HUMAN-RESOURCE-MANAGEMENT-PROFESSIONALS",
+    "agencyName": "Human Resource Management Professionals Examinations Board",
+    "servicesIdentified": 49,
+    "servicesLive": 49,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE"
+  },
+  {
+    "agencyCode": "PUBLIC-SERVICE-PERFORMANCE-MANAGEMENT-UN",
+    "agencyName": "Public Service Performance Management Unit",
+    "servicesIdentified": 0,
+    "servicesLive": 0,
+    "onboardingStatus": "PENDING",
+    "onboardingRemarks": "Not citizen facing"
+  },
+  {
+    "agencyCode": "GOVERNMENT-DELIVERY-SERVICES-GDS",
+    "agencyName": "Government Delivery Services (GDS)",
+    "servicesIdentified": 2,
+    "servicesLive": null,
+    "onboardingStatus": "SUSPENDED",
+    "onboardingRemarks": "Stalled"
+  },
+  {
+    "agencyCode": "MATERIAL-TESTING-AND-RESEARCH-DIVISION",
+    "agencyName": "Material Testing and Research Division",
+    "servicesIdentified": 44,
+    "servicesLive": 44,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE"
+  },
+  {
+    "agencyCode": "KENYA-ROADS-BOARD",
+    "agencyName": "Kenya Roads Board",
+    "servicesIdentified": 0,
+    "servicesLive": 0,
+    "onboardingStatus": "PENDING",
+    "onboardingRemarks": "Not Citizen Facing"
+  },
+  {
+    "agencyCode": "KENYA-NATIONAL-HIGHWAY-AUTHORITY",
+    "agencyName": "Kenya National Highway Authority",
+    "servicesIdentified": 26,
+    "servicesLive": 26,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE (Payment Integration)"
+  },
+  {
+    "agencyCode": "KENYA-URBAN-ROADS-AUTHORITY",
+    "agencyName": "Kenya Urban Roads Authority",
+    "servicesIdentified": 8,
+    "servicesLive": 8,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE"
+  },
+  {
+    "agencyCode": "KENYA-RURAL-ROADS-AUTHORITY-KERRA",
+    "agencyName": "Kenya Rural Roads Authority \u2013 KeRRA",
+    "servicesIdentified": 9,
+    "servicesLive": 9,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE"
+  },
+  {
+    "agencyCode": "KENYA-INSTITUTE-OF-HIGHWAYS-AND-BUILDING",
+    "agencyName": "Kenya Institute of Highways and Building Technology",
+    "servicesIdentified": 165,
+    "servicesLive": 165,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE Integration. End to End and USSD Deactivated"
+  },
+  {
+    "agencyCode": "KENYA-INSTITUTE-OF-TECHNOLOGY",
+    "agencyName": "Kenya Institute of Technology",
+    "servicesIdentified": null,
+    "servicesLive": null,
+    "onboardingStatus": "PENDING",
+    "onboardingRemarks": "Never Engaged"
+  },
+  {
+    "agencyCode": "ENGINEERS-BOARD-OF-KENYA",
+    "agencyName": "Engineers Board of Kenya",
+    "servicesIdentified": 23,
+    "servicesLive": 23,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE"
+  },
+  {
+    "agencyCode": "KENYA-ENGINEERING-TECHNOLOGISTS-REGISTRA",
+    "agencyName": "Kenya Engineering Technologists Registration Board",
+    "servicesIdentified": 53,
+    "servicesLive": 53,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE"
+  },
+  {
+    "agencyCode": "MECHANICAL-AND-TRANSPORT-FUND",
+    "agencyName": "Mechanical and Transport Fund",
+    "servicesIdentified": 69,
+    "servicesLive": 69,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE (End to End) 2 USSD"
+  },
+  {
+    "agencyCode": "KENYA-RAILWAYS-CORPORATION",
+    "agencyName": "Kenya Railways Corporation",
+    "servicesIdentified": 43,
+    "servicesLive": 43,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE (18 end to End)"
+  },
+  {
+    "agencyCode": "NORTHERN-CORRIDOR-TRANSIT-AND-TRANSPORT",
+    "agencyName": "Northern Corridor Transit and Transport Co-ordination (NCTTCA)",
+    "servicesIdentified": null,
+    "servicesLive": null,
+    "onboardingStatus": "PENDING",
+    "onboardingRemarks": "Never Engaged"
+  },
+  {
+    "agencyCode": "LAPSSET-DEVELOPMENT-AUTHORITY",
+    "agencyName": "LAPSSET Development Authority",
+    "servicesIdentified": null,
+    "servicesLive": null,
+    "onboardingStatus": "PENDING",
+    "onboardingRemarks": "Never Engaged"
+  },
+  {
+    "agencyCode": "KENYA-AIRPORTS-AUTHORITY-KAA",
+    "agencyName": "Kenya Airports Authority (KAA)",
+    "servicesIdentified": 436,
+    "servicesLive": 436,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE"
+  },
+  {
+    "agencyCode": "KENYA-CIVIL-AVIATION-AUTHORITY",
+    "agencyName": "Kenya Civil Aviation Authority",
+    "servicesIdentified": 649,
+    "servicesLive": 649,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE"
+  },
+  {
+    "agencyCode": "EAST-AFRICAN-SCHOOL-OF-AVIATION",
+    "agencyName": "East African School of Aviation",
+    "servicesIdentified": 304,
+    "servicesLive": 304,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE"
+  },
+  {
+    "agencyCode": "KENYA-PORTS-AUTHORITY",
+    "agencyName": "Kenya Ports Authority",
+    "servicesIdentified": 1203,
+    "servicesLive": 946,
+    "onboardingStatus": "IN_PROGRESS",
+    "onboardingRemarks": "LIVE. Onboarding of pending services in progress"
+  },
+  {
+    "agencyCode": "NATIONAL-TRANSPORT-AND-SAFETY-AUTHORITY",
+    "agencyName": "National Transport and Safety Authority",
+    "servicesIdentified": 96,
+    "servicesLive": 96,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE"
+  },
+  {
+    "agencyCode": "THE-NAIROBI-METROPOLITAN-AREA-TRANSPORT",
+    "agencyName": "The Nairobi Metropolitan Area Transport Authority",
+    "servicesIdentified": 1,
+    "servicesLive": 1,
+    "onboardingStatus": "PENDING",
+    "onboardingRemarks": "LIVE URL. Not citizen facing"
+  },
+  {
+    "agencyCode": "THE-RAILWAY-CITY-DEVELOPMENT-AUTHORITY",
+    "agencyName": "The Railway City Development Authority",
+    "servicesIdentified": null,
+    "servicesLive": null,
+    "onboardingStatus": "PENDING",
+    "onboardingRemarks": "Never Engaged"
+  },
+  {
+    "agencyCode": "RAILWAYS-TRAINING-INSTITUTE",
+    "agencyName": "Railways Training Institute",
+    "servicesIdentified": 87,
+    "servicesLive": 87,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE"
+  },
+  {
+    "agencyCode": "STATE-DEPARTMENT-FOR-LANDS",
+    "agencyName": "State Department for Lands",
+    "servicesIdentified": 124,
+    "servicesLive": 124,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE in Nairobi. The other towns to be rolled out."
+  },
+  {
+    "agencyCode": "PHYSICAL-PLANNERS-REGISTRATION-BOARD",
+    "agencyName": "Physical Planners Registration Board",
+    "servicesIdentified": 7,
+    "servicesLive": 7,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "Live 7 USSD. Configurations complete; awaiting servers to go live"
+  },
+  {
+    "agencyCode": "VALUERS-REGISTRATION-BOARD",
+    "agencyName": "Valuers Registration Board",
+    "servicesIdentified": 6,
+    "servicesLive": 6,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE"
+  },
+  {
+    "agencyCode": "SETTLEMENT-TRUSTEE-FUND",
+    "agencyName": "Settlement Trustee Fund",
+    "servicesIdentified": null,
+    "servicesLive": null,
+    "onboardingStatus": "PENDING",
+    "onboardingRemarks": "To provide list"
+  },
+  {
+    "agencyCode": "LAND-SURVEYORS-BOARD",
+    "agencyName": "Land Surveyors Board",
+    "servicesIdentified": 7,
+    "servicesLive": 7,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE (Direct to Paybill)"
+  },
+  {
+    "agencyCode": "KENYA-INSTITUTE-OF-SURVEYING-AND-MAPPING",
+    "agencyName": "Kenya Institute of Surveying and Mapping",
+    "servicesIdentified": 2,
+    "servicesLive": 2,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE (Direct to Paybill)"
+  },
+  {
+    "agencyCode": "LAND-SETTLEMENT-FUND",
+    "agencyName": "Land Settlement Fund",
+    "servicesIdentified": 2,
+    "servicesLive": 2,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE (USSD)"
+  },
+  {
+    "agencyCode": "NATIONAL-HOUSING-CORPORATION",
+    "agencyName": "National Housing Corporation",
+    "servicesIdentified": 17,
+    "servicesLive": 17,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE"
+  },
+  {
+    "agencyCode": "NATIONAL-HOUSING-DEVELOPMENT-FUND",
+    "agencyName": "National Housing Development Fund",
+    "servicesIdentified": null,
+    "servicesLive": null,
+    "onboardingStatus": "PENDING",
+    "onboardingRemarks": "Never Engaged"
+  },
+  {
+    "agencyCode": "CIVIL-SERVANTS-HOUSING-SCHEME-FUND",
+    "agencyName": "Civil Servants Housing Scheme Fund",
+    "servicesIdentified": 7,
+    "servicesLive": 6,
+    "onboardingStatus": "IN_PROGRESS",
+    "onboardingRemarks": "LIVE(6) Direct to Paybill). End to end digitization complete; awaiting server to go live"
+  },
+  {
+    "agencyCode": "INTEGRATED-PROJECT-DELIVERY-UNIT",
+    "agencyName": "Integrated Project Delivery Unit",
+    "servicesIdentified": null,
+    "servicesLive": null,
+    "onboardingStatus": "PENDING",
+    "onboardingRemarks": "Never Engaged"
+  },
+  {
+    "agencyCode": "METROPOLITAN-DEPARTMENT",
+    "agencyName": "Metropolitan Department",
+    "servicesIdentified": null,
+    "servicesLive": null,
+    "onboardingStatus": "PENDING",
+    "onboardingRemarks": "Never Engaged"
+  },
+  {
+    "agencyCode": "ESTATE-AGENTS-REGISTRATION-BOARD",
+    "agencyName": "Estate Agents Registration Board",
+    "servicesIdentified": 10,
+    "servicesLive": 10,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE"
+  },
+  {
+    "agencyCode": "ESTATE-MANAGEMENT-DEPARTMENT",
+    "agencyName": "Estate Management Department",
+    "servicesIdentified": 4,
+    "servicesLive": 4,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE (Direct to paybill)"
+  },
+  {
+    "agencyCode": "BOMA-YANGU",
+    "agencyName": "Boma Yangu",
+    "servicesIdentified": 90,
+    "servicesLive": 90,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE"
+  },
+  {
+    "agencyCode": "SLUM-UPGRADING-DEPARTMENT",
+    "agencyName": "Slum Upgrading Department",
+    "servicesIdentified": 8,
+    "servicesLive": 8,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE (Direct to paybill). End to end digitization complete; awaiting servers to go live"
+  },
+  {
+    "agencyCode": "NATIONAL-CONSTRUCTION-AUTHORITY",
+    "agencyName": "National Construction Authority",
+    "servicesIdentified": 12,
+    "servicesLive": 12,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE"
+  },
+  {
+    "agencyCode": "KENYA-BUILDING-RESEARCH-CENTRE",
+    "agencyName": "Kenya Building Research Centre",
+    "servicesIdentified": null,
+    "servicesLive": null,
+    "onboardingStatus": "PENDING",
+    "onboardingRemarks": "Not citizen facing"
+  },
+  {
+    "agencyCode": "THE-NATIONAL-BUILDING-INSPECTORATE",
+    "agencyName": "The National Building Inspectorate",
+    "servicesIdentified": null,
+    "servicesLive": null,
+    "onboardingStatus": "PENDING",
+    "onboardingRemarks": "Not citizen facing"
+  },
+  {
+    "agencyCode": "BOARD-OF-REGISTERED-ARCHITECTS-AND-QUANT",
+    "agencyName": "Board of Registered Architects and Quantity Surveyors",
+    "servicesIdentified": 2,
+    "servicesLive": 2,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE"
+  },
+  {
+    "agencyCode": "CONTRACTORS-AND-BUILDERS-RETENTION-FUND",
+    "agencyName": "Contractors and Builders Retention Fund",
+    "servicesIdentified": null,
+    "servicesLive": null,
+    "onboardingStatus": "PENDING",
+    "onboardingRemarks": "Never Engaged"
+  },
+  {
+    "agencyCode": "BUILDING-SURVEYORS-REGISTRATION-BOARD",
+    "agencyName": "Building Surveyors Registration Board",
+    "servicesIdentified": null,
+    "servicesLive": null,
+    "onboardingStatus": "PENDING",
+    "onboardingRemarks": "Never Engaged"
+  },
+  {
+    "agencyCode": "COMMUNICATIONS-AUTHORITY-OF-KENYA",
+    "agencyName": "Communications Authority of Kenya",
+    "servicesIdentified": 73,
+    "servicesLive": 73,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE"
+  },
+  {
+    "agencyCode": "UNIVERSAL-SERVICE-FUND-ADVISORY-COUNCIL",
+    "agencyName": "Universal Service Fund Advisory Council",
+    "servicesIdentified": null,
+    "servicesLive": null,
+    "onboardingStatus": "PENDING",
+    "onboardingRemarks": "Never Engaged"
+  },
+  {
+    "agencyCode": "KENYA-BROADCASTING-CORPORATION",
+    "agencyName": "Kenya Broadcasting Corporation",
+    "servicesIdentified": 98,
+    "servicesLive": 98,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE"
+  },
+  {
+    "agencyCode": "THE-POSTAL-CORPORATION-OF-KENYA",
+    "agencyName": "The Postal Corporation of Kenya",
+    "servicesIdentified": 589,
+    "servicesLive": 589,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE"
+  },
+  {
+    "agencyCode": "MEDIA-COUNCIL-OF-KENYA",
+    "agencyName": "Media Council of Kenya",
+    "servicesIdentified": 47,
+    "servicesLive": 47,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE"
+  },
+  {
+    "agencyCode": "KENYA-INSTITUTE-OF-MASS-COMMUNICATION-KI",
+    "agencyName": "Kenya Institute of Mass Communication (KIMC)",
+    "servicesIdentified": 8,
+    "servicesLive": 8,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "1 LIVE (Integration) 7 end to end"
+  },
+  {
+    "agencyCode": "KENYA-NEWS-AGENCY",
+    "agencyName": "Kenya News Agency",
+    "servicesIdentified": 7,
+    "servicesLive": 7,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE Direct Payments. End to end digitization complete; awaiting servers to go live"
+  },
+  {
+    "agencyCode": "GOVERNMENT-ADVERTISING-AGENCY",
+    "agencyName": "Government Advertising Agency",
+    "servicesIdentified": 0,
+    "servicesLive": 0,
+    "onboardingStatus": "PENDING",
+    "onboardingRemarks": "Not citizen facing"
+  },
+  {
+    "agencyCode": "KENYA-YEAR-BOOK-EDITORIAL-BOARD",
+    "agencyName": "Kenya Year Book Editorial Board",
+    "servicesIdentified": 36,
+    "servicesLive": 36,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE"
+  },
+  {
+    "agencyCode": "OFFICE-OF-THE-DATA-PROTECTION-COMMISSION",
+    "agencyName": "Office of the Data Protection Commissioner",
+    "servicesIdentified": 3,
+    "servicesLive": 3,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE"
+  },
+  {
+    "agencyCode": "KONZA-TECHNOPOLIS-DEVELOPMENT-AUTHORITY",
+    "agencyName": "Konza Technopolis Development Authority",
+    "servicesIdentified": 13,
+    "servicesLive": 13,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE"
+  },
+  {
+    "agencyCode": "KENYA-ICT-AUTHORITY",
+    "agencyName": "Kenya ICT Authority",
+    "servicesIdentified": 5,
+    "servicesLive": 5,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE"
+  },
+  {
+    "agencyCode": "KENYA-ADVANCED-INSTITUTE-OF-SCIENCE-AND",
+    "agencyName": "Kenya Advanced Institute of Science and Technology (KAIST)",
+    "servicesIdentified": null,
+    "servicesLive": null,
+    "onboardingStatus": "PENDING",
+    "onboardingRemarks": "Requirements gathering to commence"
+  },
+  {
+    "agencyCode": "THE-EAST-AFRICAN-MARINE-CABLE-SYSTEM-LIM",
+    "agencyName": "The East African Marine Cable System Limited \"TEAMS\"",
+    "servicesIdentified": null,
+    "servicesLive": null,
+    "onboardingStatus": "PENDING",
+    "onboardingRemarks": "Never Engaged"
+  },
+  {
+    "agencyCode": "SOCIAL-HEALTH-AUTHORITY",
+    "agencyName": "Social Health Authority",
+    "servicesIdentified": 5,
+    "servicesLive": 5,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE URL"
+  },
+  {
+    "agencyCode": "NATIONAL-HEALTH-INSURANCE-FUND-NHIF",
+    "agencyName": "National Health Insurance Fund (NHIF)",
+    "servicesIdentified": 19,
+    "servicesLive": 8,
+    "onboardingStatus": "IN_PROGRESS",
+    "onboardingRemarks": "LIVE. SSO Onboarded. Pending payment integration"
+  },
+  {
+    "agencyCode": "KENYA-MEDICAL-SUPPLIES-AUTHORITY",
+    "agencyName": "Kenya Medical Supplies Authority",
+    "servicesIdentified": 3,
+    "servicesLive": null,
+    "onboardingStatus": "IN_PROGRESS",
+    "onboardingRemarks": "Integration Documentation shared"
+  },
+  {
+    "agencyCode": "KENYA-MEDICAL-RESEARCH-INSTITUTEKEMRI",
+    "agencyName": "Kenya Medical Research Institute(KEMRI)",
+    "servicesIdentified": 197,
+    "servicesLive": 197,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE 66 Payment Integration. 126 End to End. 3 USSD. 2 URL"
+  },
+  {
+    "agencyCode": "DIGITAL-HEALTH-AUTHORITY",
+    "agencyName": "Digital Health Authority",
+    "servicesIdentified": null,
+    "servicesLive": null,
+    "onboardingStatus": "PENDING",
+    "onboardingRemarks": "Never Engaged"
+  },
+  {
+    "agencyCode": "KENYA-BIOVAX-INSTITUTE-LIMITED",
+    "agencyName": "Kenya BioVax Institute Limited",
+    "servicesIdentified": 1,
+    "servicesLive": 1,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE URL. Requirements gathering done. Haven't started offering services to the public."
+  },
+  {
+    "agencyCode": "KENYATTA-NATIONAL-HOSPITAL",
+    "agencyName": "Kenyatta National Hospital",
+    "servicesIdentified": 185,
+    "servicesLive": 185,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE"
+  },
+  {
+    "agencyCode": "MWAI-KIBAKI-HOSPITAL",
+    "agencyName": "Mwai Kibaki Hospital",
+    "servicesIdentified": 2,
+    "servicesLive": 2,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE"
+  },
+  {
+    "agencyCode": "MOI-TEACHING-AND-REFERRAL-HOSPITAL",
+    "agencyName": "Moi Teaching and Referral Hospital",
+    "servicesIdentified": 48,
+    "servicesLive": 48,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE"
+  },
+  {
+    "agencyCode": "KENYATTA-UNIVERSITY-TEACHING-REFERRAL-AN",
+    "agencyName": "Kenyatta University Teaching, Referral and Research Hospital",
+    "servicesIdentified": 1946,
+    "servicesLive": 1946,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE"
+  },
+  {
+    "agencyCode": "MATHARI-NATIONAL-TEACHING-AND-REFERRAL-M",
+    "agencyName": "Mathari National Teaching and Referral Mental Hospital",
+    "servicesIdentified": 47,
+    "servicesLive": 47,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE"
+  },
+  {
+    "agencyCode": "NATIONAL-SPINAL-INJURY-REFERRAL-HOSPITAL",
+    "agencyName": "National Spinal Injury Referral Hospital",
+    "servicesIdentified": 992,
+    "servicesLive": 992,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE"
+  },
+  {
+    "agencyCode": "JARAMOGI-OGINGA-ODINGA-TEACHING-AND-REFE",
+    "agencyName": "Jaramogi Oginga Odinga Teaching and Referral Hospital",
+    "servicesIdentified": 3,
+    "servicesLive": 3,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE"
+  },
+  {
+    "agencyCode": "THE-NATIONAL-CANCER-INSTITUTE-OF-KENYA",
+    "agencyName": "The National Cancer Institute of Kenya",
+    "servicesIdentified": 12,
+    "servicesLive": 12,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "Live 11(USSD) 1 Integration. Configuration ongoing"
+  },
+  {
+    "agencyCode": "KENYA-TISSUE-AND-TRANSPLANT-AUTHORITY",
+    "agencyName": "Kenya Tissue and Transplant Authority",
+    "servicesIdentified": 4,
+    "servicesLive": null,
+    "onboardingStatus": "SUSPENDED",
+    "onboardingRemarks": "STALLED (SSO Integration)"
+  },
+  {
+    "agencyCode": "NATIONAL-SYNDEMIC-DISEASES-CONTROL-COUNC",
+    "agencyName": "National Syndemic Diseases Control Council",
+    "servicesIdentified": 10,
+    "servicesLive": 10,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE 4 Integration; 3 USSD; 3 URL"
+  },
+  {
+    "agencyCode": "KENYA-MEDICAL-PRACTITIONERS-AND-DENTIST",
+    "agencyName": "Kenya Medical Practitioners and Dentist Council",
+    "servicesIdentified": 97,
+    "servicesLive": 97,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE"
+  },
+  {
+    "agencyCode": "KENYA-HEALTH-PROFESSIONS-OVERSIGHT-AUTHO",
+    "agencyName": "Kenya Health Professions Oversight Authority",
+    "servicesIdentified": 4,
+    "servicesLive": 4,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE"
+  },
+  {
+    "agencyCode": "KENYA-MEDICAL-TRAINING-COLLEGE",
+    "agencyName": "Kenya Medical Training College",
+    "servicesIdentified": 24,
+    "servicesLive": 24,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE"
+  },
+  {
+    "agencyCode": "KENYA-NATIONAL-PUBLIC-HEALTH-INSTITUTE",
+    "agencyName": "Kenya National Public Health Institute",
+    "servicesIdentified": 6,
+    "servicesLive": 6,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "1 USSD; 5 LIVE URL. Port Health and Division of National Laboratory Services to be under them"
+  },
+  {
+    "agencyCode": "PORT-HEALTH",
+    "agencyName": "Port Health",
+    "servicesIdentified": 55,
+    "servicesLive": 55,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "Live USSD. The MDA will soon be under Kenya National Public Health Institute"
+  },
+  {
+    "agencyCode": "DIVISION-OF-NATIONAL-LABORATORY-SERVICES",
+    "agencyName": "Division of National Laboratory Services",
+    "servicesIdentified": 35,
+    "servicesLive": 3,
+    "onboardingStatus": "IN_PROGRESS",
+    "onboardingRemarks": "Live 3 USSD. The MDA will soon be under Kenya National Public Health Institute."
+  },
+  {
+    "agencyCode": "KENYA-HOSPITAL-AUTHORITY-TRUST-FUND",
+    "agencyName": "Kenya Hospital Authority Trust Fund",
+    "servicesIdentified": null,
+    "servicesLive": null,
+    "onboardingStatus": "PENDING",
+    "onboardingRemarks": "Never Engaged"
+  },
+  {
+    "agencyCode": "COUNSELORS-AND-PSYCHOLOGISTS-BOARD",
+    "agencyName": "Counselors and Psychologists Board",
+    "servicesIdentified": 33,
+    "servicesLive": 14,
+    "onboardingStatus": "IN_PROGRESS",
+    "onboardingRemarks": "LIVE. 19 services not ready; awaiting policy finalization"
+  },
+  {
+    "agencyCode": "PHYSIOTHERAPY-COUNCIL-OF-KENYA",
+    "agencyName": "Physiotherapy Council of Kenya",
+    "servicesIdentified": 16,
+    "servicesLive": 16,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "Live Integration with new system. End to end services unpublished"
+  },
+  {
+    "agencyCode": "CLINICAL-OFFICERS-COUNCIL-OF-KENYA",
+    "agencyName": "Clinical Officers Council of Kenya",
+    "servicesIdentified": 34,
+    "servicesLive": 34,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE"
+  },
+  {
+    "agencyCode": "KENYA-MEDICAL-LABORATORY-TECHNICIANS-AND",
+    "agencyName": "Kenya Medical Laboratory Technicians and Technologists Board",
+    "servicesIdentified": 67,
+    "servicesLive": 67,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE (57) end to end. 10 Integration"
+  },
+  {
+    "agencyCode": "NURSING-COUNCIL-OF-KENYA",
+    "agencyName": "Nursing Council of Kenya",
+    "servicesIdentified": 44,
+    "servicesLive": 44,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE"
+  },
+  {
+    "agencyCode": "KENYA-NUTRITIONISTS-AND-DIETICIANS-INSTI",
+    "agencyName": "Kenya Nutritionists and Dieticians Institute",
+    "servicesIdentified": null,
+    "servicesLive": null,
+    "onboardingStatus": "PENDING",
+    "onboardingRemarks": "Never Engaged"
+  },
+  {
+    "agencyCode": "HEALTH-RECORDS-AND-INFORMATION-MANAGERS",
+    "agencyName": "Health Records and Information Managers Board",
+    "servicesIdentified": 5,
+    "servicesLive": null,
+    "onboardingStatus": "IN_PROGRESS",
+    "onboardingRemarks": "Pending payment integration"
+  },
+  {
+    "agencyCode": "PHARMACY-AND-POISONS-BOARD",
+    "agencyName": "Pharmacy and Poisons Board",
+    "servicesIdentified": 68,
+    "servicesLive": 68,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE"
+  },
+  {
+    "agencyCode": "NATIONAL-QUALITY-CONTROL-LABORATORIES",
+    "agencyName": "National Quality Control Laboratories",
+    "servicesIdentified": 37,
+    "servicesLive": null,
+    "onboardingStatus": "IN_PROGRESS",
+    "onboardingRemarks": "End to end digitization complete; awaiting server to go live"
+  },
+  {
+    "agencyCode": "PUBLIC-HEALTH-OFFICERS-AND-TECHNICIANS-C",
+    "agencyName": "Public Health Officers and Technicians Council",
+    "servicesIdentified": 17,
+    "servicesLive": 17,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE"
+  },
+  {
+    "agencyCode": "KENYA-NUCLEAR-REGULATORY-AUTHORITY",
+    "agencyName": "Kenya Nuclear Regulatory Authority",
+    "servicesIdentified": 99,
+    "servicesLive": 99,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE"
+  },
+  {
+    "agencyCode": "TOBACCO-CONTROL-BOARD",
+    "agencyName": "Tobacco Control Board",
+    "servicesIdentified": null,
+    "servicesLive": null,
+    "onboardingStatus": "PENDING",
+    "onboardingRemarks": "Never Engaged"
+  },
+  {
+    "agencyCode": "KENYA-INSTITUTE-OF-PRIMATE-RESEARCH",
+    "agencyName": "Kenya Institute of Primate Research",
+    "servicesIdentified": 18,
+    "servicesLive": 18,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE."
+  },
+  {
+    "agencyCode": "STATE-DEPARTMENT-FOR-BASIC-EDUCATION",
+    "agencyName": "State Department for Basic Education",
+    "servicesIdentified": 5,
+    "servicesLive": 5,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE"
+  },
+  {
+    "agencyCode": "KENYA-NATIONAL-EXAMINATIONS-COUNCIL",
+    "agencyName": "Kenya National Examinations Council",
+    "servicesIdentified": 46,
+    "servicesLive": 46,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE"
+  },
+  {
+    "agencyCode": "KENYA-INSTITUTE-OF-CURRICULUM-DEVELOPMEN",
+    "agencyName": "Kenya Institute of Curriculum Development",
+    "servicesIdentified": 3,
+    "servicesLive": 3,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE  3 Direct to Paybill. End to end digitization complete; awaiting server to go live"
+  },
+  {
+    "agencyCode": "KENYA-INSTITUTE-OF-SPECIAL-EDUCATION",
+    "agencyName": "Kenya Institute of Special Education",
+    "servicesIdentified": 76,
+    "servicesLive": 76,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE wnd to end; 12 Direct Payments"
+  },
+  {
+    "agencyCode": "KENYA-LITERATURE-BUREAU",
+    "agencyName": "Kenya Literature Bureau",
+    "servicesIdentified": 8,
+    "servicesLive": 8,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE (E-Shop successfully intergrated.)"
+  },
+  {
+    "agencyCode": "KENYA-INSTITUTE-FOR-THE-BLIND",
+    "agencyName": "Kenya Institute for the Blind",
+    "servicesIdentified": 31,
+    "servicesLive": 31,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE 14 End to End; 17 USSD"
+  },
+  {
+    "agencyCode": "CENTRE-FOR-MATHEMATICS-SCIENCE-AND-TECHN",
+    "agencyName": "Centre for Mathematics, Science and Technology in Africa",
+    "servicesIdentified": 10,
+    "servicesLive": 10,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE (Direct to Paybill). Configuration for manual services to commence"
+  },
+  {
+    "agencyCode": "KENYA-NATIONAL-COMMISSION-FOR-UNESCO",
+    "agencyName": "Kenya National Commission for UNESCO",
+    "servicesIdentified": 5,
+    "servicesLive": null,
+    "onboardingStatus": "IN_PROGRESS",
+    "onboardingRemarks": "End to end digitization complete; awaiting server to go live"
+  },
+  {
+    "agencyCode": "KENYA-EDUCATION-MANAGEMENT-INSTITUTE-KEM",
+    "agencyName": "Kenya Education Management Institute (KEMI)",
+    "servicesIdentified": 7,
+    "servicesLive": 7,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE"
+  },
+  {
+    "agencyCode": "SCHOOL-EQUIPMENT-PRODUCTION-UNIT",
+    "agencyName": "School Equipment Production Unit",
+    "servicesIdentified": 7,
+    "servicesLive": 6,
+    "onboardingStatus": "IN_PROGRESS",
+    "onboardingRemarks": "LIVE (Direct to Paybill) End to end digitization complete; awaiting servers to go live"
+  },
+  {
+    "agencyCode": "JOMO-KENYATTA-FOUNDATION",
+    "agencyName": "Jomo Kenyatta Foundation",
+    "servicesIdentified": 1,
+    "servicesLive": 1,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE (URL)"
+  },
+  {
+    "agencyCode": "NATIONAL-COMMISSION-FOR-NOMADIC-EDUCATIO",
+    "agencyName": "National Commission for Nomadic Education (NACONEC)",
+    "servicesIdentified": 1,
+    "servicesLive": 1,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE SSO URL"
+  },
+  {
+    "agencyCode": "TECHNICAL-AND-VOCATIONAL-EDUCATION-AND-T",
+    "agencyName": "Technical and Vocational Education and Training Authority",
+    "servicesIdentified": 48,
+    "servicesLive": 48,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE"
+  },
+  {
+    "agencyCode": "TECHNICAL-VOCATIONAL-EDUCATION-TRAINING",
+    "agencyName": "Technical Vocational Education Training Fund Board",
+    "servicesIdentified": null,
+    "servicesLive": null,
+    "onboardingStatus": "PENDING",
+    "onboardingRemarks": "Never Engaged"
+  },
+  {
+    "agencyCode": "CURRICULUM-DEVELOPMENT-ASSESSMENT-AND-CE",
+    "agencyName": "Curriculum Development Assessment and Certification Council",
+    "servicesIdentified": 30,
+    "servicesLive": 30,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE"
+  },
+  {
+    "agencyCode": "KENYA-NATIONAL-QUALIFICATIONS-AUTHORITY",
+    "agencyName": "Kenya National Qualifications Authority",
+    "servicesIdentified": 2,
+    "servicesLive": 2,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE"
+  },
+  {
+    "agencyCode": "KENYA-SCHOOL-OF-TVET",
+    "agencyName": "Kenya School of TVET",
+    "servicesIdentified": 13,
+    "servicesLive": 13,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE"
+  },
+  {
+    "agencyCode": "NAIROBI-TECHNICAL-TRAINING-INSTITUTE",
+    "agencyName": "Nairobi Technical Training Institute",
+    "servicesIdentified": 18,
+    "servicesLive": 18,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE"
+  },
+  {
+    "agencyCode": "KAREN-TECHNICAL-TRAINING-INSTITUTE-FOR-T",
+    "agencyName": "Karen Technical Training Institute for the Deaf",
+    "servicesIdentified": 1,
+    "servicesLive": null,
+    "onboardingStatus": "IN_PROGRESS",
+    "onboardingRemarks": "To be given USSD Option"
+  },
+  {
+    "agencyCode": "SEME-VOCATIONAL-COLLEGE",
+    "agencyName": "Seme Vocational College",
+    "servicesIdentified": null,
+    "servicesLive": null,
+    "onboardingStatus": "PENDING",
+    "onboardingRemarks": "To be onboarded"
+  },
+  {
+    "agencyCode": "PC-KINYANJUI-TRAINING-INSTITUTE",
+    "agencyName": "PC Kinyanjui Training Institute",
+    "servicesIdentified": 9,
+    "servicesLive": 9,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE"
+  },
+  {
+    "agencyCode": "ELDORET-NATIONAL-POLYTECHNIC",
+    "agencyName": "Eldoret National Polytechnic",
+    "servicesIdentified": 10,
+    "servicesLive": 10,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE"
+  },
+  {
+    "agencyCode": "LUGARI-DIPLOMA-TEACHERS-TRAINING-COLLEGE",
+    "agencyName": "Lugari Diploma Teachers' Training College.",
+    "servicesIdentified": 3,
+    "servicesLive": 2,
+    "onboardingStatus": "IN_PROGRESS",
+    "onboardingRemarks": "LIVE (2) Direct Payments."
+  },
+  {
+    "agencyCode": "MAASAI-NATIONAL-POLYTECHNIC",
+    "agencyName": "Maasai National Polytechnic",
+    "servicesIdentified": 16,
+    "servicesLive": 16,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE"
+  },
+  {
+    "agencyCode": "RIFT-VALLEY-TECHNICAL-TRAINING-INSTITUTE",
+    "agencyName": "Rift Valley Technical Training Institute",
+    "servicesIdentified": 21,
+    "servicesLive": null,
+    "onboardingStatus": "IN_PROGRESS",
+    "onboardingRemarks": "Integration Done. Ready to go live"
+  },
+  {
+    "agencyCode": "KONOIN-TECHNICAL-TRAINING-INSTITUTE",
+    "agencyName": "Konoin Technical Training Institute",
+    "servicesIdentified": 6,
+    "servicesLive": 6,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE"
+  },
+  {
+    "agencyCode": "ENDEBESS-TECHNICAL-TRAINING-INSTITUTE",
+    "agencyName": "Endebess Technical Training Institute",
+    "servicesIdentified": 19,
+    "servicesLive": 19,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE"
+  },
+  {
+    "agencyCode": "SIAYA-INSTITUTE-OF-TECHNOLOGY",
+    "agencyName": "Siaya Institute of Technology",
+    "servicesIdentified": 20,
+    "servicesLive": null,
+    "onboardingStatus": "IN_PROGRESS",
+    "onboardingRemarks": "Intergration done. Moving to production enviroment"
+  },
+  {
+    "agencyCode": "KIAMBU-NATIONAL-POLYTECHNIC",
+    "agencyName": "Kiambu National Polytechnic",
+    "servicesIdentified": null,
+    "servicesLive": null,
+    "onboardingStatus": "PENDING",
+    "onboardingRemarks": "Requirements gathering to commence"
+  },
+  {
+    "agencyCode": "KABETE-NATIONAL-POLYTECHNIC",
+    "agencyName": "Kabete National Polytechnic",
+    "servicesIdentified": 15,
+    "servicesLive": null,
+    "onboardingStatus": "IN_PROGRESS",
+    "onboardingRemarks": "Pending integration"
+  },
+  {
+    "agencyCode": "KENYA-COAST-POLYTECHNIC",
+    "agencyName": "Kenya Coast Polytechnic",
+    "servicesIdentified": 4,
+    "servicesLive": null,
+    "onboardingStatus": "IN_PROGRESS",
+    "onboardingRemarks": "Onboarding to commence"
+  },
+  {
+    "agencyCode": "SIGALAGALA-NATIONAL-POLYTECHNIC",
+    "agencyName": "Sigalagala National Polytechnic",
+    "servicesIdentified": 3,
+    "servicesLive": null,
+    "onboardingStatus": "IN_PROGRESS",
+    "onboardingRemarks": "Onboarding to commence"
+  },
+  {
+    "agencyCode": "OLLESSOS-POLYTECHNIC",
+    "agencyName": "Ollessos Polytechnic",
+    "servicesIdentified": null,
+    "servicesLive": null,
+    "onboardingStatus": "SUSPENDED",
+    "onboardingRemarks": "Test credetials shared. No communication"
+  },
+  {
+    "agencyCode": "NYANDARUA-NATIONAL-POLYTECHNIC",
+    "agencyName": "Nyandarua National Polytechnic",
+    "servicesIdentified": null,
+    "servicesLive": null,
+    "onboardingStatus": "PENDING",
+    "onboardingRemarks": "Requirements gathering to commence"
+  },
+  {
+    "agencyCode": "OKAME-TECHNICAL-VOCATIONAL-COLLEGE",
+    "agencyName": "Okame Technical Vocational College",
+    "servicesIdentified": null,
+    "servicesLive": null,
+    "onboardingStatus": "SUSPENDED",
+    "onboardingRemarks": "Test credetials shared. No communication"
+  },
+  {
+    "agencyCode": "BARINGO-NATIONAL-POLYTECHNIC",
+    "agencyName": "Baringo National Polytechnic",
+    "servicesIdentified": 16,
+    "servicesLive": null,
+    "onboardingStatus": "IN_PROGRESS",
+    "onboardingRemarks": "Integration Done. Ready to go live"
+  },
+  {
+    "agencyCode": "RUIRU-TECHNICAL-VOCATIONAL-COLLEGE",
+    "agencyName": "Ruiru Technical Vocational College",
+    "servicesIdentified": 14,
+    "servicesLive": 14,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE USSD"
+  },
+  {
+    "agencyCode": "WOTE-TECHNICAL-TRAINING-INSTITUTE",
+    "agencyName": "Wote Technical Training Institute",
+    "servicesIdentified": null,
+    "servicesLive": null,
+    "onboardingStatus": "PENDING",
+    "onboardingRemarks": "Requirements gathering to commence"
+  },
+  {
+    "agencyCode": "SABATIA-TECHNICAL-VOCATIONAL-COLLEGE",
+    "agencyName": "Sabatia Technical Vocational College",
+    "servicesIdentified": null,
+    "servicesLive": null,
+    "onboardingStatus": "PENDING",
+    "onboardingRemarks": "Requirements gathering to commence"
+  },
+  {
+    "agencyCode": "THE-NYERI-POLYTECHNIC",
+    "agencyName": "The Nyeri Polytechnic",
+    "servicesIdentified": 11,
+    "servicesLive": null,
+    "onboardingStatus": "IN_PROGRESS",
+    "onboardingRemarks": "Intergration done. Moving to production enviroment"
+  },
+  {
+    "agencyCode": "KISII-NATIONAL-POLYTECHNIC",
+    "agencyName": "Kisii National Polytechnic",
+    "servicesIdentified": null,
+    "servicesLive": null,
+    "onboardingStatus": "SUSPENDED",
+    "onboardingRemarks": "Integration documentation sent. No Communication"
+  },
+  {
+    "agencyCode": "SOT-TECHNICAL-TRAINING-INSTITUTE",
+    "agencyName": "SOT Technical Training Institute",
+    "servicesIdentified": null,
+    "servicesLive": null,
+    "onboardingStatus": "IN_PROGRESS",
+    "onboardingRemarks": "Requirements gathering ongoing"
+  },
+  {
+    "agencyCode": "KAIBOI-NATIONAL-POLYTECHNIC",
+    "agencyName": "Kaiboi National Polytechnic",
+    "servicesIdentified": 15,
+    "servicesLive": 3,
+    "onboardingStatus": "IN_PROGRESS",
+    "onboardingRemarks": "LIVE 3"
+  },
+  {
+    "agencyCode": "KASARANI-TECHNICAL-AND-VOCATIONAL-COLLEG",
+    "agencyName": "Kasarani Technical and Vocational College",
+    "servicesIdentified": null,
+    "servicesLive": null,
+    "onboardingStatus": "PENDING",
+    "onboardingRemarks": "Requirements gathering to commence"
+  },
+  {
+    "agencyCode": "KERICHO-NATIONAL-POLYTECNIC",
+    "agencyName": "Kericho National Polytecnic",
+    "servicesIdentified": 10,
+    "servicesLive": 10,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE USSD"
+  },
+  {
+    "agencyCode": "STATE-DEPARTMENT-FOR-HIGHER-EDUCATION-AN",
+    "agencyName": "State Department for Higher Education and Research",
+    "servicesIdentified": 2,
+    "servicesLive": null,
+    "onboardingStatus": "IN_PROGRESS",
+    "onboardingRemarks": "Digitization ongoing"
+  },
+  {
+    "agencyCode": "COMMISSION-FOR-UNIVERSITY-EDUCATION",
+    "agencyName": "Commission for University Education",
+    "servicesIdentified": 21,
+    "servicesLive": 21,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE"
+  },
+  {
+    "agencyCode": "KENYA-UNIVERSITIES-AND-COLLEGES-PLACEMEN",
+    "agencyName": "Kenya Universities and Colleges Placement Service",
+    "servicesIdentified": 19,
+    "servicesLive": 19,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE"
+  },
+  {
+    "agencyCode": "NATIONAL-COMMISSION-FOR-SCIENCE-TECHNOLO",
+    "agencyName": "National Commission for Science Technology and Innovation",
+    "servicesIdentified": 25,
+    "servicesLive": 25,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE (Integration 20; End to End 2; 3 URL)"
+  },
+  {
+    "agencyCode": "HIGHER-EDUCATION-LOANS-BOARD",
+    "agencyName": "Higher Education Loans Board",
+    "servicesIdentified": 5,
+    "servicesLive": 5,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE"
+  },
+  {
+    "agencyCode": "NATIONAL-RESEARCH-FUND",
+    "agencyName": "National Research Fund",
+    "servicesIdentified": null,
+    "servicesLive": null,
+    "onboardingStatus": "PENDING",
+    "onboardingRemarks": null
+  },
+  {
+    "agencyCode": "UNIVERSITIES-FUNDING-BOARD",
+    "agencyName": "Universities Funding Board",
+    "servicesIdentified": null,
+    "servicesLive": null,
+    "onboardingStatus": "PENDING",
+    "onboardingRemarks": "Never Engaged"
+  },
+  {
+    "agencyCode": "KENYATTA-UNIVERSITY",
+    "agencyName": "Kenyatta University",
+    "servicesIdentified": 140,
+    "servicesLive": 140,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE"
+  },
+  {
+    "agencyCode": "UNIVERSITY-OF-NAIROBI",
+    "agencyName": "University of Nairobi",
+    "servicesIdentified": 52,
+    "servicesLive": 52,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE"
+  },
+  {
+    "agencyCode": "JOMO-KENYATTA-UNIVERSITY-OF-AGRICULTURE",
+    "agencyName": "Jomo Kenyatta University of Agriculture and Technology",
+    "servicesIdentified": 61,
+    "servicesLive": 61,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE"
+  },
+  {
+    "agencyCode": "MOI-UNIVERSITY",
+    "agencyName": "Moi University",
+    "servicesIdentified": 103,
+    "servicesLive": 103,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE"
+  },
+  {
+    "agencyCode": "UNIVERSITY-OF-ELDORET",
+    "agencyName": "University of Eldoret",
+    "servicesIdentified": 17,
+    "servicesLive": 17,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE"
+  },
+  {
+    "agencyCode": "KARATINA-UNIVERSITY",
+    "agencyName": "Karatina University",
+    "servicesIdentified": 26,
+    "servicesLive": 26,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE"
+  },
+  {
+    "agencyCode": "TAITA-TAVETA-UNIVERSITY",
+    "agencyName": "Taita Taveta University",
+    "servicesIdentified": 56,
+    "servicesLive": 56,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE"
+  },
+  {
+    "agencyCode": "KIRINYAGA-UNIVERSITY",
+    "agencyName": "Kirinyaga University",
+    "servicesIdentified": 10,
+    "servicesLive": 10,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE"
+  },
+  {
+    "agencyCode": "MURANGA-UNIVERSITY-OF-TECHNOLOGY",
+    "agencyName": "Muranga University of Technology",
+    "servicesIdentified": 28,
+    "servicesLive": 28,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE"
+  },
+  {
+    "agencyCode": "EGERTON-UNIVERSITY",
+    "agencyName": "Egerton University",
+    "servicesIdentified": 90,
+    "servicesLive": 90,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE"
+  },
+  {
+    "agencyCode": "MASENO-UNIVERSITY",
+    "agencyName": "Maseno University",
+    "servicesIdentified": 14,
+    "servicesLive": 14,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE"
+  },
+  {
+    "agencyCode": "MASINDE-MULIRO-UNIVERSITY-OF-SCIENCE-AND",
+    "agencyName": "Masinde Muliro University of Science and Technology",
+    "servicesIdentified": 14,
+    "servicesLive": 14,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE"
+  },
+  {
+    "agencyCode": "TECHNICAL-UNIVERSITY-OF-KENYA",
+    "agencyName": "Technical University of Kenya",
+    "servicesIdentified": 27,
+    "servicesLive": 27,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE"
+  },
+  {
+    "agencyCode": "TECHNICAL-UNIVERSITY-OF-MOMBASA",
+    "agencyName": "Technical University of Mombasa",
+    "servicesIdentified": 12,
+    "servicesLive": 12,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE"
+  },
+  {
+    "agencyCode": "PWANI-UNIVERSITY",
+    "agencyName": "Pwani University",
+    "servicesIdentified": 27,
+    "servicesLive": 25,
+    "onboardingStatus": "IN_PROGRESS",
+    "onboardingRemarks": "LIVE. Awaiting server for manual services"
+  },
+  {
+    "agencyCode": "SOUTH-EASTERN-KENYA-UNIVERSITY",
+    "agencyName": "South Eastern Kenya University",
+    "servicesIdentified": 53,
+    "servicesLive": 53,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE"
+  },
+  {
+    "agencyCode": "DEDAN-KIMATHI-UNIVERSITY-OF-TECHNOLOGY",
+    "agencyName": "Dedan Kimathi University of Technology",
+    "servicesIdentified": 33,
+    "servicesLive": 33,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE"
+  },
+  {
+    "agencyCode": "UNIVERSITY-OF-KABIANGA",
+    "agencyName": "University of Kabianga",
+    "servicesIdentified": 26,
+    "servicesLive": 26,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE (15 integration, 11 USSD)"
+  },
+  {
+    "agencyCode": "MAASAI-MARA-UNIVERSITY",
+    "agencyName": "Maasai Mara University",
+    "servicesIdentified": 12,
+    "servicesLive": 12,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE"
+  },
+  {
+    "agencyCode": "UNIVERSITY-OF-KIBABII",
+    "agencyName": "University of Kibabii",
+    "servicesIdentified": 15,
+    "servicesLive": 15,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE"
+  },
+  {
+    "agencyCode": "JARAMOGI-OGINGA-ODINGA-UNIVERSITY-OF-SCI",
+    "agencyName": "Jaramogi Oginga Odinga University of Science and Technology",
+    "servicesIdentified": 55,
+    "servicesLive": 55,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE"
+  },
+  {
+    "agencyCode": "LAIKIPIA-UNIVERSITY",
+    "agencyName": "Laikipia University",
+    "servicesIdentified": 32,
+    "servicesLive": 16,
+    "onboardingStatus": "IN_PROGRESS",
+    "onboardingRemarks": "LIVE  Payment Integration (7) Direct to paybill. Awaiting the rest of the services to be onboarded"
+  },
+  {
+    "agencyCode": "MERU-UNIVERSITY-OF-SCIENCE-AND-TECHNOLOG",
+    "agencyName": "Meru University of Science and Technology",
+    "servicesIdentified": 25,
+    "servicesLive": 25,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE"
+  },
+  {
+    "agencyCode": "GARISSA-UNIVERSITY",
+    "agencyName": "Garissa University",
+    "servicesIdentified": 8,
+    "servicesLive": 8,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE"
+  },
+  {
+    "agencyCode": "MACHAKOS-UNIVERSITY",
+    "agencyName": "Machakos University",
+    "servicesIdentified": 19,
+    "servicesLive": 19,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE"
+  },
+  {
+    "agencyCode": "MULTIMEDIA-UNIVERSITY",
+    "agencyName": "Multi-Media University",
+    "servicesIdentified": 148,
+    "servicesLive": 148,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE Integration 144 Direct Payments"
+  },
+  {
+    "agencyCode": "KISII-UNIVERSITY",
+    "agencyName": "Kisii University",
+    "servicesIdentified": 36,
+    "servicesLive": 36,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE"
+  },
+  {
+    "agencyCode": "RONGO-UNIVERSITY",
+    "agencyName": "Rongo University",
+    "servicesIdentified": 38,
+    "servicesLive": 38,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE"
+  },
+  {
+    "agencyCode": "UNIVERSITY-OF-EMBU",
+    "agencyName": "University of Embu",
+    "servicesIdentified": 37,
+    "servicesLive": 37,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE (12 Integration; 25USSD)"
+  },
+  {
+    "agencyCode": "CHUKA-UNIVERSITY",
+    "agencyName": "Chuka University",
+    "servicesIdentified": 37,
+    "servicesLive": 37,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE 28 Integration; 10 Direct to Paybill"
+  },
+  {
+    "agencyCode": "THARAKA-UNIVERSITY",
+    "agencyName": "Tharaka University",
+    "servicesIdentified": 31,
+    "servicesLive": 31,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE"
+  },
+  {
+    "agencyCode": "COOPERATIVE-UNIVERSITY-OF-KENYA",
+    "agencyName": "Cooperative University of Kenya",
+    "servicesIdentified": 28,
+    "servicesLive": 28,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE"
+  },
+  {
+    "agencyCode": "KAIMOSI-FRIENDS-UNIVERSITY",
+    "agencyName": "Kaimosi Friends University",
+    "servicesIdentified": 58,
+    "servicesLive": 58,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE"
+  },
+  {
+    "agencyCode": "ALUPE-UNIVERSITY",
+    "agencyName": "Alupe University",
+    "servicesIdentified": 14,
+    "servicesLive": 14,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE"
+  },
+  {
+    "agencyCode": "MAMA-NGINA-UNIVERSITY-COLLEGE",
+    "agencyName": "Mama Ngina University College",
+    "servicesIdentified": 20,
+    "servicesLive": 20,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE"
+  },
+  {
+    "agencyCode": "BOMET-UNIVERSITY-COLLEGE",
+    "agencyName": "Bomet University College",
+    "servicesIdentified": 10,
+    "servicesLive": 10,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE"
+  },
+  {
+    "agencyCode": "TOM-MBOYA-UNIVERSITY",
+    "agencyName": "Tom Mboya University",
+    "servicesIdentified": 26,
+    "servicesLive": 26,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE"
+  },
+  {
+    "agencyCode": "TURKANA-UNIVERSITY-COLLEGE",
+    "agencyName": "Turkana University College",
+    "servicesIdentified": 65,
+    "servicesLive": 65,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE"
+  },
+  {
+    "agencyCode": "KOITALEL-ARAP-SAMOEI-UNIVERSITY-COLLEGE",
+    "agencyName": "Koitalel Arap Samoei University College",
+    "servicesIdentified": 5,
+    "servicesLive": 5,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE"
+  },
+  {
+    "agencyCode": "UNIVERSITY-OF-NAIROBI-ENTERPRISES",
+    "agencyName": "University of Nairobi Enterprises",
+    "servicesIdentified": null,
+    "servicesLive": null,
+    "onboardingStatus": "PENDING",
+    "onboardingRemarks": "Never Engaged"
+  },
+  {
+    "agencyCode": "UNIVERSITY-OF-NAIROBI-PRESS",
+    "agencyName": "University of Nairobi Press",
+    "servicesIdentified": null,
+    "servicesLive": null,
+    "onboardingStatus": "PENDING",
+    "onboardingRemarks": "Never Engaged"
+  },
+  {
+    "agencyCode": "OPEN-UNIVERSITY-OF-KENYA",
+    "agencyName": "Open University of Kenya",
+    "servicesIdentified": 36,
+    "servicesLive": 36,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE"
+  },
+  {
+    "agencyCode": "UNIVERSITIES-FUND",
+    "agencyName": "Universities Fund",
+    "servicesIdentified": 4,
+    "servicesLive": 4,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE (URL)"
+  },
+  {
+    "agencyCode": "STATE-DEPARTMENT-FOR-AGRICULTURE",
+    "agencyName": "State Department for Agriculture",
+    "servicesIdentified": 2,
+    "servicesLive": 2,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE (URL)"
+  },
+  {
+    "agencyCode": "AGRICULTURE-AND-FOOD-AUTHORITY-AFA",
+    "agencyName": "Agriculture and Food Authority (AFA)",
+    "servicesIdentified": 164,
+    "servicesLive": 164,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE 144 Integration. 19 End to End; 1 USSD"
+  },
+  {
+    "agencyCode": "KENYA-SUGAR-BOARD",
+    "agencyName": "Kenya Sugar Board",
+    "servicesIdentified": 6,
+    "servicesLive": 6,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE Integration"
+  },
+  {
+    "agencyCode": "TEA-BOARD-OF-KENYA",
+    "agencyName": "Tea Board of Kenya",
+    "servicesIdentified": 18,
+    "servicesLive": 18,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE"
+  },
+  {
+    "agencyCode": "AGRICULTURAL-FINANCE-CORPORATION",
+    "agencyName": "Agricultural Finance Corporation",
+    "servicesIdentified": 166,
+    "servicesLive": 166,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE (USSD Integration)"
+  },
+  {
+    "agencyCode": "AGRICULTURAL-DEVELOPMENT-CORPORATION",
+    "agencyName": "Agricultural Development Corporation",
+    "servicesIdentified": 23,
+    "servicesLive": 23,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE (USSD)"
+  },
+  {
+    "agencyCode": "KENYA-SEED-COMPANY",
+    "agencyName": "Kenya Seed Company",
+    "servicesIdentified": 1602,
+    "servicesLive": 84,
+    "onboardingStatus": "IN_PROGRESS",
+    "onboardingRemarks": "LIVE. Awaiting their SAP system integration for the remaining services to go live"
+  },
+  {
+    "agencyCode": "KENYA-PLANT-HEALTH-INSPECTORATE-SERVICES",
+    "agencyName": "Kenya Plant Health InspecTorate Services (KEPHIS)",
+    "servicesIdentified": 145,
+    "servicesLive": 145,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE integration. Invoice generator for manual services being configured"
+  },
+  {
+    "agencyCode": "NYAYO-TEA-ZONES-DEVELOPMENT-CORPORATION",
+    "agencyName": "Nyayo Tea Zones Development Corporation",
+    "servicesIdentified": 10,
+    "servicesLive": 10,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE"
+  },
+  {
+    "agencyCode": "SOUTH-NYANZA-SUGAR-COMPANY",
+    "agencyName": "South Nyanza Sugar Company",
+    "servicesIdentified": 66,
+    "servicesLive": 21,
+    "onboardingStatus": "IN_PROGRESS",
+    "onboardingRemarks": "LIVE 14 SSO; 7 USSD. Invoice generator for hospital services being configured"
+  },
+  {
+    "agencyCode": "NZOIA-SUGAR-COMPANY",
+    "agencyName": "Nzoia Sugar Company",
+    "servicesIdentified": 39,
+    "servicesLive": 39,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE 38 End-to-End 1 USSD"
+  },
+  {
+    "agencyCode": "CHEMELIL-SUGAR-COMPANY",
+    "agencyName": "Chemelil Sugar Company",
+    "servicesIdentified": 33,
+    "servicesLive": 33,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "Live USSD"
+  },
+  {
+    "agencyCode": "MUHORONI-SUGAR-FACTORY",
+    "agencyName": "Muhoroni Sugar Factory",
+    "servicesIdentified": 12,
+    "servicesLive": 11,
+    "onboardingStatus": "IN_PROGRESS",
+    "onboardingRemarks": "LIVE Payment Integration"
+  },
+  {
+    "agencyCode": "MIWANI-SUGAR-COMPANY",
+    "agencyName": "Miwani Sugar Company",
+    "servicesIdentified": 7,
+    "servicesLive": 0,
+    "onboardingStatus": "IN_PROGRESS",
+    "onboardingRemarks": "Digitization Ongoing"
+  },
+  {
+    "agencyCode": "BUKURA-AGRICULTURAL-COLLEGE",
+    "agencyName": "Bukura Agricultural College",
+    "servicesIdentified": 30,
+    "servicesLive": 30,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE"
+  },
+  {
+    "agencyCode": "AGRICULTURAL-INFORMATION-RESOURCE-CENTER",
+    "agencyName": "Agricultural Information Resource Center",
+    "servicesIdentified": 10,
+    "servicesLive": 7,
+    "onboardingStatus": "IN_PROGRESS",
+    "onboardingRemarks": "LIVE USSD (Paid Services)"
+  },
+  {
+    "agencyCode": "KENYA-SCHOOL-OF-AGRICULTURE",
+    "agencyName": "Kenya School of Agriculture",
+    "servicesIdentified": 32,
+    "servicesLive": 13,
+    "onboardingStatus": "IN_PROGRESS",
+    "onboardingRemarks": "LIVE. Awaiting bank letter approval for remaining services to be given the USSD solution."
+  },
+  {
+    "agencyCode": "NATIONAL-CEREALS-AND-PRODUCE-BOARD",
+    "agencyName": "National Cereals and Produce Board",
+    "servicesIdentified": 154,
+    "servicesLive": 154,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE"
+  },
+  {
+    "agencyCode": "COMMODITIES-FUND",
+    "agencyName": "Commodities Fund",
+    "servicesIdentified": 39,
+    "servicesLive": 39,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE USSD Integration"
+  },
+  {
+    "agencyCode": "AGROCHEMICAL-AND-FOOD-COMPANY",
+    "agencyName": "Agro-Chemical and Food Company",
+    "servicesIdentified": 28,
+    "servicesLive": 19,
+    "onboardingStatus": "IN_PROGRESS",
+    "onboardingRemarks": "LIVE 19 (Direct to Paybill). Configurations ongoing"
+  },
+  {
+    "agencyCode": "AGRICULTURE-INFORMATION-RESOURCE-CENTRE",
+    "agencyName": "Agriculture Information Resource Centre Revolving Fund",
+    "servicesIdentified": null,
+    "servicesLive": null,
+    "onboardingStatus": "PENDING",
+    "onboardingRemarks": "Under AIRC above"
+  },
+  {
+    "agencyCode": "PEST-CONTROL-PRODUCTS-BOARD",
+    "agencyName": "Pest Control Products Board",
+    "servicesIdentified": 155,
+    "servicesLive": 155,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE (76 end to end; 76 integration, 3 USSD)"
+  },
+  {
+    "agencyCode": "PYRETHRUM-PROCESSING-COMPANY-OF-KENYA",
+    "agencyName": "Pyrethrum Processing Company of Kenya",
+    "servicesIdentified": 7,
+    "servicesLive": 7,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE"
+  },
+  {
+    "agencyCode": "KENYA-AGRICULTURE-AND-LIVESTOCK-RESEARCH",
+    "agencyName": "Kenya Agriculture and Livestock Research Organisation (KALRO)",
+    "servicesIdentified": 153,
+    "servicesLive": 153,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE 82 End to End; 71 USSD"
+  },
+  {
+    "agencyCode": "KENYA-SUGAR-RESEARCH-AND-TRAINING-INSTIT",
+    "agencyName": "Kenya Sugar Research and Training Institute",
+    "servicesIdentified": 1,
+    "servicesLive": 1,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE USSD"
+  },
+  {
+    "agencyCode": "NATIONAL-BIOSAFETY-AUTHORITY",
+    "agencyName": "National Biosafety Authority",
+    "servicesIdentified": 43,
+    "servicesLive": 43,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE End to End. Integration test done. Moving to production"
+  },
+  {
+    "agencyCode": "BIOSAFETY-APPEALS-BOARD",
+    "agencyName": "Biosafety Appeals Board",
+    "servicesIdentified": 7,
+    "servicesLive": 0,
+    "onboardingStatus": "IN_PROGRESS",
+    "onboardingRemarks": "End to end digitization complete; awaiting server to go live"
+  },
+  {
+    "agencyCode": "KENYA-VETERINARY-VACCINE-PRODUCTION-INST",
+    "agencyName": "Kenya Veterinary Vaccine Production Institute",
+    "servicesIdentified": 88,
+    "servicesLive": 88,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE"
+  },
+  {
+    "agencyCode": "KENYA-VETERINARY-BOARD",
+    "agencyName": "Kenya Veterinary Board",
+    "servicesIdentified": 41,
+    "servicesLive": 41,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE"
+  },
+  {
+    "agencyCode": "VETERINARY-MEDICINES-DIRECTORATE",
+    "agencyName": "Veterinary Medicines Directorate",
+    "servicesIdentified": 23,
+    "servicesLive": 23,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE"
+  },
+  {
+    "agencyCode": "VETERINARY-SERVICES-DEVELOPMENT-FUND",
+    "agencyName": "Veterinary Services Development Fund",
+    "servicesIdentified": 125,
+    "servicesLive": 125,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE"
+  },
+  {
+    "agencyCode": "ANIMAL-TECHNICIANS-COUNCIL",
+    "agencyName": "Animal Technicians Council",
+    "servicesIdentified": null,
+    "servicesLive": null,
+    "onboardingStatus": "PENDING",
+    "onboardingRemarks": "Never Engaged"
+  },
+  {
+    "agencyCode": "KENYA-LEATHER-DEVELOPMENT-COUNCIL",
+    "agencyName": "Kenya Leather Development Council",
+    "servicesIdentified": 72,
+    "servicesLive": 72,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE"
+  },
+  {
+    "agencyCode": "KENYA-DAIRY-BOARD",
+    "agencyName": "Kenya dairy board",
+    "servicesIdentified": 11,
+    "servicesLive": 11,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE"
+  },
+  {
+    "agencyCode": "KENYA-ANIMAL-GENETIC-RESOURCES-CENTRE",
+    "agencyName": "Kenya Animal Genetic Resources Centre",
+    "servicesIdentified": 42,
+    "servicesLive": 42,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE"
+  },
+  {
+    "agencyCode": "KENYA-TSETSE-AND-TRYPANOSOMIASIS-ERADICA",
+    "agencyName": "Kenya Tsetse and Trypanosomiasis Eradication Council (KENTTEC)",
+    "servicesIdentified": 7,
+    "servicesLive": 7,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE"
+  },
+  {
+    "agencyCode": "NATIONAL-BEEKEEPING-INSTITUTE-LENANA",
+    "agencyName": "National Beekeeping Institute Lenana",
+    "servicesIdentified": 15,
+    "servicesLive": 15,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE (Direct to Paybill). Digitization ongoing"
+  },
+  {
+    "agencyCode": "DAIRY-TRAINING-INSTITUTE-NAIVASHA",
+    "agencyName": "Dairy Training Institute, Naivasha",
+    "servicesIdentified": 26,
+    "servicesLive": 26,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE"
+  },
+  {
+    "agencyCode": "NATIONAL-RABBIT-INSTITUTE",
+    "agencyName": "National Rabbit Institute",
+    "servicesIdentified": 14,
+    "servicesLive": 14,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE (Direct to Paybill). Digitization ongoing"
+  },
+  {
+    "agencyCode": "NATIONAL-LIVESTOCK-RECORDING-CENTER",
+    "agencyName": "National Livestock Recording Center",
+    "servicesIdentified": 2,
+    "servicesLive": null,
+    "onboardingStatus": "IN_PROGRESS",
+    "onboardingRemarks": "End to end digitization complete; awaiting servers to go live"
+  },
+  {
+    "agencyCode": "REGIONAL-PASTORAL-TRAINING-CENTER-NAROK",
+    "agencyName": "Regional Pastoral Training Center - Narok",
+    "servicesIdentified": 8,
+    "servicesLive": 8,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE (Direct to Paybill)"
+  },
+  {
+    "agencyCode": "MEAT-TRAINING-INSTITUTE",
+    "agencyName": "Meat Training Institute",
+    "servicesIdentified": 3,
+    "servicesLive": 3,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE (USSD)"
+  },
+  {
+    "agencyCode": "ANIMAL-HEALTH-AND-INDUSTRY-TRAINING-INST",
+    "agencyName": "Animal Health and Industry Training Institute - Kabete",
+    "servicesIdentified": 17,
+    "servicesLive": 17,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "Live  USSD. Digitization ongoing"
+  },
+  {
+    "agencyCode": "ANIMAL-HEALTH-AND-INDUSTRY-TRAINING-I-2",
+    "agencyName": "Animal Health and Industry Training Institute - Ndomba",
+    "servicesIdentified": 9,
+    "servicesLive": 1,
+    "onboardingStatus": "IN_PROGRESS",
+    "onboardingRemarks": "1 Live on USSD. Digitization ongoing"
+  },
+  {
+    "agencyCode": "ANIMAL-HEALTH-AND-INDUSTRY-TRAINING-I-3",
+    "agencyName": "Animal Health and Industry Training Institute - Nyahururu",
+    "servicesIdentified": 9,
+    "servicesLive": 3,
+    "onboardingStatus": "IN_PROGRESS",
+    "onboardingRemarks": "3 Live USSD. Digitization ongoing"
+  },
+  {
+    "agencyCode": "LIVESTOCK-TRAINING-INSTITUTE-WAJIR",
+    "agencyName": "Livestock Training Institute - Wajir",
+    "servicesIdentified": 12,
+    "servicesLive": 3,
+    "onboardingStatus": "IN_PROGRESS",
+    "onboardingRemarks": "Live 3 on USSD. Configurations ongoing"
+  },
+  {
+    "agencyCode": "LIVESTOCK-FARMS-AND-STATIONS-14",
+    "agencyName": "Livestock Farms and stations (14)",
+    "servicesIdentified": 165,
+    "servicesLive": 139,
+    "onboardingStatus": "IN_PROGRESS",
+    "onboardingRemarks": "13 STATIONS LIVE USSD"
+  },
+  {
+    "agencyCode": "STATE-DEPARTMENT-FOR-INVESTMENTS-PROMOTI",
+    "agencyName": "State Department for Investments Promotion",
+    "servicesIdentified": 5,
+    "servicesLive": 0,
+    "onboardingStatus": "IN_PROGRESS",
+    "onboardingRemarks": "End to end digitization complete; awaiting server to go live"
+  },
+  {
+    "agencyCode": "KENYA-INVESTMENT-AUTHORITY",
+    "agencyName": "Kenya Investment Authority",
+    "servicesIdentified": 2,
+    "servicesLive": 2,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE URL"
+  },
+  {
+    "agencyCode": "EXPORT-PROCESSING-ZONES-AUTHORITY",
+    "agencyName": "Export Processing Zones Authority",
+    "servicesIdentified": 67,
+    "servicesLive": 67,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE 52 Invoice generator; USSD 15"
+  },
+  {
+    "agencyCode": "SPECIAL-ECONOMIC-ZONES-AUTHORITY",
+    "agencyName": "Special Economic Zones Authority",
+    "servicesIdentified": 8,
+    "servicesLive": 7,
+    "onboardingStatus": "IN_PROGRESS",
+    "onboardingRemarks": "LIVE End to End (1 Pending)"
+  },
+  {
+    "agencyCode": "KENYA-DEVELOPMENT-CORPORATION-KDC",
+    "agencyName": "Kenya Development Corporation (KDC)",
+    "servicesIdentified": 11,
+    "servicesLive": 11,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE (Integration)"
+  },
+  {
+    "agencyCode": "SUNSET-HOTEL-LIMITED",
+    "agencyName": "Sunset Hotel Limited",
+    "servicesIdentified": 1,
+    "servicesLive": 1,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE"
+  },
+  {
+    "agencyCode": "DEPARTMENT-OF-BUSINESS-REFORMS-AND-TRANS",
+    "agencyName": "Department of Business Reforms and Transformation",
+    "servicesIdentified": null,
+    "servicesLive": null,
+    "onboardingStatus": "PENDING",
+    "onboardingRemarks": "Never Engaged"
+  },
+  {
+    "agencyCode": "KENYA-NATIONAL-TRADING-CORPORATION",
+    "agencyName": "Kenya National Trading Corporation",
+    "servicesIdentified": 16,
+    "servicesLive": 16,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE"
+  },
+  {
+    "agencyCode": "AFRICA-TRADE-INSURANCE",
+    "agencyName": "Africa Trade Insurance",
+    "servicesIdentified": null,
+    "servicesLive": null,
+    "onboardingStatus": "PENDING",
+    "onboardingRemarks": "Never Engaged"
+  },
+  {
+    "agencyCode": "THE-NATIONAL-TRADE-NEGOTIATIONS-COUNCIL",
+    "agencyName": "The National Trade Negotiations Council (NTNC)",
+    "servicesIdentified": null,
+    "servicesLive": null,
+    "onboardingStatus": "PENDING",
+    "onboardingRemarks": "Never Engaged"
+  },
+  {
+    "agencyCode": "KENYA-TRADE-REMEDIES-AGENCY-KETRA",
+    "agencyName": "Kenya Trade Remedies Agency (KETRA)",
+    "servicesIdentified": 3,
+    "servicesLive": null,
+    "onboardingStatus": "IN_PROGRESS",
+    "onboardingRemarks": "Requirements gathering done. Awaiting forms and workflows for digitization to commence."
+  },
+  {
+    "agencyCode": "KENYA-EXPORT-PROMOTION-AND-BRANDING-AGEN",
+    "agencyName": "Kenya Export Promotion and Branding Agency",
+    "servicesIdentified": 4,
+    "servicesLive": 4,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE (URL)"
+  },
+  {
+    "agencyCode": "WAREHOUSE-RECEIPT-SYSTEM-COUNCIL",
+    "agencyName": "Warehouse Receipt System Council",
+    "servicesIdentified": 5,
+    "servicesLive": 5,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE USSD. System in Progress. Pending SSO and Payment integration."
+  },
+  {
+    "agencyCode": "KENYA-NATIONAL-MULTI-COMMODITIES-EXCHANG",
+    "agencyName": "Kenya National Multi- Commodities Exchange Limited",
+    "servicesIdentified": 18,
+    "servicesLive": 18,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE USSD"
+  },
+  {
+    "agencyCode": "WEIGHTS-AND-MEASURES",
+    "agencyName": "Weights and Measures",
+    "servicesIdentified": 26,
+    "servicesLive": 26,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE USSD. End to end digitization complete; awaiting servers to go live"
+  },
+  {
+    "agencyCode": "STATE-DEPARTMENT-FOR-INDUSTRY",
+    "agencyName": "State Department for Industry",
+    "servicesIdentified": 7,
+    "servicesLive": null,
+    "onboardingStatus": "IN_PROGRESS",
+    "onboardingRemarks": "SSO documentation sent"
+  },
+  {
+    "agencyCode": "KENYA-BUREAU-OF-STANDARDS-KEBS",
+    "agencyName": "Kenya Bureau of Standards (KEBS)",
+    "servicesIdentified": 45,
+    "servicesLive": 45,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE"
+  },
+  {
+    "agencyCode": "KENYA-ACCREDITATION-SERVICE",
+    "agencyName": "Kenya Accreditation Service",
+    "servicesIdentified": 138,
+    "servicesLive": 138,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE"
+  },
+  {
+    "agencyCode": "RIVATEX",
+    "agencyName": "Rivatex",
+    "servicesIdentified": 18,
+    "servicesLive": 18,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE 9 end-to-end; 9 USSD"
+  },
+  {
+    "agencyCode": "EAST-AFRICAN-PORTLAND-CEMENT-CO-LTD",
+    "agencyName": "East African Portland Cement Co. Ltd",
+    "servicesIdentified": 3,
+    "servicesLive": null,
+    "onboardingStatus": "IN_PROGRESS",
+    "onboardingRemarks": "Digitization ongoing"
+  },
+  {
+    "agencyCode": "NUMERICAL-MACHINING-COMPLEX-NMC",
+    "agencyName": "Numerical Machining Complex (NMC)",
+    "servicesIdentified": 13,
+    "servicesLive": 13,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE"
+  },
+  {
+    "agencyCode": "KENYA-INDUSTRIAL-RESEARCH-AND-DEVELOPMEN",
+    "agencyName": "Kenya Industrial Research and Development Institute (KIRDI)",
+    "servicesIdentified": 275,
+    "servicesLive": 275,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE"
+  },
+  {
+    "agencyCode": "KENYA-INDUSTRIAL-PROPERTY-INSTITUTE",
+    "agencyName": "Kenya Industrial Property Institute",
+    "servicesIdentified": 336,
+    "servicesLive": 336,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE (Invoice generator)"
+  },
+  {
+    "agencyCode": "SCRAP-METAL-COUNCIL",
+    "agencyName": "Scrap Metal Council",
+    "servicesIdentified": 13,
+    "servicesLive": 13,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE"
+  },
+  {
+    "agencyCode": "KENYA-INDUSTRIAL-TRAINING-INSTITUTE-KITI",
+    "agencyName": "Kenya Industrial Training Institute (KITI)",
+    "servicesIdentified": null,
+    "servicesLive": null,
+    "onboardingStatus": "PENDING",
+    "onboardingRemarks": "Never Engaged"
+  },
+  {
+    "agencyCode": "ANTI-COUNTERFEIT-AUTHORITY-ACA",
+    "agencyName": "Anti Counterfeit Authority (ACA)",
+    "servicesIdentified": 23,
+    "servicesLive": 23,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE"
+  },
+  {
+    "agencyCode": "STATE-DEPARTMENT-FOR-COOPERATIVES",
+    "agencyName": "State Department for Co-operatives",
+    "servicesIdentified": 30,
+    "servicesLive": 18,
+    "onboardingStatus": "IN_PROGRESS",
+    "onboardingRemarks": "LIVE"
+  },
+  {
+    "agencyCode": "SACCO-SOCIETIES-REGULATORY-AUTHORITY-SAS",
+    "agencyName": "Sacco Societies Regulatory Authority (SASRA)",
+    "servicesIdentified": 10,
+    "servicesLive": 3,
+    "onboardingStatus": "SUSPENDED",
+    "onboardingRemarks": "LIVE(URL) Integration test done. No communication"
+  },
+  {
+    "agencyCode": "NEW-KENYA-PLANTERS-COOPERATIVE-UNION",
+    "agencyName": "New Kenya Planters Cooperative Union",
+    "servicesIdentified": 5,
+    "servicesLive": 2,
+    "onboardingStatus": "IN_PROGRESS",
+    "onboardingRemarks": "LIVE (2) Direct to Paybill. Pending services are complicated. Further discussions with all stakeholders pending."
+  },
+  {
+    "agencyCode": "NEW-KENYA-COOPERATIVE-CREAMERIES",
+    "agencyName": "New Kenya Cooperative Creameries",
+    "servicesIdentified": 8,
+    "servicesLive": 8,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE"
+  },
+  {
+    "agencyCode": "KENYA-INDUSTRIAL-ESTATES",
+    "agencyName": "Kenya Industrial Estates",
+    "servicesIdentified": 4,
+    "servicesLive": null,
+    "onboardingStatus": "IN_PROGRESS",
+    "onboardingRemarks": "End to end digitization complete; awaiting server to go live"
+  },
+  {
+    "agencyCode": "MICRO-AND-SMALL-ENTERPRISE-AUTHORITY",
+    "agencyName": "Micro and Small Enterprise Authority",
+    "servicesIdentified": 13,
+    "servicesLive": 9,
+    "onboardingStatus": "IN_PROGRESS",
+    "onboardingRemarks": "LIVE (7) End to End; Direct to Paybill 2. Configurations for pending services ongoing."
+  },
+  {
+    "agencyCode": "UWEZO-FUND",
+    "agencyName": "Uwezo Fund",
+    "servicesIdentified": 291,
+    "servicesLive": 291,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE"
+  },
+  {
+    "agencyCode": "KENYA-INSTITUTE-OF-BUSINESS-TRAINING-KIB",
+    "agencyName": "Kenya Institute of Business Training (KIBT)",
+    "servicesIdentified": 25,
+    "servicesLive": null,
+    "onboardingStatus": "IN_PROGRESS",
+    "onboardingRemarks": "Clients insists services are not revenue generating. To write a letter to ecitizen to that effect"
+  },
+  {
+    "agencyCode": "STATE-DEPARTMENT-FOR-YOUTH-AFFAIRS-AND-C",
+    "agencyName": "State Department for Youth Affairs and Creative Economy",
+    "servicesIdentified": 19,
+    "servicesLive": null,
+    "onboardingStatus": "IN_PROGRESS",
+    "onboardingRemarks": "Configurations ongoing"
+  },
+  {
+    "agencyCode": "KENYA-NATIONAL-YOUTH-COUNCIL",
+    "agencyName": "Kenya National Youth Council",
+    "servicesIdentified": 2,
+    "servicesLive": null,
+    "onboardingStatus": "IN_PROGRESS",
+    "onboardingRemarks": "Digitization ongoing"
+  },
+  {
+    "agencyCode": "YOUTH-ADVISORY-BOARD",
+    "agencyName": "Youth Advisory Board",
+    "servicesIdentified": null,
+    "servicesLive": null,
+    "onboardingStatus": "PENDING",
+    "onboardingRemarks": "Never Engaged"
+  },
+  {
+    "agencyCode": "KENYA-ASSOCIATION-OF-YOUTH-CENTRES",
+    "agencyName": "Kenya Association of Youth Centres",
+    "servicesIdentified": null,
+    "servicesLive": null,
+    "onboardingStatus": "PENDING",
+    "onboardingRemarks": "Never Engaged"
+  },
+  {
+    "agencyCode": "KENYA-NATIONAL-INNOVATION-AGENCY",
+    "agencyName": "Kenya National Innovation Agency",
+    "servicesIdentified": 8,
+    "servicesLive": 8,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE Payment Integration"
+  },
+  {
+    "agencyCode": "THE-REGIONAL-YOUTH-FORUM-SECRETARIAT-OF",
+    "agencyName": "The Regional Youth Forum Secretariat of the International Conference\n on the Great Lakes Region (ICGLR)",
+    "servicesIdentified": null,
+    "servicesLive": null,
+    "onboardingStatus": "PENDING",
+    "onboardingRemarks": null
+  },
+  {
+    "agencyCode": "YOUTH-ENTERPRISE-DEVELOPMENT-FUND-YEDF",
+    "agencyName": "Youth Enterprise Development Fund (YEDF)",
+    "servicesIdentified": 4,
+    "servicesLive": 4,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE (USSD)"
+  },
+  {
+    "agencyCode": "KENYA-FILM-CLASSIFICATION-BOARD",
+    "agencyName": "Kenya film classification Board",
+    "servicesIdentified": 116,
+    "servicesLive": 116,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE"
+  },
+  {
+    "agencyCode": "KENYA-FILM-COMMMISSION",
+    "agencyName": "Kenya Film Commmission",
+    "servicesIdentified": 9,
+    "servicesLive": 9,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE 8 End to End; 1 USSD; Integration testing done."
+  },
+  {
+    "agencyCode": "KENYA-NATIONAL-THEATRE",
+    "agencyName": "Kenya National Theatre",
+    "servicesIdentified": null,
+    "servicesLive": null,
+    "onboardingStatus": "PENDING",
+    "onboardingRemarks": "Never Engaged"
+  },
+  {
+    "agencyCode": "SPORTS-KENYA",
+    "agencyName": "Sports Kenya",
+    "servicesIdentified": 183,
+    "servicesLive": 183,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE; 3 USSD"
+  },
+  {
+    "agencyCode": "KENYA-ANTI-DOPING-AGENCY",
+    "agencyName": "Kenya Anti Doping Agency",
+    "servicesIdentified": 3,
+    "servicesLive": 3,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE URL. Services can't be digitized due to their nature."
+  },
+  {
+    "agencyCode": "SPORTS-ARTS-AND-SOCIAL-DEVELOPMENT-FUND",
+    "agencyName": "Sports Arts and Social Development Fund",
+    "servicesIdentified": 0,
+    "servicesLive": 0,
+    "onboardingStatus": "PENDING",
+    "onboardingRemarks": "Not citizen facing. To be given visibility"
+  },
+  {
+    "agencyCode": "KENYA-ACADEMY-OF-SPORTS",
+    "agencyName": "Kenya Academy of Sports",
+    "servicesIdentified": 6,
+    "servicesLive": 2,
+    "onboardingStatus": "IN_PROGRESS",
+    "onboardingRemarks": "Live 2 (Direct to Paybill). Configurations complete; awaiting servers to go live"
+  },
+  {
+    "agencyCode": "REGISTRAR-OF-SPORTS",
+    "agencyName": "Registrar of Sports",
+    "servicesIdentified": 12,
+    "servicesLive": 12,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE"
+  },
+  {
+    "agencyCode": "NATIONAL-ENVIRONMENTAL-MANAGEMENT-AUTHOR",
+    "agencyName": "National Environmental Management Authority",
+    "servicesIdentified": 130,
+    "servicesLive": 130,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE"
+  },
+  {
+    "agencyCode": "NATIONAL-CLIMATE-CHANGE-COUNCIL",
+    "agencyName": "National Climate Change Council",
+    "servicesIdentified": null,
+    "servicesLive": null,
+    "onboardingStatus": "PENDING",
+    "onboardingRemarks": "Never Engaged"
+  },
+  {
+    "agencyCode": "NATIONAL-ENVIRONMENT-TRUST-FUND",
+    "agencyName": "National Environment Trust Fund",
+    "servicesIdentified": 3,
+    "servicesLive": null,
+    "onboardingStatus": "IN_PROGRESS",
+    "onboardingRemarks": "End to end digitization complete; awaiting servers to go live"
+  },
+  {
+    "agencyCode": "NATIONAL-ENVIRONMENTAL-COMPLAINTS-COMMIT",
+    "agencyName": "National Environmental Complaints Committee (NECC)",
+    "servicesIdentified": 1,
+    "servicesLive": 1,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE URL"
+  },
+  {
+    "agencyCode": "KENYA-METEOROLOGICAL-DEPARTMENT",
+    "agencyName": "Kenya Meteorological Department",
+    "servicesIdentified": 11,
+    "servicesLive": 11,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE"
+  },
+  {
+    "agencyCode": "KENYA-METEOROLOGICAL-TRAINING-COLLEGE",
+    "agencyName": "Kenya Meteorological Training College",
+    "servicesIdentified": null,
+    "servicesLive": null,
+    "onboardingStatus": "PENDING",
+    "onboardingRemarks": "Services included in Kenya Meteorological Department"
+  },
+  {
+    "agencyCode": "KENYA-FOREST-SERVICE",
+    "agencyName": "Kenya Forest Service",
+    "servicesIdentified": 505,
+    "servicesLive": 505,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE"
+  },
+  {
+    "agencyCode": "KENYA-FORESTRY-RESEARCH-INSTITUTE",
+    "agencyName": "Kenya Forestry Research Institute",
+    "servicesIdentified": 30,
+    "servicesLive": 30,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE"
+  },
+  {
+    "agencyCode": "STATE-DEPARTMENT-OF-TOURISM",
+    "agencyName": "State Department of Tourism",
+    "servicesIdentified": 1,
+    "servicesLive": null,
+    "onboardingStatus": "IN_PROGRESS",
+    "onboardingRemarks": "Pending SSO Integration"
+  },
+  {
+    "agencyCode": "TOURISM-REGULATORY-AUTHORITY",
+    "agencyName": "Tourism Regulatory Authority",
+    "servicesIdentified": 269,
+    "servicesLive": 269,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE"
+  },
+  {
+    "agencyCode": "KENYA-UTALII-COLLEGE",
+    "agencyName": "Kenya Utalii College",
+    "servicesIdentified": 31,
+    "servicesLive": 31,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE"
+  },
+  {
+    "agencyCode": "THE-TOURISM-FUND",
+    "agencyName": "The Tourism Fund",
+    "servicesIdentified": 5,
+    "servicesLive": 5,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE"
+  },
+  {
+    "agencyCode": "TOURISM-RESEARCH-INSTITUTE-AND-MONITORIN",
+    "agencyName": "Tourism Research Institute and Monitoring Mechanism",
+    "servicesIdentified": 1,
+    "servicesLive": 1,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE (URL)"
+  },
+  {
+    "agencyCode": "TOURISM-PROTECTION-SERVICE",
+    "agencyName": "Tourism Protection Service",
+    "servicesIdentified": null,
+    "servicesLive": null,
+    "onboardingStatus": "PENDING",
+    "onboardingRemarks": "Never EngaGed"
+  },
+  {
+    "agencyCode": "KENYA-TOURISM-BOARD",
+    "agencyName": "Kenya Tourism Board",
+    "servicesIdentified": 10,
+    "servicesLive": 10,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE Payment Integration"
+  },
+  {
+    "agencyCode": "KENYATTA-INTERNATIONAL-CONVENTION-CENTER",
+    "agencyName": "Kenyatta International Convention Center (KICC)",
+    "servicesIdentified": 54,
+    "servicesLive": 54,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE"
+  },
+  {
+    "agencyCode": "KENYA-WILDLIFE-SERVICE",
+    "agencyName": "Kenya Wildlife Service",
+    "servicesIdentified": 293,
+    "servicesLive": 293,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE"
+  },
+  {
+    "agencyCode": "KENYA-WILDLIFE-RESEARCH-AND-TRAINING-INS",
+    "agencyName": "Kenya Wildlife Research and Training Institute",
+    "servicesIdentified": 30,
+    "servicesLive": 30,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE"
+  },
+  {
+    "agencyCode": "WILDLIFE-CONSERVATION-TRUST-FUND",
+    "agencyName": "Wildlife Conservation Trust Fund",
+    "servicesIdentified": null,
+    "servicesLive": null,
+    "onboardingStatus": "PENDING",
+    "onboardingRemarks": "Never Engaged"
+  },
+  {
+    "agencyCode": "WILDLIFE-CLUBS-OF-KENYA",
+    "agencyName": "Wildlife Clubs of Kenya",
+    "servicesIdentified": 3,
+    "servicesLive": 0,
+    "onboardingStatus": "IN_PROGRESS",
+    "onboardingRemarks": "Pending Onboarding"
+  },
+  {
+    "agencyCode": "KENYA-SAFARI-LODGES-AND-HOTELS",
+    "agencyName": "Kenya Safari Lodges and Hotels",
+    "servicesIdentified": 33,
+    "servicesLive": 33,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE (USSD)"
+  },
+  {
+    "agencyCode": "THE-NATIONAL-GOVERNMENT-AFFIRMATIVE-ACTI",
+    "agencyName": "The National Government Affirmative Action Fund",
+    "servicesIdentified": 3,
+    "servicesLive": null,
+    "onboardingStatus": "IN_PROGRESS",
+    "onboardingRemarks": "End to end digitization complete; awaiting server to go live"
+  },
+  {
+    "agencyCode": "ANTIFEMALE-GENITAL-MUTILATION-BOARD",
+    "agencyName": "Anti-Female Genital Mutilation Board",
+    "servicesIdentified": 9,
+    "servicesLive": 9,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE (URL)"
+  },
+  {
+    "agencyCode": "GENDER-VIOLENCE-PROTECTION-CENTRES",
+    "agencyName": "Gender Violence Protection Centres",
+    "servicesIdentified": null,
+    "servicesLive": null,
+    "onboardingStatus": "PENDING",
+    "onboardingRemarks": "Never Engaged"
+  },
+  {
+    "agencyCode": "WOMEN-ENTERPRISE-FUND",
+    "agencyName": "Women Enterprise Fund",
+    "servicesIdentified": 1,
+    "servicesLive": 1,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE"
+  },
+  {
+    "agencyCode": "NATIONAL-GENDER-AND-EQUALITY-COMMISSION",
+    "agencyName": "National Gender and Equality Commission",
+    "servicesIdentified": 1,
+    "servicesLive": 1,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE (URL)"
+  },
+  {
+    "agencyCode": "STATE-DEPARTMENT-FOR-CULTURE-THE-ARTS-AN",
+    "agencyName": "State Department for Culture, the Arts and Heritage",
+    "servicesIdentified": 16,
+    "servicesLive": 16,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE 12 End to End; 4 USSD"
+  },
+  {
+    "agencyCode": "THE-NATIONAL-HEROES-COUNCIL",
+    "agencyName": "The National Heroes Council",
+    "servicesIdentified": 3,
+    "servicesLive": null,
+    "onboardingStatus": "IN_PROGRESS",
+    "onboardingRemarks": "End to end digitization complete; awaiting server to go live"
+  },
+  {
+    "agencyCode": "KENYA-NATIONAL-ARCHIVES-AND-DOCUMENTATIO",
+    "agencyName": "Kenya National Archives and Documentation Service",
+    "servicesIdentified": 28,
+    "servicesLive": 28,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE"
+  },
+  {
+    "agencyCode": "NATIONAL-MUSEUMS-OF-KENYA",
+    "agencyName": "National Museums of Kenya",
+    "servicesIdentified": 76,
+    "servicesLive": 76,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE."
+  },
+  {
+    "agencyCode": "BOMAS-OF-KENYA",
+    "agencyName": "Bomas of Kenya",
+    "servicesIdentified": 43,
+    "servicesLive": 43,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE (41 End to End; 2 USSD)"
+  },
+  {
+    "agencyCode": "PERMANENT-PRESIDENTIAL-MUSIC-COMMISSION",
+    "agencyName": "Permanent Presidential Music Commission",
+    "servicesIdentified": 6,
+    "servicesLive": 1,
+    "onboardingStatus": "IN_PROGRESS",
+    "onboardingRemarks": "LIVE 1 USSD. End to end digitization complete; awaiting server to go live"
+  },
+  {
+    "agencyCode": "KENYA-COPYRIGHT-BOARD-KECOBO",
+    "agencyName": "Kenya Copyright Board (KECOBO)",
+    "servicesIdentified": 16,
+    "servicesLive": 16,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE (11 End to End; 1 integration; 3 URL)"
+  },
+  {
+    "agencyCode": "KENYA-NATIONAL-LIBRARY-SEVICES",
+    "agencyName": "Kenya National Library Sevices",
+    "servicesIdentified": 43,
+    "servicesLive": 43,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE"
+  },
+  {
+    "agencyCode": "KENYA-CULTURAL-CENTRE",
+    "agencyName": "Kenya Cultural Centre",
+    "servicesIdentified": 40,
+    "servicesLive": 40,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE"
+  },
+  {
+    "agencyCode": "KENYA-NATIONAL-COMMISSION-FOR-CULTURE-AN",
+    "agencyName": "Kenya National Commission for Culture and Social Services",
+    "servicesIdentified": null,
+    "servicesLive": null,
+    "onboardingStatus": "PENDING",
+    "onboardingRemarks": "Never Engaged"
+  },
+  {
+    "agencyCode": "USHANGA-KENYA-INITIATIVE",
+    "agencyName": "Ushanga Kenya Initiative",
+    "servicesIdentified": 1,
+    "servicesLive": 0,
+    "onboardingStatus": "IN_PROGRESS",
+    "onboardingRemarks": "Their E-shop system is still in progress. Once completed we move to sso and payment intergration"
+  },
+  {
+    "agencyCode": "MINISTRY-FOR-WATER-AND-SANITATION",
+    "agencyName": "Ministry for Water and Sanitation",
+    "servicesIdentified": 19,
+    "servicesLive": 19,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE"
+  },
+  {
+    "agencyCode": "WATER-SERVICES-REGULATORY-BOARD",
+    "agencyName": "Water Services Regulatory Board",
+    "servicesIdentified": 17,
+    "servicesLive": 2,
+    "onboardingStatus": "IN_PROGRESS",
+    "onboardingRemarks": "LIVE (2) USSD as they await SSO and Payment integration to commence"
+  },
+  {
+    "agencyCode": "KENYA-WATER-INSTITUTE",
+    "agencyName": "Kenya Water Institute",
+    "servicesIdentified": 104,
+    "servicesLive": 104,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE Integration USSD 10 (Have live service end to end but not consuming that)"
+  },
+  {
+    "agencyCode": "ATHI-WATER-WORKS-DEVELOPMENT-AGENCY",
+    "agencyName": "Athi Water Works Development Agency",
+    "servicesIdentified": 4,
+    "servicesLive": 3,
+    "onboardingStatus": "IN_PROGRESS",
+    "onboardingRemarks": "LIVE URL. Configurations Done. Ready to go live"
+  },
+  {
+    "agencyCode": "TANA-WATER-WORKS-DEVELOPMENT-AGENCY",
+    "agencyName": "Tana Water Works Development Agency",
+    "servicesIdentified": 2,
+    "servicesLive": 2,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE"
+  },
+  {
+    "agencyCode": "TANATHI-WATER-WORKS-DEVELOPMENT-AGENCY",
+    "agencyName": "Tanathi Water Works Development Agency",
+    "servicesIdentified": 1,
+    "servicesLive": 1,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE URL"
+  },
+  {
+    "agencyCode": "LAKE-VICTORIA-NORTH-WATER-WORKS-DEVELOPM",
+    "agencyName": "Lake Victoria North Water Works Development Agency",
+    "servicesIdentified": 3,
+    "servicesLive": 3,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE"
+  },
+  {
+    "agencyCode": "LAKE-VICTORIA-SOUTH-WORKS-DEVELOPMENT-AG",
+    "agencyName": "Lake Victoria South Works Development Agency",
+    "servicesIdentified": 2,
+    "servicesLive": 2,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE"
+  },
+  {
+    "agencyCode": "CENTRAL-RIFT-VALLEY-WATER-WORKS-DEVELOPM",
+    "agencyName": "Central Rift Valley Water Works Development Agency",
+    "servicesIdentified": 2,
+    "servicesLive": 2,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE"
+  },
+  {
+    "agencyCode": "NORTH-RIFT-VALLEY-WATER-WORKS-DEVELOPMEN",
+    "agencyName": "North Rift Valley Water Works Development Agency",
+    "servicesIdentified": 1,
+    "servicesLive": 1,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE URL"
+  },
+  {
+    "agencyCode": "COAST-WATER-WORKS-DEVELOPMENT-AGENCY",
+    "agencyName": "Coast Water Works Development Agency",
+    "servicesIdentified": 3,
+    "servicesLive": 3,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE"
+  },
+  {
+    "agencyCode": "NOTHERN-WATER-WORKS-DEVELOPMENT-AGENCY",
+    "agencyName": "Nothern Water Works Development Agency",
+    "servicesIdentified": 1,
+    "servicesLive": 1,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE"
+  },
+  {
+    "agencyCode": "WATER-SECTOR-TRUST-FUND",
+    "agencyName": "Water Sector Trust Fund",
+    "servicesIdentified": 1,
+    "servicesLive": 1,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE SSO Integration"
+  },
+  {
+    "agencyCode": "REGIONAL-CENTRE-ON-GROUND-WATER-RESOURCE",
+    "agencyName": "Regional Centre on Ground Water Resources Education, Training and Research",
+    "servicesIdentified": 7,
+    "servicesLive": 1,
+    "onboardingStatus": "IN_PROGRESS",
+    "onboardingRemarks": "LIVE USSD (1). The other services arent active; awaiting board approval."
+  },
+  {
+    "agencyCode": "WATER-RESOURCES-AUTHORITY",
+    "agencyName": "Water Resources Authority",
+    "servicesIdentified": 15,
+    "servicesLive": 15,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE"
+  },
+  {
+    "agencyCode": "HYDROLOGISTS-REGISTRATION-BOARD",
+    "agencyName": "Hydrologists Registration Board",
+    "servicesIdentified": 22,
+    "servicesLive": null,
+    "onboardingStatus": "IN_PROGRESS",
+    "onboardingRemarks": "Requirements gathering done. Configurations ongoing"
+  },
+  {
+    "agencyCode": "STATE-DEPARTMENT-FOR-IRRIGATION",
+    "agencyName": "State Department for Irrigation",
+    "servicesIdentified": 25,
+    "servicesLive": 24,
+    "onboardingStatus": "IN_PROGRESS",
+    "onboardingRemarks": "LIVE 24; 1 needs datasets dependent on one of the live services. Clients need to apply first."
+  },
+  {
+    "agencyCode": "NATIONAL-WATER-HARVESTING-AND-STORAGE-AU",
+    "agencyName": "National Water Harvesting and Storage Authority",
+    "servicesIdentified": 8,
+    "servicesLive": 2,
+    "onboardingStatus": "IN_PROGRESS",
+    "onboardingRemarks": "LIVE 2 Direct Payments. End to end digitization complete; awaiting server to go live"
+  },
+  {
+    "agencyCode": "NATIONAL-IRRIGATION-AUTHORITY",
+    "agencyName": "National Irrigation Authority",
+    "servicesIdentified": 26,
+    "servicesLive": 26,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE"
+  },
+  {
+    "agencyCode": "STATE-DEPARTMENT-FOR-ENERGY",
+    "agencyName": "State Department for Energy",
+    "servicesIdentified": 6,
+    "servicesLive": 3,
+    "onboardingStatus": "IN_PROGRESS",
+    "onboardingRemarks": "LIVE 3 FREE; 3 Digitization ongoing"
+  },
+  {
+    "agencyCode": "ENERGY-AND-PETROLEUM-REGULATORY-AUTHORIT",
+    "agencyName": "Energy and Petroleum Regulatory Authority",
+    "servicesIdentified": 6,
+    "servicesLive": 6,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE"
+  },
+  {
+    "agencyCode": "KENYA-POWER-COMPANY-LIMITED",
+    "agencyName": "Kenya Power Company Limited",
+    "servicesIdentified": 13,
+    "servicesLive": 11,
+    "onboardingStatus": "IN_PROGRESS",
+    "onboardingRemarks": "LIVE (URL). Awaiting direction for the pending services."
+  },
+  {
+    "agencyCode": "KENYA-ELECTRICITY-GENERATING-COMPANY-LIM",
+    "agencyName": "Kenya Electricity Generating Company Limited",
+    "servicesIdentified": 48,
+    "servicesLive": 48,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE (Direct to Paybill). Invoice generator complete; awaiting servers to go live"
+  },
+  {
+    "agencyCode": "KENYA-ELECTRICITY-TRANSMISSION-COMPANY-K",
+    "agencyName": "Kenya Electricity Transmission Company (KETRACO)",
+    "servicesIdentified": 0,
+    "servicesLive": null,
+    "onboardingStatus": "PENDING",
+    "onboardingRemarks": "Not Citizen Facing"
+  },
+  {
+    "agencyCode": "RURAL-ELECTRIFICATION-AND-RENEWABLE-ENER",
+    "agencyName": "Rural Electrification and Renewable Energy",
+    "servicesIdentified": 21,
+    "servicesLive": 21,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE SSO. 16 Energy centers on USSD"
+  },
+  {
+    "agencyCode": "NUCLEAR-POWER-AND-ENERGY-AGENCY",
+    "agencyName": "Nuclear Power and Energy Agency",
+    "servicesIdentified": null,
+    "servicesLive": null,
+    "onboardingStatus": "PENDING",
+    "onboardingRemarks": "Never Engaged"
+  },
+  {
+    "agencyCode": "GEOTHERMAL-DEVELOPMENT-COMPANY",
+    "agencyName": "Geothermal Development Company",
+    "servicesIdentified": 49,
+    "servicesLive": 2,
+    "onboardingStatus": "IN_PROGRESS",
+    "onboardingRemarks": "LIVE 2 USSD. Configurations ongoing"
+  },
+  {
+    "agencyCode": "NATIONAL-OIL-CORPORATION-OF-KENYA",
+    "agencyName": "National Oil Corporation of Kenya",
+    "servicesIdentified": 2,
+    "servicesLive": 0,
+    "onboardingStatus": "IN_PROGRESS",
+    "onboardingRemarks": "Configurations complete. Awaiting validation of services."
+  },
+  {
+    "agencyCode": "KENYA-PIPELINE-COMPANY",
+    "agencyName": "Kenya Pipeline Company",
+    "servicesIdentified": 4,
+    "servicesLive": 4,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE (USSD)"
+  },
+  {
+    "agencyCode": "PETROLEUM-DEVELOPMENT-LEVY-FUND",
+    "agencyName": "Petroleum Development Levy Fund",
+    "servicesIdentified": null,
+    "servicesLive": null,
+    "onboardingStatus": "PENDING",
+    "onboardingRemarks": "Never Engaged"
+  },
+  {
+    "agencyCode": "KENYA-PETROLEUM-REFINERIES",
+    "agencyName": "Kenya Petroleum Refineries",
+    "servicesIdentified": 0,
+    "servicesLive": 0,
+    "onboardingStatus": "PENDING",
+    "onboardingRemarks": "Storage mainly for KPC - No public facing services"
+  },
+  {
+    "agencyCode": "STATE-DEPARTMENT-FOR-LABOUR-AND-SKILLS-D",
+    "agencyName": "State Department for Labour and Skills Development",
+    "servicesIdentified": 10,
+    "servicesLive": 10,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE (Direct toPaybill). Configurations complete; awaiting servers to go live"
+  },
+  {
+    "agencyCode": "NATIONAL-SOCIAL-SECURITY-FUND-NSSF",
+    "agencyName": "National Social Security Fund (NSSF)",
+    "servicesIdentified": 21,
+    "servicesLive": 21,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE"
+  },
+  {
+    "agencyCode": "NATIONAL-EMPLOYMENT-AUTHORITY",
+    "agencyName": "National Employment Authority",
+    "servicesIdentified": 6,
+    "servicesLive": 6,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE"
+  },
+  {
+    "agencyCode": "NATIONAL-INDUSTRIAL-TRAINING-AUTHORITY",
+    "agencyName": "National Industrial Training Authority",
+    "servicesIdentified": 687,
+    "servicesLive": 687,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE"
+  },
+  {
+    "agencyCode": "NATIONAL-PRODUCTIVITY-AND-COMPETITIVENES",
+    "agencyName": "National Productivity and Competitiveness Centre",
+    "servicesIdentified": null,
+    "servicesLive": null,
+    "onboardingStatus": "PENDING",
+    "onboardingRemarks": "Never Engaged"
+  },
+  {
+    "agencyCode": "KENYA-NATIONAL-LABOUR-BOARD-AND-THE-WAGE",
+    "agencyName": "Kenya National Labour Board and the Wages Council",
+    "servicesIdentified": null,
+    "servicesLive": null,
+    "onboardingStatus": "PENDING",
+    "onboardingRemarks": "Never Engaged"
+  },
+  {
+    "agencyCode": "NATIONAL-COUNCIL-FOR-OCCUPATIONAL-SAFETY",
+    "agencyName": "National Council for Occupational Safety and Health",
+    "servicesIdentified": null,
+    "servicesLive": null,
+    "onboardingStatus": "PENDING",
+    "onboardingRemarks": "Never Engaged"
+  },
+  {
+    "agencyCode": "DIRECTORATE-OF-OCCUPATIONAL-SAFETY-AND-H",
+    "agencyName": "Directorate of Occupational Safety and Health",
+    "servicesIdentified": 35,
+    "servicesLive": 35,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "Live Payment Integration"
+  },
+  {
+    "agencyCode": "MIGRANT-WORKERS-WELFARE-FUND",
+    "agencyName": "Migrant Workers Welfare Fund",
+    "servicesIdentified": null,
+    "servicesLive": null,
+    "onboardingStatus": "PENDING",
+    "onboardingRemarks": "Never Engaged"
+  },
+  {
+    "agencyCode": "DEPARTMENT-OF-LABOUR-MIGRATION-MANAGEMEN",
+    "agencyName": "Department of Labour Migration Management",
+    "servicesIdentified": null,
+    "servicesLive": null,
+    "onboardingStatus": "PENDING",
+    "onboardingRemarks": "Never Engaged"
+  },
+  {
+    "agencyCode": "STATE-DEPARTMENT-FOR-SOCIAL-PROTECTION",
+    "agencyName": "State Department for Social Protection",
+    "servicesIdentified": 34,
+    "servicesLive": 18,
+    "onboardingStatus": "IN_PROGRESS",
+    "onboardingRemarks": "LIVE (18) Payment Integration. Awaiting formal communication on changes in the directorate"
+  },
+  {
+    "agencyCode": "CHILD-WELFARE-SOCIETY-OF-KENYA",
+    "agencyName": "Child welfare society of Kenya",
+    "servicesIdentified": 10,
+    "servicesLive": 0,
+    "onboardingStatus": "IN_PROGRESS",
+    "onboardingRemarks": "Just completed requirements gathering"
+  },
+  {
+    "agencyCode": "NATIONAL-COUNCIL-FOR-PERSONS-WITH-DISABI",
+    "agencyName": "National Council for Persons with Disabilities",
+    "servicesIdentified": 3,
+    "servicesLive": 3,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE"
+  },
+  {
+    "agencyCode": "NATIONAL-COUNCIL-FOR-CHILDRENS-SERVICES",
+    "agencyName": "National Council for Children's Services",
+    "servicesIdentified": 5,
+    "servicesLive": null,
+    "onboardingStatus": "IN_PROGRESS",
+    "onboardingRemarks": "On hold. Client is reengineering business processes. Awaiting their direction once ready"
+  },
+  {
+    "agencyCode": "STREET-FAMILIES-REHABILITATION-TRUST-FUN",
+    "agencyName": "Street families Rehabilitation Trust Fund",
+    "servicesIdentified": 7,
+    "servicesLive": null,
+    "onboardingStatus": "SUSPENDED",
+    "onboardingRemarks": "No communication"
+  },
+  {
+    "agencyCode": "STATE-DEPARTMENT-FOR-EAST-AFRICAN-COMMUN",
+    "agencyName": "State Department for East African Community",
+    "servicesIdentified": 3,
+    "servicesLive": 3,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE URL"
+  },
+  {
+    "agencyCode": "THE-SUMMIT",
+    "agencyName": "The Summit",
+    "servicesIdentified": null,
+    "servicesLive": null,
+    "onboardingStatus": "PENDING",
+    "onboardingRemarks": "Never Engaged"
+  },
+  {
+    "agencyCode": "THE-COUNCIL-OF-MINISTERS",
+    "agencyName": "The Council of Ministers",
+    "servicesIdentified": null,
+    "servicesLive": null,
+    "onboardingStatus": "PENDING",
+    "onboardingRemarks": "Never Engaged"
+  },
+  {
+    "agencyCode": "THE-COORDINATING-COMMITTEE",
+    "agencyName": "The Co-ordinating Committee",
+    "servicesIdentified": null,
+    "servicesLive": null,
+    "onboardingStatus": "PENDING",
+    "onboardingRemarks": "Never Engaged"
+  },
+  {
+    "agencyCode": "SECTORAL-COMMITTEES",
+    "agencyName": "Sectoral Committees",
+    "servicesIdentified": null,
+    "servicesLive": null,
+    "onboardingStatus": "PENDING",
+    "onboardingRemarks": "Never Engaged"
+  },
+  {
+    "agencyCode": "THE-EAST-AFRICAN-COURT-OF-JUSTICE",
+    "agencyName": "The East African Court of Justice",
+    "servicesIdentified": null,
+    "servicesLive": null,
+    "onboardingStatus": "PENDING",
+    "onboardingRemarks": "Never Engaged"
+  },
+  {
+    "agencyCode": "THE-EAST-AFRICAN-LEGISLATIVE-ASSEMBLY",
+    "agencyName": "The East African Legislative Assembly",
+    "servicesIdentified": null,
+    "servicesLive": null,
+    "onboardingStatus": "PENDING",
+    "onboardingRemarks": "Never Engaged"
+  },
+  {
+    "agencyCode": "THE-SECRETARIAT",
+    "agencyName": "The Secretariat",
+    "servicesIdentified": null,
+    "servicesLive": null,
+    "onboardingStatus": "PENDING",
+    "onboardingRemarks": "Never Engaged"
+  },
+  {
+    "agencyCode": "THE-EAC",
+    "agencyName": "The EAC",
+    "servicesIdentified": null,
+    "servicesLive": null,
+    "onboardingStatus": "PENDING",
+    "onboardingRemarks": "Never Engaged"
+  },
+  {
+    "agencyCode": "THE-CIVIL-AVIATION-SAFETY-AND-SECURITY-O",
+    "agencyName": "The Civil Aviation Safety and Security Oversight Agency",
+    "servicesIdentified": null,
+    "servicesLive": null,
+    "onboardingStatus": "PENDING",
+    "onboardingRemarks": "Never Engaged"
+  },
+  {
+    "agencyCode": "THE-EAST-AFRICAN-HEALTH-RESEARCH-COMMISS",
+    "agencyName": "The East African Health Research Commission (EAHRC)",
+    "servicesIdentified": null,
+    "servicesLive": null,
+    "onboardingStatus": "PENDING",
+    "onboardingRemarks": "Never Engaged"
+  },
+  {
+    "agencyCode": "THE-EAST-AFRICAN-KISWAHILI-COMMISSION-EA",
+    "agencyName": "The East African Kiswahili Commission (EAKC)",
+    "servicesIdentified": null,
+    "servicesLive": null,
+    "onboardingStatus": "PENDING",
+    "onboardingRemarks": "Never Engaged"
+  },
+  {
+    "agencyCode": "THE-EAST-AFRICAN-SCIENCE-AND-TECHNOLOGY",
+    "agencyName": "The East African Science and Technology Commission (EASTECO)",
+    "servicesIdentified": null,
+    "servicesLive": null,
+    "onboardingStatus": "PENDING",
+    "onboardingRemarks": "Never Engaged"
+  },
+  {
+    "agencyCode": "THE-INTERUNIVERSITY-COUNCIL-FOR-EAST-AFR",
+    "agencyName": "The Inter-University Council for East Africa (IUCEA)",
+    "servicesIdentified": null,
+    "servicesLive": null,
+    "onboardingStatus": "PENDING",
+    "onboardingRemarks": "Never Engaged"
+  },
+  {
+    "agencyCode": "THE-LAKE-VICTORIA-BASIN-COMMISSION-LVBC",
+    "agencyName": "The Lake Victoria Basin Commission (LVBC)",
+    "servicesIdentified": null,
+    "servicesLive": null,
+    "onboardingStatus": "PENDING",
+    "onboardingRemarks": "Never Engaged"
+  },
+  {
+    "agencyCode": "THE-LAKE-VICTORIA-FISHERIES-ORGANIZATION",
+    "agencyName": "The Lake Victoria Fisheries Organization (LVFO)",
+    "servicesIdentified": null,
+    "servicesLive": null,
+    "onboardingStatus": "PENDING",
+    "onboardingRemarks": "Never Engaged"
+  },
+  {
+    "agencyCode": "STATE-DEPARTMENT-FOR-THE-ASALS-REGIONAL",
+    "agencyName": "STATE DEPARTMENT FOR THE ASALs & REGIONAL DEVELOPMENT",
+    "servicesIdentified": null,
+    "servicesLive": null,
+    "onboardingStatus": "PENDING",
+    "onboardingRemarks": "Requirements gathering to commence"
+  },
+  {
+    "agencyCode": "NATIONAL-DROUGHT-MANAGEMENT-AUTHORITY",
+    "agencyName": "National Drought Management Authority",
+    "servicesIdentified": 4,
+    "servicesLive": null,
+    "onboardingStatus": "IN_PROGRESS",
+    "onboardingRemarks": "SSO yet to be done due to client accessing service. Documentation for payment integration sent."
+  },
+  {
+    "agencyCode": "NATIONAL-DROUGHT-EMERGENCY-FUND",
+    "agencyName": "National Drought Emergency Fund",
+    "servicesIdentified": null,
+    "servicesLive": null,
+    "onboardingStatus": "PENDING",
+    "onboardingRemarks": "Never Engaged"
+  },
+  {
+    "agencyCode": "TANA-AND-ATHI-RIVERS-DEVELOPMENT-AUTHORI",
+    "agencyName": "Tana and Athi Rivers Development Authority",
+    "servicesIdentified": 45,
+    "servicesLive": 45,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE (37 end to end), 7 Direct to Paybill"
+  },
+  {
+    "agencyCode": "LAKE-BASIN-DEVELOPMENT-AUTHORITY",
+    "agencyName": "Lake Basin Development Authority",
+    "servicesIdentified": 74,
+    "servicesLive": 74,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE(USSD)"
+  },
+  {
+    "agencyCode": "KERIO-VALLEY-DEVELOPMENT-AUTHORITY",
+    "agencyName": "Kerio Valley Development Authority",
+    "servicesIdentified": 25,
+    "servicesLive": 25,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE USSD. End to end digitization complete; awaiting servers to go live"
+  },
+  {
+    "agencyCode": "EWASO-NYIRO-NORTH-DEVELOPMENT-AUTHORITY",
+    "agencyName": "Ewaso Nyiro North Development Authority",
+    "servicesIdentified": 4,
+    "servicesLive": 4,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE"
+  },
+  {
+    "agencyCode": "EWASO-NYIRO-SOUTH-DEVELOPMENT-AUTHORITY",
+    "agencyName": "Ewaso Nyiro South Development Authority",
+    "servicesIdentified": 4,
+    "servicesLive": 4,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE on Direct to Paybill"
+  },
+  {
+    "agencyCode": "COAST-DEVELOPMENT-AUTHORITY",
+    "agencyName": "Coast Development Authority",
+    "servicesIdentified": 10,
+    "servicesLive": 10,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE Direct to Paybill"
+  },
+  {
+    "agencyCode": "KENYA-DEVELOPMENT-RESPONSE-TO-DISPLACEME",
+    "agencyName": "Kenya Development Response to Displacement Impacts Project\n (KDRDIP)",
+    "servicesIdentified": null,
+    "servicesLive": null,
+    "onboardingStatus": "PENDING",
+    "onboardingRemarks": null
+  },
+  {
+    "agencyCode": "STATE-DEPARTMENT-FOR-MINING",
+    "agencyName": "State department for mining",
+    "servicesIdentified": 73,
+    "servicesLive": 73,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE. 18 integrated with pesaflow. 6 Live on Kentrade. 39 on USSD"
+  },
+  {
+    "agencyCode": "NATIONAL-MINING-CORPORATION",
+    "agencyName": "National Mining Corporation",
+    "servicesIdentified": 4,
+    "servicesLive": 0,
+    "onboardingStatus": "IN_PROGRESS",
+    "onboardingRemarks": "Requirements gathering is yet to commence."
+  },
+  {
+    "agencyCode": "MINERAL-RIGHTS-BOARD",
+    "agencyName": "Mineral Rights Board",
+    "servicesIdentified": 0,
+    "servicesLive": 0,
+    "onboardingStatus": "PENDING",
+    "onboardingRemarks": "Services captured under State Department for Mining"
+  },
+  {
+    "agencyCode": "THE-GEOLOGISTS-REGISTRATION-BOARD",
+    "agencyName": "The Geologists Registration Board",
+    "servicesIdentified": 11,
+    "servicesLive": 11,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE USSD. Configurations complete; awaiting servers to go live"
+  },
+  {
+    "agencyCode": "KENYA-MARINE-AND-FISHERIES-RESEARCH-INST",
+    "agencyName": "Kenya Marine and Fisheries Research Institute",
+    "servicesIdentified": 88,
+    "servicesLive": 88,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE 36 End to End ; 52 Direct Payments"
+  },
+  {
+    "agencyCode": "KENYA-FISHERIES-SERVICE",
+    "agencyName": "Kenya Fisheries Service",
+    "servicesIdentified": 51,
+    "servicesLive": 51,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE end to end; 20 USSD"
+  },
+  {
+    "agencyCode": "KENYA-FISH-MARKETING-AUTHORITY-KFMA",
+    "agencyName": "Kenya Fish Marketing Authority (KFMA)",
+    "servicesIdentified": 12,
+    "servicesLive": null,
+    "onboardingStatus": "IN_PROGRESS",
+    "onboardingRemarks": "New MDA. Still setting up their services. Awaiting approval of forms and workflows"
+  },
+  {
+    "agencyCode": "KENYA-FISHING-INDUSTRIES-CORPORATION",
+    "agencyName": "Kenya Fishing Industries Corporation",
+    "servicesIdentified": 24,
+    "servicesLive": 24,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE (End to End)"
+  },
+  {
+    "agencyCode": "FISH-LEVY-TRUST-FUND",
+    "agencyName": "Fish Levy Trust Fund",
+    "servicesIdentified": 13,
+    "servicesLive": null,
+    "onboardingStatus": "IN_PROGRESS",
+    "onboardingRemarks": "Configurations ongoing"
+  },
+  {
+    "agencyCode": "THE-KENYA-NATIONAL-SHIPPING-LINE",
+    "agencyName": "The Kenya National Shipping Line",
+    "servicesIdentified": 31,
+    "servicesLive": 31,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE Invoice Generator"
+  },
+  {
+    "agencyCode": "KENYA-MARITIME-AUTHORITY",
+    "agencyName": "Kenya Maritime Authority",
+    "servicesIdentified": 201,
+    "servicesLive": 201,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE"
+  },
+  {
+    "agencyCode": "BANDARI-MARITIME-ACADEMY",
+    "agencyName": "Bandari Maritime Academy",
+    "servicesIdentified": 6,
+    "servicesLive": 6,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE (6) Direct to Paybill. End to end digitization complete; awaiting servers to go live"
+  },
+  {
+    "agencyCode": "GOVERNMENT-CLEARING-AGENCY",
+    "agencyName": "Government Clearing Agency",
+    "servicesIdentified": null,
+    "servicesLive": null,
+    "onboardingStatus": "PENDING",
+    "onboardingRemarks": "Never Engaged"
+  },
+  {
+    "agencyCode": "BUSINESS-REGISTRATION-SERVICES",
+    "agencyName": "Business Registration Services",
+    "servicesIdentified": 164,
+    "servicesLive": 164,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE"
+  },
+  {
+    "agencyCode": "COUNCIL-FOR-LEGAL-EDUCATION",
+    "agencyName": "Council for Legal Education",
+    "servicesIdentified": 6,
+    "servicesLive": 6,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE"
+  },
+  {
+    "agencyCode": "NATIONAL-ANTICORRUPTION-CAMPAIGN-STEERIN",
+    "agencyName": "National Anti-Corruption Campaign Steering Committee",
+    "servicesIdentified": null,
+    "servicesLive": null,
+    "onboardingStatus": "PENDING",
+    "onboardingRemarks": "Never Engaged"
+  },
+  {
+    "agencyCode": "ASSETS-RECOVERY-AGENCY",
+    "agencyName": "Assets Recovery Agency",
+    "servicesIdentified": 1,
+    "servicesLive": 1,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE(URL)"
+  },
+  {
+    "agencyCode": "KENYA-SCHOOL-OF-LAW",
+    "agencyName": "Kenya School of Law",
+    "servicesIdentified": 24,
+    "servicesLive": 24,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE (Payment Integration) 10 USSD"
+  },
+  {
+    "agencyCode": "AUCTIONEERS-LICENSING-BOARD",
+    "agencyName": "Auctioneers Licensing Board",
+    "servicesIdentified": 6,
+    "servicesLive": 2,
+    "onboardingStatus": "IN_PROGRESS",
+    "onboardingRemarks": "LIVE 2 USSD. Configurations complete; awaiting servers to go live"
+  },
+  {
+    "agencyCode": "WITNESS-PROTECTION-AGENCY",
+    "agencyName": "Witness Protection Agency",
+    "servicesIdentified": 3,
+    "servicesLive": null,
+    "onboardingStatus": "IN_PROGRESS",
+    "onboardingRemarks": "Configurations complete; awaiting servers to go live"
+  },
+  {
+    "agencyCode": "VICTIMS-PROTECTION-BOARD",
+    "agencyName": "Victims Protection Board",
+    "servicesIdentified": 0,
+    "servicesLive": 0,
+    "onboardingStatus": "IN_PROGRESS",
+    "onboardingRemarks": "New department that is still awaiting to be enacted by Parliament"
+  },
+  {
+    "agencyCode": "NAIROBI-CENTRE-FOR-INTERNATIONAL-ARBITRA",
+    "agencyName": "Nairobi Centre for International Arbitration",
+    "servicesIdentified": 16,
+    "servicesLive": 16,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE"
+  },
+  {
+    "agencyCode": "ADVOCATES-DISCIPLINARY-TRIBUNAL",
+    "agencyName": "Advocates Disciplinary Tribunal",
+    "servicesIdentified": null,
+    "servicesLive": null,
+    "onboardingStatus": "PENDING",
+    "onboardingRemarks": "Never Engaged"
+  },
+  {
+    "agencyCode": "ADVOCATES-COMPLAINTS-COMMISSION",
+    "agencyName": "Advocates Complaints Commission",
+    "servicesIdentified": 2,
+    "servicesLive": null,
+    "onboardingStatus": "IN_PROGRESS",
+    "onboardingRemarks": "End to end digitization complete; awaiting servers to go live"
+  },
+  {
+    "agencyCode": "CAR-LOAN-SCHEME-FOR-ELECTORAL-COMMISSION",
+    "agencyName": "Car Loan Scheme for Electoral Commissioners Fund",
+    "servicesIdentified": null,
+    "servicesLive": null,
+    "onboardingStatus": "PENDING",
+    "onboardingRemarks": "Never Engaged"
+  },
+  {
+    "agencyCode": "KENYA-LAW-REFORM-COMMISSION",
+    "agencyName": "Kenya Law Reform Commission",
+    "servicesIdentified": 3,
+    "servicesLive": 3,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE(URL)"
+  },
+  {
+    "agencyCode": "OFFICE-OF-THE-REGISTRAR-OF-POLITICAL-PAR",
+    "agencyName": "Office of the Registrar of Political Parties",
+    "servicesIdentified": 5,
+    "servicesLive": 5,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE"
+  },
+  {
+    "agencyCode": "NATIONAL-COMMITTEE-ON-IMPLEMENTATION-OF",
+    "agencyName": "National Committee on Implementation of National Humanitarian Law",
+    "servicesIdentified": null,
+    "servicesLive": null,
+    "onboardingStatus": "PENDING",
+    "onboardingRemarks": "Never Engaged"
+  },
+  {
+    "agencyCode": "NATIONAL-CORONERS-SERVICE",
+    "agencyName": "National Coroners Service",
+    "servicesIdentified": 1,
+    "servicesLive": 0,
+    "onboardingStatus": "IN_PROGRESS",
+    "onboardingRemarks": "New department that is still awaiting to be enacted by Parliament"
+  },
+  {
+    "agencyCode": "NATIONAL-LEGAL-AID-SERVICE",
+    "agencyName": "National Legal Aid Service",
+    "servicesIdentified": 0,
+    "servicesLive": 0,
+    "onboardingStatus": "PENDING",
+    "onboardingRemarks": "Have a vendor. Number of services to be identified."
+  },
+  {
+    "agencyCode": "REGISTRAR-OF-SOCIETIES",
+    "agencyName": "Registrar of societies",
+    "servicesIdentified": 30,
+    "servicesLive": 30,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE."
+  },
+  {
+    "agencyCode": "REGISTRAR-OF-MARRIAGES",
+    "agencyName": "Registrar of marriages",
+    "servicesIdentified": 33,
+    "servicesLive": 33,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE"
+  },
+  {
+    "agencyCode": "REGISTRAR-OF-COAT-OF-ARMS",
+    "agencyName": "Registrar of Coat of Arms",
+    "servicesIdentified": 6,
+    "servicesLive": 6,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE"
+  },
+  {
+    "agencyCode": "PUBLIC-TRUSTEE",
+    "agencyName": "Public Trustee",
+    "servicesIdentified": 4,
+    "servicesLive": 4,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE"
+  },
+  {
+    "agencyCode": "THE-NATIONAL-COUNCIL-FOR-LAW-REPORTING",
+    "agencyName": "The National Council for Law Reporting",
+    "servicesIdentified": 94,
+    "servicesLive": 94,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE"
+  },
+  {
+    "agencyCode": "THE-JUDICIARY",
+    "agencyName": "The Judiciary",
+    "servicesIdentified": 87,
+    "servicesLive": null,
+    "onboardingStatus": "IN_PROGRESS",
+    "onboardingRemarks": "Integration ongoing"
+  },
+  {
+    "agencyCode": "NATIONAL-ASSEMBLY",
+    "agencyName": "National Assembly",
+    "servicesIdentified": 20,
+    "servicesLive": 17,
+    "onboardingStatus": "SUSPENDED",
+    "onboardingRemarks": "LIVE URL. Configurations for 3 manual services complete. No communication"
+  },
+  {
+    "agencyCode": "PARLIAMENT-OF-KENYATHE-SENATE",
+    "agencyName": "Parliament of Kenya-The Senate",
+    "servicesIdentified": 15,
+    "servicesLive": 15,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE(URL)"
+  },
+  {
+    "agencyCode": "ETHICS-AND-ANTICORRUPTION-COMMISSION",
+    "agencyName": "Ethics and Anti-Corruption Commission",
+    "servicesIdentified": 4,
+    "servicesLive": null,
+    "onboardingStatus": "SUSPENDED",
+    "onboardingRemarks": "Stalled. SSO dcumentation shared but client is silent"
+  },
+  {
+    "agencyCode": "FIREARMS-LICENSING-BOARD",
+    "agencyName": "Firearms Licensing Board",
+    "servicesIdentified": 10,
+    "servicesLive": 10,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE(10) Direct to Paybill"
+  },
+  {
+    "agencyCode": "OFFICE-OF-THE-AUDITOR-GENERAL",
+    "agencyName": "Office of the Auditor General",
+    "servicesIdentified": 1,
+    "servicesLive": null,
+    "onboardingStatus": "PENDING",
+    "onboardingRemarks": "Not citizen facing"
+  },
+  {
+    "agencyCode": "TEACHERS-SERVICE-COMMISSION",
+    "agencyName": "Teachers Service Commission",
+    "servicesIdentified": 9,
+    "servicesLive": 9,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE"
+  },
+  {
+    "agencyCode": "STATE-DEPARTMENT-FOR-PARLIAMENTARY-AFFAI",
+    "agencyName": "State Department for Parliamentary Affairs",
+    "servicesIdentified": 1,
+    "servicesLive": null,
+    "onboardingStatus": "PENDING",
+    "onboardingRemarks": "Not citizen facing"
+  },
+  {
+    "agencyCode": "COMMISSION-ON-ADMINISTRATIVE-JUSTICE",
+    "agencyName": "Commission on Administrative Justice",
+    "servicesIdentified": 1,
+    "servicesLive": 1,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE URL. SSO Integration pending"
+  },
+  {
+    "agencyCode": "DIRECTORATE-OF-CRIMINAL-INVESTIGATIONS",
+    "agencyName": "Directorate of Criminal Investigations",
+    "servicesIdentified": 3,
+    "servicesLive": 1,
+    "onboardingStatus": "IN_PROGRESS",
+    "onboardingRemarks": "LIVE. Requirements gathering for upcoming services to commence."
+  },
+  {
+    "agencyCode": "INSTITUTE-OF-CERTIFIED-PUBLIC-SECRETARIE",
+    "agencyName": "Institute of Certified Public Secretaries of Kenya",
+    "servicesIdentified": null,
+    "servicesLive": null,
+    "onboardingStatus": "PENDING",
+    "onboardingRemarks": "Never Engaged"
+  },
+  {
+    "agencyCode": "INSTITUTE-OF-CERTIFIED-INVESTMENTS-AND-F",
+    "agencyName": "Institute of Certified Investments and Financial Analysts",
+    "servicesIdentified": 11,
+    "servicesLive": null,
+    "onboardingStatus": "IN_PROGRESS",
+    "onboardingRemarks": "Configurations ongoing"
+  },
+  {
+    "agencyCode": "GOVERNMENT-CLEARANCE-AGENCY-FUND",
+    "agencyName": "Government Clearance Agency Fund",
+    "servicesIdentified": null,
+    "servicesLive": null,
+    "onboardingStatus": "PENDING",
+    "onboardingRemarks": "Never Engaged"
+  },
+  {
+    "agencyCode": "CIVIL-SERVANTS-ACCIDENT-CLAIM-FUND",
+    "agencyName": "Civil Servants Accident Claim Fund",
+    "servicesIdentified": null,
+    "servicesLive": null,
+    "onboardingStatus": "PENDING",
+    "onboardingRemarks": "Never Engaged"
+  },
+  {
+    "agencyCode": "COMPETITION-TRIBUNAL-SECRETARIAT",
+    "agencyName": "Competition Tribunal Secretariat",
+    "servicesIdentified": 2,
+    "servicesLive": 2,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE Direct to Paybill. Configurations complete; awaiting servers to go live"
+  },
+  {
+    "agencyCode": "GOVERNMENT-VEHICLE-CHECK-UNIT",
+    "agencyName": "Government Vehicle Check Unit",
+    "servicesIdentified": 4,
+    "servicesLive": 4,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE Direct to Paybill. Configurations complete; awaiting servers to go live"
+  },
+  {
+    "agencyCode": "STATE-CORPORATIONS-APPEAL-TRIBUNAL",
+    "agencyName": "State Corporations Appeal Tribunal",
+    "servicesIdentified": 16,
+    "servicesLive": 0,
+    "onboardingStatus": "IN_PROGRESS",
+    "onboardingRemarks": "Configurations complete; awaiting servers to go live"
+  },
+  {
+    "agencyCode": "INDEPENDENT-ELECTORAL-AND-BOUNDARIES-COM",
+    "agencyName": "Independent Electoral and Boundaries Commission (IEBC)",
+    "servicesIdentified": null,
+    "servicesLive": null,
+    "onboardingStatus": "PENDING",
+    "onboardingRemarks": null
+  },
+  {
+    "agencyCode": "OCCUPATIONAL-THERAPISTS-OF-KENYA",
+    "agencyName": "Occupational Therapists of Kenya",
+    "servicesIdentified": 6,
+    "servicesLive": null,
+    "onboardingStatus": "IN_PROGRESS",
+    "onboardingRemarks": "Configurations ongoing."
+  },
+  {
+    "agencyCode": "MERU-JAMBOPAY",
+    "agencyName": "Meru - Jambopay",
+    "servicesIdentified": 83,
+    "servicesLive": 83,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE"
+  },
+  {
+    "agencyCode": "BOMET",
+    "agencyName": "Bomet",
+    "servicesIdentified": 82,
+    "servicesLive": 82,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE"
+  },
+  {
+    "agencyCode": "EMBU",
+    "agencyName": "Embu",
+    "servicesIdentified": 81,
+    "servicesLive": 81,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE"
+  },
+  {
+    "agencyCode": "KAJIADO",
+    "agencyName": "Kajiado",
+    "servicesIdentified": 82,
+    "servicesLive": 82,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE"
+  },
+  {
+    "agencyCode": "THARAKA-NITHI",
+    "agencyName": "Tharaka Nithi",
+    "servicesIdentified": 84,
+    "servicesLive": 84,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE"
+  },
+  {
+    "agencyCode": "NAROK",
+    "agencyName": "Narok",
+    "servicesIdentified": 26,
+    "servicesLive": 26,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE"
+  },
+  {
+    "agencyCode": "UASIN-GISHU",
+    "agencyName": "Uasin Gishu",
+    "servicesIdentified": 84,
+    "servicesLive": null,
+    "onboardingStatus": "IN_PROGRESS",
+    "onboardingRemarks": "Integration ongoing"
+  },
+  {
+    "agencyCode": "MOMBASA",
+    "agencyName": "Mombasa",
+    "servicesIdentified": 9,
+    "servicesLive": 9,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE"
+  },
+  {
+    "agencyCode": "KISUMU",
+    "agencyName": "Kisumu",
+    "servicesIdentified": 3,
+    "servicesLive": 3,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE"
+  },
+  {
+    "agencyCode": "NYERI",
+    "agencyName": "Nyeri",
+    "servicesIdentified": 3,
+    "servicesLive": 3,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE"
+  },
+  {
+    "agencyCode": "PRE-5000",
+    "agencyName": "Pre 5000",
+    "servicesIdentified": 706,
+    "servicesLive": 706,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE"
+  },
+  {
+    "agencyCode": "PRESIDENTS-BUDGET-OFFICE",
+    "agencyName": "President's Budget Office",
+    "servicesIdentified": null,
+    "servicesLive": null,
+    "onboardingStatus": "PENDING",
+    "onboardingRemarks": "Never Engaged"
+  },
+  {
+    "agencyCode": "THE-PRESIDENTS-AWARD-KENYA",
+    "agencyName": "The President's Award Kenya",
+    "servicesIdentified": 2,
+    "servicesLive": 2,
+    "onboardingStatus": "COMPLETED",
+    "onboardingRemarks": "LIVE (Direct to Paybill). Configurations complete; awaiting servers to go live"
+  }
+]
