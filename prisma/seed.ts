@@ -257,6 +257,30 @@ async function main() {
   }
   console.log('✅ Call test super admin created (call.test@ecitizen.go.ke / CallTest2026)');
 
+  // ─── PesaFlow company accounts ────────────────────────────────────────────
+  const pfPassword = 'PesaFlow@SCC2026!';
+  const pfHash = await bcrypt.hash(pfPassword, 10);
+
+  const pesaflowAccounts = [
+    { email: 'pesaflow@ecitizen.go.ke',      firstName: 'PesaFlow',     lastName: 'Admin',    label: 'main' },
+    { email: 'pesaflow.sla@ecitizen.go.ke',  firstName: 'PesaFlow',     lastName: 'SLA',      label: 'SLA test' },
+    { email: 'pesaflow.chat@ecitizen.go.ke', firstName: 'PesaFlow',     lastName: 'Chat',     label: 'chat test' },
+  ];
+
+  for (const acc of pesaflowAccounts) {
+    const u = await prisma.user.upsert({
+      where: { email: acc.email },
+      update: { passwordHash: pfHash, isActive: true, isVerified: true, userType: UserType.SUPER_ADMIN, firstName: acc.firstName, lastName: acc.lastName },
+      create: { email: acc.email, firstName: acc.firstName, lastName: acc.lastName, userType: UserType.SUPER_ADMIN, passwordHash: pfHash, isActive: true, isVerified: true },
+    });
+    await prisma.user.update({ where: { email: acc.email }, data: { passwordHash: pfHash, isActive: true, isVerified: true } });
+    if (superAdminRole) {
+      const roleExists = await prisma.userRole.findFirst({ where: { userId: u.id, roleId: superAdminRole.id } });
+      if (!roleExists) await prisma.userRole.create({ data: { userId: u.id, roleId: superAdminRole.id } });
+    }
+    console.log(`✅ PesaFlow ${acc.label} account created (${acc.email} / ${pfPassword})`);
+  }
+
   // ==========================================
   // Staff agents — for group chat testing
   // ==========================================
