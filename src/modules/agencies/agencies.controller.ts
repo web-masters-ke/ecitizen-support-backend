@@ -11,7 +11,13 @@ import {
   ParseUUIDPipe,
   HttpCode,
   HttpStatus,
+  BadRequestException,
+  UseInterceptors,
+  UploadedFile,
 } from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { memoryStorage } from 'multer';
+import { ApiConsumes } from '@nestjs/swagger';
 import {
   ApiTags,
   ApiOperation,
@@ -355,5 +361,48 @@ export class AgenciesController {
   @ApiResponse({ status: 200, description: 'Paginated list of service providers' })
   async findAllServiceProviders(@Query() filters: ServiceProviderFilterDto) {
     return this.agenciesService.findAllServiceProviders(filters);
+  }
+
+  // ============================================================
+  //  BULK IMPORT
+  // ============================================================
+
+  @Post('agencies/import')
+  @Roles('SUPER_ADMIN', 'COMMAND_CENTER_ADMIN')
+  @UseInterceptors(FileInterceptor('file', { storage: memoryStorage(), limits: { fileSize: 10 * 1024 * 1024 } }))
+  @ApiOperation({ summary: 'Bulk import agencies from CSV. Columns: agencyCode,agencyName,agencyType,officialEmail,officialPhone,county' })
+  @ApiConsumes('multipart/form-data')
+  @HttpCode(HttpStatus.OK)
+  async importAgencies(@UploadedFile() file: Express.Multer.File) {
+    if (!file) throw new BadRequestException('No file uploaded');
+    const text = file.buffer.toString('utf-8');
+    const lines = text.split('\n').filter(l => l.trim());
+    const headers = lines[0].split(',').map(h => h.trim().replace(/"/g, ''));
+    const results = { created: 0, skipped: 0, errors: [] as string[] };
+    for (let i = 1; i < lines.length; i++) {
+      const vals = lines[i].split(',').map(v => v.trim().replace(/"/g, ''));
+      const row: Record<string, string> = {};
+      headers.forEach((h, idx) => { row[h] = vals[idx] ?? ''; });
+      if (!row.agencyCode || !row.agencyName || !row.agencyType) {
+        results.errors.push(`Row ${i + 1}: missing required fields`);
+        continue;
+      }
+      try {
+        await this.agenciesService.create({
+          agencyCode: row.agencyCode,
+          agencyName: row.agencyName,
+          agencyType: row.agencyType as any,
+          officialEmail: row.officialEmail || undefined,
+          officialPhone: row.officialPhone || undefined,
+          county: row.county || undefined,
+          isActive: true,
+        });
+        results.created++;
+      } catch (e: any) {
+        results.skipped++;
+        results.errors.push(`Row ${i + 1}: ${e.message}`);
+      }
+    }
+    return results;
   }
 }

@@ -34,6 +34,7 @@ import {
   TicketFilterDto,
   CategoryFilterDto,
   MessageFilterDto,
+  TicketFeedbackDto,
 } from './dto/tickets.dto';
 import { CurrentUser, JwtPayload } from '../../common/decorators/current-user.decorator';
 import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
@@ -444,5 +445,21 @@ export class TicketLookupsController {
   @SwaggerResponse({ status: 200, description: 'List of ticket statuses' })
   async getStatuses() {
     return this.ticketsService.getStatuses();
+  }
+
+  // ------------------------------------------
+  // POST /api/v1/tickets/:id/feedback - Citizen feedback
+  // ------------------------------------------
+
+  @Post(':id/feedback')
+  @Public()
+  @ApiOperation({ summary: 'Submit citizen satisfaction rating for a closed/resolved ticket' })
+  @SwaggerResponse({ status: 200, description: 'Feedback recorded' })
+  @HttpCode(HttpStatus.OK)
+  async submitFeedback(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body() dto: TicketFeedbackDto,
+  ) {
+    return this.ticketsService.submitCitizenFeedback(id, { rating: dto.rating, feedback: dto.feedback });
   }
 }

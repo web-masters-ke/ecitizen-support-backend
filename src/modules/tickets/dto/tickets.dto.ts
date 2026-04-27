@@ -410,3 +410,21 @@ export class MessageFilterDto extends PaginationDto {
   @IsBoolean()
   includeInternal?: boolean;
 }
+
+// ============================================
+// Ticket Citizen Feedback DTO
+// ============================================
+
+export class TicketFeedbackDto {
+  @ApiProperty({ description: 'Citizen rating 1-5', minimum: 1, maximum: 5 })
+  @IsInt()
+  @Min(1)
+  @Max(5)
+  rating: number;
+
+  @ApiPropertyOptional({ description: 'Citizen feedback comment' })
+  @IsOptional()
+  @IsString()
+  @MaxLength(1000)
+  feedback?: string;
+}

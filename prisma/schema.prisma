@@ -593,6 +593,9 @@ model Ticket {
   escalationLevel       Int           @default(0) @map("escalation_level")
   isEscalated           Boolean       @default(false) @map("is_escalated")
   isDeleted             Boolean       @default(false) @map("is_deleted")
+  citizenRating         Int?          @map("citizen_rating")
+  citizenFeedback       String?       @map("citizen_feedback")
+  feedbackAt            DateTime?     @map("feedback_at")
   createdAt             DateTime      @default(now()) @map("created_at")
   updatedAt             DateTime      @updatedAt @map("updated_at")
 

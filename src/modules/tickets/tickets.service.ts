@@ -1670,4 +1670,20 @@ export class TicketsService {
       orderBy: { name: 'asc' },
     });
   }
+
+  /**
+   * Submit citizen satisfaction rating and feedback for a ticket.
+   */
+  async submitCitizenFeedback(id: string, dto: { rating: number; feedback?: string }) {
+    const ticket = await this.prisma.ticket.findUnique({ where: { id } });
+    if (!ticket) throw new NotFoundException('Ticket not found');
+    return this.prisma.ticket.update({
+      where: { id },
+      data: {
+        citizenRating: dto.rating,
+        citizenFeedback: dto.feedback ?? null,
+        feedbackAt: new Date(),
+      },
+    });
+  }
 }

@@ -10,7 +10,13 @@ import {
   UseGuards,
   HttpCode,
   HttpStatus,
+  BadRequestException,
+  UseInterceptors,
+  UploadedFile,
 } from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { memoryStorage } from 'multer';
+import { ApiConsumes } from '@nestjs/swagger';
 import {
   ApiTags,
   ApiOperation,
@@ -19,6 +25,8 @@ import {
   ApiResponse as SwaggerResponse,
 } from '@nestjs/swagger';
 import { AdminService } from './admin.service';
+import { UsersService } from '../users/users.service';
+import { UserTypeEnum } from '../users/dto/users.dto';
 import {
   DateRangeDto,
   SlaOverrideDto,
@@ -41,7 +49,10 @@ import { CurrentUser } from '../../common/decorators/current-user.decorator';
 @Roles('COMMAND_CENTER_ADMIN', 'SUPER_ADMIN')
 @Controller('admin')
 export class AdminController {
-  constructor(private readonly adminService: AdminService) {}
+  constructor(
+    private readonly adminService: AdminService,
+    private readonly usersService: UsersService,
+  ) {}
 
   // ============================================
   // DASHBOARD METRICS
@@ -191,5 +202,45 @@ export class AdminController {
     @CurrentUser('sub') adminUserId: string,
   ) {
     return this.adminService.updateEscalationPolicy(dto, adminUserId);
+  }
+
+  // ============================================
+  // BULK USER IMPORT
+  // ============================================
+
+  @Post('users/import')
+  @UseInterceptors(FileInterceptor('file', { storage: memoryStorage(), limits: { fileSize: 5 * 1024 * 1024 } }))
+  @ApiOperation({ summary: 'Bulk import users from CSV. Columns: email,firstName,lastName,userType,agencyId' })
+  @ApiConsumes('multipart/form-data')
+  @HttpCode(HttpStatus.OK)
+  async importUsers(@UploadedFile() file: Express.Multer.File) {
+    if (!file) throw new BadRequestException('No file uploaded');
+    const text = file.buffer.toString('utf-8');
+    const lines = text.split('\n').filter(l => l.trim());
+    const headers = lines[0].split(',').map(h => h.trim().replace(/"/g, ''));
+    const results = { created: 0, skipped: 0, errors: [] as string[] };
+    for (let i = 1; i < lines.length; i++) {
+      const vals = lines[i].split(',').map(v => v.trim().replace(/"/g, ''));
+      const row: Record<string, string> = {};
+      headers.forEach((h, idx) => { row[h] = vals[idx] ?? ''; });
+      if (!row.email || !row.firstName || !row.lastName) {
+        results.errors.push(`Row ${i + 1}: missing required fields`);
+        continue;
+      }
+      try {
+        await this.usersService.create({
+          email: row.email,
+          firstName: row.firstName,
+          lastName: row.lastName,
+          userType: (row.userType as UserTypeEnum) || UserTypeEnum.AGENCY_AGENT,
+          agencyId: row.agencyId || undefined,
+        });
+        results.created++;
+      } catch (e: any) {
+        results.skipped++;
+        results.errors.push(`Row ${i + 1}: ${e.message}`);
+      }
+    }
+    return results;
   }
 }

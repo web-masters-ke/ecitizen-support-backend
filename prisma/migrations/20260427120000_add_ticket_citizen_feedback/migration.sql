@@ -1,0 +1,3 @@
+ALTER TABLE "tickets" ADD COLUMN IF NOT EXISTS "citizen_rating" INTEGER;
+ALTER TABLE "tickets" ADD COLUMN IF NOT EXISTS "citizen_feedback" TEXT;
+ALTER TABLE "tickets" ADD COLUMN IF NOT EXISTS "feedback_at" TIMESTAMPTZ;

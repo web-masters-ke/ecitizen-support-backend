@@ -193,4 +193,12 @@ export class MlController {
   ) {
     return this.mlService.registerModel(dto);
   }
+
+  // ─── Spam / Duplicate Detection ───────────────────────────────────────────
+
+  @Get('spam-detection')
+  @ApiOperation({ summary: 'Get tickets flagged as potential spam or duplicates' })
+  getSpamFlags(@Query('agencyId') agencyId?: string) {
+    return this.mlService.getSpamFlags(agencyId);
+  }
 }

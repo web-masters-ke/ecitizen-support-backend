@@ -946,4 +946,68 @@ export class MlService {
       detectedLanguage: 'en',
     };
   }
+
+  // ─── Spam / Duplicate Detection ───────────────────────────────────────────
+
+  /**
+   * Scans tickets from the last 7 days and flags pairs that appear to be
+   * duplicates (same subject prefix) or rapid re-submissions (same creator
+   * within 1 hour).
+   */
+  async getSpamFlags(agencyId?: string) {
+    const since = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
+    const where: any = { createdAt: { gte: since }, isDeleted: false };
+    if (agencyId) where.agencyId = agencyId;
+
+    const tickets = await this.prisma.ticket.findMany({
+      where,
+      select: {
+        id: true,
+        ticketNumber: true,
+        subject: true,
+        createdBy: true,
+        agencyId: true,
+        createdAt: true,
+        status: { select: { name: true } },
+      },
+      orderBy: { createdAt: 'desc' },
+      take: 500,
+    });
+
+    // Group by creator
+    const byCreator: Record<string, typeof tickets> = {};
+    for (const t of tickets) {
+      (byCreator[t.createdBy] ??= []).push(t);
+    }
+
+    const flagged: Array<{
+      ticketA: (typeof tickets)[number];
+      ticketB: (typeof tickets)[number];
+      reason: string;
+      creatorId: string;
+    }> = [];
+
+    for (const [creatorId, tks] of Object.entries(byCreator)) {
+      if (tks.length < 2) continue;
+      for (let i = 0; i < tks.length; i++) {
+        for (let j = i + 1; j < tks.length; j++) {
+          const a = tks[i].subject.toLowerCase().slice(0, 30);
+          const b = tks[j].subject.toLowerCase().slice(0, 30);
+          const timeDiff = Math.abs(
+            new Date(tks[i].createdAt).getTime() - new Date(tks[j].createdAt).getTime(),
+          );
+          if (a === b || timeDiff < 60 * 60 * 1000) {
+            flagged.push({
+              ticketA: tks[i],
+              ticketB: tks[j],
+              reason: a === b ? 'DUPLICATE_SUBJECT' : 'RAPID_RESUBMISSION',
+              creatorId,
+            });
+          }
+        }
+      }
+    }
+
+    return { total: flagged.length, flags: flagged.slice(0, 100) };
+  }
 }
