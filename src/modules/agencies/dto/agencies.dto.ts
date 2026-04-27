@@ -369,6 +369,17 @@ export class CreateServiceProviderDto {
   @MaxLength(50)
   contactPhone?: string;
 
+  @ApiPropertyOptional({ description: 'Website URL' })
+  @IsOptional()
+  @IsString()
+  @MaxLength(500)
+  website?: string;
+
+  @ApiPropertyOptional({ description: 'Description' })
+  @IsOptional()
+  @IsString()
+  description?: string;
+
   @ApiPropertyOptional({ description: 'Contract reference number' })
   @IsOptional()
   @IsString()
