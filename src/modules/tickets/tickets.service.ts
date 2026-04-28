@@ -1177,23 +1177,49 @@ export class TicketsService {
 
     const recommendedRole = matchedLevel?.escalationRole ?? null;
 
-    // Users in the recommended agency, optionally filtered by role
-    const users = await this.prisma.user.findMany({
-      where: {
-        agencyUsers: { some: { agencyId: recommendedAgencyId } },
-        ...(recommendedRole
-          ? { userRoles: { some: { role: { name: recommendedRole } } } }
-          : {}),
-      },
-      select: {
-        id: true,
-        firstName: true,
-        lastName: true,
-        email: true,
-        userRoles: { select: { role: { select: { name: true } } } },
-      },
-      take: 50,
-    });
+    // First try: users matching the recommended role at the recommended agency
+    let users: Array<{
+      id: string;
+      firstName: string | null;
+      lastName: string | null;
+      email: string;
+      userRoles: { role: { name: string } }[];
+    }> = [];
+
+    if (recommendedRole) {
+      users = await this.prisma.user.findMany({
+        where: {
+          agencyUsers: { some: { agencyId: recommendedAgencyId } },
+          userRoles: { some: { role: { name: recommendedRole } } },
+        },
+        select: {
+          id: true,
+          firstName: true,
+          lastName: true,
+          email: true,
+          userRoles: { select: { role: { select: { name: true } } } },
+        },
+        take: 50,
+      });
+    }
+
+    // Fallback: if no users match the role (or no role recommended), return all agency users
+    // — the escalator can still pick freely. The matrix banner stays as guidance.
+    if (users.length === 0) {
+      users = await this.prisma.user.findMany({
+        where: {
+          agencyUsers: { some: { agencyId: recommendedAgencyId } },
+        },
+        select: {
+          id: true,
+          firstName: true,
+          lastName: true,
+          email: true,
+          userRoles: { select: { role: { select: { name: true } } } },
+        },
+        take: 100,
+      });
+    }
 
     return {
       currentLevel: ticket.escalationLevel,
