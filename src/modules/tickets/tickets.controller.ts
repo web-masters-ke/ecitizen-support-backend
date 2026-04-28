@@ -170,6 +170,21 @@ export class TicketsController {
   }
 
   // ------------------------------------------
+  // GET /api/v1/tickets/:id/escalation-targets — matrix-driven recommendation
+  // ------------------------------------------
+
+  @Get(':id/escalation-targets')
+  @ApiOperation({
+    summary: 'Get recommended escalation targets',
+    description: 'Returns the next-level role from the agency escalation matrix and users matching that role. If matrix is exhausted and a parent agency exists, returns the parent agency users (cross-agency escalation).',
+  })
+  @ApiParam({ name: 'id', type: 'string', format: 'uuid' })
+  @SwaggerResponse({ status: 200, description: 'Escalation targets' })
+  async getEscalationTargets(@Param('id', ParseUUIDPipe) id: string) {
+    return this.ticketsService.getEscalationTargets(id);
+  }
+
+  // ------------------------------------------
   // POST /api/v1/tickets/:id/resolve - Mark resolved
   // ------------------------------------------
 

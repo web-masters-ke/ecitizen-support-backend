@@ -194,6 +194,16 @@ export class EscalateTicketDto {
   @IsOptional()
   @IsEnum(EscalationTriggerEnum)
   trigger?: EscalationTriggerEnum;
+
+  @ApiPropertyOptional({ description: 'Bump ticket priority on escalation (CRITICAL/HIGH/MEDIUM/LOW)' })
+  @IsOptional()
+  @IsString()
+  @MaxLength(50)
+  newPriority?: string;
+
+  @ApiPropertyOptional({ description: 'Additional emails to notify about the escalation', type: [String] })
+  @IsOptional()
+  notifyEmails?: string[];
 }
 
 // ============================================

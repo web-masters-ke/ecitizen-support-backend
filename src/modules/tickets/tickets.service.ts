@@ -1030,14 +1030,28 @@ export class TicketsService {
     const newEscalationLevel = ticket.escalationLevel + 1;
     const trigger = dto.trigger || EscalationTriggerEnum.MANUAL_OVERRIDE;
 
+    // If escalating to a specific user, auto-reassign the ticket to them.
+    // This is the actual routing — without this, "escalation" was just a paper trail.
+    const ticketUpdateData: Record<string, unknown> = {
+      statusId: escalatedStatus.id,
+      escalationLevel: newEscalationLevel,
+      isEscalated: true,
+    };
+    if (dto.escalateToUserId) {
+      ticketUpdateData.assigneeId = dto.escalateToUserId;
+    }
+    // Bump priority if requested
+    if ((dto as any).newPriority) {
+      const priority = await this.prisma.ticketPriorityLevel.findFirst({
+        where: { name: (dto as any).newPriority },
+      });
+      if (priority) ticketUpdateData.priorityId = priority.id;
+    }
+
     const [updatedTicket] = await this.prisma.$transaction([
       this.prisma.ticket.update({
         where: { id },
-        data: {
-          statusId: escalatedStatus.id,
-          escalationLevel: newEscalationLevel,
-          isEscalated: true,
-        },
+        data: ticketUpdateData,
         include: this.fullTicketInclude(),
       }),
       this.prisma.ticketHistory.create({
@@ -1046,7 +1060,7 @@ export class TicketsService {
           oldStatusId: ticket.statusId,
           newStatusId: escalatedStatus.id,
           changedBy: escalatedBy,
-          changeReason: `Escalated to L${newEscalationLevel}: ${dto.reason || 'No reason provided'}`,
+          changeReason: `Escalated to L${newEscalationLevel}${dto.escalateToUserId ? ' and reassigned' : ''}: ${dto.reason || 'No reason provided'}`,
         },
       }),
       this.prisma.escalationEvent.create({
@@ -1083,11 +1097,125 @@ export class TicketsService {
       });
     }
 
+    // Notify the escalated-to user (in-app + email) — fire-and-forget
+    if (dto.escalateToUserId) {
+      const target = await this.prisma.user.findUnique({
+        where: { id: dto.escalateToUserId },
+        select: { id: true, firstName: true, lastName: true, email: true, phoneNumber: true },
+      });
+      if (target?.id) {
+        const subject = `Ticket ${(updatedTicket as any).ticketNumber} escalated to you (Level ${newEscalationLevel})`;
+        const body = `Hi ${target.firstName ?? 'there'},\n\nTicket <strong>${(updatedTicket as any).ticketNumber}</strong> — <em>${(updatedTicket as any).subject}</em> — has been escalated to you at Level ${newEscalationLevel}.\n\nReason: ${dto.reason || 'No reason provided'}\n\nPlease review and respond as soon as possible.\n\neCitizen Service Command Centre`;
+        const recipient = {
+          recipientUserId: target.id,
+          recipientEmail: target.email ?? undefined,
+          recipientPhone: target.phoneNumber ?? undefined,
+        };
+        this.notificationsService
+          .sendNotification({ ticketId: id, channel: 'IN_APP' as any, triggerEvent: 'TICKET_ESCALATED', subject, body, recipients: [recipient] })
+          .catch((err) => this.logger.warn(`IN_APP escalate notify failed: ${err?.message}`));
+        if (target.email) {
+          this.notificationsService
+            .sendNotification({ ticketId: id, channel: 'EMAIL' as any, triggerEvent: 'TICKET_ESCALATED', subject, body, recipients: [recipient] })
+            .catch((err) => this.logger.warn(`EMAIL escalate notify failed: ${err?.message}`));
+        }
+      }
+    }
+
+    // Notify additional emails if provided in the escalation DTO
+    const notifyEmails: string[] = (dto as any).notifyEmails ?? [];
+    if (Array.isArray(notifyEmails) && notifyEmails.length > 0) {
+      const subject = `Ticket ${(updatedTicket as any).ticketNumber} escalated`;
+      const body = `Ticket <strong>${(updatedTicket as any).ticketNumber}</strong> — <em>${(updatedTicket as any).subject}</em> — has been escalated to Level ${newEscalationLevel}.\n\nReason: ${dto.reason || 'No reason provided'}`;
+      for (const email of notifyEmails) {
+        const recipient = { recipientEmail: email };
+        this.notificationsService
+          .sendNotification({ ticketId: id, channel: 'EMAIL' as any, triggerEvent: 'TICKET_ESCALATED', subject, body, recipients: [recipient] })
+          .catch((err) => this.logger.warn(`EMAIL escalate notify (cc=${email}) failed: ${err?.message}`));
+      }
+    }
+
     this.logger.log(
-      `Ticket ${ticket.ticketNumber} escalated to L${newEscalationLevel} by ${escalatedBy}`,
+      `Ticket ${ticket.ticketNumber} escalated to L${newEscalationLevel} by ${escalatedBy}${dto.escalateToUserId ? ` and reassigned to ${dto.escalateToUserId}` : ''}`,
     );
 
     return updatedTicket;
+  }
+
+  /**
+   * Get the recommended escalation targets for a ticket: next level role from
+   * the agency's escalation matrix + users matching that role in the agency
+   * (and parent agency for cross-agency cascade when the matrix is exhausted).
+   */
+  async getEscalationTargets(ticketId: string) {
+    const ticket = await this.prisma.ticket.findUnique({
+      where: { id: ticketId },
+      include: { priority: true, agency: { include: { parentAgency: true } } },
+    });
+    if (!ticket) throw new NotFoundException('Ticket not found');
+
+    const nextLevel = ticket.escalationLevel + 1;
+    const priorityName = (ticket.priority as any)?.name ?? 'MEDIUM';
+
+    // Find the matrix for this priority on this agency
+    const matrix = await this.prisma.escalationMatrix.findFirst({
+      where: { agencyId: ticket.agencyId, priorityLevel: priorityName },
+      include: { escalationLevels: { orderBy: { levelNumber: 'asc' } } },
+    });
+
+    const matchedLevel = matrix?.escalationLevels.find((l) => l.levelNumber === nextLevel) ?? null;
+    let recommendedAgencyId = ticket.agencyId;
+    let recommendedAgencyName = (ticket.agency as any)?.agencyName ?? '';
+    let crossAgencyEscalation = false;
+
+    // If the matrix has no level for nextLevel — and there's a parent agency — cascade up
+    if (!matchedLevel && (ticket.agency as any)?.parentAgency?.id) {
+      recommendedAgencyId = (ticket.agency as any).parentAgency.id;
+      recommendedAgencyName = (ticket.agency as any).parentAgency.agencyName;
+      crossAgencyEscalation = true;
+    }
+
+    const recommendedRole = matchedLevel?.escalationRole ?? null;
+
+    // Users in the recommended agency, optionally filtered by role
+    const users = await this.prisma.user.findMany({
+      where: {
+        agencyUsers: { some: { agencyId: recommendedAgencyId } },
+        ...(recommendedRole
+          ? { userRoles: { some: { role: { name: recommendedRole } } } }
+          : {}),
+      },
+      select: {
+        id: true,
+        firstName: true,
+        lastName: true,
+        email: true,
+        userRoles: { select: { role: { select: { name: true } } } },
+      },
+      take: 50,
+    });
+
+    return {
+      currentLevel: ticket.escalationLevel,
+      nextLevel,
+      ticketAgencyId: ticket.agencyId,
+      ticketAgencyName: (ticket.agency as any)?.agencyName ?? '',
+      recommendedAgencyId,
+      recommendedAgencyName,
+      crossAgencyEscalation,
+      recommendedRole,
+      matrixLevels: matrix?.escalationLevels?.map((l) => ({
+        levelNumber: l.levelNumber,
+        escalationRole: l.escalationRole,
+        notifyEmail: (l as any).notifyViaEmail,
+      })) ?? [],
+      users: users.map((u) => ({
+        id: u.id,
+        name: `${u.firstName ?? ''} ${u.lastName ?? ''}`.trim() || u.email,
+        email: u.email,
+        roles: u.userRoles.map((r) => r.role.name),
+      })),
+    };
   }
 
   // ============================================
