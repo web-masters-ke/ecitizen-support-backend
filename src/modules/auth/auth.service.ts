@@ -567,7 +567,12 @@ export class AuthService {
 
     const user = await this.prisma.user.findUnique({
       where: { email },
-      select: { id: true, email: true, isActive: true },
+      select: {
+        id: true,
+        email: true,
+        isActive: true,
+        userRoles: { select: { role: { select: { name: true } } } },
+      },
     });
 
     // Always return success to prevent email enumeration
@@ -608,8 +613,13 @@ export class AuthService {
 
     // Send the password-reset email via Brevo
     const appName = this.configService.get<string>('APP_NAME', 'eCitizen SCC');
-    const clientUrl = this.configService.get<string>('CLIENT_URL', 'http://localhost:3001');
-    const resetUrl = `${clientUrl}/reset-password?token=${rawToken}`;
+    const staffRoles = ['SUPER_ADMIN', 'ADMIN', 'AGENT', 'SUPERVISOR', 'MANAGER'];
+    const userRoleNames = user.userRoles?.map((ur) => ur.role.name) ?? [];
+    const isStaff = userRoleNames.some((r) => staffRoles.includes(r));
+    const baseUrl = isStaff
+      ? this.configService.get<string>('ADMIN_URL', 'http://localhost:3001')
+      : this.configService.get<string>('CLIENT_URL', 'http://localhost:3003');
+    const resetUrl = `${baseUrl}/reset-password?token=${rawToken}`;
 
     const htmlContent = `
       <div style="font-family:Arial,sans-serif;max-width:560px;margin:0 auto;padding:32px 24px">
@@ -624,14 +634,14 @@ export class AuthService {
         </p>
         <div style="text-align:center;margin:32px 0">
           <a href="${resetUrl}"
-             style="background:#E87722;color:#fff;padding:14px 32px;border-radius:8px;
+             style="background:#14b04c;color:#fff;padding:14px 32px;border-radius:8px;
                     text-decoration:none;font-weight:700;font-size:15px;display:inline-block">
             Reset Password
           </a>
         </div>
         <p style="color:#888;font-size:13px;line-height:1.6">
           Or copy and paste this link into your browser:<br>
-          <a href="${resetUrl}" style="color:#E87722;word-break:break-all">${resetUrl}</a>
+          <a href="${resetUrl}" style="color:#14b04c;word-break:break-all">${resetUrl}</a>
         </p>
         <p style="color:#aaa;font-size:12px;margin-top:32px">
           If you did not request a password reset, please ignore this email. Your account is secure.
