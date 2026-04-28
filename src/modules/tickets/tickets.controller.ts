@@ -462,4 +462,16 @@ export class TicketLookupsController {
   ) {
     return this.ticketsService.submitCitizenFeedback(id, { rating: dto.rating, feedback: dto.feedback });
   }
+
+  // ------------------------------------------
+  // GET /api/v1/tickets/:id/public - Public ticket info for unauthenticated feedback page
+  // ------------------------------------------
+
+  @Get(':id/public')
+  @Public()
+  @ApiOperation({ summary: 'Public ticket info (number, subject, agency, assignee) for the feedback form — no auth required' })
+  @SwaggerResponse({ status: 200, description: 'Public ticket info' })
+  async getPublicTicket(@Param('id', ParseUUIDPipe) id: string) {
+    return this.ticketsService.getPublicTicketInfo(id);
+  }
 }

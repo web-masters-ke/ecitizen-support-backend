@@ -1109,8 +1109,10 @@ export class TicketsService {
     // Notify the citizen (fire-and-forget — don't block the response)
     const creator = (updatedTicket as any).creator;
     if (creator?.id) {
-      const subject = `Your request ${updatedTicket.ticketNumber} has been resolved`;
-      const body = `Dear ${creator.firstName ?? 'Citizen'},\n\nYour service request <strong>${updatedTicket.ticketNumber}</strong> — <em>${(updatedTicket as any).subject}</em> — has been resolved.\n\n${dto.resolutionNotes ? `Resolution notes: ${dto.resolutionNotes}` : ''}\n\nYou can view your ticket and leave feedback at any time by logging into the eCitizen portal.\n\nThank you for using eCitizen Kenya.\n\neCitizen Service Team`;
+      const clientUrl = process.env.CLIENT_URL ?? 'https://ecitizen.wasaahost.com';
+      const feedbackUrl = `${clientUrl}/feedback/${updatedTicket.id}`;
+      const subject = `Your request ${updatedTicket.ticketNumber} has been resolved — share your feedback`;
+      const body = `Dear ${creator.firstName ?? 'Citizen'},\n\nYour service request <strong>${updatedTicket.ticketNumber}</strong> — <em>${(updatedTicket as any).subject}</em> — has been resolved.\n\n${dto.resolutionNotes ? `Resolution notes: ${dto.resolutionNotes}\n\n` : ''}We'd love your feedback. Please take a minute to rate your experience:\n\n${feedbackUrl}\n\nYour rating helps us improve government services for all Kenyans.\n\nThank you for using eCitizen Kenya.\n\neCitizen Service Team`;
       const recipient = {
         recipientUserId: creator.id,
         recipientEmail: creator.email ?? undefined,
@@ -1685,5 +1687,29 @@ export class TicketsService {
         feedbackAt: new Date(),
       },
     });
+  }
+
+  /** Public (unauthenticated) ticket summary used by the feedback page so the citizen sees ticket / agency / agent names */
+  async getPublicTicketInfo(id: string) {
+    const ticket = await this.prisma.ticket.findUnique({
+      where: { id },
+      select: {
+        id: true,
+        ticketNumber: true,
+        subject: true,
+        agency: { select: { agencyName: true } },
+        assignee: { select: { firstName: true, lastName: true, email: true } },
+      },
+    });
+    if (!ticket) throw new NotFoundException('Ticket not found');
+    const assignee = ticket.assignee;
+    return {
+      ticketNumber: ticket.ticketNumber,
+      subject: ticket.subject,
+      agencyName: ticket.agency?.agencyName ?? null,
+      assigneeName: assignee
+        ? `${assignee.firstName ?? ''} ${assignee.lastName ?? ''}`.trim() || assignee.email || null
+        : null,
+    };
   }
 }
