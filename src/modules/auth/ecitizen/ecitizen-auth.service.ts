@@ -166,17 +166,28 @@ export class ECitizenAuthService {
       throw new BadRequestException('eCitizen did not return an access token');
     }
 
-    // 2. Fetch user info
+    // 2. Fetch user info. The spec shows `/api/user-info` in the heading but
+    //    `/api/userinfo` (no hyphen) in the example one line down. Try the
+    //    configured URL first, then fall back to the alternate spelling.
     let info: ECitizenUserInfo;
-    try {
-      const infoRes = await axios.get(userInfoUrl, {
+    const altUrl = userInfoUrl.includes('user-info')
+      ? userInfoUrl.replace('user-info', 'userinfo')
+      : userInfoUrl.replace('userinfo', 'user-info');
+    const tryFetch = async (url: string) =>
+      (await axios.get(url, {
         params: { access_token: tokenData.access_token },
         timeout: 10_000,
-      });
-      info = infoRes.data;
-    } catch (err: any) {
-      this.logger.warn(`eCitizen user-info failed: ${err?.message}`);
-      throw new BadRequestException('Could not fetch user info from eCitizen');
+      })).data as ECitizenUserInfo;
+    try {
+      info = await tryFetch(userInfoUrl);
+    } catch (err1: any) {
+      this.logger.warn(`eCitizen user-info (${userInfoUrl}) failed: ${err1?.message}. Trying ${altUrl}.`);
+      try {
+        info = await tryFetch(altUrl);
+      } catch (err2: any) {
+        this.logger.warn(`eCitizen user-info (${altUrl}) also failed: ${err2?.message}`);
+        throw new BadRequestException('Could not fetch user info from eCitizen');
+      }
     }
 
     if (!info?.id_number || !info?.email) {
