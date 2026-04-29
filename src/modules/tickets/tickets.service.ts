@@ -1038,7 +1038,7 @@ export class TicketsService {
       isEscalated: true,
     };
     if (dto.escalateToUserId) {
-      ticketUpdateData.assigneeId = dto.escalateToUserId;
+      ticketUpdateData.currentAssigneeId = dto.escalateToUserId;
     }
     // Bump priority if requested
     if ((dto as any).newPriority) {
