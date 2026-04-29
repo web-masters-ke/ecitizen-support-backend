@@ -46,6 +46,36 @@ export class ECitizenAuthService {
   ) {}
 
   /**
+   * Introspect an eCitizen access token (spec page 7).
+   * POSTs to /api/oauth/token/introspect and returns { active, scope, token_type, client_id }.
+   * Useful if you want to verify a token before trusting any data derived from it.
+   */
+  async introspectToken(token: string) {
+    const introspectUrl =
+      this.config.get<string>('ECITIZEN_INTROSPECT_URL') ||
+      'https://accounts.ecitizen.go.ke/api/oauth/token/introspect';
+    try {
+      const res = await axios.post(
+        introspectUrl,
+        new URLSearchParams({ token }).toString(),
+        {
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          timeout: 10_000,
+        },
+      );
+      return res.data as {
+        active: boolean;
+        scope?: string | null;
+        token_type?: string;
+        client_id?: string;
+      };
+    } catch (err: any) {
+      this.logger.warn(`eCitizen introspect failed: ${err?.message}`);
+      return { active: false };
+    }
+  }
+
+  /**
    * Returns the URL the browser should open so the citizen can authorize on eCitizen.
    * The frontend stores the code_verifier (PKCE) and the state, then navigates here.
    */

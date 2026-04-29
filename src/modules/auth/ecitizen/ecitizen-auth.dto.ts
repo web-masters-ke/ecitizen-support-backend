@@ -19,6 +19,12 @@ export class ECitizenAuthorizeUrlDto {
   redirectUri?: string;
 }
 
+export class ECitizenIntrospectDto {
+  @ApiProperty({ description: 'eCitizen access token to verify' })
+  @IsString()
+  token!: string;
+}
+
 export class ECitizenExchangeDto {
   @ApiProperty({ description: 'Authorization code returned by eCitizen on the redirect URI' })
   @IsString()

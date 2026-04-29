@@ -15,6 +15,7 @@ import { ECitizenAuthService } from './ecitizen-auth.service';
 import {
   ECitizenAuthorizeUrlDto,
   ECitizenExchangeDto,
+  ECitizenIntrospectDto,
 } from './ecitizen-auth.dto';
 
 @ApiTags('Auth — eCitizen SSO')
@@ -61,5 +62,20 @@ export class ECitizenAuthController {
         userAgent: req.headers['user-agent'] ?? undefined,
       },
     );
+  }
+
+  /**
+   * Introspect an eCitizen access token (spec page 7). Optional. We do not use
+   * this in the sign-in flow because we issue our own JWT after exchange and
+   * discard the eCitizen access token. Exposed for completeness and for any
+   * future code path that needs to verify a token at runtime.
+   */
+  @Post('introspect')
+  @Public()
+  @ApiOperation({ summary: 'Introspect an eCitizen access token' })
+  @ApiResponse({ status: 200, description: 'Returns { active, scope, token_type, client_id }' })
+  @HttpCode(HttpStatus.OK)
+  async introspect(@Body() body: ECitizenIntrospectDto) {
+    return this.service.introspectToken(body.token);
   }
 }
