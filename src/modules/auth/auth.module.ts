@@ -7,6 +7,8 @@ import { AuthService } from './auth.service';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { PrismaModule } from '../../config/prisma.module';
 import { NotificationsModule } from '../notifications/notifications.module';
+import { ECitizenAuthController } from './ecitizen/ecitizen-auth.controller';
+import { ECitizenAuthService } from './ecitizen/ecitizen-auth.service';
 
 @Module({
   imports: [
@@ -24,8 +26,8 @@ import { NotificationsModule } from '../notifications/notifications.module';
       }),
     }),
   ],
-  controllers: [AuthController],
-  providers: [AuthService, JwtStrategy],
+  controllers: [AuthController, ECitizenAuthController],
+  providers: [AuthService, JwtStrategy, ECitizenAuthService],
   exports: [AuthService, JwtModule, PassportModule],
 })
 export class AuthModule {}
