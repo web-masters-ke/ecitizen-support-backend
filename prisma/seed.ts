@@ -922,9 +922,12 @@ async function main() {
 
   // ── Global Service Providers ──────────────────────────────────────────────
   const serviceProviders = [
-    { providerName: 'Safaricom PLC', providerType: 'PAYMENT_GATEWAY', contactEmail: 'enterprise@safaricom.co.ke', contactPhone: '+254722000000' },
-    { providerName: 'Equity Bank Kenya', providerType: 'PAYMENT_GATEWAY', contactEmail: 'eazzyapi@equitybank.co.ke', contactPhone: '+254763000000' },
-    { providerName: 'Kenya Post Corporation', providerType: 'DELIVERY', contactEmail: 'info@posta.co.ke', contactPhone: '+254 20 2324000' },
+    { providerName: 'Safaricom PLC',          providerType: 'PAYMENT_GATEWAY',     contactEmail: 'enterprise@safaricom.co.ke', contactPhone: '+254722000000' },
+    { providerName: 'Equity Bank Kenya',      providerType: 'PAYMENT_GATEWAY',     contactEmail: 'eazzyapi@equitybank.co.ke', contactPhone: '+254763000000' },
+    { providerName: 'Kenya Post Corporation', providerType: 'DELIVERY',            contactEmail: 'info@posta.co.ke',           contactPhone: '+254 20 2324000' },
+    { providerName: 'PesaFlow',               providerType: 'PAYMENT_AGGREGATOR',  contactEmail: 'support@pesaflow.com',       contactPhone: '+254 709 920000' },
+    { providerName: 'Webmasters Kenya Ltd',   providerType: 'TECHNOLOGY_PARTNER',  contactEmail: 'info@webmasters.co.ke',      contactPhone: '+254 700 000000' },
+    { providerName: 'Olive Tree Media',       providerType: 'MERCHANT',            contactEmail: 'support@olivetree.co.ke',    contactPhone: '+254 720 000000' },
   ];
 
   const createdProviders: { id: string }[] = [];
