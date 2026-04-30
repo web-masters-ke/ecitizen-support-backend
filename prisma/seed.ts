@@ -952,6 +952,136 @@ async function main() {
     }
   }
 
+  // ── Merchant / Partner Agencies (so PesaFlow et al. can add their own agents) ─
+  // Each merchant gets:
+  //   1. An Agency record with type=SERVICE_PROVIDER (so existing agency-admin
+  //      flows for adding staff / managing tickets just work)
+  //   2. Two sample staff users (admin + agent) wired into the agency
+  //   3. A link back to its ServiceProvider record via AgencyServiceMapping
+  const merchantAgencies = [
+    {
+      providerName: 'PesaFlow',
+      agency: {
+        agencyCode: 'PESAFLOW',
+        agencyName: 'PesaFlow',
+        agencyType: AgencyType.SERVICE_PROVIDER,
+        officialEmail: 'support@pesaflow.com',
+        officialPhone: '+254 709 920000',
+        physicalAddress: 'Nairobi, Kenya',
+        ministryName: 'Service Providers',
+        primaryContactName: 'PesaFlow Support',
+        primaryContactPhone: '+254 709 920000',
+        onboardingRemarks: 'Live · Payment aggregator · Direct-to-Paybill integrations',
+      },
+      staff: [
+        { email: 'admin@pesaflow.com',  firstName: 'PesaFlow', lastName: 'Admin', password: 'Pesaflow2026', isAdmin: true  },
+        { email: 'agent@pesaflow.com',  firstName: 'PesaFlow', lastName: 'Agent', password: 'Pesaflow2026', isAdmin: false },
+      ],
+    },
+    {
+      providerName: 'Webmasters Kenya Ltd',
+      agency: {
+        agencyCode: 'WEBMASTERS',
+        agencyName: 'Webmasters Kenya Ltd',
+        agencyType: AgencyType.SERVICE_PROVIDER,
+        officialEmail: 'info@webmasters.co.ke',
+        officialPhone: '+254 700 000000',
+        physicalAddress: 'Nairobi, Kenya',
+        ministryName: 'Service Providers',
+        primaryContactName: 'Webmasters Support',
+        primaryContactPhone: '+254 700 000000',
+        onboardingRemarks: 'Live · Technology partner · Platform integrations and bespoke services',
+      },
+      staff: [
+        { email: 'admin@webmasters.co.ke', firstName: 'Webmasters', lastName: 'Admin', password: 'Webmasters2026', isAdmin: true  },
+        { email: 'agent@webmasters.co.ke', firstName: 'Webmasters', lastName: 'Agent', password: 'Webmasters2026', isAdmin: false },
+      ],
+    },
+    {
+      providerName: 'Olive Tree Media',
+      agency: {
+        agencyCode: 'OLIVETREE',
+        agencyName: 'Olive Tree Media',
+        agencyType: AgencyType.SERVICE_PROVIDER,
+        officialEmail: 'support@olivetree.co.ke',
+        officialPhone: '+254 720 000000',
+        physicalAddress: 'Nairobi, Kenya',
+        ministryName: 'Service Providers',
+        primaryContactName: 'Olive Tree Support',
+        primaryContactPhone: '+254 720 000000',
+        onboardingRemarks: 'Live · Merchant · Content and digital services',
+      },
+      staff: [
+        { email: 'admin@olivetree.co.ke', firstName: 'OliveTree', lastName: 'Admin', password: 'Olivetree2026', isAdmin: true  },
+        { email: 'agent@olivetree.co.ke', firstName: 'OliveTree', lastName: 'Agent', password: 'Olivetree2026', isAdmin: false },
+      ],
+    },
+  ];
+
+  const agencyAdminRoleForMerchants = await prisma.role.findUnique({ where: { name: 'AGENCY_ADMIN' } });
+  const agentRoleForMerchants       = await prisma.role.findUnique({ where: { name: 'L1_AGENT' } });
+
+  for (const m of merchantAgencies) {
+    const merchantAgency = await prisma.agency.upsert({
+      where: { agencyCode: m.agency.agencyCode },
+      update: { ...m.agency, isActive: true, onboardingStatus: 'COMPLETED' },
+      create: { ...m.agency, isActive: true, onboardingStatus: 'COMPLETED' },
+    });
+
+    // Link this Agency to its corresponding ServiceProvider record
+    const sp = await prisma.serviceProvider.findUnique({ where: { providerName: m.providerName } });
+    if (sp) {
+      const linked = await prisma.agencyServiceMapping.findFirst({
+        where: { agencyId: merchantAgency.id, serviceProviderId: sp.id },
+      });
+      if (!linked) {
+        await prisma.agencyServiceMapping.create({
+          data: { agencyId: merchantAgency.id, serviceProviderId: sp.id, isPrimary: true },
+        });
+      }
+    }
+
+    // Seed merchant staff (admin + agent) and bind them to the merchant agency
+    for (const s of m.staff) {
+      const hash = await bcrypt.hash(s.password, 10);
+      const user = await prisma.user.upsert({
+        where: { email: s.email },
+        update: {
+          passwordHash: hash, isActive: true, isVerified: true,
+          userType: UserType.SERVICE_PROVIDER_AGENT,
+          firstName: s.firstName, lastName: s.lastName,
+        },
+        create: {
+          email: s.email, firstName: s.firstName, lastName: s.lastName,
+          userType: UserType.SERVICE_PROVIDER_AGENT,
+          passwordHash: hash, isActive: true, isVerified: true,
+        },
+      });
+      await prisma.user.update({
+        where: { email: s.email },
+        data: { passwordHash: hash, isActive: true, isVerified: true },
+      });
+
+      // Bind to merchant agency
+      const existingAU = await prisma.agencyUser.findFirst({
+        where: { userId: user.id, agencyId: merchantAgency.id },
+      });
+      if (!existingAU) {
+        await prisma.agencyUser.create({
+          data: { userId: user.id, agencyId: merchantAgency.id, employmentStatus: 'active' },
+        });
+      }
+
+      // Assign role
+      const role = s.isAdmin ? agencyAdminRoleForMerchants : agentRoleForMerchants;
+      if (role) {
+        const exists = await prisma.userRole.findFirst({ where: { userId: user.id, roleId: role.id } });
+        if (!exists) await prisma.userRole.create({ data: { userId: user.id, roleId: role.id } });
+      }
+    }
+    console.log(`✅ Merchant agency seeded: ${m.agency.agencyName} (admin@${m.agency.agencyCode.toLowerCase()}.* / agent@${m.agency.agencyCode.toLowerCase()}.*)`);
+  }
+
   // ── Escalation Matrices (4 priority levels per agency) ───────────────────
   const escalationPriorities = [
     { priorityLevel: 'CRITICAL', maxResponseTimeMinutes: 15, maxResolutionTimeMinutes: 120 },
