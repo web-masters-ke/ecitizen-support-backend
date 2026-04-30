@@ -257,6 +257,28 @@ async function main() {
   }
   console.log('✅ Call test super admin created (call.test@ecitizen.go.ke / CallTest2026)');
 
+  // ─── Caller test super admin (fresh account — call.test was unreliable) ───
+  const callerHash = await bcrypt.hash('Caller2026', 10);
+  const callerAdmin = await prisma.user.upsert({
+    where: { email: 'caller@ecitizen.go.ke' },
+    update: { passwordHash: callerHash, isActive: true, isVerified: true, userType: UserType.SUPER_ADMIN, firstName: 'Caller', lastName: 'Test' },
+    create: {
+      email: 'caller@ecitizen.go.ke',
+      firstName: 'Caller',
+      lastName: 'Test',
+      userType: UserType.SUPER_ADMIN,
+      passwordHash: callerHash,
+      isActive: true,
+      isVerified: true,
+    },
+  });
+  await prisma.user.update({ where: { email: 'caller@ecitizen.go.ke' }, data: { passwordHash: callerHash, isActive: true, isVerified: true } });
+  if (superAdminRole) {
+    const callerRoleExists = await prisma.userRole.findFirst({ where: { userId: callerAdmin.id, roleId: superAdminRole.id } });
+    if (!callerRoleExists) await prisma.userRole.create({ data: { userId: callerAdmin.id, roleId: superAdminRole.id } });
+  }
+  console.log('✅ Caller test super admin created (caller@ecitizen.go.ke / Caller2026)');
+
   // ─── PesaFlow company accounts ────────────────────────────────────────────
   const pfPassword = 'PesaFlow@SCC2026!';
   const pfHash = await bcrypt.hash(pfPassword, 10);
