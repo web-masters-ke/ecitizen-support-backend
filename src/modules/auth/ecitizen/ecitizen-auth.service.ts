@@ -212,14 +212,22 @@ export class ECitizenAuthService {
       });
     }
 
+    // Squeeze every available name out of the eCitizen response.
+    // Some accounts only return surname, some return first_name only, some neither.
+    // Fallback chain: explicit field → surname (some accounts only have this) → email prefix
+    const emailPrefix = info.email.split('@')[0].replace(/[._-]/g, ' ');
+    const resolvedFirstName = info.first_name || (info.surname ? null : emailPrefix) || null;
+    const resolvedLastName = info.last_name ?? info.surname ?? null;
+
     if (user) {
-      // Existing user — link the eCitizen ID if not already linked, refresh profile data
+      // Existing user — link the eCitizen ID if not already linked, refresh profile data.
+      // Only overwrite names if eCitizen returned something — never blank out an existing name.
       user = await this.prisma.user.update({
         where: { id: user.id },
         data: {
           ecitizenUserId,
-          firstName: info.first_name ?? user.firstName,
-          lastName: info.last_name ?? user.lastName,
+          firstName: info.first_name ?? info.surname?.split(' ')[0] ?? user.firstName,
+          lastName: info.last_name ?? info.surname ?? user.lastName,
           phoneNumber: info.mobile_number ?? user.phoneNumber,
           nationalId: info.id_number ?? user.nationalId,
           isVerified: true,
@@ -237,8 +245,8 @@ export class ECitizenAuthService {
         data: {
           ecitizenUserId,
           email: info.email.toLowerCase(),
-          firstName: info.first_name ?? null,
-          lastName: info.last_name ?? null,
+          firstName: resolvedFirstName,
+          lastName: resolvedLastName,
           phoneNumber: info.mobile_number ?? null,
           nationalId: info.id_number ?? null,
           userType: 'CITIZEN',
