@@ -1043,7 +1043,7 @@ export class TicketsService {
   async escalateTicket(id: string, dto: EscalateTicketDto, escalatedBy: string) {
     const ticket = await this.prisma.ticket.findUnique({
       where: { id },
-      include: { status: true, slaTracking: true },
+      include: { status: true, slaTracking: true, priority: true },
     });
 
     if (!ticket || ticket.isDeleted) {
@@ -1057,15 +1057,65 @@ export class TicketsService {
     const newEscalationLevel = ticket.escalationLevel + 1;
     const trigger = dto.trigger || EscalationTriggerEnum.MANUAL_OVERRIDE;
 
-    // If escalating to a specific user, auto-reassign the ticket to them.
-    // This is the actual routing — without this, "escalation" was just a paper trail.
+    // ── AUTO mode: consult the agency's escalation matrix ──────────────────
+    // When mode === 'AUTO', read the matrix for (agency × priority) and pull
+    // the role + department for the next level. The agent doesn't have to
+    // hand-pick a user — the system routes by hierarchy.
+    let resolvedRole = dto.escalateToRole;
+    let resolvedUserId = dto.escalateToUserId;
+    if (dto.mode === 'AUTO' && !dto.escalateToCommandCentre && !dto.targetAgencyId) {
+      const matrix = await this.prisma.escalationMatrix.findFirst({
+        where: {
+          agencyId: ticket.agencyId,
+          ...(ticket.priority?.name ? { priorityLevel: ticket.priority.name } : {}),
+        },
+        include: {
+          escalationLevels: { where: { levelNumber: newEscalationLevel } },
+        },
+      });
+      const lvl = matrix?.escalationLevels[0];
+      if (!lvl) {
+        throw new BadRequestException(
+          `No level ${newEscalationLevel} defined in this agency's escalation matrix for ${ticket.priority?.name ?? 'this priority'}. Define it in SLA & Escalation settings or pick a user manually.`,
+        );
+      }
+      resolvedRole = lvl.escalationRole ?? resolvedRole;
+      // Try to find a real user holding that role within the agency (and dept if specified)
+      if (resolvedRole) {
+        const candidate = await this.prisma.user.findFirst({
+          where: {
+            agencyUsers: {
+              some: {
+                agencyId: ticket.agencyId,
+                ...(lvl.escalationDepartmentId ? { departmentId: lvl.escalationDepartmentId } : {}),
+              },
+            },
+            userRoles: { some: { role: { name: resolvedRole } } },
+          },
+          select: { id: true },
+        });
+        if (candidate) resolvedUserId = candidate.id;
+      }
+    }
+
+    // ── Command Centre escalation ───────────────────────────────────────────
+    if (dto.escalateToCommandCentre) {
+      resolvedRole = 'COMMAND_CENTER_ADMIN';
+    }
+
+    // ── Cross-agency transfer ──────────────────────────────────────────────
+    // When targetAgencyId is set, the ticket physically moves agency.
+    // Receiving agency starts unassigned (their admin re-assigns).
     const ticketUpdateData: Record<string, unknown> = {
       statusId: escalatedStatus.id,
       escalationLevel: newEscalationLevel,
       isEscalated: true,
     };
-    if (dto.escalateToUserId) {
-      ticketUpdateData.currentAssigneeId = dto.escalateToUserId;
+    if (dto.targetAgencyId && dto.targetAgencyId !== ticket.agencyId) {
+      ticketUpdateData.agencyId = dto.targetAgencyId;
+      ticketUpdateData.currentAssigneeId = null; // receiving agency picks
+    } else if (resolvedUserId) {
+      ticketUpdateData.currentAssigneeId = resolvedUserId;
     }
     // Bump priority if requested
     if ((dto as any).newPriority) {
@@ -1087,7 +1137,7 @@ export class TicketsService {
           oldStatusId: ticket.statusId,
           newStatusId: escalatedStatus.id,
           changedBy: escalatedBy,
-          changeReason: `Escalated to L${newEscalationLevel}${dto.escalateToUserId ? ' and reassigned' : ''}${dto.reason ? `: ${dto.reason}` : ''}`,
+          changeReason: `Escalated to L${newEscalationLevel}${dto.targetAgencyId ? ' (cross-agency transfer)' : dto.escalateToCommandCentre ? ' (Command Centre)' : resolvedUserId ? ' and reassigned' : ''}${dto.reason ? `: ${dto.reason}` : ''}`,
         },
       }),
       this.prisma.escalationEvent.create({
@@ -1096,8 +1146,8 @@ export class TicketsService {
           slaTrackingId: ticket.slaTracking?.id || null,
           previousLevel: ticket.escalationLevel,
           newLevel: newEscalationLevel,
-          escalatedToUserId: dto.escalateToUserId || null,
-          escalatedToRole: dto.escalateToRole || null,
+          escalatedToUserId: resolvedUserId || null,
+          escalatedToRole: resolvedRole || null,
           escalationReason: dto.reason || null,
           triggeredBy: trigger,
         },
@@ -1125,9 +1175,9 @@ export class TicketsService {
     }
 
     // Notify the escalated-to user (in-app + email) — fire-and-forget
-    if (dto.escalateToUserId) {
+    if (resolvedUserId) {
       const target = await this.prisma.user.findUnique({
-        where: { id: dto.escalateToUserId },
+        where: { id: resolvedUserId },
         select: { id: true, firstName: true, lastName: true, email: true, phoneNumber: true },
       });
       if (target?.id) {
@@ -1146,6 +1196,58 @@ export class TicketsService {
             .sendNotification({ ticketId: id, channel: 'EMAIL' as any, triggerEvent: 'TICKET_ESCALATED', subject, body, recipients: [recipient] })
             .catch((err) => this.logger.warn(`EMAIL escalate notify failed: ${err?.message}`));
         }
+      }
+    }
+
+    // Notify Command Centre admins if escalating up to them
+    if (dto.escalateToCommandCentre) {
+      const ccAdmins = await this.prisma.user.findMany({
+        where: {
+          userType: { in: ['COMMAND_CENTER_ADMIN', 'SUPER_ADMIN'] as any },
+        },
+        select: { id: true, firstName: true, email: true, phoneNumber: true },
+      });
+      if (ccAdmins.length > 0) {
+        const subject = `[Command Centre] Ticket ${(updatedTicket as any).ticketNumber} escalated to you`;
+        const body = `A ticket has been escalated to the Command Centre at Level ${newEscalationLevel}.\n\nTicket: <strong>${(updatedTicket as any).ticketNumber}</strong> — <em>${(updatedTicket as any).subject}</em>${dto.reason ? `\n\nReason: ${dto.reason}` : ''}\n\nPlease review.`;
+        const recipients = ccAdmins.map((u) => ({
+          recipientUserId: u.id,
+          recipientEmail: u.email ?? undefined,
+          recipientPhone: u.phoneNumber ?? undefined,
+        }));
+        this.notificationsService
+          .sendNotification({ ticketId: id, channel: 'IN_APP' as any, triggerEvent: 'TICKET_ESCALATED', subject, body, recipients })
+          .catch((err) => this.logger.warn(`Command Centre escalate notify failed: ${err?.message}`));
+        this.notificationsService
+          .sendNotification({ ticketId: id, channel: 'EMAIL' as any, triggerEvent: 'TICKET_ESCALATED', subject, body, recipients: recipients.filter((r) => r.recipientEmail) })
+          .catch((err) => this.logger.warn(`Command Centre EMAIL escalate notify failed: ${err?.message}`));
+      }
+    }
+
+    // Notify receiving agency's leadership when transferred cross-agency
+    if (dto.targetAgencyId && dto.targetAgencyId !== ticket.agencyId) {
+      const targetAgency = await this.prisma.agency.findUnique({
+        where: { id: dto.targetAgencyId },
+        select: { agencyName: true },
+      });
+      const recvAdmins = await this.prisma.user.findMany({
+        where: {
+          agencyUsers: { some: { agencyId: dto.targetAgencyId } },
+          userRoles: { some: { role: { name: { in: ['AGENCY_ADMIN', 'SUPERVISOR'] } } } },
+        },
+        select: { id: true, email: true, phoneNumber: true },
+      });
+      if (recvAdmins.length > 0) {
+        const subject = `New ticket transferred to ${targetAgency?.agencyName ?? 'your agency'}: ${(updatedTicket as any).ticketNumber}`;
+        const body = `A ticket has been transferred to your agency from another agency for handling.\n\nTicket: <strong>${(updatedTicket as any).ticketNumber}</strong> — <em>${(updatedTicket as any).subject}</em>${dto.reason ? `\n\nReason: ${dto.reason}` : ''}\n\nPlease assign it to one of your agents.`;
+        const recipients = recvAdmins.map((u) => ({
+          recipientUserId: u.id,
+          recipientEmail: u.email ?? undefined,
+          recipientPhone: u.phoneNumber ?? undefined,
+        }));
+        this.notificationsService
+          .sendNotification({ ticketId: id, channel: 'IN_APP' as any, triggerEvent: 'TICKET_ESCALATED', subject, body, recipients })
+          .catch((err) => this.logger.warn(`Cross-agency transfer notify failed: ${err?.message}`));
       }
     }
 

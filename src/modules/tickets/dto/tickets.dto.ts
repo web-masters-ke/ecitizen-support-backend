@@ -186,6 +186,21 @@ export class EscalateTicketDto {
   @MaxLength(100)
   escalateToRole?: string;
 
+  @ApiPropertyOptional({ description: 'Transfer ownership to a different agency on escalation', format: 'uuid' })
+  @IsOptional()
+  @IsUUID()
+  targetAgencyId?: string;
+
+  @ApiPropertyOptional({ description: 'Escalate to the eCitizen Command Centre (notifies all SUPER_ADMIN / COMMAND_CENTER_ADMIN users)' })
+  @IsOptional()
+  @IsBoolean()
+  escalateToCommandCentre?: boolean;
+
+  @ApiPropertyOptional({ description: 'Resolution mode: AUTO (consult agency escalation matrix) or MANUAL (use provided user/role/agency)', enum: ['AUTO', 'MANUAL'] })
+  @IsOptional()
+  @IsEnum(['AUTO', 'MANUAL'])
+  mode?: 'AUTO' | 'MANUAL';
+
   @ApiPropertyOptional({
     description: 'Trigger for the escalation',
     enum: EscalationTriggerEnum,
