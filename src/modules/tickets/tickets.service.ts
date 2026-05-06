@@ -2,8 +2,12 @@ import {
   Injectable,
   NotFoundException,
   BadRequestException,
+  ForbiddenException,
   Logger,
 } from '@nestjs/common';
+import { JwtPayload } from '../../common/decorators/current-user.decorator';
+
+const EXTERNAL_USER_TYPES = new Set(['CITIZEN', 'BUSINESS']);
 import { PrismaService } from '../../config/prisma.service';
 import { PaginatedResult } from '../../common/dto/pagination.dto';
 import { NotificationsService } from '../notifications/notifications.service';
@@ -570,8 +574,14 @@ export class TicketsService {
    */
   async findAll(
     filters: TicketFilterDto,
-    userAgencyId?: string,
+    user?: JwtPayload | string,
   ): Promise<PaginatedResult<any>> {
+    // Backwards-compat: callers used to pass user.agencyId as a string.
+    const callerUser: JwtPayload | undefined =
+      typeof user === 'string' || !user ? undefined : user;
+    const userAgencyId =
+      typeof user === 'string' ? user : callerUser?.agencyId;
+
     const {
       page = 1,
       limit = 20,
@@ -598,9 +608,15 @@ export class TicketsService {
       isDeleted: false,
     };
 
-    // Agency scoping: if user has an agencyId, scope to that agency
-    // unless they explicitly request a different one (for super admins)
-    if (agencyId) {
+    // Citizens / businesses can ONLY see tickets they created.
+    // Force ownership scoping server-side and ignore any agency filter
+    // they may have passed (defence-in-depth).
+    const isExternalUser =
+      callerUser && EXTERNAL_USER_TYPES.has(callerUser.userType);
+    if (isExternalUser) {
+      where.createdBy = callerUser!.sub;
+    } else if (agencyId) {
+      // Agents may explicitly request a different agency (super admin)
       where.agencyId = agencyId;
     } else if (userAgencyId) {
       where.agencyId = userAgencyId;
@@ -640,7 +656,9 @@ export class TicketsService {
       where.isEscalated = isEscalated;
     }
 
-    if (createdBy) {
+    // External users have already been scoped to their own createdBy above —
+    // never let a query param override that.
+    if (createdBy && !isExternalUser) {
       where.createdBy = createdBy;
     }
 
@@ -710,7 +728,7 @@ export class TicketsService {
    * Get a single ticket with full details including messages, assignments,
    * history, SLA tracking, and AI classification.
    */
-  async findById(id: string) {
+  async findById(id: string, user?: JwtPayload) {
     const ticket = await this.prisma.ticket.findUnique({
       where: { id },
       include: {
@@ -813,6 +831,15 @@ export class TicketsService {
 
     if (!ticket || ticket.isDeleted) {
       throw new NotFoundException(`Ticket ${id} not found`);
+    }
+
+    // External users (citizens / businesses) can only read tickets they raised.
+    if (
+      user &&
+      EXTERNAL_USER_TYPES.has(user.userType) &&
+      ticket.createdBy !== user.sub
+    ) {
+      throw new ForbiddenException('You do not have access to this ticket');
     }
 
     return ticket;

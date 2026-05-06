@@ -85,7 +85,7 @@ export class TicketsController {
     @Query() filters: TicketFilterDto,
     @CurrentUser() user: JwtPayload,
   ) {
-    return this.ticketsService.findAll(filters, user.agencyId);
+    return this.ticketsService.findAll(filters, user);
   }
 
   // ------------------------------------------
@@ -100,8 +100,11 @@ export class TicketsController {
   @ApiParam({ name: 'id', type: 'string', format: 'uuid', description: 'Ticket ID' })
   @SwaggerResponse({ status: 200, description: 'Ticket details' })
   @SwaggerResponse({ status: 404, description: 'Ticket not found' })
-  async findById(@Param('id', ParseUUIDPipe) id: string) {
-    return this.ticketsService.findById(id);
+  async findById(
+    @Param('id', ParseUUIDPipe) id: string,
+    @CurrentUser() user: JwtPayload,
+  ) {
+    return this.ticketsService.findById(id, user);
   }
 
   // ------------------------------------------
