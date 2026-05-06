@@ -33,6 +33,7 @@ export class AuditConsumer extends BaseKafkaConsumer implements OnModuleInit {
     KAFKA_TOPICS.AUDIT_EVENTS,
     KAFKA_TOPICS.TICKET_CREATED,
     KAFKA_TOPICS.TICKET_UPDATED,
+    KAFKA_TOPICS.TICKET_ASSIGNED,
     KAFKA_TOPICS.TICKET_RESOLVED,
     KAFKA_TOPICS.TICKET_CLOSED,
     KAFKA_TOPICS.TICKET_ESCALATED,
@@ -60,7 +61,8 @@ export class AuditConsumer extends BaseKafkaConsumer implements OnModuleInit {
       data.createdBy ??
       data.resolvedBy ??
       data.closedBy ??
-      data.escalatedBy;
+      data.escalatedBy ??
+      (data as any).assignedBy;
 
     // For domain events the entire payload is the post-state; for AUDIT_EVENTS
     // honour the explicit newValue/oldValue.
@@ -87,7 +89,9 @@ export class AuditConsumer extends BaseKafkaConsumer implements OnModuleInit {
 
   private topicToAction(topic: string): string {
     if (topic.includes('created')) return 'CREATE';
-    if (topic.includes('resolved') || topic.includes('closed')) return 'CLOSE';
+    if (topic.includes('assigned')) return 'ASSIGN';
+    if (topic.includes('resolved')) return 'RESOLVE';
+    if (topic.includes('closed')) return 'CLOSE';
     if (topic.includes('escalated') || topic.includes('breached')) return 'ESCALATE';
     return 'UPDATE';
   }

@@ -101,6 +101,24 @@ export class UsersService {
 
     this.logger.log(`User created: ${user.id} (${user.email})`);
 
+    await this.prisma.auditLog
+      .create({
+        data: {
+          entityType: 'USER',
+          entityId: user.id,
+          actionType: 'CREATE',
+          performedBy: assignedBy,
+          newValue: {
+            email: user.email,
+            userType: user.userType,
+            agencyId: dto.agencyId ?? null,
+            departmentId: dto.departmentId ?? null,
+            roleIds: dto.roleIds ?? [],
+          } as any,
+        },
+      })
+      .catch((err) => this.logger.warn(`User CREATE audit failed: ${err?.message}`));
+
     // Send welcome notification with credentials
     const plainPassword = dto.password ?? '';
     const roleName =
@@ -369,6 +387,25 @@ eCitizen Service Team`;
     });
 
     this.logger.log(`User updated: ${user.id}`);
+
+    await this.prisma.auditLog
+      .create({
+        data: {
+          entityType: 'USER',
+          entityId: user.id,
+          actionType: 'UPDATE',
+          newValue: {
+            ...(dto.email !== undefined ? { email: dto.email } : {}),
+            ...(dto.firstName !== undefined ? { firstName: dto.firstName } : {}),
+            ...(dto.lastName !== undefined ? { lastName: dto.lastName } : {}),
+            ...(dto.phoneNumber !== undefined ? { phoneNumber: dto.phoneNumber } : {}),
+            ...(dto.userType !== undefined ? { userType: dto.userType } : {}),
+            passwordChanged: dto.password ? true : undefined,
+          } as any,
+        },
+      })
+      .catch((err) => this.logger.warn(`User UPDATE audit failed: ${err?.message}`));
+
     return this.sanitizeUser(user);
   }
 
@@ -493,6 +530,18 @@ eCitizen Service Team`;
     });
 
     this.logger.log(`User ${id} status set to ${isActive ? 'active' : 'inactive'}`);
+
+    await this.prisma.auditLog
+      .create({
+        data: {
+          entityType: 'USER',
+          entityId: id,
+          actionType: isActive ? 'ENABLE' : 'DISABLE',
+          newValue: { isActive } as any,
+        },
+      })
+      .catch((err) => this.logger.warn(`User toggleStatus audit failed: ${err?.message}`));
+
     return this.sanitizeUser(user);
   }
 
@@ -512,6 +561,17 @@ eCitizen Service Team`;
     });
 
     this.logger.log(`User soft-deleted: ${id}`);
+
+    await this.prisma.auditLog
+      .create({
+        data: {
+          entityType: 'USER',
+          entityId: id,
+          actionType: 'DELETE',
+        },
+      })
+      .catch((err) => this.logger.warn(`User DELETE audit failed: ${err?.message}`));
+
     return { message: `User ${id} has been deleted` };
   }
 

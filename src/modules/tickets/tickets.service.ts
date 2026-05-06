@@ -997,6 +997,19 @@ export class TicketsService {
         `Ticket ${ticket.ticketNumber} assigned to ${dto.assigneeId} by ${assignedBy}`,
       );
 
+      this.kafkaService.publish({
+        topic: KAFKA_TOPICS.TICKET_ASSIGNED,
+        key: partitionKey.byTicket(id),
+        value: {
+          ticketId: id,
+          ticketNumber: ticket.ticketNumber,
+          agencyId: ticket.agencyId,
+          assignedTo: dto.assigneeId,
+          performedBy: assignedBy,
+          assignedAt: new Date(),
+        },
+      }).catch(() => null);
+
       return updatedTicket;
     }
 
@@ -1029,6 +1042,19 @@ export class TicketsService {
     this.logger.log(
       `Ticket ${ticket.ticketNumber} reassigned to ${dto.assigneeId} by ${assignedBy}`,
     );
+
+    this.kafkaService.publish({
+      topic: KAFKA_TOPICS.TICKET_ASSIGNED,
+      key: partitionKey.byTicket(id),
+      value: {
+        ticketId: id,
+        ticketNumber: ticket.ticketNumber,
+        agencyId: ticket.agencyId,
+        assignedTo: dto.assigneeId,
+        performedBy: assignedBy,
+        assignedAt: new Date(),
+      },
+    }).catch(() => null);
 
     return updatedTicket;
   }
@@ -1268,6 +1294,25 @@ export class TicketsService {
       `Ticket ${ticket.ticketNumber} escalated to L${newEscalationLevel} by ${escalatedBy}${dto.escalateToUserId ? ` and reassigned to ${dto.escalateToUserId}` : ''}`,
     );
 
+    this.kafkaService.publish({
+      topic: KAFKA_TOPICS.TICKET_ESCALATED,
+      key: partitionKey.byTicket(id),
+      value: {
+        ticketId: id,
+        ticketNumber: ticket.ticketNumber,
+        agencyId: (updatedTicket as any).agencyId ?? ticket.agencyId,
+        previousLevel: ticket.escalationLevel,
+        newLevel: newEscalationLevel,
+        escalatedToUserId: resolvedUserId ?? null,
+        escalatedToRole: resolvedRole ?? null,
+        targetAgencyId: dto.targetAgencyId ?? null,
+        toCommandCentre: !!dto.escalateToCommandCentre,
+        reason: dto.reason ?? null,
+        performedBy: escalatedBy,
+        escalatedAt: new Date(),
+      },
+    }).catch(() => null);
+
     return updatedTicket;
   }
 
@@ -1418,7 +1463,13 @@ export class TicketsService {
     this.kafkaService.publish({
       topic: KAFKA_TOPICS.TICKET_RESOLVED,
       key: partitionKey.byTicket(id),
-      value: { ticketId: id, ticketNumber: updatedTicket.ticketNumber, agencyId: updatedTicket.agencyId, resolvedAt: new Date() },
+      value: {
+        ticketId: id,
+        ticketNumber: updatedTicket.ticketNumber,
+        agencyId: updatedTicket.agencyId,
+        resolvedAt: new Date(),
+        resolvedBy,
+      },
     }).catch(() => null);
 
     return updatedTicket;
@@ -1463,7 +1514,13 @@ export class TicketsService {
     this.kafkaService.publish({
       topic: KAFKA_TOPICS.TICKET_CLOSED,
       key: partitionKey.byTicket(id),
-      value: { ticketId: id, ticketNumber: updatedTicket.ticketNumber, agencyId: updatedTicket.agencyId, closedAt: new Date() },
+      value: {
+        ticketId: id,
+        ticketNumber: updatedTicket.ticketNumber,
+        agencyId: updatedTicket.agencyId,
+        closedAt: new Date(),
+        closedBy,
+      },
     }).catch(() => null);
 
     return updatedTicket;

@@ -734,6 +734,18 @@ export class AuthService {
       });
     });
 
+    // Audit log for security review
+    await this.prisma.auditLog
+      .create({
+        data: {
+          entityType: 'USER',
+          entityId: matchedToken.user.id,
+          actionType: 'PASSWORD_RESET',
+          ipAddress: ip ?? null,
+        },
+      })
+      .catch((err) => this.logger.warn(`PASSWORD_RESET audit failed: ${err?.message}`));
+
     // Log the password reset
     await this.logAuthAttempt({
       userId: matchedToken.user.id,

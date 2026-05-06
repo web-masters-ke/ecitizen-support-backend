@@ -79,6 +79,23 @@ export class AgenciesService {
     });
 
     this.logger.log(`Agency created: ${agency.id} (${agency.agencyCode})`);
+
+    await this.prisma.auditLog
+      .create({
+        data: {
+          entityType: 'AGENCY',
+          entityId: agency.id,
+          actionType: 'CREATE',
+          newValue: {
+            agencyCode: agency.agencyCode,
+            agencyName: agency.agencyName,
+            agencyType: agency.agencyType,
+            parentAgencyId: agency.parentAgencyId ?? null,
+          } as any,
+        },
+      })
+      .catch((err) => this.logger.warn(`Agency CREATE audit failed: ${err?.message}`));
+
     return agency;
   }
 
@@ -254,6 +271,18 @@ export class AgenciesService {
     });
 
     this.logger.log(`Agency updated: ${agency.id}`);
+
+    await this.prisma.auditLog
+      .create({
+        data: {
+          entityType: 'AGENCY',
+          entityId: agency.id,
+          actionType: 'UPDATE',
+          newValue: dto as any,
+        },
+      })
+      .catch((err) => this.logger.warn(`Agency UPDATE audit failed: ${err?.message}`));
+
     return agency;
   }
 
