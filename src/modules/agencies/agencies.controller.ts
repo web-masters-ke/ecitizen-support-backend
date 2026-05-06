@@ -141,6 +141,20 @@ export class AgenciesController {
     return this.agenciesService.getDepartments(id);
   }
 
+  @Get('agencies/:id/users')
+  @ApiOperation({
+    summary: 'List users in an agency (optionally scoped to a department)',
+    description: 'Returns all users assigned to the agency. Pass ?departmentId=<uuid> to scope to one department.',
+  })
+  @ApiParam({ name: 'id', description: 'Agency UUID' })
+  @ApiResponse({ status: 200, description: 'List of users in the agency' })
+  async getAgencyUsers(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Query('departmentId') departmentId?: string,
+  ) {
+    return this.agenciesService.getAgencyUsers(id, departmentId);
+  }
+
   @Post('agencies/:id/departments')
   @Roles('SUPER_ADMIN', 'COMMAND_CENTER_ADMIN')
   @HttpCode(HttpStatus.CREATED)

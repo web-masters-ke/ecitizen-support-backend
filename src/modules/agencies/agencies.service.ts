@@ -347,6 +347,43 @@ export class AgenciesService {
     });
   }
 
+  /**
+   * Resolve all users in an agency (or a specific department within it).
+   * Used by the chat module's "add by agency/department" group flow.
+   */
+  async getAgencyUsers(agencyId: string, departmentId?: string) {
+    await this.ensureAgencyExists(agencyId);
+
+    const links = await this.prisma.agencyUser.findMany({
+      where: {
+        agencyId,
+        ...(departmentId ? { departmentId } : {}),
+      },
+      include: {
+        user: {
+          select: {
+            id: true,
+            firstName: true,
+            lastName: true,
+            email: true,
+            userType: true,
+            phoneNumber: true,
+          },
+        },
+        department: { select: { id: true, departmentName: true } },
+      },
+    });
+
+    return links
+      .filter((l) => (l as any).user)
+      .map((l: any) => ({
+        ...l.user,
+        agencyId: l.agencyId,
+        departmentId: l.departmentId,
+        departmentName: l.department?.departmentName ?? null,
+      }));
+  }
+
   // ============================================================
   //  CONTACTS
   // ============================================================
