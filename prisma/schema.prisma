@@ -350,6 +350,8 @@ model Agency {
 
   ministryName           String?  @map("ministry_name") @db.VarChar(255)
   stateDepartment        String?  @map("state_department") @db.VarChar(255)
+  executiveOrderRef      String?  @map("executive_order_ref") @db.VarChar(255)
+  executiveOrderYear     Int?     @map("executive_order_year")
   primaryContactName     String?  @map("primary_contact_name") @db.VarChar(255)
   primaryContactPhone    String?  @map("primary_contact_phone") @db.VarChar(50)
   coordinatorId          String?  @map("coordinator_id") @db.Uuid

@@ -125,6 +125,19 @@ export class UpdateAgencyDto extends PartialType(CreateAgencyDto) {
   @MaxLength(255)
   stateDepartment?: string;
 
+  @ApiPropertyOptional({ description: 'Executive Order reference (e.g. "EO No. 1 of 2023")' })
+  @IsOptional()
+  @IsString()
+  @MaxLength(255)
+  executiveOrderRef?: string;
+
+  @ApiPropertyOptional({ description: 'Year of the executive order' })
+  @IsOptional()
+  @IsInt()
+  @Min(1900)
+  @Max(2100)
+  executiveOrderYear?: number;
+
   @ApiPropertyOptional({ description: 'Primary contact name' })
   @IsOptional()
   @IsString()
