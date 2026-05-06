@@ -175,7 +175,10 @@ export class AuditService {
   }
 
   async getUserActivity(query: QueryUserActivityDto) {
-    const where: any = { userId: query.userId };
+    // Only filter by userId when it's actually provided — otherwise return
+    // every user's activity (admin view).
+    const where: any = {};
+    if (query.userId) where.userId = query.userId;
 
     if (query.activityType) where.activityType = query.activityType;
 
@@ -213,10 +216,10 @@ export class AuditService {
       this.prisma.userActivityLog.count({ where }),
     ]);
 
-    // Build activity summary
+    // Build activity summary (same scoping as the main query)
     const activitySummary = await this.prisma.userActivityLog.groupBy({
       by: ['activityType'],
-      where: { userId: query.userId },
+      where: query.userId ? { userId: query.userId } : {},
       _count: { _all: true },
       orderBy: { _count: { activityType: 'desc' } },
     });
@@ -276,7 +279,9 @@ export class AuditService {
   }
 
   async getDataAccessLogs(query: QueryDataAccessDto) {
-    const where: any = { userId: query.userId };
+    // Only filter by userId when actually provided.
+    const where: any = {};
+    if (query.userId) where.userId = query.userId;
 
     if (query.entityType) where.entityType = query.entityType;
     if (query.accessType) where.accessType = query.accessType;
