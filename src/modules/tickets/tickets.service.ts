@@ -15,6 +15,7 @@ import { SlaService } from '../sla/sla.service';
 import { KafkaService } from '../kafka/kafka.service';
 import { AppWebSocketGateway } from '../websocket/websocket.gateway';
 import { AuditService } from '../audit/audit.service';
+import { AiService } from '../ai/ai.service';
 import { KAFKA_TOPICS, partitionKey } from '../kafka/kafka.topics';
 import {
   CreateTicketDto,
@@ -109,6 +110,7 @@ export class TicketsService {
     private readonly kafkaService: KafkaService,
     private readonly wsGateway: AppWebSocketGateway,
     private readonly auditService: AuditService,
+    private readonly aiService: AiService,
   ) {}
 
   // ============================================
@@ -549,6 +551,16 @@ export class TicketsService {
       ticketId: ticket.id,
       description: `Created ticket ${ticket.ticketNumber}`,
     }).catch(() => null);
+
+    // Fire ML classification — fire-and-forget. autoApply=true so when the
+    // model is confident (>=0.75) the ticket's category + priority get set
+    // server-side without blocking the citizen's response.
+    this.aiService.classifyTicket({
+      ticketId: ticket.id,
+      autoApply: true,
+    } as any).catch((err) =>
+      this.logger.warn(`AI classify failed for ${ticket.ticketNumber}: ${err?.message}`),
+    );
 
     // Publish ticket.created event to Kafka (non-blocking)
     this.kafkaService.publish({
