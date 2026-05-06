@@ -5,14 +5,24 @@ import { KAFKA_TOPICS } from '../kafka.topics';
 import { AuditService } from '../../audit/audit.service';
 
 interface AuditEvent {
-  entityType: string;
-  entityId: string;
-  actionType: string;
+  // Generic shape (used by AUDIT_EVENTS)
+  entityType?: string;
+  entityId?: string;
+  actionType?: string;
   performedBy?: string;
   oldValue?: unknown;
   newValue?: unknown;
   ipAddress?: string;
   description?: string;
+  // Domain-event fields (TICKET_*, SLA_*)
+  ticketId?: string;
+  createdBy?: string;
+  actorId?: string;
+  resolvedBy?: string;
+  closedBy?: string;
+  escalatedBy?: string;
+  // Plus arbitrary other payload fields we serialize as newValue
+  [k: string]: unknown;
 }
 
 @Injectable()
@@ -41,13 +51,30 @@ export class AuditConsumer extends BaseKafkaConsumer implements OnModuleInit {
   }
 
   protected async handleMessage(topic: string, data: AuditEvent): Promise<void> {
+    // AUDIT_EVENTS uses the explicit shape; domain events (TICKET_*, SLA_*)
+    // publish ticketId/createdBy/etc, so map those onto the audit columns.
+    const entityId = data.entityId ?? data.ticketId;
+    const performedBy =
+      data.performedBy ??
+      data.actorId ??
+      data.createdBy ??
+      data.resolvedBy ??
+      data.closedBy ??
+      data.escalatedBy;
+
+    // For domain events the entire payload is the post-state; for AUDIT_EVENTS
+    // honour the explicit newValue/oldValue.
+    const isAuditEventTopic = topic === KAFKA_TOPICS.AUDIT_EVENTS;
+    const newValue = isAuditEventTopic ? data.newValue : (data.newValue ?? data);
+    const oldValue = data.oldValue;
+
     await this.auditService.createAuditLog({
       entityType: data.entityType ?? this.topicToEntity(topic),
-      entityId: data.entityId,
+      entityId,
       actionType: data.actionType ?? this.topicToAction(topic),
-      performedBy: data.performedBy,
-      oldValue: data.oldValue ? { _raw: JSON.stringify(data.oldValue) } : undefined,
-      newValue: data.newValue ? { _raw: JSON.stringify(data.newValue) } : undefined,
+      performedBy,
+      oldValue: oldValue ? { _raw: JSON.stringify(oldValue) } : undefined,
+      newValue: newValue ? { _raw: JSON.stringify(newValue) } : undefined,
       ipAddress: data.ipAddress ?? 'kafka-event',
     });
   }
