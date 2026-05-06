@@ -78,10 +78,14 @@ export class CreateUserDto {
   @MaxLength(100)
   ecitizenUserId?: string;
 
-  @ApiPropertyOptional({ description: 'Password (for admin-created accounts)', minLength: 8 })
+  @ApiPropertyOptional({ description: 'Password (for admin-created accounts) — must include upper, lower, digit, and be 8+ chars', minLength: 8 })
   @IsOptional()
   @IsString()
   @MinLength(8)
+  @MaxLength(128)
+  @Matches(/[A-Z]/, { message: 'Password must contain at least one uppercase letter' })
+  @Matches(/[a-z]/, { message: 'Password must contain at least one lowercase letter' })
+  @Matches(/[0-9]/, { message: 'Password must contain at least one digit' })
   password?: string;
 
   @ApiPropertyOptional({ description: 'Agency ID to associate with', format: 'uuid' })

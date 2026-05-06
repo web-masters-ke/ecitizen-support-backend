@@ -423,6 +423,12 @@ eCitizen Service Team`;
       );
     }
 
+    // Capture the previous role set for audit purposes
+    const previousRoles = await this.prisma.userRole.findMany({
+      where: { userId, ...(dto.agencyId ? { agencyId: dto.agencyId } : {}) },
+      include: { role: { select: { name: true } } },
+    });
+
     // Remove existing roles for this user (in the same agency scope if provided)
     const deleteWhere: any = { userId };
     if (dto.agencyId) {
@@ -441,8 +447,26 @@ eCitizen Service Team`;
       })),
     });
 
+    // Audit trail — granting/revoking SUPER_ADMIN especially must be loud.
+    const newRoleNames = roles.map((r) => r.name);
+    const oldRoleNames = previousRoles.map((p: any) => p.role?.name).filter(Boolean);
+    await this.prisma.auditLog
+      .create({
+        data: {
+          entityType: 'USER_ROLE',
+          entityId: userId,
+          actionType: 'ROLE_ASSIGN',
+          performedBy: assignedBy,
+          oldValue: { roles: oldRoleNames, agencyId: dto.agencyId ?? null } as any,
+          newValue: { roles: newRoleNames, agencyId: dto.agencyId ?? null } as any,
+        },
+      })
+      .catch((err) =>
+        this.logger.warn(`assignRoles audit log failed: ${err?.message}`),
+      );
+
     this.logger.log(
-      `Roles assigned to user ${userId}: ${dto.roleIds.join(', ')}`,
+      `Roles assigned to user ${userId} by ${assignedBy ?? 'system'}: ${newRoleNames.join(', ')} (was: ${oldRoleNames.join(', ') || 'none'})`,
     );
 
     return this.findOne(userId);

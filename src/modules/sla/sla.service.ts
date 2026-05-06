@@ -91,8 +91,120 @@ export class SlaService {
 
   async deletePolicy(id: string) {
     await this.findPolicyById(id);
-    await this.prisma.slaRule.deleteMany({ where: { slaPolicyId: id } });
-    await this.prisma.slaPolicy.delete({ where: { id } });
+    // Soft archive — preserve audit trail for already-tracked tickets.
+    await this.prisma.slaPolicy.update({
+      where: { id },
+      data: {
+        isActive: false,
+        archivedAt: new Date(),
+      },
+    });
+  }
+
+  // ============================================
+  // Change Request approval workflow
+  // ============================================
+
+  async submitChangeRequest(args: {
+    agencyId: string;
+    action: 'CREATE' | 'UPDATE' | 'ARCHIVE';
+    targetPolicyId?: string;
+    payload: Record<string, unknown>;
+    requestReason?: string;
+    requestedBy: string;
+  }) {
+    if (args.action !== 'CREATE' && !args.targetPolicyId) {
+      throw new NotFoundException('targetPolicyId is required for UPDATE / ARCHIVE');
+    }
+    return this.prisma.slaChangeRequest.create({
+      data: {
+        agencyId: args.agencyId,
+        targetPolicyId: args.targetPolicyId,
+        action: args.action as any,
+        payload: args.payload as any,
+        requestReason: args.requestReason,
+        requestedBy: args.requestedBy,
+      },
+    });
+  }
+
+  async listChangeRequests(args: { status?: string; agencyId?: string }) {
+    return this.prisma.slaChangeRequest.findMany({
+      where: {
+        ...(args.status ? { status: args.status as any } : {}),
+        ...(args.agencyId ? { agencyId: args.agencyId } : {}),
+      },
+      orderBy: { createdAt: 'desc' },
+      take: 200,
+    });
+  }
+
+  async approveChangeRequest(id: string, reviewerId: string, comment?: string) {
+    const req = await this.prisma.slaChangeRequest.findUnique({ where: { id } });
+    if (!req) throw new NotFoundException(`SLA change request ${id} not found`);
+    if (req.status !== 'PENDING') {
+      throw new NotFoundException(`Change request ${id} already ${req.status.toLowerCase()}`);
+    }
+    const payload = (req.payload ?? {}) as Record<string, any>;
+
+    // Replay the requested change atomically with the approval transition.
+    if (req.action === 'CREATE') {
+      await this.prisma.slaPolicy.create({
+        data: {
+          agencyId: req.agencyId,
+          policyName: payload.policyName,
+          description: payload.description ?? null,
+          isActive: payload.isActive ?? true,
+          appliesBusinessHours: payload.appliesBusinessHours ?? true,
+        },
+      });
+    } else if (req.action === 'UPDATE' && req.targetPolicyId) {
+      await this.prisma.slaPolicy.update({
+        where: { id: req.targetPolicyId },
+        data: {
+          ...(payload.policyName !== undefined ? { policyName: payload.policyName } : {}),
+          ...(payload.description !== undefined ? { description: payload.description } : {}),
+          ...(payload.isActive !== undefined ? { isActive: payload.isActive } : {}),
+          ...(payload.appliesBusinessHours !== undefined ? { appliesBusinessHours: payload.appliesBusinessHours } : {}),
+        },
+      });
+    } else if (req.action === 'ARCHIVE' && req.targetPolicyId) {
+      await this.prisma.slaPolicy.update({
+        where: { id: req.targetPolicyId },
+        data: {
+          isActive: false,
+          archivedAt: new Date(),
+          archivedBy: reviewerId,
+        },
+      });
+    }
+
+    return this.prisma.slaChangeRequest.update({
+      where: { id },
+      data: {
+        status: 'APPROVED',
+        reviewedBy: reviewerId,
+        reviewedAt: new Date(),
+        reviewerComment: comment ?? null,
+      },
+    });
+  }
+
+  async rejectChangeRequest(id: string, reviewerId: string, comment?: string) {
+    const req = await this.prisma.slaChangeRequest.findUnique({ where: { id } });
+    if (!req) throw new NotFoundException(`SLA change request ${id} not found`);
+    if (req.status !== 'PENDING') {
+      throw new NotFoundException(`Change request ${id} already ${req.status.toLowerCase()}`);
+    }
+    return this.prisma.slaChangeRequest.update({
+      where: { id },
+      data: {
+        status: 'REJECTED',
+        reviewedBy: reviewerId,
+        reviewedAt: new Date(),
+        reviewerComment: comment ?? null,
+      },
+    });
   }
 
   async deleteRule(policyId: string, ruleId: string) {

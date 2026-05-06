@@ -18,6 +18,7 @@ import { SlaService } from './sla.service';
 import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
 import { RolesGuard } from '../../common/guards/roles.guard';
 import { Roles } from '../../common/decorators/roles.decorator';
+import { CurrentUser, JwtPayload } from '../../common/decorators/current-user.decorator';
 import {
   CreateSlaPolicyDto,
   UpdateSlaPolicyDto,
@@ -100,6 +101,61 @@ export class SlaController {
   @ApiResponse({ status: 404, description: 'SLA policy not found' })
   async deletePolicy(@Param('id', ParseUUIDPipe) id: string) {
     await this.slaService.deletePolicy(id);
+  }
+
+  // ============================================
+  // SLA Change Requests (approval workflow)
+  // ============================================
+
+  @Post('change-requests')
+  @Roles('SUPER_ADMIN', 'COMMAND_CENTER_ADMIN', 'AGENCY_AGENT')
+  @ApiOperation({ summary: 'Submit a CREATE / UPDATE / ARCHIVE request for an SLA policy' })
+  async submitChangeRequest(
+    @Body() body: {
+      agencyId: string;
+      action: 'CREATE' | 'UPDATE' | 'ARCHIVE';
+      targetPolicyId?: string;
+      payload: Record<string, unknown>;
+      requestReason?: string;
+    },
+    @CurrentUser() user: JwtPayload,
+  ) {
+    return this.slaService.submitChangeRequest({
+      ...body,
+      requestedBy: user.sub,
+    });
+  }
+
+  @Get('change-requests')
+  @Roles('SUPER_ADMIN', 'COMMAND_CENTER_ADMIN')
+  @ApiOperation({ summary: 'List SLA change requests (filter by status)' })
+  async listChangeRequests(
+    @Query('status') status?: 'PENDING' | 'APPROVED' | 'REJECTED',
+    @Query('agencyId') agencyId?: string,
+  ) {
+    return this.slaService.listChangeRequests({ status, agencyId });
+  }
+
+  @Post('change-requests/:id/approve')
+  @Roles('SUPER_ADMIN')
+  @ApiOperation({ summary: 'Approve an SLA change request and apply the change' })
+  async approveChangeRequest(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body() body: { reviewerComment?: string },
+    @CurrentUser() user: JwtPayload,
+  ) {
+    return this.slaService.approveChangeRequest(id, user.sub, body?.reviewerComment);
+  }
+
+  @Post('change-requests/:id/reject')
+  @Roles('SUPER_ADMIN')
+  @ApiOperation({ summary: 'Reject an SLA change request' })
+  async rejectChangeRequest(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body() body: { reviewerComment?: string },
+    @CurrentUser() user: JwtPayload,
+  ) {
+    return this.slaService.rejectChangeRequest(id, user.sub, body?.reviewerComment);
   }
 
   @Delete('policies/:policyId/rules/:ruleId')

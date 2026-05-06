@@ -734,6 +734,8 @@ model SlaPolicy {
   description         String?
   isActive            Boolean  @default(true) @map("is_active")
   appliesBusinessHours Boolean @default(true) @map("applies_business_hours")
+  archivedAt          DateTime? @map("archived_at")
+  archivedBy          String?   @map("archived_by") @db.Uuid
   createdAt           DateTime @default(now()) @map("created_at")
   updatedAt           DateTime @updatedAt @map("updated_at")
 
@@ -743,6 +745,38 @@ model SlaPolicy {
 
   @@unique([agencyId, policyName], name: "uq_sla_policy")
   @@map("sla_policies")
+}
+
+enum SlaChangeAction {
+  CREATE
+  UPDATE
+  ARCHIVE
+}
+
+enum SlaChangeStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+model SlaChangeRequest {
+  id              String           @id @default(uuid()) @db.Uuid
+  agencyId        String           @map("agency_id") @db.Uuid
+  targetPolicyId  String?          @map("target_policy_id") @db.Uuid
+  action          SlaChangeAction
+  payload         Json
+  status          SlaChangeStatus  @default(PENDING)
+  requestedBy     String           @map("requested_by") @db.Uuid
+  requestReason   String?          @map("request_reason")
+  reviewedBy      String?          @map("reviewed_by") @db.Uuid
+  reviewedAt      DateTime?        @map("reviewed_at")
+  reviewerComment String?          @map("reviewer_comment")
+  createdAt       DateTime         @default(now()) @map("created_at")
+  updatedAt       DateTime         @updatedAt @map("updated_at")
+
+  @@index([status, createdAt])
+  @@index([agencyId, status])
+  @@map("sla_change_requests")
 }
 
 model SlaRule {
