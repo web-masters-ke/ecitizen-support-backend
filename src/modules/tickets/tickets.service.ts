@@ -944,7 +944,7 @@ export class TicketsService {
             oldStatusId: ticket.statusId,
             newStatusId: assignedStatus.id,
             changedBy: assignedBy,
-            changeReason: `Assigned to ${assignee.firstName || ''} ${assignee.lastName || ''}: ${dto.reason || 'No reason provided'}`.trim(),
+            changeReason: `Assigned to ${assignee.firstName || ''} ${assignee.lastName || ''}${dto.reason ? `: ${dto.reason}` : ''}`.replace(/\s+/g, ' ').trim(),
           },
         }),
         this.prisma.ticketMessage.create({
@@ -1060,7 +1060,7 @@ export class TicketsService {
           oldStatusId: ticket.statusId,
           newStatusId: escalatedStatus.id,
           changedBy: escalatedBy,
-          changeReason: `Escalated to L${newEscalationLevel}${dto.escalateToUserId ? ' and reassigned' : ''}: ${dto.reason || 'No reason provided'}`,
+          changeReason: `Escalated to L${newEscalationLevel}${dto.escalateToUserId ? ' and reassigned' : ''}${dto.reason ? `: ${dto.reason}` : ''}`,
         },
       }),
       this.prisma.escalationEvent.create({
@@ -1105,7 +1105,7 @@ export class TicketsService {
       });
       if (target?.id) {
         const subject = `Ticket ${(updatedTicket as any).ticketNumber} escalated to you (Level ${newEscalationLevel})`;
-        const body = `Hi ${target.firstName ?? 'there'},\n\nTicket <strong>${(updatedTicket as any).ticketNumber}</strong> — <em>${(updatedTicket as any).subject}</em> — has been escalated to you at Level ${newEscalationLevel}.\n\nReason: ${dto.reason || 'No reason provided'}\n\nPlease review and respond as soon as possible.\n\neCitizen Service Command Centre`;
+        const body = `Hi ${target.firstName ?? 'there'},\n\nTicket <strong>${(updatedTicket as any).ticketNumber}</strong> — <em>${(updatedTicket as any).subject}</em> — has been escalated to you at Level ${newEscalationLevel}.${dto.reason ? `\n\nReason: ${dto.reason}` : ''}\n\nPlease review and respond as soon as possible.\n\neCitizen Service Command Centre`;
         const recipient = {
           recipientUserId: target.id,
           recipientEmail: target.email ?? undefined,
@@ -1126,7 +1126,7 @@ export class TicketsService {
     const notifyEmails: string[] = (dto as any).notifyEmails ?? [];
     if (Array.isArray(notifyEmails) && notifyEmails.length > 0) {
       const subject = `Ticket ${(updatedTicket as any).ticketNumber} escalated`;
-      const body = `Ticket <strong>${(updatedTicket as any).ticketNumber}</strong> — <em>${(updatedTicket as any).subject}</em> — has been escalated to Level ${newEscalationLevel}.\n\nReason: ${dto.reason || 'No reason provided'}`;
+      const body = `Ticket <strong>${(updatedTicket as any).ticketNumber}</strong> — <em>${(updatedTicket as any).subject}</em> — has been escalated to Level ${newEscalationLevel}.${dto.reason ? `\n\nReason: ${dto.reason}` : ''}`;
       for (const email of notifyEmails) {
         const recipient = { recipientEmail: email };
         this.notificationsService
