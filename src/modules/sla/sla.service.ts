@@ -2,6 +2,7 @@ import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { Cron, CronExpression } from '@nestjs/schedule';
 import { PrismaService } from '@config/prisma.service';
 import { KafkaService } from '../kafka/kafka.service';
+import { NotificationsService } from '../notifications/notifications.service';
 import { KAFKA_TOPICS, partitionKey } from '../kafka/kafka.topics';
 import {
   CreateSlaPolicyDto,
@@ -19,6 +20,7 @@ export class SlaService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly kafkaService: KafkaService,
+    private readonly notificationsService: NotificationsService,
   ) {}
 
   // ============================================
@@ -281,6 +283,111 @@ export class SlaService {
     );
 
     return tracking;
+  }
+
+  /**
+   * checkApproachingBreaches - Cron job that runs every minute.
+   * Notifies the assigned agent ~30 minutes before responseDueAt or
+   * resolutionDueAt, exactly once per tracking row (gated by
+   * response_warning_at / resolution_warning_at).
+   */
+  @Cron(CronExpression.EVERY_MINUTE)
+  async checkApproachingBreaches() {
+    const WARN_LEAD_MINUTES = 30;
+    const now = new Date();
+    const warnHorizon = new Date(now.getTime() + WARN_LEAD_MINUTES * 60_000);
+
+    const rows = await this.prisma.slaTracking.findMany({
+      where: {
+        OR: [
+          {
+            responseWarningAt: null,
+            responseMet: null,
+            responseBreached: false,
+            responseDueAt: { gt: now, lte: warnHorizon },
+          },
+          {
+            resolutionWarningAt: null,
+            resolutionMet: null,
+            resolutionBreached: false,
+            resolutionDueAt: { gt: now, lte: warnHorizon },
+          },
+        ],
+      },
+      include: {
+        ticket: {
+          select: {
+            id: true,
+            ticketNumber: true,
+            subject: true,
+            currentAssigneeId: true,
+            agencyId: true,
+          },
+        },
+      },
+    });
+
+    for (const t of rows) {
+      const responseInWindow =
+        !t.responseWarningAt &&
+        t.responseMet === null &&
+        !t.responseBreached &&
+        t.responseDueAt > now &&
+        t.responseDueAt <= warnHorizon;
+      const resolutionInWindow =
+        !t.resolutionWarningAt &&
+        t.resolutionMet === null &&
+        !t.resolutionBreached &&
+        t.resolutionDueAt > now &&
+        t.resolutionDueAt <= warnHorizon;
+      if (!responseInWindow && !resolutionInWindow) continue;
+
+      const assigneeId = t.ticket.currentAssigneeId;
+      if (!assigneeId) {
+        // Mark as warned anyway to avoid loop; agency admins still see breach later.
+        await this.prisma.slaTracking.update({
+          where: { id: t.id },
+          data: {
+            ...(responseInWindow ? { responseWarningAt: now } : {}),
+            ...(resolutionInWindow ? { resolutionWarningAt: now } : {}),
+          },
+        });
+        continue;
+      }
+
+      const agent = await this.prisma.user.findUnique({
+        where: { id: assigneeId },
+        select: { id: true, firstName: true, email: true, phoneNumber: true },
+      });
+      if (agent?.id) {
+        const which = responseInWindow ? 'response' : 'resolution';
+        const dueAt = responseInWindow ? t.responseDueAt : t.resolutionDueAt;
+        const minsLeft = Math.max(0, Math.round((dueAt.getTime() - now.getTime()) / 60000));
+        const subject = `⏰ Ticket ${t.ticket.ticketNumber} ${which} due in ~${minsLeft} min`;
+        const body = `Hi ${agent.firstName ?? 'there'},\n\nTicket <strong>${t.ticket.ticketNumber}</strong> — <em>${t.ticket.subject}</em> — is approaching its ${which} SLA.\n\nDue at: ${dueAt.toISOString()}\n\nPlease action it before the SLA breaches.\n\neCitizen Service Command Centre`;
+        const recipient = {
+          recipientUserId: agent.id,
+          recipientEmail: agent.email ?? undefined,
+          recipientPhone: agent.phoneNumber ?? undefined,
+        };
+        this.notificationsService
+          .sendNotification({ ticketId: t.ticket.id, channel: 'IN_APP' as any, triggerEvent: 'SLA_APPROACHING', subject, body, recipients: [recipient] })
+          .catch((err) => this.logger.warn(`SLA-warning IN_APP failed: ${err?.message}`));
+        if (agent.email) {
+          this.notificationsService
+            .sendNotification({ ticketId: t.ticket.id, channel: 'EMAIL' as any, triggerEvent: 'SLA_APPROACHING', subject, body, recipients: [recipient] })
+            .catch((err) => this.logger.warn(`SLA-warning EMAIL failed: ${err?.message}`));
+        }
+      }
+
+      await this.prisma.slaTracking.update({
+        where: { id: t.id },
+        data: {
+          ...(responseInWindow ? { responseWarningAt: now } : {}),
+          ...(resolutionInWindow ? { resolutionWarningAt: now } : {}),
+        },
+      });
+    }
   }
 
   /**

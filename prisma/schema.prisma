@@ -774,6 +774,8 @@ model SlaTracking {
   resolutionBreached  Boolean   @default(false) @map("resolution_breached")
   responseBreachAt    DateTime? @map("response_breach_at")
   resolutionBreachAt  DateTime? @map("resolution_breach_at")
+  responseWarningAt   DateTime? @map("response_warning_at")
+  resolutionWarningAt DateTime? @map("resolution_warning_at")
   escalationLevel     Int       @default(0) @map("escalation_level")
   lastEscalatedAt     DateTime? @map("last_escalated_at")
   createdAt           DateTime  @default(now()) @map("created_at")
