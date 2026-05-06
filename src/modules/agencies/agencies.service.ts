@@ -32,7 +32,7 @@ export class AgenciesService {
   //  AGENCIES CRUD
   // ============================================================
 
-  async create(dto: CreateAgencyDto) {
+  async create(dto: CreateAgencyDto, performedBy?: string) {
     // Ensure unique agency code
     const existing = await this.prisma.agency.findUnique({
       where: { agencyCode: dto.agencyCode },
@@ -86,6 +86,7 @@ export class AgenciesService {
           entityType: 'AGENCY',
           entityId: agency.id,
           actionType: 'CREATE',
+          performedBy,
           newValue: {
             agencyCode: agency.agencyCode,
             agencyName: agency.agencyName,
@@ -217,7 +218,7 @@ export class AgenciesService {
     return agency;
   }
 
-  async update(id: string, dto: UpdateAgencyDto) {
+  async update(id: string, dto: UpdateAgencyDto, performedBy?: string) {
     await this.ensureAgencyExists(id);
 
     // If agency code is being updated, check for conflicts
@@ -278,6 +279,7 @@ export class AgenciesService {
           entityType: 'AGENCY',
           entityId: agency.id,
           actionType: 'UPDATE',
+          performedBy,
           newValue: dto as any,
         },
       })

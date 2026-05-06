@@ -336,7 +336,7 @@ eCitizen Service Team`;
   // UPDATE
   // ──────────────────────────────────────────────
 
-  async update(id: string, dto: UpdateUserDto) {
+  async update(id: string, dto: UpdateUserDto, performedBy?: string) {
     await this.ensureUserExists(id);
 
     // If email is being changed, check for conflicts
@@ -394,6 +394,7 @@ eCitizen Service Team`;
           entityType: 'USER',
           entityId: user.id,
           actionType: 'UPDATE',
+          performedBy,
           newValue: {
             ...(dto.email !== undefined ? { email: dto.email } : {}),
             ...(dto.firstName !== undefined ? { firstName: dto.firstName } : {}),
@@ -513,7 +514,7 @@ eCitizen Service Team`;
   // TOGGLE STATUS (active/inactive)
   // ──────────────────────────────────────────────
 
-  async toggleStatus(id: string, isActive: boolean) {
+  async toggleStatus(id: string, isActive: boolean, performedBy?: string) {
     await this.ensureUserExists(id);
 
     const user = await this.prisma.user.update({
@@ -537,6 +538,7 @@ eCitizen Service Team`;
           entityType: 'USER',
           entityId: id,
           actionType: isActive ? 'ENABLE' : 'DISABLE',
+          performedBy,
           newValue: { isActive } as any,
         },
       })
@@ -549,7 +551,7 @@ eCitizen Service Team`;
   // SOFT DELETE
   // ──────────────────────────────────────────────
 
-  async softDelete(id: string) {
+  async softDelete(id: string, performedBy?: string) {
     await this.ensureUserExists(id);
 
     await this.prisma.user.update({
@@ -568,6 +570,7 @@ eCitizen Service Team`;
           entityType: 'USER',
           entityId: id,
           actionType: 'DELETE',
+          performedBy,
         },
       })
       .catch((err) => this.logger.warn(`User DELETE audit failed: ${err?.message}`));

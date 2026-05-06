@@ -134,8 +134,9 @@ export class UsersController {
   async update(
     @Param('id', ParseUUIDPipe) id: string,
     @Body() dto: UpdateUserDto,
+    @CurrentUser('sub') currentUserId: string,
   ) {
-    return this.usersService.update(id, dto);
+    return this.usersService.update(id, dto, currentUserId);
   }
 
   // ──────────────────────────────────────────────
@@ -177,8 +178,9 @@ export class UsersController {
   async toggleStatus(
     @Param('id', ParseUUIDPipe) id: string,
     @Body() dto: ToggleUserStatusDto,
+    @CurrentUser('sub') currentUserId: string,
   ) {
-    return this.usersService.toggleStatus(id, dto.isActive);
+    return this.usersService.toggleStatus(id, dto.isActive, currentUserId);
   }
 
   // ──────────────────────────────────────────────
@@ -196,7 +198,10 @@ export class UsersController {
   @ApiParam({ name: 'id', description: 'User UUID' })
   @ApiResponse({ status: 200, description: 'User deleted' })
   @ApiResponse({ status: 404, description: 'User not found' })
-  async remove(@Param('id', ParseUUIDPipe) id: string) {
-    return this.usersService.softDelete(id);
+  async remove(
+    @Param('id', ParseUUIDPipe) id: string,
+    @CurrentUser('sub') currentUserId: string,
+  ) {
+    return this.usersService.softDelete(id, currentUserId);
   }
 }

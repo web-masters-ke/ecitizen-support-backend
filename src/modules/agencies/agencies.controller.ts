@@ -43,6 +43,7 @@ import {
 import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
 import { RolesGuard } from '../../common/guards/roles.guard';
 import { Roles } from '../../common/decorators/roles.decorator';
+import { CurrentUser } from '../../common/decorators/current-user.decorator';
 
 @ApiTags('Agencies')
 @ApiBearerAuth()
@@ -90,8 +91,11 @@ export class AgenciesController {
   })
   @ApiResponse({ status: 201, description: 'Agency created' })
   @ApiResponse({ status: 409, description: 'Duplicate agency code' })
-  async create(@Body() dto: CreateAgencyDto) {
-    return this.agenciesService.create(dto);
+  async create(
+    @Body() dto: CreateAgencyDto,
+    @CurrentUser('sub') currentUserId: string,
+  ) {
+    return this.agenciesService.create(dto, currentUserId);
   }
 
   @Post('agencies/onboard')
@@ -120,8 +124,9 @@ export class AgenciesController {
   async update(
     @Param('id', ParseUUIDPipe) id: string,
     @Body() dto: UpdateAgencyDto,
+    @CurrentUser('sub') currentUserId: string,
   ) {
-    return this.agenciesService.update(id, dto);
+    return this.agenciesService.update(id, dto, currentUserId);
   }
 
   // ============================================================

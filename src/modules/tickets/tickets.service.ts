@@ -733,6 +733,15 @@ export class TicketsService {
 
     const totalPages = Math.ceil(total / limit);
 
+    if (callerUser) {
+      this.auditService.logDataAccess({
+        userId: callerUser.sub,
+        agencyId: callerUser.agencyId,
+        entityType: 'TICKET_LIST',
+        accessType: 'READ' as any,
+      }).catch(() => null);
+    }
+
     return {
       data,
       meta: {
