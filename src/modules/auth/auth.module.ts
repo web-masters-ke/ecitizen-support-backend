@@ -7,6 +7,7 @@ import { AuthService } from './auth.service';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { PrismaModule } from '../../config/prisma.module';
 import { NotificationsModule } from '../notifications/notifications.module';
+import { AuditModule } from '../audit/audit.module';
 import { ECitizenAuthController } from './ecitizen/ecitizen-auth.controller';
 import { ECitizenAuthService } from './ecitizen/ecitizen-auth.service';
 
@@ -14,6 +15,7 @@ import { ECitizenAuthService } from './ecitizen/ecitizen-auth.service';
   imports: [
     PrismaModule,
     NotificationsModule,
+    AuditModule,
     PassportModule.register({ defaultStrategy: 'jwt' }),
     JwtModule.registerAsync({
       imports: [ConfigModule],

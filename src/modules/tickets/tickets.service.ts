@@ -14,6 +14,7 @@ import { NotificationsService } from '../notifications/notifications.service';
 import { SlaService } from '../sla/sla.service';
 import { KafkaService } from '../kafka/kafka.service';
 import { AppWebSocketGateway } from '../websocket/websocket.gateway';
+import { AuditService } from '../audit/audit.service';
 import { KAFKA_TOPICS, partitionKey } from '../kafka/kafka.topics';
 import {
   CreateTicketDto,
@@ -107,6 +108,7 @@ export class TicketsService {
     private readonly slaService: SlaService,
     private readonly kafkaService: KafkaService,
     private readonly wsGateway: AppWebSocketGateway,
+    private readonly auditService: AuditService,
   ) {}
 
   // ============================================
@@ -540,6 +542,14 @@ export class TicketsService {
 
     this.logger.log(`Ticket created: ${ticketNumber} by user ${createdBy}`);
 
+    this.auditService.logUserActivity({
+      userId: createdBy,
+      agencyId: ticket.agencyId,
+      activityType: 'TICKET_CREATE',
+      ticketId: ticket.id,
+      description: `Created ticket ${ticket.ticketNumber}`,
+    }).catch(() => null);
+
     // Publish ticket.created event to Kafka (non-blocking)
     this.kafkaService.publish({
       topic: KAFKA_TOPICS.TICKET_CREATED,
@@ -842,6 +852,16 @@ export class TicketsService {
       throw new ForbiddenException('You do not have access to this ticket');
     }
 
+    if (user) {
+      this.auditService.logDataAccess({
+        userId: user.sub,
+        agencyId: user.agencyId,
+        entityType: 'TICKET',
+        entityId: id,
+        accessType: 'READ' as any,
+      }).catch(() => null);
+    }
+
     return ticket;
   }
 
@@ -1008,6 +1028,14 @@ export class TicketsService {
           performedBy: assignedBy,
           assignedAt: new Date(),
         },
+      }).catch(() => null);
+
+      this.auditService.logUserActivity({
+        userId: assignedBy,
+        agencyId: ticket.agencyId,
+        activityType: 'TICKET_ASSIGN',
+        ticketId: id,
+        description: `Assigned ticket ${ticket.ticketNumber} to user ${dto.assigneeId}`,
       }).catch(() => null);
 
       return updatedTicket;
@@ -1313,6 +1341,14 @@ export class TicketsService {
       },
     }).catch(() => null);
 
+    this.auditService.logUserActivity({
+      userId: escalatedBy,
+      agencyId: ticket.agencyId,
+      activityType: 'TICKET_ESCALATE',
+      ticketId: id,
+      description: `Escalated ticket ${ticket.ticketNumber} to L${newEscalationLevel}${dto.escalateToCommandCentre ? ' (Command Centre)' : dto.targetAgencyId ? ' (cross-agency)' : ''}`,
+    }).catch(() => null);
+
     return updatedTicket;
   }
 
@@ -1472,6 +1508,14 @@ export class TicketsService {
       },
     }).catch(() => null);
 
+    this.auditService.logUserActivity({
+      userId: resolvedBy,
+      agencyId: updatedTicket.agencyId,
+      activityType: 'TICKET_RESOLVE',
+      ticketId: id,
+      description: `Resolved ticket ${updatedTicket.ticketNumber}`,
+    }).catch(() => null);
+
     return updatedTicket;
   }
 
@@ -1521,6 +1565,14 @@ export class TicketsService {
         closedAt: new Date(),
         closedBy,
       },
+    }).catch(() => null);
+
+    this.auditService.logUserActivity({
+      userId: closedBy,
+      agencyId: updatedTicket.agencyId,
+      activityType: 'TICKET_CLOSE',
+      ticketId: id,
+      description: `Closed ticket ${updatedTicket.ticketNumber}`,
     }).catch(() => null);
 
     return updatedTicket;

@@ -14,6 +14,7 @@ import { PrismaService } from '../../config/prisma.service';
 import { JwtPayload } from '../../common/decorators/current-user.decorator';
 import { NotificationsService } from '../notifications/notifications.service';
 import { NotificationChannelDto } from '../notifications/dto/notifications.dto';
+import { AuditService } from '../audit/audit.service';
 import {
   RegisterDto,
   LoginDto,
@@ -35,6 +36,7 @@ export class AuthService {
     private readonly jwtService: JwtService,
     private readonly configService: ConfigService,
     private readonly notificationsService: NotificationsService,
+    private readonly auditService: AuditService,
   ) {}
 
   // ============================================
@@ -276,6 +278,15 @@ export class AuthService {
       userAgent,
     });
 
+    await this.auditService.logUserActivity({
+      userId: user.id,
+      agencyId,
+      activityType: 'LOGIN',
+      description: `Logged in from ${ip ?? 'unknown IP'}`,
+      ipAddress: ip,
+      userAgent,
+    });
+
     this.logger.log(`User logged in: ${user.email} (${user.id})`);
 
     // Build permissions list
@@ -451,6 +462,12 @@ export class AuthService {
     }
 
     this.logger.log(`User logged out: ${userId}`);
+
+    await this.auditService.logUserActivity({
+      userId,
+      activityType: 'LOGOUT',
+      description: 'User logged out',
+    });
 
     return { message: 'Successfully logged out' };
   }
@@ -745,6 +762,14 @@ export class AuthService {
         },
       })
       .catch((err) => this.logger.warn(`PASSWORD_RESET audit failed: ${err?.message}`));
+
+    await this.auditService.logUserActivity({
+      userId: matchedToken.user.id,
+      activityType: 'PASSWORD_RESET',
+      description: 'Password reset via emailed token',
+      ipAddress: ip,
+      userAgent,
+    });
 
     // Log the password reset
     await this.logAuthAttempt({
