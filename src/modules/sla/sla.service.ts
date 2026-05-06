@@ -488,18 +488,30 @@ export class SlaService {
   ) {
     const tracking = await this.prisma.slaTracking.findUnique({
       where: { id: slaTrackingId },
-      include: { ticket: { select: { agencyId: true, escalationLevel: true } } },
+      include: {
+        ticket: {
+          select: {
+            agencyId: true,
+            escalationLevel: true,
+            priority: { select: { name: true } },
+          },
+        },
+      },
     });
     if (!tracking) return;
 
     const currentLevel = tracking.escalationLevel;
     const newLevel = currentLevel + 1;
+    const priorityName = tracking.ticket.priority?.name;
 
-    // Find the escalation matrix for this agency
+    // Find the escalation matrix for this agency + the ticket's priority.
+    // Without the priority filter we'd grab any matrix the agency has and
+    // route on the wrong ladder.
     const matrix = await this.prisma.escalationMatrix.findFirst({
       where: {
         agencyId: tracking.ticket.agencyId,
         autoEscalationEnabled: true,
+        ...(priorityName ? { priorityLevel: priorityName } : {}),
       },
       include: {
         escalationLevels: {
