@@ -100,8 +100,9 @@ export class TicketsController {
   })
   @SwaggerResponse({ status: 200, description: 'Stats object' })
   async getMyStats(@CurrentUser() user: JwtPayload) {
-    const data = await this.ticketsService.getMyStats(user.sub);
-    return { success: true, data };
+    // Return the stats object directly so TransformInterceptor wraps it
+    // in the standard { success, data, meta, timestamp } envelope.
+    return this.ticketsService.getMyStats(user.sub);
   }
 
   // ------------------------------------------
