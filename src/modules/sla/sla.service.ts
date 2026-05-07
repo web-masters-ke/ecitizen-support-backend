@@ -265,8 +265,12 @@ export class SlaService {
         },
       },
     });
+    // "No tracking yet" is a valid state — happens when the ticket's agency
+    // has no SLA policy with a rule matching the ticket's priority/category.
+    // Return null so the frontend can render the SLA panel as not-configured
+    // instead of treating it as a 404 error.
     if (!tracking) {
-      throw new NotFoundException(`SLA tracking for ticket ${ticketId} not found`);
+      return null;
     }
 
     // Compute live status

@@ -194,8 +194,7 @@ export class SlaController {
   @Get('tracking/:ticketId')
   @Roles('COMMAND_CENTER_ADMIN', 'SUPER_ADMIN', 'AGENCY_AGENT')
   @ApiOperation({ summary: 'Get SLA tracking status for a ticket' })
-  @ApiResponse({ status: 200, description: 'SLA tracking found' })
-  @ApiResponse({ status: 404, description: 'No SLA tracking for this ticket' })
+  @ApiResponse({ status: 200, description: 'SLA tracking record, or null if the ticket has no matching SLA policy yet' })
   async getTracking(@Param('ticketId', ParseUUIDPipe) ticketId: string) {
     const tracking = await this.slaService.getTrackingForTicket(ticketId);
     return {
