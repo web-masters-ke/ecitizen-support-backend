@@ -320,16 +320,18 @@ export class AuditService {
       this.prisma.dataAccessLog.count({ where }),
     ]);
 
-    // Build access summary
+    // Build summaries scoped the same way as the main query: only filter by
+    // userId when actually provided, otherwise summarise across all users.
+    const summaryWhere = query.userId ? { userId: query.userId } : {};
     const accessSummary = await this.prisma.dataAccessLog.groupBy({
       by: ['accessType'],
-      where: { userId: query.userId },
+      where: summaryWhere,
       _count: { _all: true },
     });
 
     const entitySummary = await this.prisma.dataAccessLog.groupBy({
       by: ['entityType'],
-      where: { userId: query.userId },
+      where: summaryWhere,
       _count: { _all: true },
       orderBy: { _count: { entityType: 'desc' } },
     });

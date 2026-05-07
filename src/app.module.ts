@@ -3,7 +3,7 @@ import { ConfigModule } from '@nestjs/config';
 import { ScheduleModule } from '@nestjs/schedule';
 import { ThrottlerModule } from '@nestjs/throttler';
 import { EventEmitterModule } from '@nestjs/event-emitter';
-import { APP_GUARD } from '@nestjs/core';
+import { APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
 
 // Config modules
 import { PrismaModule } from './config/prisma.module';
@@ -12,6 +12,9 @@ import { RedisModule } from './config/redis.module';
 // Guards
 import { JwtAuthGuard } from './common/guards/jwt-auth.guard';
 import { RolesGuard } from './common/guards/roles.guard';
+
+// Interceptors
+import { DataAccessInterceptor } from './common/interceptors/data-access.interceptor';
 
 // Feature modules
 import { AuthModule } from './modules/auth/auth.module';
@@ -93,6 +96,13 @@ import { KafkaModule } from './modules/kafka/kafka.module';
     {
       provide: APP_GUARD,
       useClass: RolesGuard,
+    },
+    // Logs every authenticated GET into data_access_logs so the Audit page
+    // shows reads across all entities, not just tickets. Skips audit/health/
+    // notifications/auth-probe endpoints to avoid recursion and noise.
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: DataAccessInterceptor,
     },
   ],
 })
