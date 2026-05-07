@@ -89,6 +89,22 @@ export class TicketsController {
   }
 
   // ------------------------------------------
+  // GET /api/v1/tickets/me/stats - Own ticket aggregate counts
+  // (Must be declared before :id so 'me' is not parsed as a UUID.)
+  // ------------------------------------------
+
+  @Get('me/stats')
+  @ApiOperation({
+    summary: 'Aggregate counts for the current user\'s own tickets',
+    description: 'Returns total / open / resolved / closed / escalated counts scoped to tickets the caller created. Used by the citizen dashboard so cards reflect real totals, not a single paginated page.',
+  })
+  @SwaggerResponse({ status: 200, description: 'Stats object' })
+  async getMyStats(@CurrentUser() user: JwtPayload) {
+    const data = await this.ticketsService.getMyStats(user.sub);
+    return { success: true, data };
+  }
+
+  // ------------------------------------------
   // GET /api/v1/tickets/:id - Full ticket detail
   // ------------------------------------------
 

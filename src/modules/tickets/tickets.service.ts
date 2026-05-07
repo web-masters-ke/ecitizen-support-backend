@@ -756,6 +756,46 @@ export class TicketsService {
   }
 
   /**
+   * Real aggregate counts for the current user's own tickets. Used by the
+   * citizen dashboard so its tiles aren't computed from a single page of 5.
+   */
+  async getMyStats(userId: string) {
+    const baseWhere = { createdBy: userId, isDeleted: false };
+
+    const [total, open, resolved, closed, escalated] = await Promise.all([
+      this.prisma.ticket.count({ where: baseWhere }),
+      this.prisma.ticket.count({
+        where: {
+          ...baseWhere,
+          status: {
+            name: {
+              in: [
+                'OPEN',
+                'ASSIGNED',
+                'IN_PROGRESS',
+                'ESCALATED',
+                'PENDING_CITIZEN',
+                'REOPENED',
+              ],
+            },
+          },
+        },
+      }),
+      this.prisma.ticket.count({
+        where: { ...baseWhere, status: { name: 'RESOLVED' } },
+      }),
+      this.prisma.ticket.count({
+        where: { ...baseWhere, status: { name: 'CLOSED' } },
+      }),
+      this.prisma.ticket.count({
+        where: { ...baseWhere, isEscalated: true },
+      }),
+    ]);
+
+    return { total, open, resolved, closed, escalated };
+  }
+
+  /**
    * Get a single ticket with full details including messages, assignments,
    * history, SLA tracking, and AI classification.
    */
