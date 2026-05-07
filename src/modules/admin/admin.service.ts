@@ -88,11 +88,17 @@ export class AdminService {
       }),
       // Total agencies
       this.prisma.agency.count({ where: { isActive: true } }),
-      // Active agents
+      // Active agents — agents with a non-revoked, non-expired session right now
       this.prisma.user.count({
         where: {
           isActive: true,
           userType: { in: ['AGENCY_AGENT', 'SERVICE_PROVIDER_AGENT'] },
+          sessions: {
+            some: {
+              revoked: false,
+              expiresAt: { gt: new Date() },
+            },
+          },
         },
       }),
       // Tickets by channel
@@ -116,8 +122,6 @@ export class AdminService {
           ticket: { ...agencyFilter, ...dateFilter, isDeleted: false },
         },
         select: {
-          responseMet: true,
-          resolutionMet: true,
           responseBreached: true,
           resolutionBreached: true,
         },
@@ -151,10 +155,12 @@ export class AdminService {
       priorityCounts[name] = (priorityCounts[name] || 0) + 1;
     }
 
-    // Calculate SLA compliance percentage
+    // SLA compliance: a tracked ticket is compliant unless it has an actual
+    // breach flag set. Treating `responseMet !== false` as compliant inflated
+    // the numerator with in-flight tickets that hadn't been evaluated yet.
     const totalSla = slaCompliance.length;
     const metCount = slaCompliance.filter(
-      (s) => s.responseMet !== false && s.resolutionMet !== false,
+      (s) => !s.responseBreached && !s.resolutionBreached,
     ).length;
     const slaCompliancePercentage =
       totalSla > 0 ? Math.round((metCount / totalSla) * 10000) / 100 : 100;
