@@ -540,6 +540,38 @@ export class OnboardAgencyDto {
   @MaxLength(100)
   county?: string;
 
+  // Government hierarchy fields the admin CreateAgency wizard collects.
+  // Without them on the DTO, global whitelist validation rejected the
+  // onboard request with a 400 the instant the wizard sent ministryName.
+  @ApiPropertyOptional({ description: 'Parent ministry name (e.g. "Ministry of Finance")' })
+  @IsOptional()
+  @IsString()
+  @MaxLength(255)
+  ministryName?: string;
+
+  @ApiPropertyOptional({ description: 'State department under the parent ministry' })
+  @IsOptional()
+  @IsString()
+  @MaxLength(255)
+  stateDepartment?: string;
+
+  @ApiPropertyOptional({ description: 'Executive order reference number that established the agency' })
+  @IsOptional()
+  @IsString()
+  @MaxLength(255)
+  executiveOrderRef?: string;
+
+  @ApiPropertyOptional({ description: 'Year of the establishing executive order' })
+  @IsOptional()
+  @Type(() => Number)
+  @IsInt()
+  executiveOrderYear?: number;
+
+  @ApiPropertyOptional({ description: 'Parent agency UUID for sub-agencies' })
+  @IsOptional()
+  @IsUUID()
+  parentAgencyId?: string;
+
   @ApiPropertyOptional({ description: 'Initial departments', type: [OnboardDepartmentDto] })
   @IsOptional()
   @IsArray()

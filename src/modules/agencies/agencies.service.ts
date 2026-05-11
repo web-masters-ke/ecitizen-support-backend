@@ -784,7 +784,8 @@ export class AgenciesService {
     const passwordHash = await bcrypt.hash(dto.adminUser.password, 12);
 
     const result = await this.prisma.$transaction(async (tx) => {
-      // 1. Create agency
+      // 1. Create agency. Government hierarchy fields are optional — set
+      // only the ones the wizard actually provided, leave the rest null.
       const agency = await tx.agency.create({
         data: {
           agencyCode: dto.agencyCode,
@@ -794,6 +795,11 @@ export class AgenciesService {
           officialPhone: dto.officialPhone,
           physicalAddress: dto.physicalAddress,
           county: dto.county,
+          ministryName: dto.ministryName || undefined,
+          stateDepartment: dto.stateDepartment || undefined,
+          executiveOrderRef: dto.executiveOrderRef || undefined,
+          executiveOrderYear: dto.executiveOrderYear ?? undefined,
+          parentAgencyId: dto.parentAgencyId || undefined,
           onboardingStatus: 'IN_PROGRESS',
         },
       });
