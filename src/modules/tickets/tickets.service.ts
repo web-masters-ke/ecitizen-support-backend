@@ -1209,7 +1209,13 @@ export class TicketsService {
     }
 
     const currentStatusName = ticket.status.name as TicketStatusEnum;
-    this.validateTransition(currentStatusName, TicketStatusEnum.ESCALATED);
+    // Re-escalation (L1 → L2 → L3 …) keeps the status as ESCALATED and only
+    // bumps the level. The state machine doesn't list ESCALATED → ESCALATED as
+    // a valid transition, so skip the check when status isn't actually
+    // changing.
+    if (currentStatusName !== TicketStatusEnum.ESCALATED) {
+      this.validateTransition(currentStatusName, TicketStatusEnum.ESCALATED);
+    }
 
     const escalatedStatus = await this.getStatusByName(TicketStatusEnum.ESCALATED);
     const newEscalationLevel = ticket.escalationLevel + 1;
