@@ -28,6 +28,8 @@ enum AgencyType {
   COUNTY_GOVERNMENT
   REGULATORY_BODY
   SERVICE_PROVIDER
+  INTERNATIONAL_ORG
+  CUSTOM
 }
 
 enum TicketChannel {

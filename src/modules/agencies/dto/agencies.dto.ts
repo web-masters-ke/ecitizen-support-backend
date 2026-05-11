@@ -31,6 +31,12 @@ export enum AgencyTypeEnum {
   COUNTY_GOVERNMENT = 'COUNTY_GOVERNMENT',
   REGULATORY_BODY = 'REGULATORY_BODY',
   SERVICE_PROVIDER = 'SERVICE_PROVIDER',
+  // The admin "Onboard Agency" form exposes these two — they used to
+  // 500 on save because the backend enum rejected them. They're valid
+  // categories for KE government partners (UN agencies, sister
+  // ministries) and one-off entries we don't have a strict bucket for.
+  INTERNATIONAL_ORG = 'INTERNATIONAL_ORG',
+  CUSTOM = 'CUSTOM',
 }
 
 export enum OnboardingStatusEnum {
