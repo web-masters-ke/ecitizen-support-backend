@@ -1025,6 +1025,15 @@ export class TicketsService {
       throw new BadRequestException(`User ${dto.assigneeId} not found`);
     }
 
+    // Resolve a display name. Some agency-admin-created users have null
+    // firstName/lastName, which produced empty "Ticket reassigned to "
+    // messages in the history feed. Fall back to email, then to a generic
+    // label so the history line is never blank.
+    const assigneeName =
+      `${assignee.firstName ?? ''} ${assignee.lastName ?? ''}`.trim() ||
+      assignee.email ||
+      'an agent';
+
     const currentStatusName = ticket.status.name as TicketStatusEnum;
 
     // Determine if we need a status transition
@@ -1071,7 +1080,7 @@ export class TicketsService {
             ticketId: id,
             senderId: assignedBy,
             messageType: 'STATUS_CHANGE',
-            messageText: `Ticket assigned to ${assignee.firstName || ''} ${assignee.lastName || ''}${dto.reason ? `. Reason: ${dto.reason}` : ''}`.trim(),
+            messageText: `Ticket assigned to ${assigneeName}${dto.reason ? `. Reason: ${dto.reason}` : ''}`,
             isInternal: true,
           },
         }),
@@ -1133,7 +1142,7 @@ export class TicketsService {
           ticketId: id,
           senderId: assignedBy,
           messageType: 'STATUS_CHANGE',
-          messageText: `Ticket reassigned to ${assignee.firstName || ''} ${assignee.lastName || ''}${dto.reason ? `. Reason: ${dto.reason}` : ''}`.trim(),
+          messageText: `Ticket reassigned to ${assigneeName}${dto.reason ? `. Reason: ${dto.reason}` : ''}`,
           isInternal: true,
         },
       }),
