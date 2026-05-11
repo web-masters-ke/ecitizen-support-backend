@@ -72,6 +72,25 @@ export class TicketsController {
   }
 
   // ------------------------------------------
+  // GET /api/v1/tickets/track - Public lookup by ticket number (no auth)
+  // Citizens can paste the reference from their email/footer; we return
+  // only the minimal status info — no PII, no description, no messages.
+  // Declared before the auth-protected list endpoint and before any :id
+  // routes so it's matched first and isn't blocked by the JWT guard.
+  // ------------------------------------------
+
+  @Get('track')
+  @Public()
+  @ApiOperation({
+    summary: 'Public ticket lookup by ticket number (no auth)',
+    description: 'Returns minimal status info for the citizen-facing /track page. Safe to call unauthenticated.',
+  })
+  @SwaggerResponse({ status: 200, description: 'Public ticket status info' })
+  async trackPublic(@Query('ticketNumber') ticketNumber: string) {
+    return this.ticketsService.lookupPublicByNumber(ticketNumber);
+  }
+
+  // ------------------------------------------
   // GET /api/v1/tickets - Paginated list with filters
   // ------------------------------------------
 

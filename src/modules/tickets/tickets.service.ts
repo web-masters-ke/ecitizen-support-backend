@@ -2204,4 +2204,38 @@ export class TicketsService {
         : null,
     };
   }
+
+  // Public lookup by ticketNumber for the /track page. No PII, no description,
+  // no message history — only enough fields to show the citizen current state.
+  async lookupPublicByNumber(rawNumber: string) {
+    const normalised = (rawNumber ?? '')
+      .replace(/\s+/g, ' ')
+      .trim()
+      .toUpperCase();
+    if (!normalised) throw new BadRequestException('Ticket number is required');
+
+    const ticket = await this.prisma.ticket.findFirst({
+      where: { ticketNumber: { equals: normalised, mode: 'insensitive' } },
+      select: {
+        id: true,
+        ticketNumber: true,
+        subject: true,
+        createdAt: true,
+        updatedAt: true,
+        status: { select: { name: true } },
+        agency: { select: { agencyName: true } },
+      },
+    });
+    if (!ticket) throw new NotFoundException('Ticket not found');
+
+    return {
+      id: ticket.id,
+      ticketNumber: ticket.ticketNumber,
+      subject: ticket.subject,
+      status: ticket.status?.name ?? 'OPEN',
+      createdAt: ticket.createdAt,
+      updatedAt: ticket.updatedAt,
+      agency: ticket.agency ? { agencyName: ticket.agency.agencyName } : null,
+    };
+  }
 }
