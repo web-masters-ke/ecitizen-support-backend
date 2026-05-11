@@ -1,4 +1,4 @@
-import { Injectable, Logger, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { Cron, CronExpression } from '@nestjs/schedule';
 import { PrismaService } from '@config/prisma.service';
 import { KafkaService } from '../kafka/kafka.service';
@@ -114,7 +114,26 @@ export class SlaService {
     requestedBy: string;
   }) {
     if (args.action !== 'CREATE' && !args.targetPolicyId) {
-      throw new NotFoundException('targetPolicyId is required for UPDATE / ARCHIVE');
+      throw new BadRequestException('targetPolicyId is required for UPDATE / ARCHIVE');
+    }
+    // Validate UUID shape before hitting Prisma so we return a clean 400
+    // instead of letting a Prisma "Inconsistent column data: Error creating UUID"
+    // stacktrace bubble up to the API consumer.
+    const uuidRe = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+    if (args.targetPolicyId && !uuidRe.test(args.targetPolicyId)) {
+      throw new BadRequestException('targetPolicyId must be a valid UUID');
+    }
+    if (args.targetPolicyId) {
+      // Confirm the policy exists and belongs to the same agency to avoid
+      // cross-agency tampering via crafted IDs.
+      const policy = await this.prisma.slaPolicy.findUnique({
+        where: { id: args.targetPolicyId },
+        select: { id: true, agencyId: true },
+      });
+      if (!policy) throw new NotFoundException('Target SLA policy not found');
+      if (policy.agencyId !== args.agencyId) {
+        throw new BadRequestException('Target policy does not belong to the selected agency');
+      }
     }
     return this.prisma.slaChangeRequest.create({
       data: {
