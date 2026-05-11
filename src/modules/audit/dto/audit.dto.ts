@@ -123,6 +123,11 @@ export class QueryAuditLogsDto {
   @IsString()
   endDate?: string;
 
+  @ApiPropertyOptional({ description: 'Free-text search across performer name/email, entity type, action type, and resource id' })
+  @IsOptional()
+  @IsString()
+  search?: string;
+
   @ApiPropertyOptional({ default: 1 })
   @IsOptional()
   @Type(() => Number)
@@ -199,6 +204,11 @@ export class QueryUserActivityDto {
   @IsString()
   endDate?: string;
 
+  @ApiPropertyOptional({ description: 'Free-text search across user, activity, and description' })
+  @IsOptional()
+  @IsString()
+  search?: string;
+
   @ApiPropertyOptional({ default: 1 })
   @IsOptional()
   @Type(() => Number)
@@ -274,6 +284,11 @@ export class QueryDataAccessDto {
   @IsOptional()
   @IsString()
   endDate?: string;
+
+  @ApiPropertyOptional({ description: 'Free-text search across user, entity, and field' })
+  @IsOptional()
+  @IsString()
+  search?: string;
 
   @ApiPropertyOptional({ default: 1 })
   @IsOptional()

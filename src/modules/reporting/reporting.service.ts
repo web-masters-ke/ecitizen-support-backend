@@ -4,6 +4,7 @@ import {
   Logger,
 } from '@nestjs/common';
 import { PrismaService } from '../../config/prisma.service';
+import { TicketStatusName, TicketPriorityName } from '@prisma/client';
 import {
   QueryDashboardMetricsDto,
   QuerySlaReportDto,
@@ -14,6 +15,7 @@ import {
   CreateExportRequestDto,
   ExportFormat,
   QuerySnapshotsDto,
+  QueryIncomingThreadsDto,
 } from './dto/reporting.dto';
 
 @Injectable()
@@ -28,6 +30,49 @@ export class ReportingService {
     const agencyFilter = query.agencyId
       ? { agencyId: query.agencyId }
       : {};
+
+    // Resolve status/priority name filters to IDs. Names are Prisma enums —
+    // upper-case the incoming string and look it up. Unknown values resolve
+    // to null, which silently disables that filter.
+    const statusEnum = query.status
+      ? (query.status.toUpperCase() as TicketStatusName)
+      : null;
+    const priorityEnum = query.priority
+      ? (query.priority.toUpperCase() as TicketPriorityName)
+      : null;
+    const [statusRow, priorityRow] = await Promise.all([
+      statusEnum
+        ? this.prisma.ticketStatus.findFirst({
+            where: { name: statusEnum },
+            select: { id: true },
+          })
+        : Promise.resolve(null),
+      priorityEnum
+        ? this.prisma.ticketPriorityLevel.findFirst({
+            where: { name: priorityEnum },
+            select: { id: true },
+          })
+        : Promise.resolve(null),
+    ]);
+
+    const dateFilter: { gte?: Date; lte?: Date } = {};
+    if (query.startDate) dateFilter.gte = new Date(query.startDate);
+    if (query.endDate) {
+      // Treat endDate as inclusive end-of-day
+      const end = new Date(query.endDate);
+      end.setHours(23, 59, 59, 999);
+      dateFilter.lte = end;
+    }
+    const createdAtFilter = Object.keys(dateFilter).length ? { createdAt: dateFilter } : {};
+
+    // Filters applied to every ticket query
+    const ticketBaseFilter = {
+      ...agencyFilter,
+      ...createdAtFilter,
+      isDeleted: false,
+      ...(statusRow ? { statusId: statusRow.id } : {}),
+      ...(priorityRow ? { priorityId: priorityRow.id } : {}),
+    };
 
     // Get current open ticket statuses
     const openStatuses = await this.prisma.ticketStatus.findMany({
@@ -47,6 +92,15 @@ export class ReportingService {
     const now = new Date();
     const twentyFourHoursAgo = new Date(now.getTime() - 24 * 60 * 60 * 1000);
 
+    // When a specific status filter is set, "open" counts should reflect that filter
+    // (i.e. drop the openStatusIds constraint since the caller already asked for a status).
+    const openStatusConstraint = statusRow ? {} : { statusId: { in: openStatusIds } };
+    const resolved24hConstraint = statusRow
+      ? {}
+      : resolvedStatus
+        ? { statusId: resolvedStatus.id }
+        : null;
+
     // Run all aggregation queries in parallel
     const [
       totalOpen,
@@ -63,37 +117,33 @@ export class ReportingService {
       // Total open tickets
       this.prisma.ticket.count({
         where: {
-          ...agencyFilter,
-          statusId: { in: openStatusIds },
-          isDeleted: false,
+          ...ticketBaseFilter,
+          ...openStatusConstraint,
         },
       }),
 
       // Resolved in last 24 hours
-      resolvedStatus
+      resolved24hConstraint
         ? this.prisma.ticket.count({
             where: {
-              ...agencyFilter,
-              statusId: resolvedStatus.id,
+              ...ticketBaseFilter,
+              ...resolved24hConstraint,
               resolvedAt: { gte: twentyFourHoursAgo },
-              isDeleted: false,
             },
           })
         : 0,
 
-      // Total SLA tracked
+      // Total SLA tracked (scoped to current ticket filter)
       this.prisma.slaTracking.count({
-        where: agencyFilter.agencyId
-          ? { ticket: { agencyId: agencyFilter.agencyId } }
-          : {},
+        where: {
+          ticket: { ...ticketBaseFilter },
+        },
       }),
 
       // SLA compliant (both response and resolution met)
       this.prisma.slaTracking.count({
         where: {
-          ...(agencyFilter.agencyId
-            ? { ticket: { agencyId: agencyFilter.agencyId } }
-            : {}),
+          ticket: { ...ticketBaseFilter },
           OR: [
             { responseMet: true, resolutionMet: true },
             { responseBreached: false, resolutionBreached: false },
@@ -104,47 +154,45 @@ export class ReportingService {
       // Active escalated tickets
       this.prisma.ticket.count({
         where: {
-          ...agencyFilter,
+          ...ticketBaseFilter,
           isEscalated: true,
-          statusId: { in: openStatusIds },
-          isDeleted: false,
+          ...openStatusConstraint,
         },
       }),
 
       // Average resolution time (for resolved tickets)
       this.prisma.ticket.findMany({
         where: {
-          ...agencyFilter,
+          ...ticketBaseFilter,
           resolvedAt: { not: null },
-          isDeleted: false,
         },
         select: { createdAt: true, resolvedAt: true },
         take: 10000, // Limit for performance
       }),
 
-      // Total tickets (all time)
+      // Total tickets matching the filter
       this.prisma.ticket.count({
-        where: { ...agencyFilter, isDeleted: false },
+        where: ticketBaseFilter,
       }),
 
       // Tickets grouped by status
       this.prisma.ticket.groupBy({
         by: ['statusId'],
-        where: { ...agencyFilter, isDeleted: false },
+        where: ticketBaseFilter,
         _count: { _all: true },
       }),
 
       // Tickets grouped by priority
       this.prisma.ticket.groupBy({
         by: ['priorityId'],
-        where: { ...agencyFilter, isDeleted: false },
+        where: ticketBaseFilter,
         _count: { _all: true },
       }),
 
       // Tickets grouped by channel
       this.prisma.ticket.groupBy({
         by: ['channel'],
-        where: { ...agencyFilter, isDeleted: false },
+        where: ticketBaseFilter,
         _count: { _all: true },
       }),
     ]);
@@ -297,16 +345,137 @@ export class ReportingService {
   // ─── AGENCY PERFORMANCE ──────────────────────────────────────────────────────
 
   async getAgencyPerformance(query: QueryAgencyPerformanceDto) {
-    const where: any = {};
-    if (query.agencyId) where.agencyId = query.agencyId;
+    // ── Live per-agency aggregation ───────────────────────────────────────
+    // The AgencyPerformanceMetric rollup table is populated by a scheduled
+    // job that may not have run on this environment. To keep the dashboard
+    // useful regardless of rollup state, compute stats directly from tickets.
 
-    if (query.startDate || query.endDate) {
-      if (query.startDate)
-        where.reportingPeriodStart = { gte: new Date(query.startDate) };
-      if (query.endDate)
-        where.reportingPeriodEnd = { lte: new Date(query.endDate) };
+    const dateFilter: { gte?: Date; lte?: Date } = {};
+    if (query.startDate) dateFilter.gte = new Date(query.startDate);
+    if (query.endDate) {
+      const end = new Date(query.endDate);
+      end.setHours(23, 59, 59, 999);
+      dateFilter.lte = end;
+    }
+    const ticketDateFilter = Object.keys(dateFilter).length ? { createdAt: dateFilter } : {};
+
+    const ticketWhere: any = {
+      isDeleted: false,
+      agencyId: query.agencyId ? query.agencyId : { not: null },
+      ...ticketDateFilter,
+    };
+
+    const [resolvedStatuses, openStatuses] = await Promise.all([
+      this.prisma.ticketStatus.findMany({
+        where: { name: { in: ['RESOLVED', 'CLOSED'] } },
+        select: { id: true },
+      }),
+      this.prisma.ticketStatus.findMany({
+        where: { isClosedStatus: false },
+        select: { id: true },
+      }),
+    ]);
+    const resolvedStatusIds = resolvedStatuses.map((s) => s.id);
+    const openStatusIds = openStatuses.map((s) => s.id);
+
+    const [totalByAgency, resolvedByAgency, slaRows] = await Promise.all([
+      this.prisma.ticket.groupBy({
+        by: ['agencyId'],
+        where: ticketWhere,
+        _count: { _all: true },
+      }),
+      this.prisma.ticket.groupBy({
+        by: ['agencyId'],
+        where: { ...ticketWhere, statusId: { in: resolvedStatusIds } },
+        _count: { _all: true },
+      }),
+      this.prisma.slaTracking.findMany({
+        where: { ticket: ticketWhere },
+        select: {
+          responseBreached: true,
+          resolutionBreached: true,
+          ticket: { select: { agencyId: true } },
+        },
+        take: 100_000,
+      }),
+    ]);
+
+    const slaTotalMap = new Map<string, number>();
+    const slaCompliantMap = new Map<string, number>();
+    for (const row of slaRows) {
+      const aid = row.ticket?.agencyId;
+      if (!aid) continue;
+      slaTotalMap.set(aid, (slaTotalMap.get(aid) ?? 0) + 1);
+      if (!row.responseBreached && !row.resolutionBreached) {
+        slaCompliantMap.set(aid, (slaCompliantMap.get(aid) ?? 0) + 1);
+      }
     }
 
+    const agencyIds = totalByAgency.map((r) => r.agencyId).filter(Boolean) as string[];
+    const agencies = agencyIds.length
+      ? await this.prisma.agency.findMany({
+          where: { id: { in: agencyIds } },
+          select: { id: true, agencyName: true, agencyCode: true },
+        })
+      : [];
+    const agencyMap = new Map(agencies.map((a) => [a.id, a]));
+
+    // Avg resolution time per agency. Computed in JS from a single ticket scan,
+    // capped to keep memory bounded.
+    const resolvedTickets = await this.prisma.ticket.findMany({
+      where: {
+        ...ticketWhere,
+        statusId: { in: resolvedStatusIds },
+        resolvedAt: { not: null },
+      },
+      select: { agencyId: true, createdAt: true, resolvedAt: true },
+      take: 50_000,
+    });
+    const resolutionAgg = new Map<string, { total: number; count: number }>();
+    for (const t of resolvedTickets) {
+      if (!t.agencyId || !t.resolvedAt) continue;
+      const minutes = (t.resolvedAt.getTime() - t.createdAt.getTime()) / 60_000;
+      const acc = resolutionAgg.get(t.agencyId) ?? { total: 0, count: 0 };
+      acc.total += minutes;
+      acc.count += 1;
+      resolutionAgg.set(t.agencyId, acc);
+    }
+
+    const resolvedMap = new Map(resolvedByAgency.map((r) => [r.agencyId, r._count._all]));
+
+    const live = totalByAgency
+      .filter((row) => row.agencyId)
+      .map((row) => {
+        const agencyId = row.agencyId as string;
+        const total = row._count._all;
+        const resolved = resolvedMap.get(agencyId) ?? 0;
+        const slaTotal = slaTotalMap.get(agencyId) ?? 0;
+        const slaCompliant = slaCompliantMap.get(agencyId) ?? 0;
+        const res = resolutionAgg.get(agencyId);
+        const agency = agencyMap.get(agencyId);
+        return {
+          agencyId,
+          agencyName: agency?.agencyName ?? 'Unknown agency',
+          agencyCode: agency?.agencyCode ?? null,
+          totalTickets: total,
+          resolvedTickets: resolved,
+          openTickets: Math.max(0, total - resolved),
+          avgResolutionMinutes: res && res.count > 0 ? Math.round((res.total / res.count) * 100) / 100 : null,
+          slaComplianceRate: slaTotal > 0 ? Math.round((slaCompliant / slaTotal) * 10000) / 100 : null,
+        };
+      })
+      .sort((a, b) => b.totalTickets - a.totalTickets);
+
+    const limit = query.limit && query.limit > 0 ? query.limit : 50;
+    const performanceMetrics = live.slice(0, limit);
+
+    // Optional historical metrics (kept for callers that ask by date range)
+    const where: any = {};
+    if (query.agencyId) where.agencyId = query.agencyId;
+    if (query.startDate || query.endDate) {
+      if (query.startDate) where.reportingPeriodStart = { gte: new Date(query.startDate) };
+      if (query.endDate) where.reportingPeriodEnd = { lte: new Date(query.endDate) };
+    }
     const metrics = await this.prisma.agencyPerformanceMetric.findMany({
       where,
       include: {
@@ -372,29 +541,164 @@ export class ReportingService {
     }
 
     return {
-      performanceMetrics: metrics.map((m) => ({
+      performanceMetrics,
+      historicalMetrics: metrics.map((m) => ({
         id: Number(m.id),
         agency: m.agency,
         reportingPeriodStart: m.reportingPeriodStart,
         reportingPeriodEnd: m.reportingPeriodEnd,
         totalTickets: m.totalTickets,
-        avgResponseTime: m.avgResponseTime
-          ? Number(m.avgResponseTime)
-          : null,
-        avgResolutionTime: m.avgResolutionTime
-          ? Number(m.avgResolutionTime)
-          : null,
-        slaCompliancePercentage: m.slaCompliancePercentage
-          ? Number(m.slaCompliancePercentage)
-          : null,
-        escalationRatePercentage: m.escalationRatePercentage
-          ? Number(m.escalationRatePercentage)
-          : null,
-        citizenSatisfactionScore: m.citizenSatisfactionScore
-          ? Number(m.citizenSatisfactionScore)
-          : null,
+        avgResponseTime: m.avgResponseTime ? Number(m.avgResponseTime) : null,
+        avgResolutionTime: m.avgResolutionTime ? Number(m.avgResolutionTime) : null,
+        slaCompliancePercentage: m.slaCompliancePercentage ? Number(m.slaCompliancePercentage) : null,
+        escalationRatePercentage: m.escalationRatePercentage ? Number(m.escalationRatePercentage) : null,
+        citizenSatisfactionScore: m.citizenSatisfactionScore ? Number(m.citizenSatisfactionScore) : null,
       })),
       liveStats,
+    };
+  }
+
+  // ─── INCOMING THREADS (Pesaflow-format ticket export) ─────────────────────
+
+  async getIncomingThreads(query: QueryIncomingThreadsDto) {
+    const dateFilter: { gte?: Date; lte?: Date } = {};
+    if (query.startDate) dateFilter.gte = new Date(query.startDate);
+    if (query.endDate) {
+      const end = new Date(query.endDate);
+      end.setHours(23, 59, 59, 999);
+      dateFilter.lte = end;
+    }
+
+    const where: any = { isDeleted: false };
+    if (query.agencyId) where.agencyId = query.agencyId;
+    if (Object.keys(dateFilter).length) where.createdAt = dateFilter;
+
+    if (query.status) {
+      const statusRow = await this.prisma.ticketStatus.findFirst({
+        where: { name: query.status.toUpperCase() as TicketStatusName },
+        select: { id: true },
+      });
+      if (statusRow) where.statusId = statusRow.id;
+    }
+
+    if (query.channel) {
+      where.channel = query.channel.toUpperCase();
+    }
+
+    if (query.search) {
+      where.OR = [
+        { ticketNumber: { contains: query.search, mode: 'insensitive' } },
+        { subject: { contains: query.search, mode: 'insensitive' } },
+        { creator: {
+          OR: [
+            { firstName: { contains: query.search, mode: 'insensitive' } },
+            { lastName: { contains: query.search, mode: 'insensitive' } },
+            { email: { contains: query.search, mode: 'insensitive' } },
+          ],
+        } },
+      ];
+    }
+
+    const limit = query.limit && query.limit > 0 ? query.limit : 200;
+    const offset = query.offset && query.offset > 0 ? query.offset : 0;
+
+    const [tickets, total] = await Promise.all([
+      this.prisma.ticket.findMany({
+        where,
+        include: {
+          creator: { select: { firstName: true, lastName: true, email: true } },
+          assignee: { select: { firstName: true, lastName: true, email: true } },
+          status: { select: { name: true } },
+          slaTracking: {
+            select: {
+              responseDueAt: true,
+              resolutionDueAt: true,
+              responseBreached: true,
+              resolutionBreached: true,
+            },
+          },
+        },
+        orderBy: { createdAt: 'desc' },
+        skip: offset,
+        take: limit,
+      }),
+      this.prisma.ticket.count({ where }),
+    ]);
+
+    const fullName = (u?: { firstName?: string | null; lastName?: string | null } | null) => {
+      if (!u) return '';
+      const fn = u.firstName ?? '';
+      const ln = u.lastName ?? '';
+      return `${fn} ${ln}`.trim();
+    };
+    const initials = (u?: { firstName?: string | null; lastName?: string | null } | null) => {
+      if (!u) return '-';
+      const fi = (u.firstName ?? '').charAt(0).toUpperCase();
+      const li = (u.lastName ?? '').charAt(0).toUpperCase();
+      const out = [fi, li].filter(Boolean).join(' ');
+      return out || '-';
+    };
+    const formatDuration = (ms: number): string => {
+      if (!Number.isFinite(ms) || ms <= 0) return '-';
+      const totalSec = Math.floor(ms / 1000);
+      const days = Math.floor(totalSec / 86_400);
+      const hours = Math.floor((totalSec % 86_400) / 3600);
+      const minutes = Math.floor((totalSec % 3600) / 60);
+      if (days > 0) return `${days}d ${hours}h`;
+      if (hours > 0) return `${hours}h ${minutes}m`;
+      const seconds = totalSec % 60;
+      const pad = (n: number) => String(n).padStart(2, '0');
+      return `${pad(hours)}:${pad(minutes)}:${pad(seconds)}`;
+    };
+
+    const now = Date.now();
+    const rows = tickets.map((t) => {
+      const isViolated = !!(t.slaTracking?.responseBreached || t.slaTracking?.resolutionBreached);
+      const breachRefMs = t.slaTracking?.resolutionDueAt?.getTime() ?? null;
+      const agentResponseMs = t.firstResponseAt
+        ? t.firstResponseAt.getTime() - t.createdAt.getTime()
+        : null;
+      const systemResponseMs = t.slaTracking?.responseDueAt
+        ? t.slaTracking.responseDueAt.getTime() - t.createdAt.getTime()
+        : null;
+
+      const creatorName = fullName(t.creator) || 'Citizen';
+      const fromField = t.creator?.email
+        ? `"${creatorName}"<${t.creator.email}>`
+        : creatorName;
+
+      return {
+        ticketId: t.ticketNumber,
+        subject: t.subject,
+        ticketOwner: initials(t.assignee),
+        contactName: creatorName,
+        eventOwner: fullName(t.assignee) || 'Unassigned',
+        from: fromField,
+        receivedTime: t.createdAt,
+        responseStatus: t.firstResponseAt ? 'Responded' : 'Pending',
+        respondedBy: t.firstResponseAt ? initials(t.assignee) : '-',
+        agentRespondedTime: t.firstResponseAt,
+        agentResponseTime: agentResponseMs != null ? formatDuration(agentResponseMs) : '-',
+        systemResponseTime: systemResponseMs != null ? formatDuration(systemResponseMs) : '-',
+        isViolated,
+        violatedTime: isViolated && breachRefMs ? new Date(breachRefMs).toISOString() : '-',
+        ownerDuringViolation: isViolated ? (fullName(t.assignee) || 'Unassigned') : '-',
+        breachTime: isViolated && breachRefMs ? formatDuration(now - breachRefMs) : '-',
+        status: t.status?.name ?? '-',
+        channel: t.channel,
+      };
+    });
+
+    return {
+      rows,
+      pagination: { total, limit, offset, returned: rows.length },
+      columns: [
+        'TICKET ID', 'SUBJECT', 'TICKET OWNER', 'CONTACT NAME', 'EVENT OWNER',
+        'FROM', 'RECEIVED TIME', 'RESPONSE STATUS', 'RESPONDED BY',
+        'AGENT RESPONDED TIME', 'AGENT RESPONSE TIME', 'SYSTEM RESPONSE TIME',
+        'IS_VIOLATED', 'VIOLATED TIME', 'OWNER DURING VIOLATION',
+        'BREACH TIME', 'STATUS', 'CHANNEL',
+      ],
     };
   }
 

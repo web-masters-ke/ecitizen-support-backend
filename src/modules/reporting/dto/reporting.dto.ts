@@ -18,6 +18,26 @@ export class QueryDashboardMetricsDto {
   @IsOptional()
   @IsUUID()
   agencyId?: string;
+
+  @ApiPropertyOptional({ description: 'Start date (ISO string)', example: '2026-01-01' })
+  @IsOptional()
+  @IsString()
+  startDate?: string;
+
+  @ApiPropertyOptional({ description: 'End date (ISO string)', example: '2026-12-31' })
+  @IsOptional()
+  @IsString()
+  endDate?: string;
+
+  @ApiPropertyOptional({ description: 'Filter by ticket status name (e.g. OPEN, RESOLVED)' })
+  @IsOptional()
+  @IsString()
+  status?: string;
+
+  @ApiPropertyOptional({ description: 'Filter by ticket priority name (e.g. CRITICAL, HIGH)' })
+  @IsOptional()
+  @IsString()
+  priority?: string;
 }
 
 // ─── SLA Report Query ────────────────────────────────────────────────────────
@@ -56,6 +76,63 @@ export class QueryAgencyPerformanceDto {
   @IsOptional()
   @IsString()
   endDate?: string;
+
+  @ApiPropertyOptional({ description: 'Max number of agencies to return', minimum: 1, maximum: 500 })
+  @IsOptional()
+  @Type(() => Number)
+  @IsInt()
+  @Min(1)
+  @Max(500)
+  limit?: number;
+}
+
+// ─── Incoming Threads Query (Pesaflow-style ticket export) ──────────────────
+
+export class QueryIncomingThreadsDto {
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsUUID()
+  agencyId?: string;
+
+  @ApiPropertyOptional({ description: 'Start date (ISO string)' })
+  @IsOptional()
+  @IsString()
+  startDate?: string;
+
+  @ApiPropertyOptional({ description: 'End date (ISO string)' })
+  @IsOptional()
+  @IsString()
+  endDate?: string;
+
+  @ApiPropertyOptional({ description: 'Filter by ticket status name (e.g. OPEN, RESOLVED)' })
+  @IsOptional()
+  @IsString()
+  status?: string;
+
+  @ApiPropertyOptional({ description: 'Filter by ticket channel (e.g. EMAIL, WEB, USSD)' })
+  @IsOptional()
+  @IsString()
+  channel?: string;
+
+  @ApiPropertyOptional({ description: 'Free-text search on subject, citizen, ticket number' })
+  @IsOptional()
+  @IsString()
+  search?: string;
+
+  @ApiPropertyOptional({ minimum: 1, maximum: 5000 })
+  @IsOptional()
+  @Type(() => Number)
+  @IsInt()
+  @Min(1)
+  @Max(5000)
+  limit?: number;
+
+  @ApiPropertyOptional({ minimum: 0 })
+  @IsOptional()
+  @Type(() => Number)
+  @IsInt()
+  @Min(0)
+  offset?: number;
 }
 
 // ─── Ticket Metrics Query ────────────────────────────────────────────────────

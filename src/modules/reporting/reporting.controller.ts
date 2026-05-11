@@ -20,6 +20,7 @@ import {
   QueryUserPerformanceDto,
   CreateExportRequestDto,
   QuerySnapshotsDto,
+  QueryIncomingThreadsDto,
 } from './dto/reporting.dto';
 
 @ApiTags('Reporting')
@@ -88,6 +89,16 @@ export class ReportingController {
   })
   getUserPerformance(@Query() query: QueryUserPerformanceDto) {
     return this.reportingService.getUserPerformance(query);
+  }
+
+  @Get('incoming-threads')
+  @ApiOperation({
+    summary: 'Get incoming-threads ticket report (Pesaflow-format export)',
+    description:
+      'Returns tickets in the column layout used by the Pesaflow incoming-threads workbook: ticket id, subject, owners, contact, FROM, received time, response status, response/breach times, status, and channel. Built for direct CSV/XLSX export.',
+  })
+  getIncomingThreads(@Query() query: QueryIncomingThreadsDto) {
+    return this.reportingService.getIncomingThreads(query);
   }
 
   @Post('export')

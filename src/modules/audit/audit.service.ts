@@ -69,7 +69,35 @@ export class AuditService {
       where.createdAt = {};
       if (query.startDate)
         where.createdAt.gte = new Date(query.startDate);
-      if (query.endDate) where.createdAt.lte = new Date(query.endDate);
+      if (query.endDate) {
+        // Inclusive end-of-day so a "To" date covers the whole day, not just 00:00
+        const end = new Date(query.endDate);
+        end.setHours(23, 59, 59, 999);
+        where.createdAt.lte = end;
+      }
+    }
+
+    if (query.search) {
+      const q = query.search.trim();
+      if (q) {
+        where.AND = [
+          ...(where.AND ?? []),
+          {
+            OR: [
+              { entityType: { contains: q, mode: 'insensitive' } },
+              { actionType: { contains: q, mode: 'insensitive' } },
+              { ipAddress: { contains: q, mode: 'insensitive' } },
+              { performer: {
+                OR: [
+                  { firstName: { contains: q, mode: 'insensitive' } },
+                  { lastName: { contains: q, mode: 'insensitive' } },
+                  { email: { contains: q, mode: 'insensitive' } },
+                ],
+              } },
+            ],
+          },
+        ];
+      }
     }
 
     const page = query.page || 1;
@@ -186,7 +214,34 @@ export class AuditService {
       where.createdAt = {};
       if (query.startDate)
         where.createdAt.gte = new Date(query.startDate);
-      if (query.endDate) where.createdAt.lte = new Date(query.endDate);
+      if (query.endDate) {
+        const end = new Date(query.endDate);
+        end.setHours(23, 59, 59, 999);
+        where.createdAt.lte = end;
+      }
+    }
+
+    if (query.search) {
+      const q = query.search.trim();
+      if (q) {
+        where.AND = [
+          ...(where.AND ?? []),
+          {
+            OR: [
+              { activityType: { contains: q, mode: 'insensitive' } },
+              { description: { contains: q, mode: 'insensitive' } },
+              { ipAddress: { contains: q, mode: 'insensitive' } },
+              { user: {
+                OR: [
+                  { firstName: { contains: q, mode: 'insensitive' } },
+                  { lastName: { contains: q, mode: 'insensitive' } },
+                  { email: { contains: q, mode: 'insensitive' } },
+                ],
+              } },
+            ],
+          },
+        ];
+      }
     }
 
     const page = query.page || 1;
@@ -290,7 +345,33 @@ export class AuditService {
       where.accessedAt = {};
       if (query.startDate)
         where.accessedAt.gte = new Date(query.startDate);
-      if (query.endDate) where.accessedAt.lte = new Date(query.endDate);
+      if (query.endDate) {
+        const end = new Date(query.endDate);
+        end.setHours(23, 59, 59, 999);
+        where.accessedAt.lte = end;
+      }
+    }
+
+    if (query.search) {
+      const q = query.search.trim();
+      if (q) {
+        where.AND = [
+          ...(where.AND ?? []),
+          {
+            OR: [
+              { entityType: { contains: q, mode: 'insensitive' } },
+              { fieldAccessed: { contains: q, mode: 'insensitive' } },
+              { user: {
+                OR: [
+                  { firstName: { contains: q, mode: 'insensitive' } },
+                  { lastName: { contains: q, mode: 'insensitive' } },
+                  { email: { contains: q, mode: 'insensitive' } },
+                ],
+              } },
+            ],
+          },
+        ];
+      }
     }
 
     const page = query.page || 1;
