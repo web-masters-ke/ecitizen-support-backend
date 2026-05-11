@@ -1720,12 +1720,29 @@ export class TicketsService {
     // the citizen received a message via WS with attachments: [] and the file
     // only appeared on full reload.
     if (dto.fileUrl) {
+      // Resolve a friendly fileName. The client should send the original
+      // filename, but older code paths occasionally sent the UUID-shaped
+      // storage name. If the URL points at /media/serve/:fileId we can
+      // always look up the Media row and use originalName as a fallback.
+      let resolvedFileName: string | null = dto.fileName?.trim() || null;
+      const looksUuid =
+        !!resolvedFileName &&
+        /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\.[^/]+$/i.test(resolvedFileName);
+      const fileIdMatch = dto.fileUrl.match(/\/media\/serve\/([0-9a-f-]{36})/i);
+      if ((looksUuid || !resolvedFileName) && fileIdMatch) {
+        const media = await this.prisma.media.findUnique({
+          where: { fileId: fileIdMatch[1] },
+          select: { originalName: true },
+        });
+        if (media?.originalName) resolvedFileName = media.originalName;
+      }
+
       await this.prisma.ticketAttachment.create({
         data: {
           ticketId,
           messageId: message.id,
           storageUrl: dto.fileUrl,
-          fileName: dto.fileName || null,
+          fileName: resolvedFileName,
           fileType: dto.fileType || null,
           uploadedBy: senderId,
         },
@@ -1825,6 +1842,47 @@ export class TicketsService {
       }),
       this.prisma.ticketMessage.count({ where }),
     ]);
+
+    // Backfill display names for attachments whose fileName is the
+    // UUID-shaped storage filename (early uploads stored that instead
+    // of the human-friendly originalName). For each storageUrl pointing
+    // at /media/serve/:fileId, look up the Media row and substitute
+    // originalName so the citizen sees "MyReport.docx" not a UUID.
+    const fileIds: string[] = [];
+    for (const msg of data) {
+      for (const att of (msg as any).attachments ?? []) {
+        const looksUuid =
+          typeof att.fileName === 'string' &&
+          /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\.[^/]+$/i.test(att.fileName);
+        const match = typeof att.storageUrl === 'string'
+          ? att.storageUrl.match(/\/media\/serve\/([0-9a-f-]{36})/i)
+          : null;
+        if ((looksUuid || !att.fileName) && match) {
+          fileIds.push(match[1]);
+        }
+      }
+    }
+    if (fileIds.length) {
+      const medias = await this.prisma.media.findMany({
+        where: { fileId: { in: Array.from(new Set(fileIds)) } },
+        select: { fileId: true, originalName: true },
+      });
+      const byFileId = new Map(medias.map((m) => [m.fileId, m.originalName]));
+      for (const msg of data) {
+        for (const att of (msg as any).attachments ?? []) {
+          const match = typeof att.storageUrl === 'string'
+            ? att.storageUrl.match(/\/media\/serve\/([0-9a-f-]{36})/i)
+            : null;
+          if (!match) continue;
+          const real = byFileId.get(match[1]);
+          if (!real) continue;
+          const looksUuid =
+            typeof att.fileName === 'string' &&
+            /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\.[^/]+$/i.test(att.fileName);
+          if (looksUuid || !att.fileName) att.fileName = real;
+        }
+      }
+    }
 
     const totalPages = Math.ceil(total / limit);
 
