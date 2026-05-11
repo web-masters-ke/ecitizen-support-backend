@@ -133,8 +133,10 @@ export class ChatController {
 
   /** Delete a room and all its messages (group rooms only) */
   @Delete('rooms/:roomId')
-  deleteRoom(@Param('roomId') roomId: string) {
-    return this.chatService.deleteRoom(roomId);
+  deleteRoom(@Param('roomId') roomId: string, @Request() req: any) {
+    const roles: string[] = Array.isArray(req.user?.roles) ? req.user.roles : [];
+    if (req.user?.role) roles.push(req.user.role);
+    return this.chatService.deleteRoom(roomId, req.user.sub, roles);
   }
 
   /** Leave a room (removes self from participants) */

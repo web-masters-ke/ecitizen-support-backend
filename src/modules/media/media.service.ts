@@ -617,8 +617,15 @@ export class MediaService {
    * Serialize BigInt fields to numbers for JSON response
    */
   private serializeMedia(media: any) {
+    // Strip the raw file bytes from the response — they live in the DB
+    // for the serve endpoint to stream back, but shipping them with
+    // every upload/list response would bloat the JSON by megabytes per
+    // file. fileName is the generated UUID-suffixed name (used for
+    // storage); originalName is the human-readable name the client
+    // should display.
+    const { fileData: _drop, ...rest } = media;
     return {
-      ...media,
+      ...rest,
       sizeBytes: Number(media.sizeBytes),
     };
   }

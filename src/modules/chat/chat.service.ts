@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
+import { Injectable, NotFoundException, BadRequestException, ForbiddenException } from '@nestjs/common';
 import { PrismaService } from '../../config/prisma.service';
 import { SendMessageDto, AddParticipantDto, CreateGroupRoomDto } from './dto/chat.dto';
 
@@ -110,7 +110,16 @@ export class ChatService {
       data: {
         type: 'GROUP',
         title: dto.title,
-        participants: { create: allMembers.map((uid) => ({ userId: uid, addedBy: creatorId })) },
+        // The user who creates the group is its OWNER — only they (and SUPER_ADMINs)
+        // can later delete the room. Everyone else joins as MEMBER and can only
+        // leave. This is enforced server-side in deleteRoom().
+        participants: {
+          create: allMembers.map((uid) => ({
+            userId: uid,
+            addedBy: creatorId,
+            role: uid === creatorId ? 'OWNER' : 'MEMBER',
+          })),
+        },
       },
       include: ROOM_INCLUDE,
     });
@@ -372,9 +381,31 @@ export class ChatService {
   }
 
   // ─── Delete room ─────────────────────────────────────────────────────────
-  async deleteRoom(roomId: string) {
-    const room = await this.prisma.chatRoom.findUnique({ where: { id: roomId } });
+  async deleteRoom(roomId: string, requesterId: string, requesterRoles: string[] = []) {
+    const room = await this.prisma.chatRoom.findUnique({
+      where: { id: roomId },
+      include: { participants: true },
+    });
     if (!room) throw new NotFoundException('Room not found');
+
+    // Authorization: SUPER_ADMIN can delete anything; otherwise the caller
+    // must be the OWNER of the group. Backfill for rooms created before the
+    // OWNER role existed: the creator is identified by their participant row
+    // where `userId === addedBy` (createGroupRoom stamped that consistently).
+    const isSuperAdmin = requesterRoles.includes('SUPER_ADMIN');
+    if (!isSuperAdmin) {
+      const owner = room.participants.find((p) => p.role === 'OWNER');
+      const legacyCreator = !owner
+        ? room.participants.find((p) => p.userId && p.userId === p.addedBy)
+        : null;
+      const ownerUserId = owner?.userId ?? legacyCreator?.userId;
+      if (!ownerUserId || ownerUserId !== requesterId) {
+        throw new ForbiddenException(
+          'Only the group creator can delete this chat. Use "Leave group" instead.',
+        );
+      }
+    }
+
     const msgs = await this.prisma.chatMessage.findMany({ where: { roomId }, select: { id: true } });
     if (msgs.length) {
       await this.prisma.chatReadReceipt.deleteMany({ where: { messageId: { in: msgs.map((m) => m.id) } } });
