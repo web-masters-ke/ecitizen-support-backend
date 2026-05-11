@@ -39,5 +39,12 @@ else
   echo "⚠️  Agency update failed, continuing..."
 fi
 
+echo "Backfilling default ticket categories for agencies with none..."
+if npx ts-node --transpile-only prisma/seed-default-categories.ts; then
+  echo "✅ Default categories backfilled"
+else
+  echo "⚠️  Default-categories backfill failed, continuing..."
+fi
+
 echo "Starting application..."
 exec node dist/main.js
