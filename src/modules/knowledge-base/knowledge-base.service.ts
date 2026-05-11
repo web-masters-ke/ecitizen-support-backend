@@ -274,7 +274,20 @@ export class KnowledgeBaseService {
       this.logger.warn(`Failed to track view for article ${id}: ${err.message}`),
     );
 
-    return article;
+    // Flatten the latest version's content + summary onto the article so
+    // the admin Edit modal and the public reader can both consume a single
+    // shape. Prefer the currentVersionId if set; otherwise fall back to the
+    // newest version. Without this, clients have to dig into versions[0]
+    // themselves and the Edit modal renders an empty textarea.
+    const current = article.versions.find((v) => v.id === article.currentVersionId)
+      ?? article.versions[0]
+      ?? null;
+    return {
+      ...article,
+      content: current?.content ?? '',
+      summary: current?.summary ?? null,
+      changeNotes: current?.changeNotes ?? null,
+    };
   }
 
   /**
