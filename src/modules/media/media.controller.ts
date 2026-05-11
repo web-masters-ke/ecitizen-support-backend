@@ -6,6 +6,7 @@ import {
   Param,
   Query,
   Body,
+  Res,
   UseInterceptors,
   UploadedFile,
   UploadedFiles,
@@ -15,6 +16,9 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
+import { Response } from 'express';
+import { Public } from '../../common/decorators/public.decorator';
+import { SkipResponseTransform } from '../../common/decorators/skip-response-transform.decorator';
 import {
   ApiTags,
   ApiOperation,
@@ -92,6 +96,48 @@ const multerOptions = {
 @Controller('media')
 export class MediaController {
   constructor(private readonly mediaService: MediaService) {}
+
+  // ------------------------------------------------------------------
+  // GET /api/v1/media/serve/:fileId
+  // Stream a previously-uploaded file's bytes back to the caller.
+  // Public + no envelope: this is the URL stored in storageUrl, which
+  // gets handed out to admin/citizen clients and embedded in chat /
+  // ticket messages, so it has to work without an Authorization header.
+  // Declared before the auth-protected :id routes so the JWT guard
+  // and ParseUUIDPipe don't swallow it.
+  // ------------------------------------------------------------------
+  @Get('serve/:fileId')
+  @Public()
+  @SkipResponseTransform()
+  @ApiOperation({ summary: 'Stream a stored file by fileId (public)' })
+  @ApiParam({ name: 'fileId', description: 'Media fileId (uuid)' })
+  async serveFile(
+    @Param('fileId', ParseUUIDPipe) fileId: string,
+    @Res() res: Response,
+  ) {
+    const { buffer, mimeType, fileName, sizeBytes } =
+      await this.mediaService.serveFile(fileId);
+
+    const isInlineable =
+      mimeType.startsWith('image/') ||
+      mimeType.startsWith('audio/') ||
+      mimeType.startsWith('video/') ||
+      mimeType === 'application/pdf';
+    const disposition = isInlineable ? 'inline' : 'attachment';
+
+    res.setHeader('Content-Type', mimeType);
+    res.setHeader('Content-Length', String(sizeBytes));
+    // RFC 5987 encoding so non-ASCII filenames survive the round trip.
+    const encoded = encodeURIComponent(fileName);
+    res.setHeader(
+      'Content-Disposition',
+      `${disposition}; filename="${fileName.replace(/"/g, '')}"; filename*=UTF-8''${encoded}`,
+    );
+    res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Cross-Origin-Resource-Policy', 'cross-origin');
+    res.send(buffer);
+  }
 
   @Post('upload')
   @ApiOperation({ summary: 'Upload a single file' })

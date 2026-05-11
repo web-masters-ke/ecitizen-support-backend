@@ -1505,6 +1505,10 @@ model Media {
   mimeType      String   @map("mime_type") @db.VarChar(100)
   sizeBytes     BigInt   @map("size_bytes")
   storageUrl    String   @map("storage_url")
+  // File bytes persisted alongside metadata so downloads survive pod restarts
+  // and don't depend on local-disk state. Populated when storage mode is
+  // local; left null when files live in S3.
+  fileData      Bytes?   @map("file_data")
   thumbnailUrl  String?  @map("thumbnail_url")
   width         Int?
   height        Int?

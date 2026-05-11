@@ -9,7 +9,6 @@ import * as express from 'express';
 import * as path from 'path';
 import { AppModule } from './app.module';
 import { HttpExceptionFilter } from './common/filters/http-exception.filter';
-import { TransformInterceptor } from './common/interceptors/transform.interceptor';
 
 const logger = new Logger('Bootstrap');
 
@@ -64,9 +63,8 @@ async function bootstrap() {
     }),
   );
 
-  // Global filters and interceptors
+  // Global filters
   app.useGlobalFilters(new HttpExceptionFilter());
-  app.useGlobalInterceptors(new TransformInterceptor());
 
   // Swagger
   const swaggerConfig = new DocumentBuilder()

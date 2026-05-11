@@ -15,6 +15,7 @@ import { RolesGuard } from './common/guards/roles.guard';
 
 // Interceptors
 import { DataAccessInterceptor } from './common/interceptors/data-access.interceptor';
+import { TransformInterceptor } from './common/interceptors/transform.interceptor';
 
 // Feature modules
 import { AuthModule } from './modules/auth/auth.module';
@@ -103,6 +104,12 @@ import { KafkaModule } from './modules/kafka/kafka.module';
     {
       provide: APP_INTERCEPTOR,
       useClass: DataAccessInterceptor,
+    },
+    // Wraps every JSON response in { success, data, meta, timestamp }. Routes
+    // can opt out with @SkipResponseTransform() — used for binary streams.
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: TransformInterceptor,
     },
   ],
 })

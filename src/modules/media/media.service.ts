@@ -187,12 +187,21 @@ export class MediaService {
     const fileName = this.generateFileName(file.originalname);
 
     // Store to disk or S3
-    const storageUrl = await this.storeFile(
+    const storedUrl = await this.storeFile(
       file.buffer,
       fileName,
       mediaType,
       file.mimetype,
     );
+
+    // In local-storage mode the disk URL points to /uploads/... which only
+    // works on whichever pod wrote the file. To survive pod restarts and
+    // multi-replica deploys, persist the bytes in postgres and serve them
+    // back through /api/v1/media/serve/:fileId. S3 stays as-is.
+    const isLocal = this.storageMode !== 's3';
+    const storageUrl = isLocal
+      ? `${this.baseUrl}/api/v1/media/serve/${fileId}`
+      : storedUrl;
 
     // Save metadata to DB
     const media = await this.prisma.media.create({
@@ -205,6 +214,7 @@ export class MediaService {
         mimeType: file.mimetype,
         sizeBytes: BigInt(file.size),
         storageUrl,
+        fileData: isLocal ? file.buffer : null,
         metadata: metadata || undefined,
         isActive: true,
         isDeleted: false,
@@ -216,6 +226,46 @@ export class MediaService {
     );
 
     return this.serializeMedia(media);
+  }
+
+  /**
+   * Stream a file's bytes back to the caller. Looks the media up by fileId,
+   * pulls the bytea column, and returns it with the original mime type and
+   * download filename. Falls back to local disk for older media rows that
+   * pre-date the file_data column.
+   */
+  async serveFile(fileId: string): Promise<{
+    buffer: Buffer;
+    mimeType: string;
+    fileName: string;
+    sizeBytes: number;
+  }> {
+    const media = await this.prisma.media.findUnique({ where: { fileId } });
+    if (!media || media.isDeleted) {
+      throw new NotFoundException('File not found');
+    }
+
+    let buffer: Buffer | null = null;
+    if (media.fileData) {
+      buffer = Buffer.isBuffer(media.fileData)
+        ? media.fileData
+        : Buffer.from(media.fileData as unknown as Uint8Array);
+    } else {
+      // Legacy row written before file_data existed — try local disk.
+      const diskPath = path.join(this.uploadDir, media.mediaType, media.fileName);
+      try {
+        buffer = await fs.promises.readFile(diskPath);
+      } catch {
+        throw new NotFoundException('File content unavailable');
+      }
+    }
+
+    return {
+      buffer,
+      mimeType: media.mimeType,
+      fileName: media.originalName,
+      sizeBytes: Number(media.sizeBytes),
+    };
   }
 
   /**
