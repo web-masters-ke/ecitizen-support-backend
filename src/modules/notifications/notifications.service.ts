@@ -1,4 +1,4 @@
-import { Injectable, Logger, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { Cron, CronExpression } from '@nestjs/schedule';
 import { PrismaService } from '@config/prisma.service';
 import { BrevoProvider } from './providers/brevo.provider';
@@ -413,8 +413,26 @@ export class NotificationsService {
         where,
         include: {
           recipients: true,
+          // Latest delivery attempt so the list UI can surface *why* a
+          // notification failed without forcing operators to drill in.
+          deliveryLogs: {
+            orderBy: { attemptedAt: 'desc' },
+            take: 1,
+          },
+          // Latest email/sms log gives us the actual rendered body that
+          // was sent — useful for the "Message" column in the admin UI.
+          emailLogs: {
+            orderBy: { sentAt: 'desc' },
+            take: 1,
+            select: { id: true, subject: true, messageBody: true, sentAt: true, deliveryStatus: true },
+          },
+          smsLogs: {
+            orderBy: { sentAt: 'desc' },
+            take: 1,
+            select: { id: true, messageBody: true, sentAt: true },
+          },
           template: {
-            select: { id: true, templateName: true, channel: true },
+            select: { id: true, templateName: true, channel: true, subjectTemplate: true, bodyTemplate: true },
           },
           ticket: {
             select: { id: true, ticketNumber: true, subject: true },
@@ -482,6 +500,90 @@ export class NotificationsService {
       throw new NotFoundException(`Notification ${id} not found`);
     }
     return notification;
+  }
+
+  // ============================================
+  // Operations / Diagnostics
+  // ============================================
+
+  /**
+   * Reports which downstream providers (Brevo email, Bonga SMS) currently
+   * have their credentials configured. This lets the admin UI render a
+   * banner pointing at the exact env vars that are missing so operators
+   * can fix the deploy without grepping through logs.
+   */
+  providerStatus() {
+    const brevo = this.brevoProvider.describeConfig();
+    const bonga = this.bongaProvider.describeConfig();
+    return {
+      email: { provider: 'BREVO', ...brevo },
+      sms:   { provider: 'BONGA', ...bonga },
+      push:  { provider: 'NONE', configured: false, missing: [] as string[] },
+      webhook: { provider: 'GENERIC', configured: true, missing: [] as string[] },
+    };
+  }
+
+  /**
+   * Manually re-attempt delivery for a single notification. Reuses the
+   * existing dispatch path so providers, retry-counting, and delivery
+   * logging all stay consistent with the original send.
+   */
+  async retryNotification(id: string) {
+    const notif = await this.prisma.notification.findUnique({
+      where: { id },
+      include: {
+        recipients: true,
+        template: true,
+        emailLogs: { orderBy: { sentAt: 'desc' }, take: 1 },
+        smsLogs: { orderBy: { sentAt: 'desc' }, take: 1 },
+      },
+    });
+    if (!notif) {
+      throw new NotFoundException('Notification not found');
+    }
+    if (notif.status === 'SENT') {
+      throw new BadRequestException('Notification is already SENT — nothing to retry.');
+    }
+
+    // Re-render subject/body from the original template if there was one;
+    // otherwise fall back to the latest provider log so we don't ship an
+    // empty body. If neither exists, give up clearly.
+    let subject = notif.template?.subjectTemplate ?? '';
+    let body = notif.template?.bodyTemplate ?? '';
+    if (!body) {
+      const lastEmail = notif.emailLogs[0];
+      const lastSms = notif.smsLogs[0];
+      subject = subject || lastEmail?.subject || '';
+      body = body || lastEmail?.messageBody || lastSms?.messageBody || '';
+    }
+    if (!body) {
+      throw new BadRequestException(
+        'Cannot retry — original message body is not stored. Send a fresh notification instead.',
+      );
+    }
+
+    const results = await this.dispatch(
+      notif.id,
+      notif.channel,
+      notif.recipients,
+      subject,
+      body,
+      // Minimal dispatch context — channel is on the notification itself.
+      { channel: notif.channel } as SendNotificationDto,
+    );
+    const allSuccess = results.every((r) => r.success);
+    const anySuccess = results.some((r) => r.success);
+
+    await this.prisma.notification.update({
+      where: { id: notif.id },
+      data: {
+        status: allSuccess ? 'SENT' : anySuccess ? 'SENT' : 'FAILED',
+        sentAt: anySuccess ? new Date() : notif.sentAt,
+        retryCount: { increment: 1 },
+      },
+    });
+
+    return this.findNotificationById(id);
   }
 
   // ============================================

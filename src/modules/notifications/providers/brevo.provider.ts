@@ -43,6 +43,19 @@ export class BrevoProvider {
     }
   }
 
+  isConfigured(): boolean {
+    return Boolean(this.apiKey);
+  }
+
+  describeConfig(): { configured: boolean; fromEmail: string; fromName: string; missing: string[] } {
+    return {
+      configured: this.isConfigured(),
+      fromEmail: this.fromEmail,
+      fromName: this.fromName,
+      missing: this.apiKey ? [] : ['BREVO_API_KEY'],
+    };
+  }
+
   async sendEmail(payload: BrevoEmailPayload): Promise<BrevoSendResult> {
     if (!this.apiKey) {
       return {

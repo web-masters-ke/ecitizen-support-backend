@@ -40,6 +40,18 @@ export class BongaProvider {
     }
   }
 
+  isConfigured(): boolean {
+    return Boolean(this.clientId && this.apiKey && this.apiSecret);
+  }
+
+  describeConfig(): { configured: boolean; missing: string[] } {
+    const missing: string[] = [];
+    if (!this.clientId) missing.push('BONGA_CLIENT_ID');
+    if (!this.apiKey) missing.push('BONGA_API_KEY');
+    if (!this.apiSecret) missing.push('BONGA_API_SECRET');
+    return { configured: missing.length === 0, missing };
+  }
+
   async sendSms(payload: BongaSmsPayload): Promise<BongaSendResult> {
     if (!this.clientId || !this.apiKey || !this.apiSecret) {
       return {

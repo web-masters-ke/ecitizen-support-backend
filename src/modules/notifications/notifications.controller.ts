@@ -102,6 +102,25 @@ export class NotificationsController {
   }
 
   // ============================================
+  // Provider Status (diagnostics)
+  // ============================================
+
+  @Get('provider-status')
+  @Roles('COMMAND_CENTER_ADMIN', 'SUPER_ADMIN')
+  @ApiOperation({
+    summary: 'Report which downstream notification providers are configured',
+    description:
+      'Returns per-channel provider configuration so the admin UI can warn ' +
+      'operators when an env var like BREVO_API_KEY or BONGA_API_KEY is missing.',
+  })
+  async getProviderStatus() {
+    return {
+      success: true,
+      data: this.notificationsService.providerStatus(),
+    };
+  }
+
+  // ============================================
   // List Notifications
   // ============================================
 
@@ -150,6 +169,27 @@ export class NotificationsController {
       await this.notificationsService.findNotificationById(id);
     return {
       success: true,
+      data: notification,
+    };
+  }
+
+  @Post(':id/retry')
+  @Roles('COMMAND_CENTER_ADMIN', 'SUPER_ADMIN')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({
+    summary: 'Retry delivery of a failed or pending notification',
+    description:
+      'Reuses the original recipients, template and channel; logs a fresh ' +
+      'delivery attempt and updates the notification status accordingly.',
+  })
+  @ApiResponse({ status: 200, description: 'Retry attempted; check response for delivery status' })
+  @ApiResponse({ status: 400, description: 'Notification is not retryable (already SENT or no body to send)' })
+  @ApiResponse({ status: 404, description: 'Notification not found' })
+  async retryNotification(@Param('id', ParseUUIDPipe) id: string) {
+    const notification = await this.notificationsService.retryNotification(id);
+    return {
+      success: true,
+      message: 'Retry attempted',
       data: notification,
     };
   }
