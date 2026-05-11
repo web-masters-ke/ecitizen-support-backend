@@ -16,6 +16,7 @@ import { KafkaService } from '../kafka/kafka.service';
 import { AppWebSocketGateway } from '../websocket/websocket.gateway';
 import { AuditService } from '../audit/audit.service';
 import { AiService } from '../ai/ai.service';
+import { ChatService } from '../chat/chat.service';
 import { KAFKA_TOPICS, partitionKey } from '../kafka/kafka.topics';
 import {
   CreateTicketDto,
@@ -111,6 +112,7 @@ export class TicketsService {
     private readonly wsGateway: AppWebSocketGateway,
     private readonly auditService: AuditService,
     private readonly aiService: AiService,
+    private readonly chatService: ChatService,
   ) {}
 
   // ============================================
@@ -551,6 +553,15 @@ export class TicketsService {
       ticketId: ticket.id,
       description: `Created ticket ${ticket.ticketNumber}`,
     }).catch(() => null);
+
+    // Auto-provision the ticket's chat room and enrol the creator so the
+    // "TICKET CHATS" section in the chat sidebar surfaces this conversation
+    // without the citizen having to open the ticket detail first. Fire-and-
+    // forget — chat is a secondary UI surface and shouldn't fail the
+    // primary create flow.
+    this.chatService.getOrCreateTicketRoom(ticket.id, createdBy).catch((err) =>
+      this.logger.warn(`Ticket chat auto-create failed for ${ticket.ticketNumber}: ${err?.message}`),
+    );
 
     // Fire ML classification — fire-and-forget. autoApply=true so when the
     // model is confident (>=0.75) the ticket's category + priority get set
@@ -1097,6 +1108,18 @@ export class TicketsService {
       this.logger.log(
         `Ticket ${ticket.ticketNumber} assigned to ${dto.assigneeId} by ${assignedBy}`,
       );
+
+      // Make sure the assigned agent gets the ticket-chat room in their
+      // sidebar immediately, without waiting for them to open the ticket
+      // detail. getOrCreateTicketRoom auto-enrols the caller; we call it
+      // first as the assignee to enrol them, then optionally as the
+      // assigner to enrol them too. Fire-and-forget.
+      this.chatService.getOrCreateTicketRoom(id, dto.assigneeId).catch((err) =>
+        this.logger.warn(`Ticket chat auto-enrol failed for ${ticket.ticketNumber} → ${dto.assigneeId}: ${err?.message}`),
+      );
+      if (assignedBy && assignedBy !== dto.assigneeId) {
+        this.chatService.getOrCreateTicketRoom(id, assignedBy).catch(() => null);
+      }
 
       this.kafkaService.publish({
         topic: KAFKA_TOPICS.TICKET_ASSIGNED,
