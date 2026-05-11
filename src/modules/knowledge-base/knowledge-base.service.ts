@@ -277,6 +277,39 @@ export class KnowledgeBaseService {
     return article;
   }
 
+  /**
+   * Lookup helper that accepts either an article UUID or its slug, then
+   * delegates to getArticleById for view-tracking + relation hydration.
+   * Public share links use slugs (e.g. /knowledge-base/testing-article);
+   * the admin UI links by UUID. Both paths land here.
+   */
+  async getArticleByIdOrSlug(
+    idOrSlug: string,
+    viewedBy?: string,
+    ipAddress?: string,
+  ) {
+    const uuidRe =
+      /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
+    let resolvedId = idOrSlug;
+    if (!uuidRe.test(idOrSlug)) {
+      const bySlug = await this.prisma.kbArticle.findFirst({
+        where: { slug: idOrSlug },
+        select: { id: true },
+        // Two agencies could theoretically use the same slug; the schema's
+        // @@unique([agencyId, slug]) allows it. Returning the first match
+        // (ordered by createdAt desc) is acceptable for public reads.
+        orderBy: { createdAt: 'desc' },
+      });
+      if (!bySlug) {
+        throw new NotFoundException(`Article "${idOrSlug}" not found`);
+      }
+      resolvedId = bySlug.id;
+    }
+
+    return this.getArticleById(resolvedId, viewedBy, ipAddress);
+  }
+
   async updateArticle(id: string, dto: UpdateKbArticleDto) {
     const article = await this.prisma.kbArticle.findUnique({
       where: { id },

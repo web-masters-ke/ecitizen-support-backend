@@ -62,16 +62,21 @@ export class KnowledgeBaseController {
   }
 
   @Public()
-  @Get('articles/:id')
-  @ApiOperation({ summary: 'Get article by ID with all versions' })
+  @Get('articles/:idOrSlug')
+  @ApiOperation({
+    summary: 'Get article by UUID or slug, with all versions',
+    description:
+      'Accepts either the article UUID or its URL-safe slug. Public share ' +
+      'links use the slug; the admin UI links by UUID. Both resolve here.',
+  })
   getArticle(
-    @Param('id', ParseUUIDPipe) id: string,
+    @Param('idOrSlug') idOrSlug: string,
     @Req() req: Request,
   ) {
     const userId = (req as any).user?.id;
     const ipAddress =
       (req.headers['x-forwarded-for'] as string) || req.ip;
-    return this.kbService.getArticleById(id, userId, ipAddress);
+    return this.kbService.getArticleByIdOrSlug(idOrSlug, userId, ipAddress);
   }
 
   @Patch('articles/:id')
