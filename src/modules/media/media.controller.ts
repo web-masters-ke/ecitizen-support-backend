@@ -161,7 +161,20 @@ export class MediaController {
     if (!file) {
       throw new Error('No file provided');
     }
-    return this.mediaService.uploadFile(file, userId, dto.metadata);
+    // Fold any context / contextId fields the caller stamped onto the
+    // multipart body into the media row's metadata so we can trace
+    // where each file came from in audit later.
+    const metadata = {
+      ...(dto.metadata ?? {}),
+      ...(dto.context ? { context: dto.context } : {}),
+      ...(dto.contextId ? { contextId: dto.contextId } : {}),
+      ...(dto.description ? { description: dto.description } : {}),
+    };
+    return this.mediaService.uploadFile(
+      file,
+      userId,
+      Object.keys(metadata).length ? metadata : undefined,
+    );
   }
 
   @Post('upload/bulk')

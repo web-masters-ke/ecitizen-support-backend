@@ -437,6 +437,16 @@ export class ServiceProviderFilterDto extends PaginationDto {
   @Type(() => Boolean)
   @IsBoolean()
   isActive?: boolean;
+
+  // Provider type is a free-form VARCHAR in the DB (no enum), so accept any
+  // string. The frontend sends values like "PAYMENT", "MNO", "SMS_GATEWAY",
+  // etc. Whitelist validation was rejecting these as unknown fields and
+  // returning a blanket 400 — that's the bug the filter dropdown was hitting.
+  @ApiPropertyOptional({ description: 'Filter by provider type (free-form, e.g. PAYMENT, MNO, SMS_GATEWAY)' })
+  @IsOptional()
+  @IsString()
+  @MaxLength(100)
+  type?: string;
 }
 
 // ──────────────────────────────────────────────

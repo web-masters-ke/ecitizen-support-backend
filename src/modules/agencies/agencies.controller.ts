@@ -4,6 +4,7 @@ import {
   Post,
   Patch,
   Put,
+  Delete,
   Body,
   Param,
   Query,
@@ -380,6 +381,46 @@ export class AgenciesController {
   @ApiResponse({ status: 200, description: 'Paginated list of service providers' })
   async findAllServiceProviders(@Query() filters: ServiceProviderFilterDto) {
     return this.agenciesService.findAllServiceProviders(filters);
+  }
+
+  @Get('service-providers/:id')
+  @Roles('SUPER_ADMIN', 'COMMAND_CENTER_ADMIN', 'AGENCY_AGENT')
+  @ApiOperation({ summary: 'Get service provider by ID' })
+  @ApiParam({ name: 'id', description: 'Service provider UUID' })
+  @ApiResponse({ status: 200, description: 'Service provider details' })
+  @ApiResponse({ status: 404, description: 'Service provider not found' })
+  async findOneServiceProvider(@Param('id', ParseUUIDPipe) id: string) {
+    return this.agenciesService.findOneServiceProvider(id);
+  }
+
+  @Patch('service-providers/:id')
+  @Roles('SUPER_ADMIN', 'COMMAND_CENTER_ADMIN')
+  @ApiOperation({ summary: 'Update service provider' })
+  @ApiParam({ name: 'id', description: 'Service provider UUID' })
+  @ApiResponse({ status: 200, description: 'Service provider updated' })
+  @ApiResponse({ status: 404, description: 'Service provider not found' })
+  @ApiResponse({ status: 409, description: 'Duplicate provider name' })
+  async updateServiceProvider(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body() dto: CreateServiceProviderDto,
+  ) {
+    // Reuse CreateServiceProviderDto with partial semantics — every field
+    // on it is already either optional or explicitly handled, and the
+    // service treats undefined as "leave unchanged".
+    return this.agenciesService.updateServiceProvider(id, dto);
+  }
+
+  @Delete('service-providers/:id')
+  @Roles('SUPER_ADMIN', 'COMMAND_CENTER_ADMIN')
+  @ApiOperation({
+    summary: 'Delete service provider',
+    description: 'Hard-deletes a provider with no agency mappings; otherwise soft-deactivates.',
+  })
+  @ApiParam({ name: 'id', description: 'Service provider UUID' })
+  @ApiResponse({ status: 200, description: 'Service provider deleted or deactivated' })
+  @ApiResponse({ status: 404, description: 'Service provider not found' })
+  async deleteServiceProvider(@Param('id', ParseUUIDPipe) id: string) {
+    return this.agenciesService.deleteServiceProvider(id);
   }
 
   // ============================================================

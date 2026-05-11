@@ -422,6 +422,8 @@ model ServiceProvider {
   providerType      String?   @map("provider_type") @db.VarChar(100)
   contactEmail      String?   @map("contact_email") @db.VarChar(255)
   contactPhone      String?   @map("contact_phone") @db.VarChar(50)
+  website           String?   @db.VarChar(500)
+  description       String?
   contractReference String?   @map("contract_reference") @db.VarChar(100)
   contractStartDate DateTime? @map("contract_start_date") @db.Date
   contractEndDate   DateTime? @map("contract_end_date") @db.Date

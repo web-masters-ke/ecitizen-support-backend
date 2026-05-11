@@ -29,6 +29,21 @@ export class UploadMediaDto {
   @ApiPropertyOptional({ description: 'Additional metadata as JSON' })
   @IsOptional()
   metadata?: Record<string, any>;
+
+  // Free-form provenance tags so callers can stamp where the file came
+  // from (e.g. 'service-provider-doc' + the provider id). These were
+  // already being sent by the providers UI but global whitelist
+  // validation was rejecting them as unknown form-data fields and
+  // returning 400 for every upload from that screen.
+  @ApiPropertyOptional({ description: 'Where this upload originated (e.g. "service-provider-doc")' })
+  @IsOptional()
+  @IsString()
+  context?: string;
+
+  @ApiPropertyOptional({ description: 'Id of the parent entity for the upload (uuid or other identifier)' })
+  @IsOptional()
+  @IsString()
+  contextId?: string;
 }
 
 export class PresignUploadDto {

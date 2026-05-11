@@ -573,6 +573,8 @@ export class AgenciesService {
         providerType: dto.providerType,
         contactEmail: dto.contactEmail,
         contactPhone: dto.contactPhone,
+        website: dto.website,
+        description: dto.description,
         contractReference: dto.contractReference,
         contractStartDate: dto.contractStartDate
           ? new Date(dto.contractStartDate)
@@ -587,6 +589,64 @@ export class AgenciesService {
     return provider;
   }
 
+  async findOneServiceProvider(id: string) {
+    const provider = await this.prisma.serviceProvider.findUnique({
+      where: { id },
+      include: { _count: { select: { agencyServiceMaps: true } } },
+    });
+    if (!provider) throw new NotFoundException(`Service provider ${id} not found`);
+    return provider;
+  }
+
+  async updateServiceProvider(id: string, dto: Partial<CreateServiceProviderDto>) {
+    const existing = await this.prisma.serviceProvider.findUnique({ where: { id } });
+    if (!existing) throw new NotFoundException(`Service provider ${id} not found`);
+
+    // If the caller is renaming the provider, make sure the new name isn't
+    // already taken by another row — providerName has a UNIQUE constraint.
+    if (dto.providerName && dto.providerName !== existing.providerName) {
+      const clash = await this.prisma.serviceProvider.findUnique({
+        where: { providerName: dto.providerName },
+      });
+      if (clash && clash.id !== id) {
+        throw new ConflictException(
+          `Service provider "${dto.providerName}" already exists`,
+        );
+      }
+    }
+
+    const data: any = {};
+    if (dto.providerName !== undefined) data.providerName = dto.providerName;
+    if (dto.providerType !== undefined) data.providerType = dto.providerType;
+    if (dto.contactEmail !== undefined) data.contactEmail = dto.contactEmail || null;
+    if (dto.contactPhone !== undefined) data.contactPhone = dto.contactPhone || null;
+    if (dto.website !== undefined) data.website = dto.website || null;
+    if (dto.description !== undefined) data.description = dto.description || null;
+    if (dto.contractReference !== undefined) data.contractReference = dto.contractReference || null;
+    if (dto.contractStartDate !== undefined) data.contractStartDate = dto.contractStartDate ? new Date(dto.contractStartDate) : null;
+    if (dto.contractEndDate !== undefined) data.contractEndDate = dto.contractEndDate ? new Date(dto.contractEndDate) : null;
+
+    const updated = await this.prisma.serviceProvider.update({ where: { id }, data });
+    this.logger.log(`Service provider updated: ${id}`);
+    return updated;
+  }
+
+  async deleteServiceProvider(id: string) {
+    const existing = await this.prisma.serviceProvider.findUnique({
+      where: { id },
+      include: { _count: { select: { agencyServiceMaps: true } } },
+    });
+    if (!existing) throw new NotFoundException(`Service provider ${id} not found`);
+    if (existing._count.agencyServiceMaps > 0) {
+      // Don't hard-delete a provider that's still linked to agencies —
+      // soft-disable instead so the existing mappings keep working.
+      await this.prisma.serviceProvider.update({ where: { id }, data: { isActive: false } });
+      return { id, deleted: false, deactivated: true };
+    }
+    await this.prisma.serviceProvider.delete({ where: { id } });
+    return { id, deleted: true };
+  }
+
   async findAllServiceProviders(
     filters: ServiceProviderFilterDto,
   ): Promise<PaginatedResult<any>> {
@@ -597,6 +657,7 @@ export class AgenciesService {
       sortOrder = 'desc',
       search,
       isActive,
+      type,
     } = filters;
 
     const skip = (page - 1) * limit;
@@ -605,6 +666,11 @@ export class AgenciesService {
     if (isActive !== undefined) where.isActive = isActive;
     if (search) {
       where.providerName = { contains: search, mode: 'insensitive' };
+    }
+    if (type) {
+      // providerType is a free-form VARCHAR — match case-insensitively so
+      // the UI doesn't need to know the exact casing stored in the DB.
+      where.providerType = { equals: type, mode: 'insensitive' };
     }
 
     const allowedSortFields = ['createdAt', 'providerName', 'providerType'];
