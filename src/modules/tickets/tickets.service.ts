@@ -1693,7 +1693,7 @@ export class TicketsService {
       throw new NotFoundException(`Ticket ${ticketId} not found`);
     }
 
-    const message = await this.prisma.ticketMessage.create({
+    let message = await this.prisma.ticketMessage.create({
       data: {
         ticketId,
         senderId,
@@ -1715,7 +1715,10 @@ export class TicketsService {
       },
     });
 
-    // Save attachment record if a file was uploaded
+    // Save attachment record if a file was uploaded, then re-fetch the message
+    // so the returned + broadcast object includes the attachment. Without this
+    // the citizen received a message via WS with attachments: [] and the file
+    // only appeared on full reload.
     if (dto.fileUrl) {
       await this.prisma.ticketAttachment.create({
         data: {
@@ -1727,6 +1730,22 @@ export class TicketsService {
           uploadedBy: senderId,
         },
       });
+      const refreshed = await this.prisma.ticketMessage.findUnique({
+        where: { id: message.id },
+        include: {
+          sender: {
+            select: {
+              id: true,
+              firstName: true,
+              lastName: true,
+              email: true,
+              userType: true,
+            },
+          },
+          attachments: true,
+        },
+      });
+      if (refreshed) message = refreshed;
     }
 
     // Track first response time if this is the first agent response
