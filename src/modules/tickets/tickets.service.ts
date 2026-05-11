@@ -612,6 +612,7 @@ export class TicketsService {
       status,
       agencyId,
       priorityId,
+      priority,
       assigneeId,
       categoryId,
       departmentId,
@@ -656,6 +657,16 @@ export class TicketsService {
 
     if (priorityId) {
       where.priorityId = priorityId;
+    } else if (priority) {
+      // Resolve priority name (CRITICAL/HIGH/MEDIUM/LOW) to its ID so the
+      // admin tickets page can filter by enum value without first having to
+      // fetch the priority list.
+      const priorityRecord = await this.prisma.ticketPriorityLevel.findUnique({
+        where: { name: priority },
+      });
+      if (priorityRecord) {
+        where.priorityId = priorityRecord.id;
+      }
     }
 
     if (assigneeId) {

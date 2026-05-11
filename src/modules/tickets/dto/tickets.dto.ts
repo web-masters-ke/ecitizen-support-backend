@@ -357,6 +357,11 @@ export class TicketFilterDto extends PaginationDto {
   @IsUUID()
   priorityId?: string;
 
+  @ApiPropertyOptional({ description: 'Filter by priority name (CRITICAL/HIGH/MEDIUM/LOW)', enum: TicketPriorityEnum })
+  @IsOptional()
+  @IsEnum(TicketPriorityEnum)
+  priority?: TicketPriorityEnum;
+
   @ApiPropertyOptional({ description: 'Filter by current assignee ID' })
   @IsOptional()
   @IsUUID()
