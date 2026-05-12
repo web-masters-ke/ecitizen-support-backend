@@ -54,14 +54,32 @@ export class MediaService {
     );
 
     if (this.storageMode === 's3') {
+      // We run against the panaito-hosted MinIO at https://s3.wasaachat.com,
+      // not real AWS S3. Without `endpoint`, the AWS SDK defaults to
+      // s3.<region>.amazonaws.com — which then rejects our MinIO access key
+      // with "The AWS Access Key Id you provided does not exist in our
+      // records" and the upload 500s. `forcePathStyle` is required so the
+      // SDK builds URLs as `<endpoint>/<bucket>/<key>` instead of the
+      // virtual-host form `<bucket>.<endpoint>/<key>`, which MinIO doesn't
+      // serve out of the box.
+      const s3Endpoint = this.configService.get<string>('S3_ENDPOINT', '');
+      const region =
+        this.configService.get<string>('S3_REGION') ||
+        this.configService.get<string>('AWS_REGION', 'us-east-1');
       this.s3Client = new S3Client({
-        region: this.configService.get<string>('AWS_REGION', 'af-south-1'),
+        region,
         credentials: {
           accessKeyId: awsKeyId,
           secretAccessKey: this.configService.get<string>('AWS_SECRET_ACCESS_KEY', ''),
         },
+        ...(s3Endpoint ? { endpoint: s3Endpoint } : {}),
+        forcePathStyle:
+          this.configService.get<string>('S3_FORCE_PATH_STYLE', 'false') === 'true' ||
+          Boolean(s3Endpoint),
       });
-      this.logger.log('Storage mode: S3');
+      this.logger.log(
+        `Storage mode: S3 (endpoint=${s3Endpoint || 'aws-default'}, region=${region})`,
+      );
     } else {
       this.ensureUploadDirectory();
       this.logger.log('Storage mode: local disk');
