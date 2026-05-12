@@ -969,6 +969,10 @@ export class MlService {
         agencyId: true,
         createdAt: true,
         status: { select: { name: true } },
+        // Include the creator so the admin spam table can render the
+        // citizen email column and the row is recognisable without
+        // forcing a click-through.
+        creator: { select: { firstName: true, lastName: true, email: true } },
       },
       orderBy: { createdAt: 'desc' },
       take: 500,
