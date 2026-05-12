@@ -274,6 +274,36 @@ export class TicketsService {
       `Ticket ${ticket.ticketNumber} transitioned: ${currentStatusName} -> ${newStatusName} by ${changedBy}`,
     );
 
+    // Push the status change over WebSocket so any open ticket page (citizen
+    // webclient or admin) updates in real time without a manual refresh.
+    // The frontend listens for `ticket:statusChanged` on `ticket:${id}` and
+    // also pings the ticket creator's user channel so their notification
+    // bell can refresh without needing them to be on the ticket page.
+    const payload = {
+      ticketId,
+      ticketNumber: ticket.ticketNumber,
+      oldStatus: currentStatusName,
+      newStatus: newStatusName,
+      changedBy,
+      changeReason: changeReason || null,
+      resolvedAt: (updateData.resolvedAt as Date | undefined) ?? null,
+      closedAt: (updateData.closedAt as Date | undefined) ?? null,
+      at: new Date().toISOString(),
+    };
+    try {
+      this.wsGateway.emitToChannel(`ticket:${ticketId}`, 'ticket:statusChanged', payload);
+      const creatorId = (updatedTicket as { createdBy?: string }).createdBy;
+      if (creatorId) {
+        this.wsGateway.emitToUser(creatorId, 'ticket:statusChanged', payload);
+      }
+    } catch (err) {
+      // WS push is best-effort; the persisted update + IN_APP notification
+      // are the source of truth, so swallow socket-layer hiccups.
+      this.logger.warn(
+        `WS emit failed for ticket ${ticket.ticketNumber} status change: ${(err as Error)?.message ?? err}`,
+      );
+    }
+
     return updatedTicket;
   }
 
