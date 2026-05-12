@@ -103,8 +103,12 @@ export class KnowledgeBaseController {
     return this.kbService.publishArticle(id);
   }
 
+  @Public()
   @Post('articles/:id/feedback')
-  @ApiOperation({ summary: 'Submit feedback on an article' })
+  @ApiOperation({
+    summary: 'Submit feedback on an article',
+    description: 'Anonymous citizens can rate KB articles. Matches the article GET being @Public so a non-authenticated reader can also leave a helpful/not-helpful signal.',
+  })
   addFeedback(
     @Param('id', ParseUUIDPipe) id: string,
     @Body() dto: CreateKbFeedbackDto,
