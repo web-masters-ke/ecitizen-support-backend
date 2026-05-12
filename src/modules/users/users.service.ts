@@ -54,11 +54,15 @@ export class UsersService {
       }
     }
 
-    // Hash password if provided
-    let passwordHash: string | undefined;
-    if (dto.password) {
-      passwordHash = await bcrypt.hash(dto.password, 12);
-    }
+    // If the admin didn't supply a password, generate a strong temporary one
+    // so the new user can actually log in. We hash for storage but return the
+    // plain value in the response (and use it in the welcome email/SMS) so
+    // the admin can hand-deliver it when the email provider is down.
+    const generatedPassword = dto.password ? null : this.generateTempPassword();
+    const plainPassword = dto.password ?? generatedPassword ?? '';
+    const passwordHash = plainPassword
+      ? await bcrypt.hash(plainPassword, 12)
+      : undefined;
 
     // Build the create payload
     const user = await this.prisma.user.create({
@@ -120,7 +124,6 @@ export class UsersService {
       .catch((err) => this.logger.warn(`User CREATE audit failed: ${err?.message}`));
 
     // Send welcome notification with credentials
-    const plainPassword = dto.password ?? '';
     const roleName =
       user.userRoles?.[0]?.role?.name ??
       dto.userType?.replace(/_/g, ' ') ??
@@ -177,7 +180,38 @@ eCitizen Service Team`;
         );
     }
 
-    return this.sanitizeUser(user);
+    // Return the sanitized user plus the credentials and login URL so the
+    // admin can hand-deliver them when email is down (e.g. Brevo API key
+    // disabled). The temp password is only returned for newly generated
+    // ones — never echoed back for caller-supplied passwords.
+    return {
+      ...this.sanitizeUser(user),
+      credentials: {
+        email: user.email,
+        loginUrl,
+        temporaryPassword: generatedPassword ?? null,
+        passwordAlreadyProvided: !generatedPassword,
+      },
+    };
+  }
+
+  /** Generate a strong-but-typeable temporary password. */
+  private generateTempPassword(): string {
+    const lower = 'abcdefghjkmnpqrstuvwxyz';
+    const upper = 'ABCDEFGHJKMNPQRSTUVWXYZ';
+    const digits = '23456789';
+    const symbols = '!@#$%&*';
+    const all = lower + upper + digits + symbols;
+    const pick = (set: string) => set[Math.floor(Math.random() * set.length)];
+    // Guarantee at least one of each class so the result meets common policies
+    const seed = [pick(lower), pick(upper), pick(digits), pick(symbols)];
+    while (seed.length < 12) seed.push(pick(all));
+    // Shuffle so the required-class chars aren't always at the start
+    for (let i = seed.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [seed[i], seed[j]] = [seed[j], seed[i]];
+    }
+    return seed.join('');
   }
 
   // ──────────────────────────────────────────────
