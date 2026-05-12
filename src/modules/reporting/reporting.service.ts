@@ -359,9 +359,12 @@ export class ReportingService {
     }
     const ticketDateFilter = Object.keys(dateFilter).length ? { createdAt: dateFilter } : {};
 
+    // agencyId on the Ticket model is non-nullable, so the previous
+    // `{ not: null }` filter was a confusing no-op. Only apply the
+    // agencyId filter when the caller actually wants to scope to one.
     const ticketWhere: any = {
       isDeleted: false,
-      agencyId: query.agencyId ? query.agencyId : { not: null },
+      ...(query.agencyId ? { agencyId: query.agencyId } : {}),
       ...ticketDateFilter,
     };
 
@@ -411,13 +414,15 @@ export class ReportingService {
       }
     }
 
-    const agencyIds = totalByAgency.map((r) => r.agencyId).filter(Boolean) as string[];
-    const agencies = agencyIds.length
-      ? await this.prisma.agency.findMany({
-          where: { id: { in: agencyIds } },
-          select: { id: true, agencyName: true, agencyCode: true },
-        })
-      : [];
+    // Pull ALL active agencies (filtered if scoped) so the report shows
+    // zero-ticket agencies too instead of an empty screen.
+    const agencies = await this.prisma.agency.findMany({
+      where: {
+        ...(query.agencyId ? { id: query.agencyId } : {}),
+        isActive: true,
+      },
+      select: { id: true, agencyName: true, agencyCode: true },
+    });
     const agencyMap = new Map(agencies.map((a) => [a.id, a]));
 
     // Avg resolution time per agency. Computed in JS from a single ticket scan,
@@ -441,27 +446,43 @@ export class ReportingService {
       resolutionAgg.set(t.agencyId, acc);
     }
 
-    const resolvedMap = new Map(resolvedByAgency.map((r) => [r.agencyId, r._count._all]));
+    const totalMap = new Map(
+      totalByAgency
+        .filter((r) => r.agencyId)
+        .map((r) => [r.agencyId as string, r._count._all]),
+    );
+    const resolvedMap = new Map(
+      resolvedByAgency
+        .filter((r) => r.agencyId)
+        .map((r) => [r.agencyId as string, r._count._all]),
+    );
 
-    const live = totalByAgency
-      .filter((row) => row.agencyId)
-      .map((row) => {
-        const agencyId = row.agencyId as string;
-        const total = row._count._all;
+    // Iterate all known agencies (not just ones with tickets) so the
+    // dashboard shows the full agency roster with zeros when nothing has
+    // been logged yet — empty screens were unusable for admins.
+    const live = agencies
+      .map((agency) => {
+        const agencyId = agency.id;
+        const total = totalMap.get(agencyId) ?? 0;
         const resolved = resolvedMap.get(agencyId) ?? 0;
         const slaTotal = slaTotalMap.get(agencyId) ?? 0;
         const slaCompliant = slaCompliantMap.get(agencyId) ?? 0;
         const res = resolutionAgg.get(agencyId);
-        const agency = agencyMap.get(agencyId);
         return {
           agencyId,
-          agencyName: agency?.agencyName ?? 'Unknown agency',
-          agencyCode: agency?.agencyCode ?? null,
+          agencyName: agency.agencyName,
+          agencyCode: agency.agencyCode ?? null,
           totalTickets: total,
           resolvedTickets: resolved,
           openTickets: Math.max(0, total - resolved),
-          avgResolutionMinutes: res && res.count > 0 ? Math.round((res.total / res.count) * 100) / 100 : null,
-          slaComplianceRate: slaTotal > 0 ? Math.round((slaCompliant / slaTotal) * 10000) / 100 : null,
+          avgResolutionMinutes:
+            res && res.count > 0
+              ? Math.round((res.total / res.count) * 100) / 100
+              : null,
+          slaComplianceRate:
+            slaTotal > 0
+              ? Math.round((slaCompliant / slaTotal) * 10000) / 100
+              : null,
         };
       })
       .sort((a, b) => b.totalTickets - a.totalTickets);
