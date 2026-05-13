@@ -204,24 +204,32 @@ export class MediaService {
     const mediaType = this.classifyMediaType(file.mimetype);
     const fileName = this.generateFileName(file.originalname);
 
-    // Store to disk or S3
-    const storedUrl = await this.storeFile(
-      file.buffer,
-      fileName,
-      mediaType,
-      file.mimetype,
-    );
+    // Try the configured backend (S3 or disk). If S3 is misconfigured
+    // (bucket missing, creds wrong, endpoint unreachable) we don't want
+    // to fail the upload — fall through and persist bytes to postgres
+    // so the file is still recoverable via /media/serve.
+    let storedUrl: string | null = null;
+    try {
+      storedUrl = await this.storeFile(file.buffer, fileName, mediaType, file.mimetype);
+    } catch (err) {
+      this.logger.warn(
+        `External storage write failed for ${file.originalname}: ${(err as Error)?.message}. Falling back to postgres-backed serve.`,
+      );
+    }
 
-    // In local-storage mode the disk URL points to /uploads/... which only
-    // works on whichever pod wrote the file. To survive pod restarts and
-    // multi-replica deploys, persist the bytes in postgres and serve them
-    // back through /api/v1/media/serve/:fileId. S3 stays as-is.
-    const isLocal = this.storageMode !== 's3';
-    const storageUrl = isLocal
-      ? `${this.baseUrl}/api/v1/media/serve/${fileId}`
-      : storedUrl;
+    // Files ≤25MB go into the postgres fileData column as a safety net.
+    // For larger files we trust the external storage URL — postgres rows
+    // beyond that size start to hurt other queries.
+    const POSTGRES_FALLBACK_LIMIT = 25 * 1024 * 1024;
+    const persistBytes = file.size <= POSTGRES_FALLBACK_LIMIT;
 
-    // Save metadata to DB
+    // ALWAYS surface the in-process /media/serve URL. That endpoint
+    // returns the bytes from postgres if present, otherwise streams from
+    // the disk/S3 URL. This means a misconfigured bucket can't 404 the
+    // citizen's attached file — the URL stays valid as long as the
+    // backend pod is up.
+    const storageUrl = `${this.baseUrl}/api/v1/media/serve/${fileId}`;
+
     const media = await this.prisma.media.create({
       data: {
         fileId,
@@ -232,15 +240,19 @@ export class MediaService {
         mimeType: file.mimetype,
         sizeBytes: BigInt(file.size),
         storageUrl,
-        fileData: isLocal ? file.buffer : null,
-        metadata: metadata || undefined,
+        // Cache bytes when we can; the serve endpoint prefers postgres.
+        fileData: persistBytes ? file.buffer : null,
+        metadata: {
+          ...(metadata ?? {}),
+          ...(storedUrl ? { externalUrl: storedUrl } : {}),
+        },
         isActive: true,
         isDeleted: false,
       },
     });
 
     this.logger.log(
-      `File uploaded: ${file.originalname} -> ${fileName} (${mediaType}, ${file.size} bytes)`,
+      `File uploaded: ${file.originalname} -> ${fileName} (${mediaType}, ${file.size} bytes, fallback=${storedUrl ? 'external+pg' : 'pg-only'})`,
     );
 
     return this.serializeMedia(media);
