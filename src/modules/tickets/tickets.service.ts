@@ -1657,6 +1657,15 @@ export class TicketsService {
       },
     }).catch(() => null);
 
+    // Best-effort: ask Claude to draft a KB article from the conversation
+    // so an admin can later approve + publish it as institutional memory.
+    // Fire-and-forget, never blocks the resolve response.
+    this.aiService
+      .draftKbFromResolvedTicket(id, dto.resolutionNotes ?? null, resolvedBy)
+      .catch((err) =>
+        this.logger.warn(`KB auto-draft failed for ${updatedTicket.ticketNumber}: ${err?.message}`),
+      );
+
     this.auditService.logUserActivity({
       userId: resolvedBy,
       agencyId: updatedTicket.agencyId,

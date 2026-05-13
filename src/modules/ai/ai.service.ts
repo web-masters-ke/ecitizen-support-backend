@@ -5,6 +5,7 @@ import {
   Logger,
 } from '@nestjs/common';
 import { PrismaService } from '../../config/prisma.service';
+import { AnthropicProvider } from './providers/anthropic.provider';
 import {
   ClassifyTicketDto,
   QueryClassificationsDto,
@@ -136,7 +137,10 @@ const CATEGORY_KEYWORD_MAP: Record<string, string[]> = {
 export class AiService {
   private readonly logger = new Logger(AiService.name);
 
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly anthropic: AnthropicProvider,
+  ) {}
 
   // ─── CLASSIFY TICKET ─────────────────────────────────────────────────────────
 
@@ -168,10 +172,28 @@ export class AiService {
       });
     }
 
-    // Run classification
-    const textToAnalyze =
-      `${ticket.subject} ${ticket.description}`.toLowerCase();
-    const classification = this.runRuleBasedClassifier(textToAnalyze);
+    // Run classification — try Claude first (Haiku 4.5 with structured
+    // outputs). Falls back to the rule-based keyword classifier when the
+    // ANTHROPIC_API_KEY env var is missing or the API call fails.
+    const fullText = `${ticket.subject}\n\n${ticket.description}`;
+    let classification = this.runRuleBasedClassifier(fullText.toLowerCase());
+    let classifierBackend: 'claude' | 'rules' = 'rules';
+    if (this.anthropic.available()) {
+      const claudeResult = await this.anthropic.classifyTicket(fullText);
+      if (claudeResult) {
+        classification = {
+          categoryName: claudeResult.categoryName,
+          priorityName: claudeResult.priorityName,
+          confidence: claudeResult.confidence,
+          sentiment: claudeResult.sentiment,
+          matchedKeywords: claudeResult.matchedKeywords,
+        };
+        classifierBackend = 'claude';
+      }
+    }
+    this.logger.debug(
+      `Ticket ${ticket.id} classified via ${classifierBackend}: category=${classification.categoryName} priority=${classification.priorityName} conf=${classification.confidence}`,
+    );
 
     // Find matching category in the agency
     const predictedCategory = await this.findBestCategory(
@@ -282,7 +304,6 @@ export class AiService {
     confidence: number;
     reason: string;
   }> {
-    const lower = text.toLowerCase();
     const agencies = await this.prisma.agency.findMany({
       where: { isActive: true },
       select: {
@@ -293,6 +314,41 @@ export class AiService {
         ticketCategories: { select: { name: true }, where: { isActive: true } },
       },
     });
+    if (agencies.length === 0) {
+      return { agencyId: null, agencyName: null, confidence: 0, reason: 'No active agencies configured.' };
+    }
+
+    // Try Claude first (Haiku 4.5 + cached agency roster). Falls back to
+    // the keyword-overlap scorer below when the API key is missing or the
+    // call errors.
+    if (this.anthropic.available()) {
+      const choice = await this.anthropic.pickAgency(
+        text,
+        agencies.map((a) => ({
+          id: a.id,
+          name: a.agencyName,
+          code: a.agencyCode,
+          ministry: a.ministryName,
+          categories: a.ticketCategories.map((c) => c.name),
+        })),
+      );
+      if (choice && choice.agencyId) {
+        const matched = agencies.find((a) => a.id === choice.agencyId);
+        if (matched) {
+          return {
+            agencyId: matched.id,
+            agencyName: matched.agencyName,
+            confidence: choice.confidence,
+            reason: `[claude] ${choice.reason}`,
+          };
+        }
+      }
+      // Fall through to keyword scorer if Claude declined, returned an
+      // unrecognized id, or errored — keyword scoring is still useful as
+      // a backstop on routing.
+    }
+
+    const lower = text.toLowerCase();
 
     type Scored = { id: string; name: string; score: number; matched: string[] };
     const scored: Scored[] = agencies.map((a) => {
@@ -856,5 +912,124 @@ export class AiService {
       },
       orderBy: { createdAt: 'desc' },
     });
+  }
+
+  /**
+   * Best-effort KB auto-draft on ticket resolution. Pulls the ticket
+   * conversation, asks Claude (Sonnet 4.6) to summarise it into a draft
+   * article, and writes it back as an UNPUBLISHED KbArticle so an admin
+   * can review and publish later.
+   *
+   * Always fire-and-forget — never throws. Silently no-ops if Claude is
+   * unavailable or the model can't produce a usable draft.
+   */
+  async draftKbFromResolvedTicket(
+    ticketId: string,
+    resolutionNotes: string | null,
+    createdByUserId: string,
+  ): Promise<void> {
+    if (!this.anthropic.available()) return;
+
+    const ticket = await this.prisma.ticket.findUnique({
+      where: { id: ticketId },
+      select: {
+        id: true,
+        agencyId: true,
+        subject: true,
+        description: true,
+        agency: { select: { agencyName: true } },
+        messages: {
+          where: { isInternal: false, messageText: { not: null } },
+          orderBy: { createdAt: 'asc' },
+          take: 80,
+          select: {
+            messageText: true,
+            sender: { select: { userType: true, firstName: true } },
+          },
+        },
+      },
+    });
+    if (!ticket) return;
+
+    const draft = await this.anthropic.draftKbArticle({
+      subject: ticket.subject,
+      description: ticket.description ?? '',
+      messages: ticket.messages.map((m) => ({
+        // Coarse role mapping — citizens vs agents — so the model gets
+        // turn structure without the raw user-type taxonomy.
+        role:
+          m.sender?.userType === 'CITIZEN' || m.sender?.userType === 'BUSINESS'
+            ? 'citizen'
+            : m.sender?.userType
+              ? 'agent'
+              : 'system',
+        text: m.messageText ?? '',
+      })),
+      resolutionNotes,
+      agencyName: ticket.agency?.agencyName ?? null,
+    });
+    if (!draft) return;
+
+    // Persist as an unpublished article so an admin can review before it
+    // goes live. We slugify off the title (collision-safe via the
+    // ticket id suffix) and write the first version atomically.
+    const baseSlug = draft.title
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-+|-+$/g, '')
+      .slice(0, 200) || 'untitled';
+    const slug = `${baseSlug}-${ticketId.slice(0, 8)}`;
+
+    try {
+      await this.prisma.$transaction(async (tx) => {
+        const article = await tx.kbArticle.create({
+          data: {
+            agencyId: ticket.agencyId,
+            title: draft.title,
+            slug,
+            visibility: 'AGENCY_INTERNAL',
+            isPublished: false,
+            createdBy: createdByUserId,
+          },
+        });
+        const version = await tx.kbArticleVersion.create({
+          data: {
+            articleId: article.id,
+            versionNumber: 1,
+            content: draft.body,
+            summary: `Auto-drafted from ticket ${ticketId.slice(0, 8)} on resolution.`,
+            changeNotes: 'Initial AI draft. Pending admin review.',
+            isPublished: false,
+            createdBy: createdByUserId,
+          },
+        });
+        await tx.kbArticle.update({
+          where: { id: article.id },
+          data: { currentVersionId: version.id },
+        });
+
+        // Best-effort tag attach. Find-or-create per (agencyId, tag).
+        for (const rawTag of draft.tags) {
+          const tagName = rawTag.trim().toLowerCase().slice(0, 100);
+          if (!tagName) continue;
+          const tag = await tx.kbTag.upsert({
+            where: {
+              uq_kb_tag: { agencyId: ticket.agencyId ?? '', name: tagName },
+            },
+            create: { agencyId: ticket.agencyId, name: tagName },
+            update: {},
+          });
+          await tx.kbArticleTagMapping.create({
+            data: { articleId: article.id, tagId: tag.id },
+          }).catch(() => null); // duplicate (articleId, tagId) → ignore
+        }
+
+        this.logger.log(
+          `KB draft created from ticket ${ticketId} (article ${article.id}, ${draft.tags.length} tags, awaiting admin review).`,
+        );
+      });
+    } catch (err) {
+      this.logger.warn(`KB draft persistence failed for ticket ${ticketId}: ${(err as Error)?.message}`);
+    }
   }
 }
