@@ -204,4 +204,26 @@ export class UsersController {
   ) {
     return this.usersService.softDelete(id, currentUserId);
   }
+
+  // ──────────────────────────────────────────────
+  // POST /api/v1/users/:id/reset-password
+  // ──────────────────────────────────────────────
+
+  @Post(':id/reset-password')
+  @Roles('SUPER_ADMIN', 'COMMAND_CENTER_ADMIN')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({
+    summary: 'Admin resets a user password to a new one-time value',
+    description:
+      'Generates a strong temporary password, replaces the stored hash, and returns the plain text once so the admin can share it with the user. Triggers a welcome-style email + SMS containing the new credentials (best-effort).',
+  })
+  @ApiParam({ name: 'id', description: 'User UUID' })
+  @ApiResponse({ status: 200, description: 'Password reset; new temporary password returned' })
+  @ApiResponse({ status: 404, description: 'User not found' })
+  async resetPassword(
+    @Param('id', ParseUUIDPipe) id: string,
+    @CurrentUser('sub') adminUserId: string,
+  ) {
+    return this.usersService.adminResetPassword(id, adminUserId);
+  }
 }

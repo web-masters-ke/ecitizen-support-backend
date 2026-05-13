@@ -182,16 +182,102 @@ eCitizen Service Team`;
 
     // Return the sanitized user plus the credentials and login URL so the
     // admin can hand-deliver them when email is down (e.g. Brevo API key
-    // disabled). The temp password is only returned for newly generated
-    // ones — never echoed back for caller-supplied passwords.
+    // disabled). We return whichever password is being used — auto-generated
+    // OR admin-supplied — because the admin needs it both ways: when the
+    // welcome email/SMS doesn't reach the user they have to share it
+    // manually. Admin already knows admin-typed values, so echoing them
+    // back is not a new leak.
     return {
       ...this.sanitizeUser(user),
       credentials: {
         email: user.email,
         loginUrl,
-        temporaryPassword: generatedPassword ?? null,
+        temporaryPassword: plainPassword || null,
         passwordAlreadyProvided: !generatedPassword,
       },
+    };
+  }
+
+  /**
+   * Admin-triggered password reset. Generates a fresh strong password,
+   * hashes it on the user row, and returns the plain text to the caller
+   * one-time so the admin can share it with the user. Bcrypt is one-way
+   * so we cannot recover the user's previous password — reset is the
+   * only safe equivalent of "tell me what their password is".
+   */
+  async adminResetPassword(userId: string, adminUserId?: string) {
+    const user = await this.prisma.user.findUnique({ where: { id: userId } });
+    if (!user) throw new NotFoundException(`User ${userId} not found`);
+
+    const newPassword = this.generateTempPassword();
+    const passwordHash = await bcrypt.hash(newPassword, 12);
+    await this.prisma.user.update({
+      where: { id: userId },
+      data: { passwordHash },
+    });
+
+    const adminFrontendUrl = this.configService.get<string>('ADMIN_FRONTEND_URL', 'http://localhost:3001');
+    const loginUrl = `${adminFrontendUrl}/login`;
+
+    await this.prisma.auditLog
+      .create({
+        data: {
+          entityType: 'USER',
+          entityId: user.id,
+          actionType: 'PASSWORD_RESET',
+          performedBy: adminUserId,
+          newValue: { resetBy: adminUserId ?? null } as any,
+        },
+      })
+      .catch((err) => this.logger.warn(`Password reset audit failed: ${err?.message}`));
+
+    // Best-effort notification to the user so they know it changed.
+    if (user.email) {
+      const subject = 'Your eCitizen SCC password was reset';
+      const body = `Dear ${user.firstName ?? 'User'},
+
+An administrator reset the password on your eCitizen SCC account.
+
+<strong>New Login Details:</strong>
+Email: ${user.email}
+Temporary Password: <strong>${newPassword}</strong>
+
+Login here: <a href="${loginUrl}">${loginUrl}</a>
+
+Please change your password after you sign in.
+
+eCitizen Service Team`;
+      this.notificationsService
+        .sendNotification({
+          channel: 'EMAIL' as any,
+          triggerEvent: 'PASSWORD_RESET',
+          subject,
+          body,
+          recipients: [{ recipientUserId: user.id, recipientEmail: user.email }],
+        })
+        .catch((err) =>
+          this.logger.warn(`Password-reset EMAIL failed for ${user.email}: ${err?.message}`),
+        );
+    }
+    if (user.phoneNumber) {
+      const smsBody = `eCitizen SCC: your password was reset by an administrator. New temporary password: ${newPassword}. Login: ${loginUrl}. Please change it after you sign in.`;
+      this.notificationsService
+        .sendNotification({
+          channel: 'SMS' as any,
+          triggerEvent: 'PASSWORD_RESET',
+          subject: 'Password reset',
+          body: smsBody,
+          recipients: [{ recipientUserId: user.id, recipientPhone: user.phoneNumber }],
+        })
+        .catch((err) =>
+          this.logger.warn(`Password-reset SMS failed for ${user.phoneNumber}: ${err?.message}`),
+        );
+    }
+
+    return {
+      email: user.email,
+      loginUrl,
+      temporaryPassword: newPassword,
     };
   }
 
