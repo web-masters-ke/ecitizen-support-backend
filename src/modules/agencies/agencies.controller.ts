@@ -44,6 +44,7 @@ import {
 import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
 import { RolesGuard } from '../../common/guards/roles.guard';
 import { Roles } from '../../common/decorators/roles.decorator';
+import { Public } from '../../common/decorators/public.decorator';
 import { CurrentUser } from '../../common/decorators/current-user.decorator';
 
 @ApiTags('Agencies')
@@ -246,6 +247,22 @@ export class AgenciesController {
   @ApiResponse({ status: 404, description: 'Agency not found' })
   async getBusinessHours(@Param('id', ParseUUIDPipe) id: string) {
     return this.agenciesService.getBusinessHours(id);
+  }
+
+  // Public availability endpoint — used by the citizen ticket detail page
+  // to gate the Call Agent button by the agency's business-hours window.
+  // Returns { open, reason?, todayHours? } in Africa/Nairobi.
+  @Get('agencies/:id/availability')
+  @Public()
+  @ApiOperation({
+    summary: 'Is this agency open right now?',
+    description:
+      'Public, no-auth endpoint that tells the citizen UI whether the agency is currently within its configured business hours. Falls back to open=true if no hours are configured.',
+  })
+  @ApiParam({ name: 'id', description: 'Agency UUID' })
+  @ApiResponse({ status: 200, description: 'Availability snapshot for the agency.' })
+  async getAvailability(@Param('id', ParseUUIDPipe) id: string) {
+    return this.agenciesService.getAgencyAvailability(id);
   }
 
   @Put('agencies/:id/business-hours')

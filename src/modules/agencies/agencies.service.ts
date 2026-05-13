@@ -462,6 +462,61 @@ export class AgenciesService {
     });
   }
 
+  /**
+   * "Is this agency open RIGHT NOW?" — used by the citizen-facing call
+   * button to know whether to enable. Returns:
+   *   { open: true,  todayHours: { start, end } }
+   *   { open: false, reason: "Closed for the day" | "Closed today", nextOpen?: ... }
+   * If no business-hour rows exist for the agency we treat it as always
+   * open (back-compat with agencies that haven't configured hours yet).
+   */
+  async getAgencyAvailability(agencyId: string) {
+    await this.ensureAgencyExists(agencyId);
+    const rows = await this.prisma.agencyBusinessHour.findMany({
+      where: { agencyId, isActive: true },
+    });
+    if (rows.length === 0) {
+      return { open: true, reason: 'No business hours configured — defaulting to open.' };
+    }
+
+    // Africa/Nairobi is the operational timezone for the SCC; we compute
+    // "now in Nairobi" by formatting via Intl rather than relying on the
+    // pod's TZ which is usually UTC in k8s.
+    const now = new Date();
+    const fmt = (opts: Intl.DateTimeFormatOptions) =>
+      new Intl.DateTimeFormat('en-GB', { timeZone: 'Africa/Nairobi', ...opts }).format(now);
+    // weekday() — 0=Sunday … 6=Saturday to match the schema
+    const weekdayName = fmt({ weekday: 'short' }); // Mon, Tue, ...
+    const weekdayMap: Record<string, number> = { Sun: 0, Mon: 1, Tue: 2, Wed: 3, Thu: 4, Fri: 5, Sat: 6 };
+    const today = weekdayMap[weekdayName] ?? new Date().getDay();
+    const hh = fmt({ hour: '2-digit', hour12: false });
+    const mm = fmt({ minute: '2-digit' });
+    const nowSeconds = parseInt(hh, 10) * 3600 + parseInt(mm, 10) * 60;
+
+    const todayRow = rows.find((r) => r.dayOfWeek === today);
+    if (!todayRow) {
+      return { open: false, reason: 'Closed today.' };
+    }
+    const [sh, sm] = todayRow.startTime.split(':').map(Number);
+    const [eh, em] = todayRow.endTime.split(':').map(Number);
+    const startSeconds = sh * 3600 + sm * 60;
+    const endSeconds = eh * 3600 + em * 60;
+    const open = nowSeconds >= startSeconds && nowSeconds < endSeconds;
+    return open
+      ? {
+          open: true,
+          todayHours: { start: todayRow.startTime, end: todayRow.endTime },
+        }
+      : {
+          open: false,
+          reason:
+            nowSeconds < startSeconds
+              ? `Opens at ${todayRow.startTime.slice(0, 5)}`
+              : `Closed for the day (closed at ${todayRow.endTime.slice(0, 5)})`,
+          todayHours: { start: todayRow.startTime, end: todayRow.endTime },
+        };
+  }
+
   async setBusinessHours(agencyId: string, dto: SetBusinessHoursDto) {
     await this.ensureAgencyExists(agencyId);
 
