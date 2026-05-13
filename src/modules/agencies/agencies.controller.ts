@@ -430,39 +430,110 @@ export class AgenciesController {
   @Post('agencies/import')
   @Roles('SUPER_ADMIN', 'COMMAND_CENTER_ADMIN')
   @UseInterceptors(FileInterceptor('file', { storage: memoryStorage(), limits: { fileSize: 10 * 1024 * 1024 } }))
-  @ApiOperation({ summary: 'Bulk import agencies from CSV. Columns: agencyCode,agencyName,agencyType,officialEmail,officialPhone,county' })
+  @ApiOperation({
+    summary:
+      'Bulk import agencies from CSV. Columns: agencyCode,agencyName,agencyType,registrationNumber,officialEmail,officialPhone,physicalAddress,county,ministryName,stateDepartment,executiveOrderRef,executiveOrderYear,primaryContactName,primaryContactPhone',
+  })
   @ApiConsumes('multipart/form-data')
   @HttpCode(HttpStatus.OK)
   async importAgencies(@UploadedFile() file: Express.Multer.File) {
     if (!file) throw new BadRequestException('No file uploaded');
-    const text = file.buffer.toString('utf-8');
-    const lines = text.split('\n').filter(l => l.trim());
-    const headers = lines[0].split(',').map(h => h.trim().replace(/"/g, ''));
+    const rows = parseAgencyCsv(file.buffer.toString('utf-8'));
+    if (rows.length === 0) throw new BadRequestException('CSV is empty');
+    const headers = rows[0].map((h) => h.trim());
     const results = { created: 0, skipped: 0, errors: [] as string[] };
-    for (let i = 1; i < lines.length; i++) {
-      const vals = lines[i].split(',').map(v => v.trim().replace(/"/g, ''));
+
+    for (let i = 1; i < rows.length; i++) {
+      const vals = rows[i];
       const row: Record<string, string> = {};
-      headers.forEach((h, idx) => { row[h] = vals[idx] ?? ''; });
+      headers.forEach((h, idx) => { row[h] = (vals[idx] ?? '').trim(); });
+
       if (!row.agencyCode || !row.agencyName || !row.agencyType) {
-        results.errors.push(`Row ${i + 1}: missing required fields`);
+        results.errors.push(`Row ${i + 1}: missing required fields (agencyCode, agencyName, agencyType)`);
+        results.skipped++;
         continue;
       }
+
+      const agencyType = row.agencyType.toUpperCase();
+      const allowedTypes = ['MINISTRY', 'DEPARTMENT', 'PARASTATAL', 'COUNTY_GOVERNMENT', 'REGULATORY_BODY', 'SERVICE_PROVIDER', 'INTERNATIONAL_ORG', 'CUSTOM'];
+      if (!allowedTypes.includes(agencyType)) {
+        results.errors.push(`Row ${i + 1}: invalid agencyType "${row.agencyType}" — allowed: ${allowedTypes.join(', ')}`);
+        results.skipped++;
+        continue;
+      }
+
       try {
-        await this.agenciesService.create({
+        // Step 1: create with the fields the Create DTO accepts.
+        const created = await this.agenciesService.create({
           agencyCode: row.agencyCode,
           agencyName: row.agencyName,
-          agencyType: row.agencyType as any,
+          agencyType: agencyType as any,
+          registrationNumber: row.registrationNumber || undefined,
           officialEmail: row.officialEmail || undefined,
           officialPhone: row.officialPhone || undefined,
+          physicalAddress: row.physicalAddress || undefined,
           county: row.county || undefined,
           isActive: true,
         });
+
+        // Step 2: extended onboarding fields live on UpdateAgencyDto only.
+        // Apply them in a follow-up update so the imported profile matches
+        // what the onboarding form captures.
+        const hasExtended =
+          row.ministryName ||
+          row.stateDepartment ||
+          row.executiveOrderRef ||
+          row.executiveOrderYear ||
+          row.primaryContactName ||
+          row.primaryContactPhone;
+        if (hasExtended) {
+          await this.agenciesService.update(created.id, {
+            ministryName: row.ministryName || undefined,
+            stateDepartment: row.stateDepartment || undefined,
+            executiveOrderRef: row.executiveOrderRef || undefined,
+            executiveOrderYear: row.executiveOrderYear ? Number(row.executiveOrderYear) : undefined,
+            primaryContactName: row.primaryContactName || undefined,
+            primaryContactPhone: row.primaryContactPhone || undefined,
+          } as any);
+        }
+
         results.created++;
       } catch (e: any) {
         results.skipped++;
-        results.errors.push(`Row ${i + 1}: ${e.message}`);
+        results.errors.push(`Row ${i + 1} (${row.agencyCode}): ${e.message}`);
       }
     }
     return results;
   }
+}
+
+// ─── Tiny RFC-4180-lite CSV parser ────────────────────────────────────
+// Handles "quoted, fields", "escaped ""quotes""", and Windows line endings.
+function parseAgencyCsv(text: string): string[][] {
+  const rows: string[][] = [];
+  let row: string[] = [];
+  let cell = '';
+  let inQuotes = false;
+  const src = text.replace(/\r\n?/g, '\n');
+  for (let i = 0; i < src.length; i++) {
+    const c = src[i];
+    if (inQuotes) {
+      if (c === '"' && src[i + 1] === '"') { cell += '"'; i++; }
+      else if (c === '"') { inQuotes = false; }
+      else { cell += c; }
+    } else {
+      if (c === '"') { inQuotes = true; }
+      else if (c === ',') { row.push(cell); cell = ''; }
+      else if (c === '\n') {
+        row.push(cell); cell = '';
+        if (row.some((v) => v.length > 0)) rows.push(row);
+        row = [];
+      } else { cell += c; }
+    }
+  }
+  if (cell.length > 0 || row.length > 0) {
+    row.push(cell);
+    if (row.some((v) => v.length > 0)) rows.push(row);
+  }
+  return rows;
 }

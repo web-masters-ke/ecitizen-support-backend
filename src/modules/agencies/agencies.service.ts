@@ -253,6 +253,8 @@ export class AgenciesService {
         ...(dto.onboardingStatus && { onboardingStatus: dto.onboardingStatus }),
         ...(dto.ministryName !== undefined && { ministryName: dto.ministryName }),
         ...(dto.stateDepartment !== undefined && { stateDepartment: dto.stateDepartment }),
+        ...(dto.executiveOrderRef !== undefined && { executiveOrderRef: dto.executiveOrderRef }),
+        ...(dto.executiveOrderYear !== undefined && { executiveOrderYear: dto.executiveOrderYear }),
         ...(dto.primaryContactName !== undefined && { primaryContactName: dto.primaryContactName }),
         ...(dto.primaryContactPhone !== undefined && { primaryContactPhone: dto.primaryContactPhone }),
         ...(dto.coordinatorId !== undefined && { coordinatorId: dto.coordinatorId }),

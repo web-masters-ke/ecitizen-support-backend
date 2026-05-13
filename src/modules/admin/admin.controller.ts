@@ -210,37 +210,101 @@ export class AdminController {
 
   @Post('users/import')
   @UseInterceptors(FileInterceptor('file', { storage: memoryStorage(), limits: { fileSize: 5 * 1024 * 1024 } }))
-  @ApiOperation({ summary: 'Bulk import users from CSV. Columns: email,firstName,lastName,userType,agencyId' })
+  @ApiOperation({
+    summary:
+      'Bulk import users from CSV. Columns: email,userType,firstName,lastName,phoneNumber,nationalId,businessRegistrationNo,ecitizenUserId,password,agencyId,departmentId,roleIds (semicolon-separated UUIDs)',
+  })
   @ApiConsumes('multipart/form-data')
   @HttpCode(HttpStatus.OK)
-  async importUsers(@UploadedFile() file: Express.Multer.File) {
+  async importUsers(@UploadedFile() file: Express.Multer.File, @CurrentUser('sub') adminUserId: string) {
     if (!file) throw new BadRequestException('No file uploaded');
-    const text = file.buffer.toString('utf-8');
-    const lines = text.split('\n').filter(l => l.trim());
-    const headers = lines[0].split(',').map(h => h.trim().replace(/"/g, ''));
+    const rows = parseCsv(file.buffer.toString('utf-8'));
+    if (rows.length === 0) throw new BadRequestException('CSV is empty');
+    const headers = rows[0].map((h) => h.trim());
     const results = { created: 0, skipped: 0, errors: [] as string[] };
-    for (let i = 1; i < lines.length; i++) {
-      const vals = lines[i].split(',').map(v => v.trim().replace(/"/g, ''));
+
+    for (let i = 1; i < rows.length; i++) {
+      const vals = rows[i];
       const row: Record<string, string> = {};
-      headers.forEach((h, idx) => { row[h] = vals[idx] ?? ''; });
-      if (!row.email || !row.firstName || !row.lastName) {
-        results.errors.push(`Row ${i + 1}: missing required fields`);
+      headers.forEach((h, idx) => { row[h] = (vals[idx] ?? '').trim(); });
+
+      if (!row.email) {
+        results.errors.push(`Row ${i + 1}: missing required field 'email'`);
+        results.skipped++;
         continue;
       }
+
+      const userType = row.userType
+        ? (row.userType.toUpperCase() as UserTypeEnum)
+        : UserTypeEnum.AGENCY_AGENT;
+      if (!Object.values(UserTypeEnum).includes(userType)) {
+        results.errors.push(`Row ${i + 1}: invalid userType "${row.userType}" — allowed: ${Object.values(UserTypeEnum).join(', ')}`);
+        results.skipped++;
+        continue;
+      }
+
+      const roleIds = row.roleIds
+        ? row.roleIds.split(';').map((s) => s.trim()).filter(Boolean)
+        : undefined;
+
       try {
-        await this.usersService.create({
-          email: row.email,
-          firstName: row.firstName,
-          lastName: row.lastName,
-          userType: (row.userType as UserTypeEnum) || UserTypeEnum.AGENCY_AGENT,
-          agencyId: row.agencyId || undefined,
-        });
+        await this.usersService.create(
+          {
+            email: row.email,
+            userType,
+            firstName: row.firstName || undefined,
+            lastName: row.lastName || undefined,
+            phoneNumber: row.phoneNumber || undefined,
+            nationalId: row.nationalId || undefined,
+            businessRegistrationNo: row.businessRegistrationNo || undefined,
+            ecitizenUserId: row.ecitizenUserId || undefined,
+            password: row.password || undefined,
+            agencyId: row.agencyId || undefined,
+            departmentId: row.departmentId || undefined,
+            roleIds,
+          },
+          adminUserId,
+        );
         results.created++;
       } catch (e: any) {
         results.skipped++;
-        results.errors.push(`Row ${i + 1}: ${e.message}`);
+        results.errors.push(`Row ${i + 1} (${row.email}): ${e.message}`);
       }
     }
     return results;
   }
+}
+
+// ─── Tiny RFC-4180-lite CSV parser ────────────────────────────────────
+// Handles "quoted, fields", "escaped ""quotes""", and Windows line endings.
+// Address fields and agency names routinely contain commas, so naive
+// split(',') drops data silently — this is the minimum we need to be
+// tolerant of admin-prepared spreadsheets.
+function parseCsv(text: string): string[][] {
+  const rows: string[][] = [];
+  let row: string[] = [];
+  let cell = '';
+  let inQuotes = false;
+  const src = text.replace(/\r\n?/g, '\n');
+  for (let i = 0; i < src.length; i++) {
+    const c = src[i];
+    if (inQuotes) {
+      if (c === '"' && src[i + 1] === '"') { cell += '"'; i++; }
+      else if (c === '"') { inQuotes = false; }
+      else { cell += c; }
+    } else {
+      if (c === '"') { inQuotes = true; }
+      else if (c === ',') { row.push(cell); cell = ''; }
+      else if (c === '\n') {
+        row.push(cell); cell = '';
+        if (row.some((v) => v.length > 0)) rows.push(row);
+        row = [];
+      } else { cell += c; }
+    }
+  }
+  if (cell.length > 0 || row.length > 0) {
+    row.push(cell);
+    if (row.some((v) => v.length > 0)) rows.push(row);
+  }
+  return rows;
 }
