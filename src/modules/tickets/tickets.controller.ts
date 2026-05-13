@@ -525,6 +525,20 @@ export class TicketLookupsController {
     return this.ticketsService.getCategories(filters);
   }
 
+  // Public, no-auth list — same shape as the protected endpoint above.
+  // Used by /report-issue so citizens without an account can populate
+  // the Category dropdown after picking an agency.
+  @Get('ticket-categories/public')
+  @Public()
+  @ApiOperation({
+    summary: 'Public ticket category list (no auth)',
+    description:
+      'Read-only category dropdown source for the citizen-facing /report-issue page.',
+  })
+  async getCategoriesPublic(@Query() filters: CategoryFilterDto) {
+    return this.ticketsService.getCategories(filters);
+  }
+
   // ------------------------------------------
   // GET /api/v1/ticket-priorities - List priority levels
   // ------------------------------------------

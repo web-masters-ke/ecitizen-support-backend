@@ -70,6 +70,32 @@ export class AgenciesController {
     return this.agenciesService.findAll(filters);
   }
 
+  // Public, no-auth list used by /report-issue + the citizen submit-a-
+  // ticket form. Returns the minimum needed to populate the agency
+  // dropdown — no internal contacts, no SLA docs, no settings. Active
+  // agencies only.
+  @Get('agencies/public')
+  @Public()
+  @ApiOperation({
+    summary: 'Public agency directory (no auth)',
+    description:
+      'Returns active agencies with just enough fields to populate the citizen-side dropdown: id, agencyName, agencyCode, agencyType. Used by /report-issue.',
+  })
+  async findAllPublic(@Query() filters: AgencyFilterDto) {
+    const result = await this.agenciesService.findAll({
+      ...filters,
+      isActive: true,
+      limit: 500,
+    } as AgencyFilterDto);
+    const slim = (Array.isArray(result?.data) ? result.data : []).map((a: any) => ({
+      id: a.id,
+      agencyName: a.agencyName,
+      agencyCode: a.agencyCode,
+      agencyType: a.agencyType,
+    }));
+    return { data: slim, meta: result?.meta };
+  }
+
   @Get('agencies/:id')
   @Roles('SUPER_ADMIN', 'COMMAND_CENTER_ADMIN', 'AGENCY_AGENT', 'CITIZEN', 'BUSINESS')
   @ApiOperation({
