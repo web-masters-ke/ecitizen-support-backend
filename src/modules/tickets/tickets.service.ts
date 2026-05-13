@@ -1816,11 +1816,25 @@ export class TicketsService {
       throw new BadRequestException('Please share either an email or a phone number so we can reach you back.');
     }
 
-    // If the citizen didn't specify an agency, route to the eCitizen
-    // default agency so an admin / AI classifier can re-route after
-    // reading the description. Falls back to the first active agency
-    // when the default isn't seeded yet.
+    // If the citizen didn't specify an agency, ask the AI router to
+    // pick one from the subject + description. Falls back to the
+    // eCitizen routing agency, then the oldest active agency.
     let agencyId = dto.agencyId;
+    if (!agencyId) {
+      try {
+        const aiPick = await this.aiService.pickBestAgencyForText(
+          `${dto.subject} ${dto.description}`,
+        );
+        if (aiPick.agencyId && aiPick.confidence >= 0.5) {
+          this.logger.log(
+            `Public report auto-routed to ${aiPick.agencyName} (confidence ${aiPick.confidence}) — ${aiPick.reason}`,
+          );
+          agencyId = aiPick.agencyId;
+        }
+      } catch (err) {
+        this.logger.warn(`AI agency routing failed: ${(err as Error)?.message}`);
+      }
+    }
     if (!agencyId) {
       const defaultCode = process.env.DEFAULT_ROUTING_AGENCY_CODE || 'ECITIZEN';
       const fallback = await this.prisma.agency.findFirst({

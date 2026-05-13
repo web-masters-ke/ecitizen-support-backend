@@ -266,6 +266,82 @@ export class AiService {
     };
   }
 
+  /**
+   * Pick the best-matching agency for an unrouted public ticket. Scores
+   * every active agency on the overlap between the ticket text and the
+   * agency's name, code, ministry, and category names. Returns the
+   * winning agency id with a confidence score (0..1).
+   *
+   * Used by the citizen public-report flow when the citizen leaves the
+   * Agency dropdown blank ("I'm not sure — please route it for me").
+   * Falls back to the eCitizen routing agency if nothing scores.
+   */
+  async pickBestAgencyForText(text: string): Promise<{
+    agencyId: string | null;
+    agencyName: string | null;
+    confidence: number;
+    reason: string;
+  }> {
+    const lower = text.toLowerCase();
+    const agencies = await this.prisma.agency.findMany({
+      where: { isActive: true },
+      select: {
+        id: true,
+        agencyName: true,
+        agencyCode: true,
+        ministryName: true,
+        ticketCategories: { select: { name: true }, where: { isActive: true } },
+      },
+    });
+
+    type Scored = { id: string; name: string; score: number; matched: string[] };
+    const scored: Scored[] = agencies.map((a) => {
+      const matched: string[] = [];
+      let score = 0;
+      const corpus: string[] = [
+        a.agencyName,
+        a.agencyCode ?? '',
+        a.ministryName ?? '',
+        ...a.ticketCategories.map((c) => c.name),
+      ];
+      // Tokenise corpus to phrases & individual words >= 4 chars.
+      const tokens = new Set<string>();
+      for (const piece of corpus) {
+        if (!piece) continue;
+        const cleaned = piece.toLowerCase().replace(/[^a-z0-9 ]+/g, ' ');
+        // Multi-word phrase match (e.g. "kenya revenue authority")
+        if (cleaned.length >= 4) tokens.add(cleaned.trim());
+        for (const w of cleaned.split(/\s+/)) {
+          if (w.length >= 4) tokens.add(w);
+        }
+      }
+      for (const tok of tokens) {
+        if (!tok) continue;
+        if (lower.includes(tok)) {
+          matched.push(tok);
+          // Long-phrase hits are much stronger signal than single words.
+          score += tok.includes(' ') ? 3 : 1;
+        }
+      }
+      return { id: a.id, name: a.agencyName, score, matched };
+    });
+
+    scored.sort((a, b) => b.score - a.score);
+    const top = scored[0];
+    if (!top || top.score === 0) {
+      return { agencyId: null, agencyName: null, confidence: 0, reason: 'No keyword match — falling back to default routing agency.' };
+    }
+    // Confidence scales with absolute score, capped at 0.9 so we don't
+    // pretend a keyword match is human-level certainty.
+    const confidence = Math.min(0.9, 0.4 + top.score * 0.1);
+    return {
+      agencyId: top.id,
+      agencyName: top.name,
+      confidence: Math.round(confidence * 100) / 100,
+      reason: `Matched: ${top.matched.slice(0, 5).join(', ')}`,
+    };
+  }
+
   private runRuleBasedClassifier(text: string): {
     categoryName: string;
     priorityName: string;
