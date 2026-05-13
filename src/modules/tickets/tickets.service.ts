@@ -469,12 +469,49 @@ export class TicketsService {
    * Create a new ticket. Sets status to OPEN and generates a ticket number.
    */
   async createTicket(dto: CreateTicketDto, createdBy: string) {
-    // Verify agency exists
+    // Resolve the agency. Mirrors the routing chain used by
+    // createPublicTicket: caller-supplied id → AI router → eCitizen
+    // default routing agency → oldest active agency. When a citizen
+    // hits /tickets/new without picking an agency this is what lets
+    // the system still route the ticket.
+    let agencyId = dto.agencyId;
+    if (!agencyId) {
+      try {
+        const aiPick = await this.aiService.pickBestAgencyForText(
+          `${dto.subject} ${dto.description}`,
+        );
+        if (aiPick.agencyId && aiPick.confidence >= 0.5) {
+          this.logger.log(
+            `Authenticated ticket auto-routed to agency ${aiPick.agencyName} (confidence ${aiPick.confidence}) — ${aiPick.reason}`,
+          );
+          agencyId = aiPick.agencyId;
+        }
+      } catch (err) {
+        this.logger.warn(`AI agency routing failed: ${(err as Error)?.message}`);
+      }
+    }
+    if (!agencyId) {
+      const defaultCode = process.env.DEFAULT_ROUTING_AGENCY_CODE || 'ECITIZEN';
+      const fallback = await this.prisma.agency.findFirst({
+        where: { agencyCode: defaultCode, isActive: true },
+        select: { id: true },
+      }) ?? await this.prisma.agency.findFirst({
+        where: { isActive: true },
+        orderBy: { createdAt: 'asc' },
+        select: { id: true },
+      });
+      if (!fallback) {
+        throw new BadRequestException('No active agency is configured to receive tickets yet.');
+      }
+      agencyId = fallback.id;
+    }
+
+    // Verify the resolved agency exists (caller-supplied id might be stale).
     const agency = await this.prisma.agency.findUnique({
-      where: { id: dto.agencyId },
+      where: { id: agencyId },
     });
     if (!agency) {
-      throw new BadRequestException(`Agency ${dto.agencyId} not found`);
+      throw new BadRequestException(`Agency ${agencyId} not found`);
     }
 
     // Verify category if provided
@@ -508,7 +545,7 @@ export class TicketsService {
       const newTicket = await tx.ticket.create({
         data: {
           ticketNumber,
-          agencyId: dto.agencyId,
+          agencyId,
           departmentId: dto.departmentId || null,
           categoryId: dto.categoryId || null,
           priorityId: dto.priorityId || null,
@@ -543,7 +580,7 @@ export class TicketsService {
           let tag = await tx.ticketTag.findFirst({
             where: {
               name: tagName,
-              agencyId: dto.agencyId,
+              agencyId,
             },
           });
 
@@ -551,7 +588,7 @@ export class TicketsService {
             tag = await tx.ticketTag.create({
               data: {
                 name: tagName,
-                agencyId: dto.agencyId,
+                agencyId,
               },
             });
           }

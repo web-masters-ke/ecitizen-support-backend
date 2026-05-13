@@ -69,9 +69,14 @@ export enum EscalationTriggerEnum {
 // ============================================
 
 export class CreateTicketDto {
-  @ApiProperty({ description: 'Agency ID the ticket is for' })
+  // Agency is optional — when a citizen leaves it blank on /tickets/new
+  // we let the AI router (or the keyword/default fallback chain) pick
+  // the right agency. Admins on the SCC UI almost always set this
+  // explicitly so the auto-route only fires when truly omitted.
+  @ApiPropertyOptional({ description: 'Agency ID the ticket is for. Optional — auto-routed if omitted.' })
+  @IsOptional()
   @IsUUID()
-  agencyId: string;
+  agencyId?: string;
 
   @ApiPropertyOptional({ description: 'Department ID within the agency' })
   @IsOptional()
