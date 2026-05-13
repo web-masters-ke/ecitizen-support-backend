@@ -25,6 +25,16 @@ const DEFAULT_CATEGORIES: Array<{ name: string; description: string }> = [
   { name: 'Other', description: 'Anything not covered by the categories above' },
 ];
 
+// POC scope — the eCitizen-themed routing agency (the one citizens land
+// on when they don't pick an agency on the public report form) gets
+// these three categories on top of the defaults. Matches the live notes
+// in docs/SYSTEM_PRESENTATION_TO_CLIENT.md §2.2.
+const ECITIZEN_POC_CATEGORIES: Array<{ name: string; description: string }> = [
+  { name: 'eCitizen Account', description: 'Phone number change, email change, password / SSO issues, account lockouts' },
+  { name: 'eCitizen Payment', description: 'Failed payments, missing receipts, refunds, double charges' },
+  { name: 'General Inquiry', description: 'Where do I find service X, link guidance, general guidance' },
+];
+
 async function main() {
   const agencies = await prisma.agency.findMany({
     where: { isActive: true },
@@ -64,6 +74,46 @@ async function main() {
   console.log(
     `✅ Inserted ${inserted} default category rows across ${agenciesMissingCategories.length} agencies`,
   );
+
+  // Ensure the eCitizen routing agency has the three POC categories from
+  // the client walkthrough notes, idempotently. We look for an agency
+  // tagged with the routing code (env-driven; defaults to ECITIZEN) and
+  // upsert each category by (agencyId, name).
+  const routingCode = process.env.DEFAULT_ROUTING_AGENCY_CODE || 'ECITIZEN';
+  const routingAgency = await prisma.agency.findFirst({
+    where: { agencyCode: routingCode, isActive: true },
+    select: { id: true, agencyName: true },
+  });
+  if (!routingAgency) {
+    console.log(
+      `ℹ️  No agency with code "${routingCode}" found — skipping POC category seed. ` +
+        `Create that agency to make /report-issue route unassigned tickets to it.`,
+    );
+    return;
+  }
+  let pocInserted = 0;
+  for (const cat of ECITIZEN_POC_CATEGORIES) {
+    const existing = await prisma.ticketCategory.findFirst({
+      where: { agencyId: routingAgency.id, name: cat.name },
+    });
+    if (existing) continue;
+    await prisma.ticketCategory.create({
+      data: {
+        agencyId: routingAgency.id,
+        name: cat.name,
+        description: cat.description,
+        isActive: true,
+      },
+    });
+    pocInserted += 1;
+  }
+  if (pocInserted > 0) {
+    console.log(
+      `✅ Seeded ${pocInserted} POC categories on ${routingAgency.agencyName} (${routingCode})`,
+    );
+  } else {
+    console.log(`✅ POC categories already present on ${routingAgency.agencyName}`);
+  }
 }
 
 main()

@@ -116,9 +116,14 @@ export class CreateTicketDto {
 // ============================================
 
 export class PublicCreateTicketDto {
-  @ApiProperty({ description: 'Agency ID the ticket is for' })
+  // Agency is optional on the public form. Citizens often don't know
+  // which agency owns their issue (forgot password? lost passport?) —
+  // we land it on the default routing agency so AI / a triage agent
+  // can re-route after reading the description.
+  @ApiPropertyOptional({ description: 'Agency ID the ticket is for. Optional — defaults to the eCitizen routing agency.' })
+  @IsOptional()
   @IsUUID()
-  agencyId: string;
+  agencyId?: string;
 
   @ApiPropertyOptional({ description: 'Category ID for the ticket' })
   @IsOptional()

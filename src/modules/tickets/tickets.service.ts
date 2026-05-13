@@ -1804,7 +1804,7 @@ export class TicketsService {
    * details in the description so the agency can follow up.
    */
   async createPublicTicket(dto: {
-    agencyId: string;
+    agencyId?: string;
     categoryId?: string;
     subject: string;
     description: string;
@@ -1814,6 +1814,27 @@ export class TicketsService {
   }) {
     if (!dto.reporterEmail && !dto.reporterPhone) {
       throw new BadRequestException('Please share either an email or a phone number so we can reach you back.');
+    }
+
+    // If the citizen didn't specify an agency, route to the eCitizen
+    // default agency so an admin / AI classifier can re-route after
+    // reading the description. Falls back to the first active agency
+    // when the default isn't seeded yet.
+    let agencyId = dto.agencyId;
+    if (!agencyId) {
+      const defaultCode = process.env.DEFAULT_ROUTING_AGENCY_CODE || 'ECITIZEN';
+      const fallback = await this.prisma.agency.findFirst({
+        where: { agencyCode: defaultCode, isActive: true },
+        select: { id: true },
+      }) ?? await this.prisma.agency.findFirst({
+        where: { isActive: true },
+        orderBy: { createdAt: 'asc' },
+        select: { id: true },
+      });
+      if (!fallback) {
+        throw new BadRequestException('No active agency is configured to receive public reports yet. Please try again later.');
+      }
+      agencyId = fallback.id;
     }
 
     // Find or lazily create the singleton system "public reporter"
@@ -1848,7 +1869,7 @@ export class TicketsService {
 
     return this.createTicket(
       {
-        agencyId: dto.agencyId,
+        agencyId,
         categoryId: dto.categoryId,
         channel: TicketChannelEnum.WEB,
         subject: dto.subject,
