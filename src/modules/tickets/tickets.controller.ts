@@ -433,6 +433,40 @@ export class TicketsController {
   ) {
     return this.ticketsService.removeTag(id, tagId);
   }
+
+  // ------------------------------------------
+  // POST /api/v1/tickets/:id/feedback - Citizen feedback
+  // These two endpoints used to live on TicketLookupsController (which
+  // has @Controller() with no prefix) so they were registered at root
+  // (POST /:id/feedback, GET /:id/public). The webclient hits them under
+  // /tickets/:id/... so submissions silently 404'd. They belong here.
+  // ------------------------------------------
+
+  @Post(':id/feedback')
+  @Public()
+  @ApiOperation({ summary: 'Submit citizen satisfaction rating for a closed/resolved ticket' })
+  @ApiParam({ name: 'id', type: 'string', format: 'uuid' })
+  @SwaggerResponse({ status: 200, description: 'Feedback recorded' })
+  @HttpCode(HttpStatus.OK)
+  async submitFeedback(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body() dto: TicketFeedbackDto,
+  ) {
+    return this.ticketsService.submitCitizenFeedback(id, { rating: dto.rating, feedback: dto.feedback });
+  }
+
+  // ------------------------------------------
+  // GET /api/v1/tickets/:id/public - Public ticket info for the feedback page
+  // ------------------------------------------
+
+  @Get(':id/public')
+  @Public()
+  @ApiOperation({ summary: 'Public ticket info (number, subject, agency, assignee) for the feedback form — no auth required' })
+  @ApiParam({ name: 'id', type: 'string', format: 'uuid' })
+  @SwaggerResponse({ status: 200, description: 'Public ticket info' })
+  async getPublicTicket(@Param('id', ParseUUIDPipe) id: string) {
+    return this.ticketsService.getPublicTicketInfo(id);
+  }
 }
 
 // ============================================
@@ -501,31 +535,4 @@ export class TicketLookupsController {
     return this.ticketsService.getStatuses();
   }
 
-  // ------------------------------------------
-  // POST /api/v1/tickets/:id/feedback - Citizen feedback
-  // ------------------------------------------
-
-  @Post(':id/feedback')
-  @Public()
-  @ApiOperation({ summary: 'Submit citizen satisfaction rating for a closed/resolved ticket' })
-  @SwaggerResponse({ status: 200, description: 'Feedback recorded' })
-  @HttpCode(HttpStatus.OK)
-  async submitFeedback(
-    @Param('id', ParseUUIDPipe) id: string,
-    @Body() dto: TicketFeedbackDto,
-  ) {
-    return this.ticketsService.submitCitizenFeedback(id, { rating: dto.rating, feedback: dto.feedback });
-  }
-
-  // ------------------------------------------
-  // GET /api/v1/tickets/:id/public - Public ticket info for unauthenticated feedback page
-  // ------------------------------------------
-
-  @Get(':id/public')
-  @Public()
-  @ApiOperation({ summary: 'Public ticket info (number, subject, agency, assignee) for the feedback form — no auth required' })
-  @SwaggerResponse({ status: 200, description: 'Public ticket info' })
-  async getPublicTicket(@Param('id', ParseUUIDPipe) id: string) {
-    return this.ticketsService.getPublicTicketInfo(id);
-  }
 }
