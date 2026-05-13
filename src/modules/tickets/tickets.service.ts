@@ -33,6 +33,7 @@ import {
   CategoryFilterDto,
   MessageFilterDto,
   TicketStatusEnum,
+  TicketChannelEnum,
   EscalationTriggerEnum,
 } from './dto/tickets.dto';
 
@@ -601,6 +602,14 @@ export class TicketsService {
       autoApply: true,
     } as any).catch((err) =>
       this.logger.warn(`AI classify failed for ${ticket.ticketNumber}: ${err?.message}`),
+    );
+
+    // Auto-assign the ticket to the least-busy active agent in the
+    // agency. Fire-and-forget so an empty agency (no agents yet) doesn't
+    // fail ticket creation — the ticket stays OPEN and unassigned and a
+    // supervisor can pick it up manually.
+    this.autoAssignToLeastBusyAgent(ticket.id, ticket.agencyId).catch((err) =>
+      this.logger.warn(`Auto-assign failed for ${ticket.ticketNumber}: ${err?.message}`),
     );
 
     // Publish ticket.created event to Kafka (non-blocking)
@@ -1721,7 +1730,154 @@ export class TicketsService {
   /**
    * Reopen a closed or resolved ticket. Increments reopenCount.
    */
+  /**
+   * Auto-assign a freshly-created ticket to the least-busy active agent
+   * in the agency. "Busy" = number of currently-open assigned tickets.
+   * Skips silently if no eligible agent exists; the ticket stays OPEN
+   * and a supervisor / Pick button handles it manually.
+   */
+  private async autoAssignToLeastBusyAgent(ticketId: string, agencyId: string): Promise<void> {
+    // 1. All active agents linked to this agency.
+    const links = await this.prisma.agencyUser.findMany({
+      where: {
+        agencyId,
+        employmentStatus: 'active',
+        user: { isActive: true },
+      },
+      select: { userId: true, user: { select: { userType: true } } },
+    });
+    const candidateIds = links
+      .filter((l) => l.user.userType === 'AGENCY_AGENT' || l.user.userType === 'COMMAND_CENTER_ADMIN')
+      .map((l) => l.userId);
+    if (candidateIds.length === 0) {
+      this.logger.log(`Auto-assign skipped — no eligible agents in agency ${agencyId}`);
+      return;
+    }
+
+    // 2. Pull open-ticket counts per candidate so we can pick the lightest load.
+    const openStatuses = await this.prisma.ticketStatus.findMany({
+      where: { isClosedStatus: false },
+      select: { id: true },
+    });
+    const openStatusIds = openStatuses.map((s) => s.id);
+
+    const counts = await this.prisma.ticket.groupBy({
+      by: ['currentAssigneeId'],
+      where: {
+        agencyId,
+        currentAssigneeId: { in: candidateIds },
+        statusId: { in: openStatusIds },
+        isDeleted: false,
+      },
+      _count: { _all: true },
+    });
+    const loadMap = new Map<string, number>(
+      counts.map((c) => [c.currentAssigneeId as string, c._count._all]),
+    );
+
+    // Pick the candidate with the smallest current load (defaults to 0
+    // for agents with no open tickets, so brand-new agents get work).
+    let chosen = candidateIds[0];
+    let chosenLoad = loadMap.get(chosen) ?? 0;
+    for (const id of candidateIds) {
+      const load = loadMap.get(id) ?? 0;
+      if (load < chosenLoad) {
+        chosen = id;
+        chosenLoad = load;
+      }
+    }
+
+    // 3. Hand off to the existing assignTicket path so audit + notify +
+    // chat-enrolment side-effects fire identically to a manual assign.
+    await this.assignTicket(
+      ticketId,
+      { assigneeId: chosen, reason: 'Auto-assigned by load balancer' } as AssignTicketDto,
+      chosen, // assigned "by" the chosen agent themselves — system action; avoids a foreign-key crash if no system user exists
+    );
+  }
+
+  /**
+   * Public, no-auth ticket submission. Used by the citizen-facing
+   * "Report an issue" page so people who can't sign in (forgotten
+   * password, no eCitizen account) can still file. We attribute the
+   * ticket to a singleton system user and embed the reporter's contact
+   * details in the description so the agency can follow up.
+   */
+  async createPublicTicket(dto: {
+    agencyId: string;
+    categoryId?: string;
+    subject: string;
+    description: string;
+    reporterName?: string;
+    reporterEmail?: string;
+    reporterPhone?: string;
+  }) {
+    if (!dto.reporterEmail && !dto.reporterPhone) {
+      throw new BadRequestException('Please share either an email or a phone number so we can reach you back.');
+    }
+
+    // Find or lazily create the singleton system "public reporter"
+    // account that owns every anonymous submission.
+    const PUBLIC_USER_EMAIL = 'public-reporter@ecitizen.system';
+    let publicUser = await this.prisma.user.findUnique({
+      where: { email: PUBLIC_USER_EMAIL },
+    });
+    if (!publicUser) {
+      publicUser = await this.prisma.user.create({
+        data: {
+          email: PUBLIC_USER_EMAIL,
+          firstName: 'Public',
+          lastName: 'Reporter',
+          userType: 'CITIZEN',
+          isActive: true,
+          isVerified: false,
+        },
+      });
+    }
+
+    const contactBlock = [
+      dto.reporterName ? `Name: ${dto.reporterName}` : null,
+      dto.reporterEmail ? `Email: ${dto.reporterEmail}` : null,
+      dto.reporterPhone ? `Phone: ${dto.reporterPhone}` : null,
+    ]
+      .filter(Boolean)
+      .join('\n');
+    const fullDescription = contactBlock
+      ? `${dto.description}\n\n--- Reporter Contact (submitted without sign-in) ---\n${contactBlock}`
+      : dto.description;
+
+    return this.createTicket(
+      {
+        agencyId: dto.agencyId,
+        categoryId: dto.categoryId,
+        channel: TicketChannelEnum.WEB,
+        subject: dto.subject,
+        description: fullDescription,
+      } as CreateTicketDto,
+      publicUser.id,
+    );
+  }
+
   async reopenTicket(id: string, dto: ReopenTicketDto, reopenedBy: string) {
+    // Cap reopens to keep the ticket from bouncing between
+    // resolved/open forever. Past the limit the citizen has to file a
+    // fresh, linked ticket — the conversation history stays available on
+    // the original. Limit is intentionally generous so genuine "still
+    // broken" cases pass through; chronic reopening signals a deeper
+    // issue that needs a new ticket and a fresh SLA clock.
+    const current = await this.prisma.ticket.findUnique({
+      where: { id },
+      select: { reopenCount: true, ticketNumber: true },
+    });
+    if (!current) {
+      throw new NotFoundException(`Ticket ${id} not found`);
+    }
+    const REOPEN_LIMIT = 2;
+    if ((current.reopenCount ?? 0) >= REOPEN_LIMIT) {
+      throw new BadRequestException(
+        `Ticket ${current.ticketNumber} has already been reopened ${REOPEN_LIMIT} times. Please file a new ticket linking back to this one so the SLA clock can restart cleanly.`,
+      );
+    }
     return this.transitionStatus(
       id,
       TicketStatusEnum.REOPENED,

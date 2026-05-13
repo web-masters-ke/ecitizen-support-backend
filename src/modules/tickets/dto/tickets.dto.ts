@@ -111,6 +111,54 @@ export class CreateTicketDto {
 }
 
 // ============================================
+// Public Ticket Submission DTO — citizen reports
+// an issue without signing in.
+// ============================================
+
+export class PublicCreateTicketDto {
+  @ApiProperty({ description: 'Agency ID the ticket is for' })
+  @IsUUID()
+  agencyId: string;
+
+  @ApiPropertyOptional({ description: 'Category ID for the ticket' })
+  @IsOptional()
+  @IsUUID()
+  categoryId?: string;
+
+  @ApiProperty({ description: 'Ticket subject', maxLength: 255 })
+  @IsString()
+  @MinLength(3)
+  @MaxLength(255)
+  subject: string;
+
+  @ApiProperty({ description: 'Detailed description of the issue' })
+  @IsString()
+  @MinLength(10)
+  description: string;
+
+  // Citizen contact — at least one of these is required so the agency
+  // can reach the reporter back. The DTO is intentionally permissive
+  // because many citizens won't have an eCitizen ID handy.
+  @ApiPropertyOptional({ description: 'Reporter full name' })
+  @IsOptional()
+  @IsString()
+  @MaxLength(200)
+  reporterName?: string;
+
+  @ApiPropertyOptional({ description: 'Reporter email address' })
+  @IsOptional()
+  @IsString()
+  @MaxLength(255)
+  reporterEmail?: string;
+
+  @ApiPropertyOptional({ description: 'Reporter phone number' })
+  @IsOptional()
+  @IsString()
+  @MaxLength(20)
+  reporterPhone?: string;
+}
+
+// ============================================
 // Update Ticket DTO
 // ============================================
 

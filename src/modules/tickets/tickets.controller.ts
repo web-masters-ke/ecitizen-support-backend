@@ -22,6 +22,7 @@ import {
 import { TicketsService } from './tickets.service';
 import {
   CreateTicketDto,
+  PublicCreateTicketDto,
   UpdateTicketDto,
   AssignTicketDto,
   EscalateTicketDto,
@@ -69,6 +70,23 @@ export class TicketsController {
     @CurrentUser() user: JwtPayload,
   ) {
     return this.ticketsService.createTicket(dto, user.sub);
+  }
+
+  // ------------------------------------------
+  // POST /api/v1/tickets/public-report - Anonymous citizen report (no auth)
+  // ------------------------------------------
+
+  @Post('public-report')
+  @Public()
+  @ApiOperation({
+    summary: 'Anonymously report an issue (no auth required)',
+    description:
+      'For citizens who can\'t sign in (forgotten password, no eCitizen account yet, etc.). Creates a ticket on behalf of a public reporter and embeds their contact details into the description so the agency can follow up.',
+  })
+  @SwaggerResponse({ status: 201, description: 'Public ticket created' })
+  @HttpCode(HttpStatus.CREATED)
+  async createPublicTicket(@Body() dto: PublicCreateTicketDto) {
+    return this.ticketsService.createPublicTicket(dto);
   }
 
   // ------------------------------------------
