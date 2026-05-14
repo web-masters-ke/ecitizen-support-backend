@@ -232,6 +232,81 @@ export class SetPermissionsDto {
   permissionIds: string[];
 }
 
+export class UpdateRoleDto {
+  @ApiPropertyOptional({ description: 'New role name (custom roles only)' })
+  @IsOptional()
+  @IsString()
+  @MinLength(2)
+  @MaxLength(100)
+  name?: string;
+
+  @ApiPropertyOptional({ description: 'Role description' })
+  @IsOptional()
+  @IsString()
+  @MaxLength(500)
+  description?: string;
+}
+
+// Atomic capability — composes into roles via SetPermissionsDto. Two
+// permissions are equal iff (resource, action) match — schema enforces this
+// via a unique compound index.
+export class CreatePermissionDto {
+  // Human-readable identifier shown in the picker. Usually mirrors
+  // `${resource}:${action}` for consistency (e.g. "ticket:create").
+  @ApiProperty({ description: 'Permission name (e.g. ticket:create)' })
+  @IsString()
+  @MinLength(2)
+  @MaxLength(150)
+  name: string;
+
+  @ApiProperty({ description: 'Resource the permission applies to (e.g. ticket)' })
+  @IsString()
+  @MinLength(2)
+  @MaxLength(100)
+  resource: string;
+
+  @ApiProperty({ description: 'Action (e.g. create, read, update, delete, assign)' })
+  @IsString()
+  @MinLength(2)
+  @MaxLength(50)
+  action: string;
+
+  @ApiPropertyOptional({ description: 'Human-readable description of what this permission allows' })
+  @IsOptional()
+  @IsString()
+  @MaxLength(500)
+  description?: string;
+}
+
+export class UpdatePermissionDto {
+  @ApiPropertyOptional({ description: 'Permission name' })
+  @IsOptional()
+  @IsString()
+  @MinLength(2)
+  @MaxLength(150)
+  name?: string;
+
+  @ApiPropertyOptional({ description: 'Resource' })
+  @IsOptional()
+  @IsString()
+  @MinLength(2)
+  @MaxLength(100)
+  resource?: string;
+
+  @ApiPropertyOptional({ description: 'Action' })
+  @IsOptional()
+  @IsString()
+  @MinLength(2)
+  @MaxLength(50)
+  action?: string;
+
+  @ApiPropertyOptional({ description: 'Description' })
+  @IsOptional()
+  @IsString()
+  @MaxLength(500)
+  description?: string;
+}
+
 // ============================================
 // Policy DTOs
 // ============================================

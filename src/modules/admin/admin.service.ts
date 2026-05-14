@@ -13,7 +13,10 @@ import {
   TicketPriorityChangeDto,
   TicketSearchDto,
   CreateRoleDto,
+  UpdateRoleDto,
   SetPermissionsDto,
+  CreatePermissionDto,
+  UpdatePermissionDto,
   UpdateSlaPolicyDto,
   UpdateEscalationPolicyDto,
 } from './dto/admin.dto';
@@ -50,6 +53,10 @@ export class AdminService {
       avgMetrics,
       slaCompliance,
       ticketTrend,
+      totalCalls,
+      missedCalls,
+      avgCallDurationAgg,
+      ticketsWithCalls,
     ] = await Promise.all([
       // Total tickets
       this.prisma.ticket.count({
@@ -142,6 +149,45 @@ export class AdminService {
           ticketsCreated: true,
         },
       }),
+      // Call rollups — how many WebRTC calls happened against tickets in
+      // the window. Three quick aggregates so the dashboard can show
+      // total calls, missed/failed, and average duration. The admin asked
+      // specifically for "how many calls come per ticket".
+      this.prisma.callLog.count({
+        where: {
+          ...dateFilter,
+          ...(dto.agencyId ? { agencyId: dto.agencyId } : {}),
+        },
+      }),
+      this.prisma.callLog.count({
+        where: {
+          ...dateFilter,
+          ...(dto.agencyId ? { agencyId: dto.agencyId } : {}),
+          status: { in: ['MISSED', 'FAILED'] as any },
+        },
+      }),
+      this.prisma.callLog.aggregate({
+        where: {
+          ...dateFilter,
+          ...(dto.agencyId ? { agencyId: dto.agencyId } : {}),
+          status: 'COMPLETED' as any,
+          durationSec: { not: null },
+        },
+        _avg: { durationSec: true },
+      }),
+      // Distinct tickets that had at least one call — used together with
+      // totalCalls to compute "average calls per ticket that uses the
+      // call channel at all" (different from totalCalls/totalTickets,
+      // which would always be tiny).
+      this.prisma.callLog.findMany({
+        where: {
+          ...dateFilter,
+          ...(dto.agencyId ? { agencyId: dto.agencyId } : {}),
+          ticketId: { not: null },
+        },
+        distinct: ['ticketId'],
+        select: { ticketId: true },
+      }),
     ]);
 
     // Process channel counts
@@ -209,6 +255,19 @@ export class AdminService {
       }
     }
 
+    // Call rollups: how many calls happened, how many were missed, and
+    // when a ticket *does* use the call channel, how many calls does it
+    // typically have? totalCalls / max(distinctTicketsWithCalls, 1) gives
+    // a stable "calls per call-tracked ticket" figure that isn't
+    // distorted by the long tail of tickets that never used calls at all.
+    const distinctTicketsWithCalls = ticketsWithCalls.length;
+    const callsPerTicket = distinctTicketsWithCalls > 0
+      ? Math.round((totalCalls / distinctTicketsWithCalls) * 100) / 100
+      : 0;
+    const avgCallDurationSeconds = avgCallDurationAgg?._avg?.durationSec
+      ? Math.round(avgCallDurationAgg._avg.durationSec)
+      : 0;
+
     return {
       totalTickets,
       openTickets,
@@ -226,6 +285,11 @@ export class AdminService {
         date: t.dateBucket.toISOString().split('T')[0],
         count: t.ticketsCreated,
       })),
+      totalCalls,
+      missedCalls,
+      ticketsWithCalls: distinctTicketsWithCalls,
+      callsPerTicket,
+      avgCallDurationSeconds,
     };
   }
 
@@ -890,6 +954,117 @@ export class AdminService {
     return this.prisma.permission.findMany({
       orderBy: [{ resource: 'asc' }, { action: 'asc' }],
     });
+  }
+
+  // Rename / re-describe a role. System roles can be re-described but not
+  // renamed — the name is used as a hardcoded permission key in some guards.
+  async updateRole(id: string, dto: UpdateRoleDto) {
+    const role = await this.prisma.role.findUnique({ where: { id } });
+    if (!role) throw new NotFoundException(`Role ${id} not found`);
+    if (dto.name && dto.name !== role.name && role.isSystemRole) {
+      throw new BadRequestException(
+        `Cannot rename system role '${role.name}'. You may update its description though.`,
+      );
+    }
+    return this.prisma.role.update({
+      where: { id },
+      data: {
+        ...(dto.name !== undefined ? { name: dto.name } : {}),
+        ...(dto.description !== undefined ? { description: dto.description } : {}),
+      },
+    });
+  }
+
+  // Delete a custom role. Refuses to delete system roles OR roles that
+  // still have users attached — caller should reassign users first via
+  // PATCH /users/:id/roles.
+  async deleteRole(id: string) {
+    const role = await this.prisma.role.findUnique({
+      where: { id },
+      include: { _count: { select: { userRoles: true } } },
+    });
+    if (!role) throw new NotFoundException(`Role ${id} not found`);
+    if (role.isSystemRole) {
+      throw new BadRequestException(
+        `Cannot delete the system role '${role.name}'. Set isSystemRole=false first if you really need to remove it.`,
+      );
+    }
+    if ((role._count?.userRoles ?? 0) > 0) {
+      throw new BadRequestException(
+        `Cannot delete role '${role.name}' — ${role._count.userRoles} user(s) still have it. Reassign them first.`,
+      );
+    }
+    // RolePermission rows cascade via the schema's onDelete: Cascade.
+    await this.prisma.role.delete({ where: { id } });
+    return { success: true, deletedId: id };
+  }
+
+  async createPermission(dto: CreatePermissionDto) {
+    const existing = await this.prisma.permission.findFirst({
+      where: { resource: dto.resource, action: dto.action },
+    });
+    if (existing) {
+      throw new ConflictException(
+        `A permission for ${dto.resource}:${dto.action} already exists.`,
+      );
+    }
+    return this.prisma.permission.create({
+      data: {
+        name: dto.name,
+        resource: dto.resource,
+        action: dto.action,
+        description: dto.description ?? null,
+      },
+    });
+  }
+
+  async updatePermission(id: string, dto: UpdatePermissionDto) {
+    const perm = await this.prisma.permission.findUnique({ where: { id } });
+    if (!perm) throw new NotFoundException(`Permission ${id} not found`);
+    // If resource/action changes, make sure we don't collide with another
+    // existing permission. The schema has a unique(resource, action) constraint
+    // but a 409 from the DB is uglier than a clean 400 from us.
+    if (
+      (dto.resource && dto.resource !== perm.resource) ||
+      (dto.action && dto.action !== perm.action)
+    ) {
+      const clash = await this.prisma.permission.findFirst({
+        where: {
+          id: { not: id },
+          resource: dto.resource ?? perm.resource,
+          action: dto.action ?? perm.action,
+        },
+      });
+      if (clash) {
+        throw new ConflictException(
+          `A permission for ${dto.resource ?? perm.resource}:${dto.action ?? perm.action} already exists.`,
+        );
+      }
+    }
+    return this.prisma.permission.update({
+      where: { id },
+      data: {
+        ...(dto.name !== undefined ? { name: dto.name } : {}),
+        ...(dto.resource !== undefined ? { resource: dto.resource } : {}),
+        ...(dto.action !== undefined ? { action: dto.action } : {}),
+        ...(dto.description !== undefined ? { description: dto.description } : {}),
+      },
+    });
+  }
+
+  async deletePermission(id: string) {
+    const perm = await this.prisma.permission.findUnique({
+      where: { id },
+      include: { _count: { select: { rolePermissions: true } } },
+    });
+    if (!perm) throw new NotFoundException(`Permission ${id} not found`);
+    if ((perm._count?.rolePermissions ?? 0) > 0) {
+      throw new BadRequestException(
+        `Cannot delete permission '${perm.name}' — ${perm._count.rolePermissions} role(s) still grant it. Remove it from each role first.`,
+      );
+    }
+    await this.prisma.permission.delete({ where: { id } });
+    return { success: true, deletedId: id };
   }
 
   // ============================================

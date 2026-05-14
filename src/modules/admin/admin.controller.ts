@@ -3,6 +3,8 @@ import {
   Get,
   Put,
   Post,
+  Patch,
+  Delete,
   Param,
   Query,
   Body,
@@ -34,7 +36,10 @@ import {
   TicketPriorityChangeDto,
   TicketSearchDto,
   CreateRoleDto,
+  UpdateRoleDto,
   SetPermissionsDto,
+  CreatePermissionDto,
+  UpdatePermissionDto,
   UpdateSlaPolicyDto,
   UpdateEscalationPolicyDto,
 } from './dto/admin.dto';
@@ -171,11 +176,74 @@ export class AdminController {
     return this.adminService.setRolePermissions(id, dto);
   }
 
+  // Rename a role or update its description. System roles (isSystemRole=true)
+  // can be re-described but not renamed — the name is used as a hardcoded
+  // permission key in some guards.
+  @Patch('roles/:id')
+  @ApiOperation({ summary: 'Update role name / description' })
+  @ApiParam({ name: 'id', type: 'string', format: 'uuid' })
+  @SwaggerResponse({ status: 200, description: 'Role updated' })
+  @SwaggerResponse({ status: 400, description: 'Cannot rename a system role' })
+  @SwaggerResponse({ status: 404, description: 'Role not found' })
+  async updateRole(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body() dto: UpdateRoleDto,
+  ) {
+    return this.adminService.updateRole(id, dto);
+  }
+
+  // Delete a custom role. System roles can't be deleted. Will fail if any
+  // user still has the role assigned — caller should reassign users first.
+  @Delete('roles/:id')
+  @ApiOperation({ summary: 'Delete a custom role' })
+  @ApiParam({ name: 'id', type: 'string', format: 'uuid' })
+  @SwaggerResponse({ status: 200, description: 'Role deleted' })
+  @SwaggerResponse({ status: 400, description: 'Cannot delete a system role or one that is still assigned to users' })
+  @SwaggerResponse({ status: 404, description: 'Role not found' })
+  @HttpCode(HttpStatus.OK)
+  async deleteRole(@Param('id', ParseUUIDPipe) id: string) {
+    return this.adminService.deleteRole(id);
+  }
+
   @Get('permissions')
   @ApiOperation({ summary: 'List all available permissions' })
   @SwaggerResponse({ status: 200, description: 'List of permissions' })
   async listPermissions() {
     return this.adminService.listPermissions();
+  }
+
+  // Full CRUD on the Permission catalogue. Permissions are atomic capabilities
+  // (e.g. ticket:create, ticket:assign, user:read). Composed into Roles via
+  // PUT /admin/roles/:id/permissions above.
+  @Post('permissions')
+  @ApiOperation({ summary: 'Create a new permission' })
+  @SwaggerResponse({ status: 201, description: 'Permission created' })
+  @SwaggerResponse({ status: 409, description: 'Permission with this resource+action already exists' })
+  async createPermission(@Body() dto: CreatePermissionDto) {
+    return this.adminService.createPermission(dto);
+  }
+
+  @Patch('permissions/:id')
+  @ApiOperation({ summary: 'Update a permission' })
+  @ApiParam({ name: 'id', type: 'string', format: 'uuid' })
+  @SwaggerResponse({ status: 200, description: 'Permission updated' })
+  @SwaggerResponse({ status: 404, description: 'Permission not found' })
+  async updatePermission(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body() dto: UpdatePermissionDto,
+  ) {
+    return this.adminService.updatePermission(id, dto);
+  }
+
+  @Delete('permissions/:id')
+  @ApiOperation({ summary: 'Delete a permission' })
+  @ApiParam({ name: 'id', type: 'string', format: 'uuid' })
+  @SwaggerResponse({ status: 200, description: 'Permission deleted' })
+  @SwaggerResponse({ status: 400, description: 'Permission is still attached to roles' })
+  @SwaggerResponse({ status: 404, description: 'Permission not found' })
+  @HttpCode(HttpStatus.OK)
+  async deletePermission(@Param('id', ParseUUIDPipe) id: string) {
+    return this.adminService.deletePermission(id);
   }
 
   // ============================================
