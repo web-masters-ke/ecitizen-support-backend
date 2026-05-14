@@ -168,6 +168,12 @@ export class SlaService {
 
     // Replay the requested change atomically with the approval transition.
     if (req.action === 'CREATE') {
+      // Also replay rules[] if the requester sent them in the payload, so
+      // approving a CREATE request gives you the same end-state as the
+      // legacy "create + addRule loop" used to. Each rule references a
+      // priorityId (LOW/MEDIUM/HIGH/CRITICAL) — caller already converted
+      // hours → minutes for response / resolution / escalation.
+      const rules = Array.isArray(payload.rules) ? payload.rules : [];
       await this.prisma.slaPolicy.create({
         data: {
           agencyId: req.agencyId,
@@ -175,6 +181,19 @@ export class SlaService {
           description: payload.description ?? null,
           isActive: payload.isActive ?? true,
           appliesBusinessHours: payload.appliesBusinessHours ?? true,
+          ...(rules.length > 0 && {
+            slaRules: {
+              create: rules.map((r: any) => ({
+                priorityId: r.priorityId,
+                categoryId: r.categoryId ?? null,
+                responseTimeMinutes: Number(r.responseTimeMinutes),
+                resolutionTimeMinutes: Number(r.resolutionTimeMinutes),
+                ...(r.escalationAfterMinutes != null
+                  ? { escalationAfterMinutes: Number(r.escalationAfterMinutes) }
+                  : {}),
+              })),
+            },
+          }),
         },
       });
     } else if (req.action === 'UPDATE' && req.targetPolicyId) {
