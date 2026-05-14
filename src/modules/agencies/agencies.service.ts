@@ -100,6 +100,26 @@ export class AgenciesService {
     return agency;
   }
 
+  // Hero stats for the public admin homepage. Counties = distinct non-empty
+  // county values across active agencies (capped at Kenya's 47). Agencies =
+  // active agency count. Cached implicitly via Next.js fetch — backend just
+  // returns the live numbers.
+  async getPublicStats() {
+    const [agencies, counties] = await Promise.all([
+      this.prisma.agency.count({ where: { isActive: true } }),
+      this.prisma.agency.findMany({
+        where: { isActive: true, county: { not: null } },
+        select: { county: true },
+        distinct: ['county'],
+      }),
+    ]);
+    const countyCount = counties.filter((c) => (c.county ?? '').trim().length > 0).length;
+    return {
+      counties: Math.min(countyCount, 47),
+      agencies,
+    };
+  }
+
   async findAll(filters: AgencyFilterDto): Promise<PaginatedResult<any>> {
     const {
       page = 1,

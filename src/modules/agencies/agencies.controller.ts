@@ -74,6 +74,20 @@ export class AgenciesController {
   // ticket form. Returns the minimum needed to populate the agency
   // dropdown — no internal contacts, no SLA docs, no settings. Active
   // agencies only.
+  // Public homepage stats — counties covered (distinct, non-null) and
+  // active agencies. Used by the admin/marketing homepage hero so the
+  // numbers reflect reality instead of being hard-coded. No auth.
+  @Get('agencies/public-stats')
+  @Public()
+  @ApiOperation({
+    summary: 'Public platform stats (no auth)',
+    description:
+      'Returns { counties, agencies } sourced from active agency records. Used on the admin homepage hero.',
+  })
+  async publicStats() {
+    return this.agenciesService.getPublicStats();
+  }
+
   @Get('agencies/public')
   @Public()
   @ApiOperation({
