@@ -40,7 +40,15 @@ export class MediaService {
     private readonly prisma: PrismaService,
     private readonly configService: ConfigService,
   ) {
-    this.baseUrl = this.configService.get<string>('BASE_URL', 'http://localhost:4000');
+    // BASE_URL must point to the public hostname citizens reach the API
+    // through, NOT the in-cluster localhost — otherwise the storageUrl
+    // returned by /media/upload renders as http://localhost:4000/... and
+    // citizens can't open their own attachments. Falls through to the
+    // deployed wasaahost domain when nothing is set.
+    this.baseUrl = this.configService.get<string>(
+      'BASE_URL',
+      this.configService.get<string>('NEXT_PUBLIC_API_BASE', 'https://api-ecitizen.wasaahost.com'),
+    );
     this.uploadDir = path.resolve(
       this.configService.get<string>('UPLOAD_DIR', './uploads'),
     );

@@ -230,7 +230,11 @@ export class AiService {
       },
     });
 
-    // Auto-apply if confidence is high enough
+    // Auto-apply if confidence is high enough. NOTE: we deliberately do
+    // NOT auto-apply priority — the classifier was bumping every public
+    // ticket to HIGH which gives agents the wrong queue ordering. The
+    // priority stays at whatever createTicket set (defaults to MEDIUM)
+    // and an agent has to explicitly escalate if they think it's wrong.
     if (autoApply) {
       await this.prisma.ticket.update({
         where: { id: dto.ticketId },
@@ -239,7 +243,6 @@ export class AiService {
           aiConfidenceScore: confidenceScore,
           aiAutoAssigned: true,
           categoryId: predictedCategory?.id || ticket.categoryId,
-          priorityId: predictedPriority?.id || ticket.priorityId,
         },
       });
     } else {

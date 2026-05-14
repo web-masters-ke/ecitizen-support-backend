@@ -3,6 +3,7 @@ import {
   NotFoundException,
   ConflictException,
   BadRequestException,
+  ForbiddenException,
   Logger,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
@@ -205,6 +206,50 @@ eCitizen Service Team`;
    * so we cannot recover the user's previous password — reset is the
    * only safe equivalent of "tell me what their password is".
    */
+  /**
+   * Self-service password change. Caller must prove they know the current
+   * password, and can only change their own. We DON'T email a confirmation
+   * with the new value (the user just typed it — they know it) but we DO
+   * log the event so an admin can spot unusual rotation patterns.
+   */
+  async changeMyPassword(
+    targetUserId: string,
+    callerUserId: string,
+    dto: { currentPassword: string; newPassword: string },
+  ) {
+    if (targetUserId !== callerUserId) {
+      throw new ForbiddenException('You can only change your own password. Admins should use POST /:id/reset-password.');
+    }
+    const user = await this.prisma.user.findUnique({ where: { id: targetUserId } });
+    if (!user) throw new NotFoundException(`User ${targetUserId} not found`);
+    if (!user.passwordHash) {
+      throw new BadRequestException('No password set on this account — use forgot-password to set one.');
+    }
+    const ok = await bcrypt.compare(dto.currentPassword, user.passwordHash);
+    if (!ok) {
+      throw new BadRequestException('Current password is incorrect.');
+    }
+    if (dto.newPassword === dto.currentPassword) {
+      throw new BadRequestException('New password must be different from the current one.');
+    }
+    const passwordHash = await bcrypt.hash(dto.newPassword, 12);
+    await this.prisma.user.update({ where: { id: targetUserId }, data: { passwordHash } });
+
+    await this.prisma.auditLog
+      .create({
+        data: {
+          entityType: 'USER',
+          entityId: targetUserId,
+          actionType: 'PASSWORD_CHANGE',
+          performedBy: callerUserId,
+          newValue: { selfService: true } as any,
+        },
+      })
+      .catch((err) => this.logger.warn(`Password-change audit failed: ${err?.message}`));
+
+    return { success: true, message: 'Password updated successfully.' };
+  }
+
   async adminResetPassword(userId: string, adminUserId?: string) {
     const user = await this.prisma.user.findUnique({ where: { id: userId } });
     if (!user) throw new NotFoundException(`User ${userId} not found`);

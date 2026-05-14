@@ -27,6 +27,7 @@ import {
   AssignRolesDto,
   ToggleUserStatusDto,
   UserFilterDto,
+  ChangePasswordDto,
 } from './dto/users.dto';
 import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
 import { RolesGuard } from '../../common/guards/roles.guard';
@@ -225,5 +226,32 @@ export class UsersController {
     @CurrentUser('sub') adminUserId: string,
   ) {
     return this.usersService.adminResetPassword(id, adminUserId);
+  }
+
+  // ──────────────────────────────────────────────
+  // PATCH /api/v1/users/:id/password — self-service change-password
+  // Different from the admin reset above: this requires the caller to
+  // prove they know the current password, and it can ONLY be called for
+  // the caller's own user record. Used by the /profile page so a user
+  // can rotate the temp password they were given on first login.
+  // ──────────────────────────────────────────────
+
+  @Patch(':id/password')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({
+    summary: 'Change my own password',
+    description:
+      'Verifies the current password and replaces it with newPassword. The :id in the URL must match the authenticated user — admins use POST /:id/reset-password for other users.',
+  })
+  @ApiParam({ name: 'id', description: 'User UUID (must match the caller)' })
+  @ApiResponse({ status: 200, description: 'Password updated' })
+  @ApiResponse({ status: 400, description: 'Current password incorrect / new password too weak' })
+  @ApiResponse({ status: 403, description: 'Trying to change another user\'s password' })
+  async changeMyPassword(
+    @Param('id', ParseUUIDPipe) id: string,
+    @CurrentUser('sub') currentUserId: string,
+    @Body() dto: ChangePasswordDto,
+  ) {
+    return this.usersService.changeMyPassword(id, currentUserId, dto);
   }
 }

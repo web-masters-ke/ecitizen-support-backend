@@ -524,14 +524,23 @@ export class TicketsService {
       }
     }
 
-    // Verify priority if provided
-    if (dto.priorityId) {
+    // Verify priority if provided. Default to MEDIUM when the caller
+    // doesn't pick one — citizens shouldn't end up with no priority at
+    // all (rendered as 'UNKNOWN'), and we don't want the rule-based AI
+    // classifier auto-bumping them to HIGH without a human review.
+    let resolvedPriorityId: string | null = dto.priorityId ?? null;
+    if (resolvedPriorityId) {
       const priority = await this.prisma.ticketPriorityLevel.findUnique({
-        where: { id: dto.priorityId },
+        where: { id: resolvedPriorityId },
       });
       if (!priority) {
-        throw new BadRequestException(`Priority ${dto.priorityId} not found`);
+        throw new BadRequestException(`Priority ${resolvedPriorityId} not found`);
       }
+    } else {
+      const mediumPriority = await this.prisma.ticketPriorityLevel.findUnique({
+        where: { name: 'MEDIUM' as any },
+      });
+      if (mediumPriority) resolvedPriorityId = mediumPriority.id;
     }
 
     // Get the OPEN status
@@ -548,7 +557,7 @@ export class TicketsService {
           agencyId,
           departmentId: dto.departmentId || null,
           categoryId: dto.categoryId || null,
-          priorityId: dto.priorityId || null,
+          priorityId: resolvedPriorityId,
           createdBy,
           statusId: openStatus.id,
           channel: dto.channel,

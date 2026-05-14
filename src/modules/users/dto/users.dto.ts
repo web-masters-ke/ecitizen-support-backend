@@ -122,6 +122,24 @@ export class UpdateUserDto extends PartialType(CreateUserDto) {
 }
 
 // ──────────────────────────────────────────────
+// Self-service password change. Different from admin reset — caller
+// must prove they know the current password.
+// ──────────────────────────────────────────────
+
+export class ChangePasswordDto {
+  @ApiProperty({ description: 'The current password' })
+  @IsString()
+  @MinLength(1)
+  currentPassword: string;
+
+  @ApiProperty({ description: 'The new password — minimum 8 chars' })
+  @IsString()
+  @MinLength(8, { message: 'New password must be at least 8 characters' })
+  @MaxLength(128)
+  newPassword: string;
+}
+
+// ──────────────────────────────────────────────
 // Self-update DTO (citizen/user updating own profile)
 // Only safe fields — no role, userType, or status changes allowed.
 // ──────────────────────────────────────────────
