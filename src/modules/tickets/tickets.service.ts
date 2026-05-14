@@ -765,7 +765,17 @@ export class TicketsService {
       }
     }
 
-    if (assigneeId) {
+    // Server-side ownership lockdown: only SUPER_ADMIN can browse tickets
+    // they don't own. Everyone else (agency agents, agency admins,
+    // command-centre admins — including the seeded Pesaflow operators)
+    // gets force-scoped to their own assigned queue, regardless of what
+    // assigneeId they passed. The admin tickets dropdown is already
+    // locked to "My assigned tickets" for non-super-admins, but this is
+    // the real defence-in-depth — without it, anyone who knows the
+    // /tickets URL could see all tickets via curl.
+    if (callerUser && !isExternalUser && callerUser.userType !== 'SUPER_ADMIN') {
+      where.currentAssigneeId = callerUser.sub;
+    } else if (assigneeId) {
       where.currentAssigneeId = assigneeId;
     }
 
