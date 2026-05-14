@@ -4,6 +4,7 @@ import {
   IsOptional,
   IsString,
   IsEnum,
+  IsIn,
   MinLength,
   MaxLength,
   Matches,
@@ -103,11 +104,29 @@ export class RefreshDto {
 // ============================================
 // Forgot Password DTO
 // ============================================
+// Caller supplies EITHER email OR phoneNumber. We don't require @IsEmail
+// at the validator level any more because phone-only callers won't have
+// one. The service layer enforces "at least one identifier" with a
+// BadRequestException instead.
 export class ForgotPasswordDto {
-  @ApiProperty({ example: 'john.doe@example.com' })
+  @ApiPropertyOptional({ example: 'john.doe@example.com' })
+  @IsOptional()
   @IsEmail({}, { message: 'Please provide a valid email address' })
-  @IsNotEmpty({ message: 'Email is required' })
-  email: string;
+  email?: string;
+
+  @ApiPropertyOptional({ example: '+254712345678' })
+  @IsOptional()
+  @IsString()
+  @MaxLength(20)
+  phoneNumber?: string;
+
+  // EMAIL is the default — keep it so existing callers that don't send a
+  // channel still work. SMS sends the reset link via Bonga to the phone
+  // number on the account (or the one explicitly supplied above).
+  @ApiPropertyOptional({ enum: ['EMAIL', 'SMS'], default: 'EMAIL' })
+  @IsOptional()
+  @IsIn(['EMAIL', 'SMS'])
+  channel?: 'EMAIL' | 'SMS';
 }
 
 // ============================================

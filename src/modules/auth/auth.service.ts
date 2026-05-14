@@ -580,24 +580,55 @@ export class AuthService {
   // FORGOT PASSWORD
   // ============================================
   async forgotPassword(dto: ForgotPasswordDto, ip?: string) {
-    const email = dto.email.toLowerCase().trim();
+    // Caller supplies email OR phoneNumber. We require at least one — but we
+    // never confirm which one matched, to avoid enumeration. The channel
+    // defaults to EMAIL; SMS is opt-in.
+    const email = dto.email?.toLowerCase().trim();
+    const phoneNumber = dto.phoneNumber?.trim();
+    const channel: 'EMAIL' | 'SMS' = dto.channel ?? 'EMAIL';
 
-    const user = await this.prisma.user.findUnique({
-      where: { email },
-      select: {
-        id: true,
-        email: true,
-        isActive: true,
-        userRoles: { select: { role: { select: { name: true } } } },
-      },
-    });
-
-    // Always return success to prevent email enumeration
-    if (!user || !user.isActive) {
-      this.logger.log(`Forgot password requested for non-existent email: ${email}`);
+    if (!email && !phoneNumber) {
+      // Bad request because the call has no identifier at all — distinct
+      // from the "exists but won't tell you" case below.
+      this.logger.warn(`forgot-password call with neither email nor phoneNumber from ${ip}`);
       return {
         message:
-          'If an account with that email exists, a password reset link has been sent.',
+          'If an account with those details exists, a password reset link has been sent.',
+      };
+    }
+
+    // Look up by whichever identifier was supplied. Phone match is a
+    // findFirst because phoneNumber isn't unique in the schema.
+    const user = email
+      ? await this.prisma.user.findUnique({
+          where: { email },
+          select: {
+            id: true,
+            email: true,
+            phoneNumber: true,
+            isActive: true,
+            userRoles: { select: { role: { select: { name: true } } } },
+          },
+        })
+      : await this.prisma.user.findFirst({
+          where: { phoneNumber },
+          select: {
+            id: true,
+            email: true,
+            phoneNumber: true,
+            isActive: true,
+            userRoles: { select: { role: { select: { name: true } } } },
+          },
+        });
+
+    // Always return success to prevent enumeration
+    if (!user || !user.isActive) {
+      this.logger.log(
+        `Forgot password requested for non-existent identifier: ${email ?? phoneNumber}`,
+      );
+      return {
+        message:
+          'If an account with those details exists, a password reset link has been sent.',
       };
     }
 
@@ -625,10 +656,10 @@ export class AuthService {
     });
 
     this.logger.log(
-      `Password reset token generated for ${email} (expires: ${expiresAt.toISOString()})`,
+      `Password reset token generated for user ${user.id} via ${channel} (expires: ${expiresAt.toISOString()})`,
     );
 
-    // Send the password-reset email via Brevo
+    // Send the password-reset notification via the chosen channel
     const appName = this.configService.get<string>('APP_NAME', 'eCitizen SCC');
     const staffRoles = ['SUPER_ADMIN', 'ADMIN', 'AGENT', 'SUPERVISOR', 'MANAGER'];
     const userRoleNames = user.userRoles?.map((ur) => ur.role.name) ?? [];
@@ -668,25 +699,42 @@ export class AuthService {
       </div>
     `;
 
-    const textContent = `Reset Your Password\n\nWe received a request to reset the password for ${email}.\n\nReset link (expires in 1 hour):\n${resetUrl}\n\nIf you did not request this, please ignore this email.`;
+    const textContent = `Reset Your Password\n\nReset link (expires in 1 hour):\n${resetUrl}\n\nIf you did not request this, please ignore this message.`;
 
+    // Pick the channel: SMS goes via Bonga (text-only body), EMAIL via
+    // Brevo (HTML). Both are best-effort — the token is already valid
+    // in the DB so a delivery failure doesn't strand the user.
     try {
-      await this.notificationsService.sendNotification({
-        channel: NotificationChannelDto.EMAIL,
-        subject: `Reset your ${appName} password`,
-        body: htmlContent,
-        recipients: [{ recipientEmail: user.email }],
-        triggerEvent: 'PASSWORD_RESET',
-      });
-      this.logger.log(`Password reset email sent to ${email}`);
-    } catch (emailErr) {
-      // Do not fail the request if email sending fails — token is still valid
-      this.logger.error(`Failed to send password reset email to ${email}: ${emailErr}`);
+      if (channel === 'SMS' && user.phoneNumber) {
+        await this.notificationsService.sendNotification({
+          channel: NotificationChannelDto.SMS,
+          subject: `${appName} password reset`,
+          body: `${appName}: Reset your password using this link (expires in 1 hour): ${resetUrl}`,
+          recipients: [{ recipientPhone: user.phoneNumber }],
+          triggerEvent: 'PASSWORD_RESET',
+        });
+        this.logger.log(`Password reset SMS sent to user ${user.id}`);
+      } else {
+        // EMAIL path (also the fallback if SMS was asked for but the user
+        // has no phone on file). user.email is non-null on the user table.
+        await this.notificationsService.sendNotification({
+          channel: NotificationChannelDto.EMAIL,
+          subject: `Reset your ${appName} password`,
+          body: htmlContent,
+          recipients: [{ recipientEmail: user.email }],
+          triggerEvent: 'PASSWORD_RESET',
+        });
+        this.logger.log(`Password reset email sent to ${user.email}`);
+      }
+    } catch (err) {
+      // Do not fail the request — the token is still valid. The user can
+      // ask DevOps to share the link if delivery breaks.
+      this.logger.error(`Failed to send password reset via ${channel}: ${err}`);
     }
 
     return {
       message:
-        'If an account with that email exists, a password reset link has been sent.',
+        'If an account with those details exists, a password reset link has been sent.',
       // Include token only in development for testing purposes
       ...(this.configService.get('NODE_ENV') === 'development' && {
         _devToken: rawToken,
