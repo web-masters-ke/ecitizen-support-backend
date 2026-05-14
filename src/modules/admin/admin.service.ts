@@ -149,28 +149,31 @@ export class AdminService {
           ticketsCreated: true,
         },
       }),
-      // Call rollups — how many WebRTC calls happened against tickets in
-      // the window. Three quick aggregates so the dashboard can show
-      // total calls, missed/failed, and average duration. The admin asked
-      // specifically for "how many calls come per ticket".
+      // Call rollups — how many WebRTC calls happened against tickets.
+      // Three quick aggregates so the dashboard can show total calls,
+      // missed/failed, and average duration. CallLog has its own
+      // startedAt timestamp (not createdAt) so we skip the date filter
+      // here — the dashboard is a snapshot view, not a window.
       this.prisma.callLog.count({
         where: {
-          ...dateFilter,
           ...(dto.agencyId ? { agencyId: dto.agencyId } : {}),
         },
       }),
       this.prisma.callLog.count({
         where: {
-          ...dateFilter,
           ...(dto.agencyId ? { agencyId: dto.agencyId } : {}),
           status: { in: ['MISSED', 'FAILED'] as any },
         },
       }),
       this.prisma.callLog.aggregate({
         where: {
-          ...dateFilter,
+          // dateFilter is built from ticket-style { createdAt: {...} },
+          // but CallLog uses startedAt. Skip the date scope on the
+          // call-stats path — the dashboard is a snapshot, not a window.
           ...(dto.agencyId ? { agencyId: dto.agencyId } : {}),
-          status: 'COMPLETED' as any,
+          // Only ENDED calls have a meaningful durationSec to average.
+          // CallStatus enum is RINGING | ANSWERED | MISSED | ENDED | FAILED.
+          status: 'ENDED' as any,
           durationSec: { not: null },
         },
         _avg: { durationSec: true },
@@ -181,7 +184,6 @@ export class AdminService {
       // which would always be tiny).
       this.prisma.callLog.findMany({
         where: {
-          ...dateFilter,
           ...(dto.agencyId ? { agencyId: dto.agencyId } : {}),
           ticketId: { not: null },
         },
