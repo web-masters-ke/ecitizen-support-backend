@@ -88,16 +88,18 @@ export class AdminService {
       }),
       // Total agencies
       this.prisma.agency.count({ where: { isActive: true } }),
-      // Active agents — agents with a non-revoked, non-expired session right now
+      // Active agents — the operational workforce who can actually work
+      // tickets. Includes Command Centre admins (the central ops team)
+      // alongside per-agency agents. Earlier this only counted users with
+      // a live session right now AND restricted to AGENCY_AGENT /
+      // SERVICE_PROVIDER_AGENT — which excluded the seeded Pesaflow
+      // operators entirely and dropped to zero whenever everyone was
+      // signed out. We want the headcount, not the "online now" gauge.
       this.prisma.user.count({
         where: {
           isActive: true,
-          userType: { in: ['AGENCY_AGENT', 'SERVICE_PROVIDER_AGENT'] },
-          sessions: {
-            some: {
-              revoked: false,
-              expiresAt: { gt: new Date() },
-            },
+          userType: {
+            in: ['AGENCY_AGENT', 'SERVICE_PROVIDER_AGENT', 'COMMAND_CENTER_ADMIN'],
           },
         },
       }),
