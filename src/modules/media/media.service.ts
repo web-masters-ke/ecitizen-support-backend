@@ -193,6 +193,28 @@ export class MediaService {
   }
 
   /**
+   * Singleton system user that owns every anonymous upload from
+   * /report-issue. Mirrors the same pattern in tickets.service.
+   */
+  async getOrCreatePublicReporterUserId(): Promise<string> {
+    const PUBLIC_USER_EMAIL = 'public-reporter@ecitizen.system';
+    let publicUser = await this.prisma.user.findUnique({ where: { email: PUBLIC_USER_EMAIL } });
+    if (!publicUser) {
+      publicUser = await this.prisma.user.create({
+        data: {
+          email: PUBLIC_USER_EMAIL,
+          firstName: 'Public',
+          lastName: 'Reporter',
+          userType: 'CITIZEN',
+          isActive: true,
+          isVerified: false,
+        },
+      });
+    }
+    return publicUser.id;
+  }
+
+  /**
    * Upload a single file
    */
   async uploadFile(

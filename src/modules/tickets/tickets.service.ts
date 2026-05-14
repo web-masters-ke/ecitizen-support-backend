@@ -1857,6 +1857,9 @@ export class TicketsService {
     reporterName?: string;
     reporterEmail?: string;
     reporterPhone?: string;
+    attachmentUrl?: string;
+    attachmentName?: string;
+    attachmentType?: string;
   }) {
     if (!dto.reporterEmail && !dto.reporterPhone) {
       throw new BadRequestException('Please share either an email or a phone number so we can reach you back.');
@@ -1927,7 +1930,7 @@ export class TicketsService {
       ? `${dto.description}\n\n--- Reporter Contact (submitted without sign-in) ---\n${contactBlock}`
       : dto.description;
 
-    return this.createTicket(
+    const created = await this.createTicket(
       {
         agencyId,
         categoryId: dto.categoryId,
@@ -1937,6 +1940,31 @@ export class TicketsService {
       } as CreateTicketDto,
       publicUser.id,
     );
+
+    // Surface the citizen's attachment as the first ticket message so
+    // agents see it inline next to the description, the same way authed
+    // citizens see their /tickets/new attachments. Best-effort — failure
+    // here must not lose the ticket we just created.
+    if (dto.attachmentUrl) {
+      try {
+        await this.addMessage(
+          (created as any).id,
+          {
+            messageText: `Attachment: ${dto.attachmentName ?? 'file'}`,
+            fileUrl: dto.attachmentUrl,
+            fileName: dto.attachmentName,
+            fileType: dto.attachmentType,
+          } as any,
+          publicUser.id,
+        );
+      } catch (err) {
+        this.logger.warn(
+          `Public-report attachment failed to attach to ticket ${(created as any).id}: ${(err as Error)?.message}`,
+        );
+      }
+    }
+
+    return created;
   }
 
   async reopenTicket(id: string, dto: ReopenTicketDto, reopenedBy: string) {

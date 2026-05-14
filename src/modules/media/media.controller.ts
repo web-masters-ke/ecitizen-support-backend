@@ -139,6 +139,32 @@ export class MediaController {
     res.send(buffer);
   }
 
+  // Anonymous citizen uploads — used by /report-issue so a citizen can
+  // attach a screenshot / receipt / PDF without signing in. The file is
+  // owned by the singleton "public-reporter" system user (same one that
+  // owns public-report tickets) so we keep a consistent audit trail.
+  // Hardened with the 50MB multer limit + the controller-wide MIME filter,
+  // and only file path returned — no listing/search.
+  @Post('public-upload')
+  @Public()
+  @ApiOperation({ summary: 'Anonymous file upload (no auth) — for /report-issue' })
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: { file: { type: 'string', format: 'binary' } },
+    },
+  })
+  @SwaggerResponse({ status: 201, description: 'File uploaded successfully' })
+  @UseInterceptors(FileInterceptor('file', multerOptions))
+  async uploadFilePublic(@UploadedFile() file: Express.Multer.File) {
+    if (!file) {
+      throw new Error('No file provided');
+    }
+    const publicUserId = await this.mediaService.getOrCreatePublicReporterUserId();
+    return this.mediaService.uploadFile(file, publicUserId, { context: 'public-report' });
+  }
+
   @Post('upload')
   @ApiOperation({ summary: 'Upload a single file' })
   @ApiConsumes('multipart/form-data')

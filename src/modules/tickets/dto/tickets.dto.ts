@@ -166,6 +166,27 @@ export class PublicCreateTicketDto {
   @IsString()
   @MaxLength(20)
   reporterPhone?: string;
+
+  // Optional attachment — the citizen uploaded a screenshot / PDF / receipt
+  // via /media/public-upload before submitting the form. We surface it as an
+  // initial ticket message so agents see it inline in the conversation.
+  @ApiPropertyOptional({ description: 'Attachment storage URL (from /media/public-upload)' })
+  @IsOptional()
+  @IsString()
+  @MaxLength(2000)
+  attachmentUrl?: string;
+
+  @ApiPropertyOptional({ description: 'Original filename of the attachment' })
+  @IsOptional()
+  @IsString()
+  @MaxLength(255)
+  attachmentName?: string;
+
+  @ApiPropertyOptional({ description: 'MIME type of the attachment' })
+  @IsOptional()
+  @IsString()
+  @MaxLength(100)
+  attachmentType?: string;
 }
 
 // ============================================
