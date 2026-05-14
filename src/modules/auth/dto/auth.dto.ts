@@ -104,6 +104,21 @@ export class RefreshDto {
 // ============================================
 // Forgot Password DTO
 // ============================================
+// MFA OTP verification — second step of login when user.mfaEnabled.
+export class VerifyOtpDto {
+  @ApiProperty({ description: 'The challengeId returned by /auth/login when MFA was required' })
+  @IsString()
+  @IsNotEmpty()
+  challengeId: string;
+
+  @ApiProperty({ example: '123456', description: '6-digit code sent to the user' })
+  @IsString()
+  @IsNotEmpty()
+  @MinLength(4)
+  @MaxLength(10)
+  code: string;
+}
+
 // Caller supplies EITHER email OR phoneNumber. We don't require @IsEmail
 // at the validator level any more because phone-only callers won't have
 // one. The service layer enforces "at least one identifier" with a

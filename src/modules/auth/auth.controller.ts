@@ -22,6 +22,7 @@ import {
   RefreshDto,
   ForgotPasswordDto,
   ResetPasswordDto,
+  VerifyOtpDto,
 } from './dto/auth.dto';
 import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
 import { Public } from '../../common/decorators/public.decorator';
@@ -67,6 +68,24 @@ export class AuthController {
     const ip = this.getClientIp(req);
     const userAgent = req.headers['user-agent'];
     return this.authService.login(dto, ip, userAgent);
+  }
+
+  // ============================================
+  // POST /api/v1/auth/verify-otp — second step of MFA login
+  // Receives the challengeId issued by login() + the 6-digit code the
+  // user got via SMS/email. Returns the same shape as a normal login
+  // when the OTP matches.
+  // ============================================
+  @Public()
+  @Post('verify-otp')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: 'Verify MFA one-time code' })
+  @ApiResponse({ status: 200, description: 'Returns JWT tokens + user profile' })
+  @ApiResponse({ status: 401, description: 'Invalid or expired code' })
+  async verifyOtp(@Body() dto: VerifyOtpDto, @Req() req: Request) {
+    const ip = this.getClientIp(req);
+    const userAgent = req.headers['user-agent'];
+    return this.authService.verifyMfaOtp(dto.challengeId, dto.code, ip, userAgent);
   }
 
   // ============================================

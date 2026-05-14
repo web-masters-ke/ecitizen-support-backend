@@ -15,6 +15,7 @@ import { JwtPayload } from '../../common/decorators/current-user.decorator';
 import { NotificationsService } from '../notifications/notifications.service';
 import { NotificationChannelDto } from '../notifications/dto/notifications.dto';
 import { AuditService } from '../audit/audit.service';
+import { RedisService } from '../../config/redis.service';
 import {
   RegisterDto,
   LoginDto,
@@ -37,6 +38,7 @@ export class AuthService {
     private readonly configService: ConfigService,
     private readonly notificationsService: NotificationsService,
     private readonly auditService: AuditService,
+    private readonly redis: RedisService,
   ) {}
 
   // ============================================
@@ -238,6 +240,69 @@ export class AuthService {
       throw new UnauthorizedException('Invalid email or password');
     }
 
+    // ──────────────────────────────────────────────────────────────────
+    // MFA challenge — when the user opted into mfaEnabled, password is
+    // step 1. Step 2 is a 6-digit OTP we send to the channel they have
+    // on file (SMS if phoneNumber present, email otherwise). The OTP
+    // lives in Redis for 5 minutes; the frontend gets a challengeId
+    // and hits POST /auth/verify-otp to swap it for real JWT tokens.
+    // ──────────────────────────────────────────────────────────────────
+    if (user.mfaEnabled) {
+      const otp = String(Math.floor(100000 + Math.random() * 900000));
+      const challengeId = uuidv4();
+      // Store user id under challengeId so we can resolve the user
+      // server-side without the frontend leaking the user id back.
+      await this.redis.set(`otp:${challengeId}`, JSON.stringify({ userId: user.id, code: otp }), 300);
+
+      const channel: 'EMAIL' | 'SMS' = user.phoneNumber ? 'SMS' : 'EMAIL';
+      const appName = this.configService.get<string>('APP_NAME', 'eCitizen SCC');
+      try {
+        if (channel === 'SMS' && user.phoneNumber) {
+          await this.notificationsService.sendNotification({
+            channel: NotificationChannelDto.SMS,
+            subject: `${appName} verification code`,
+            body: `${appName}: Your verification code is ${otp}. Valid for 5 minutes. Do not share this code.`,
+            recipients: [{ recipientPhone: user.phoneNumber }],
+            triggerEvent: 'MFA_OTP',
+          });
+        } else {
+          await this.notificationsService.sendNotification({
+            channel: NotificationChannelDto.EMAIL,
+            subject: `${appName} verification code`,
+            body: `<p>Your verification code is <strong style="font-size:24px">${otp}</strong></p><p>Valid for 5 minutes. Do not share this code with anyone.</p>`,
+            recipients: [{ recipientEmail: user.email }],
+            triggerEvent: 'MFA_OTP',
+          });
+        }
+        this.logger.log(`MFA OTP issued for user ${user.id} via ${channel}`);
+      } catch (err) {
+        this.logger.error(`Failed to send MFA OTP for user ${user.id}: ${err}`);
+        // Cleanup the challenge so they can retry cleanly
+        await this.redis.del(`otp:${challengeId}`);
+        throw new UnauthorizedException('Could not send verification code. Please try again.');
+      }
+
+      await this.logAuthAttempt({
+        userId: user.id,
+        emailAttempted: email,
+        success: false,
+        failureReason: 'MFA challenge issued',
+        ip,
+        userAgent,
+      });
+
+      return {
+        mfaRequired: true,
+        challengeId,
+        channel,
+        // Mask the destination so the user can confirm but we don't leak it
+        destinationHint: channel === 'SMS'
+          ? `***${(user.phoneNumber ?? '').slice(-4)}`
+          : `${email.split('@')[0].slice(0, 2)}***@${email.split('@')[1]}`,
+        message: 'A 6-digit verification code has been sent. Please enter it to continue.',
+      };
+    }
+
     // Extract roles and permissions
     const roles = user.userRoles.map((ur) => ur.role.name);
     const agencyId = user.agencyUsers[0]?.agencyId || undefined;
@@ -304,6 +369,84 @@ export class AuthService {
         isVerified: user.isVerified,
         roles,
         permissions,
+        agencyId,
+      },
+    };
+  }
+
+  // ============================================
+  // VERIFY MFA OTP
+  // ============================================
+  // Pairs with the login() MFA branch. Caller hands back the challengeId
+  // we issued and the 6-digit code the user received. We look up the
+  // user via Redis, regenerate JWTs, and atomically delete the OTP so
+  // it can't be reused. Same return shape as a non-MFA login so the
+  // frontend can finish the flow with one branch.
+  async verifyMfaOtp(challengeId: string, code: string, ip?: string, userAgent?: string) {
+    const raw = await this.redis.get(`otp:${challengeId}`);
+    if (!raw) {
+      throw new UnauthorizedException('Verification code expired or invalid. Please sign in again.');
+    }
+    let stored: { userId: string; code: string };
+    try {
+      stored = JSON.parse(raw);
+    } catch {
+      await this.redis.del(`otp:${challengeId}`);
+      throw new UnauthorizedException('Verification code expired or invalid. Please sign in again.');
+    }
+    if (stored.code !== code.trim()) {
+      throw new UnauthorizedException('Verification code is incorrect.');
+    }
+
+    // Consume the OTP — single use even if subsequent lookups race.
+    await this.redis.del(`otp:${challengeId}`);
+
+    // Hydrate the user record + roles/permissions for the JWT
+    const user = await this.prisma.user.findUnique({
+      where: { id: stored.userId },
+      include: {
+        userRoles: { include: { role: true } },
+        agencyUsers: { where: { employmentStatus: 'active' }, select: { agencyId: true }, take: 1 },
+      },
+    });
+    if (!user || !user.isActive) {
+      throw new UnauthorizedException('Account is no longer active.');
+    }
+
+    const roles = user.userRoles.map((ur) => ur.role.name);
+    const agencyId = user.agencyUsers[0]?.agencyId || undefined;
+    const { accessToken, refreshToken } = await this.generateTokens({
+      sub: user.id,
+      email: user.email,
+      userType: user.userType,
+      roles,
+      agencyId,
+    });
+
+    await this.prisma.user.update({
+      where: { id: user.id },
+      data: { lastLoginAt: new Date() },
+    });
+
+    await this.logAuthAttempt({
+      userId: user.id,
+      emailAttempted: user.email,
+      success: true,
+      ip,
+      userAgent,
+    });
+
+    return {
+      accessToken,
+      refreshToken,
+      user: {
+        id: user.id,
+        email: user.email,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        phoneNumber: user.phoneNumber,
+        userType: user.userType,
+        roles,
         agencyId,
       },
     };
