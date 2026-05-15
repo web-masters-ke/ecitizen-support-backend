@@ -242,45 +242,67 @@ export class AuthService {
 
     // ──────────────────────────────────────────────────────────────────
     // MFA challenge — when the user opted into mfaEnabled, password is
-    // step 1. Step 2 is a 6-digit OTP we send to the channel they have
-    // on file (SMS if phoneNumber present, email otherwise). The OTP
-    // lives in Redis for 5 minutes; the frontend gets a challengeId
-    // and hits POST /auth/verify-otp to swap it for real JWT tokens.
+    // step 1. Step 2 is a 6-digit OTP. We send to BOTH SMS and email
+    // (fan-out) so the user receives the code on whichever channel
+    // actually works — Bonga SMS has been intermittently rejecting
+    // sends with status=666 and we don't want users locked out while
+    // DevOps sorts the SMS account. Brevo email is reliable. Either
+    // delivery is enough to satisfy step 2 since both carry the same
+    // code from the same Redis entry.
     // ──────────────────────────────────────────────────────────────────
     if (user.mfaEnabled) {
       const otp = String(Math.floor(100000 + Math.random() * 900000));
       const challengeId = uuidv4();
-      // Store user id under challengeId so we can resolve the user
-      // server-side without the frontend leaking the user id back.
       await this.redis.set(`otp:${challengeId}`, JSON.stringify({ userId: user.id, code: otp }), 300);
 
-      const channel: 'EMAIL' | 'SMS' = user.phoneNumber ? 'SMS' : 'EMAIL';
       const appName = this.configService.get<string>('APP_NAME', 'eCitizen SCC');
-      try {
-        if (channel === 'SMS' && user.phoneNumber) {
-          await this.notificationsService.sendNotification({
-            channel: NotificationChannelDto.SMS,
-            subject: `${appName} verification code`,
-            body: `${appName}: Your verification code is ${otp}. Valid for 5 minutes. Do not share this code.`,
-            recipients: [{ recipientPhone: user.phoneNumber }],
-            triggerEvent: 'MFA_OTP',
-          });
-        } else {
-          await this.notificationsService.sendNotification({
-            channel: NotificationChannelDto.EMAIL,
-            subject: `${appName} verification code`,
-            body: `<p>Your verification code is <strong style="font-size:24px">${otp}</strong></p><p>Valid for 5 minutes. Do not share this code with anyone.</p>`,
-            recipients: [{ recipientEmail: user.email }],
-            triggerEvent: 'MFA_OTP',
-          });
-        }
-        this.logger.log(`MFA OTP issued for user ${user.id} via ${channel}`);
-      } catch (err) {
-        this.logger.error(`Failed to send MFA OTP for user ${user.id}: ${err}`);
-        // Cleanup the challenge so they can retry cleanly
-        await this.redis.del(`otp:${challengeId}`);
-        throw new UnauthorizedException('Could not send verification code. Please try again.');
+      const smsBody = `${appName}: Your verification code is ${otp}. Valid for 5 minutes. Do not share this code.`;
+      const emailHtml = `<p>Your verification code is <strong style="font-size:24px">${otp}</strong></p><p>Valid for 5 minutes. Do not share this code with anyone.</p>`;
+
+      // Fan-out: fire both sends in parallel, swallow individual failures.
+      // If both fail (no phone AND email broken), we surface a clean error.
+      const sendPromises: Promise<{ channel: 'SMS' | 'EMAIL'; ok: boolean }>[] = [];
+      if (user.phoneNumber) {
+        sendPromises.push(
+          this.notificationsService
+            .sendNotification({
+              channel: NotificationChannelDto.SMS,
+              subject: `${appName} verification code`,
+              body: smsBody,
+              recipients: [{ recipientPhone: user.phoneNumber }],
+              triggerEvent: 'MFA_OTP',
+            })
+            .then(() => ({ channel: 'SMS' as const, ok: true }))
+            .catch((err) => {
+              this.logger.warn(`MFA SMS failed for user ${user.id}: ${err?.message ?? err}`);
+              return { channel: 'SMS' as const, ok: false };
+            }),
+        );
       }
+      if (user.email) {
+        sendPromises.push(
+          this.notificationsService
+            .sendNotification({
+              channel: NotificationChannelDto.EMAIL,
+              subject: `${appName} verification code`,
+              body: emailHtml,
+              recipients: [{ recipientEmail: user.email }],
+              triggerEvent: 'MFA_OTP',
+            })
+            .then(() => ({ channel: 'EMAIL' as const, ok: true }))
+            .catch((err) => {
+              this.logger.warn(`MFA email failed for user ${user.id}: ${err?.message ?? err}`);
+              return { channel: 'EMAIL' as const, ok: false };
+            }),
+        );
+      }
+      const results = await Promise.all(sendPromises);
+      const succeeded = results.filter((r) => r.ok).map((r) => r.channel);
+      if (succeeded.length === 0) {
+        await this.redis.del(`otp:${challengeId}`);
+        throw new UnauthorizedException('Could not send verification code via SMS or email. Please try again.');
+      }
+      this.logger.log(`MFA OTP issued for user ${user.id} via ${succeeded.join(', ')}`);
 
       await this.logAuthAttempt({
         userId: user.id,
@@ -291,15 +313,29 @@ export class AuthService {
         userAgent,
       });
 
+      // Pick which channel to advertise in the UI. Prefer the actually-
+      // delivered one; if both worked, prefer the one users see first
+      // (SMS — phone alerts are more immediate than email checks).
+      const advertised: 'EMAIL' | 'SMS' = succeeded.includes('SMS') ? 'SMS' : 'EMAIL';
+      // If we sent both successfully, the hint mentions both so the user
+      // knows to check either.
+      const bothSent = succeeded.length === 2;
+      let destinationHint: string;
+      if (bothSent) {
+        destinationHint = `***${(user.phoneNumber ?? '').slice(-4)} & ${email.split('@')[0].slice(0, 2)}***@${email.split('@')[1]}`;
+      } else if (advertised === 'SMS') {
+        destinationHint = `***${(user.phoneNumber ?? '').slice(-4)}`;
+      } else {
+        destinationHint = `${email.split('@')[0].slice(0, 2)}***@${email.split('@')[1]}`;
+      }
       return {
         mfaRequired: true,
         challengeId,
-        channel,
-        // Mask the destination so the user can confirm but we don't leak it
-        destinationHint: channel === 'SMS'
-          ? `***${(user.phoneNumber ?? '').slice(-4)}`
-          : `${email.split('@')[0].slice(0, 2)}***@${email.split('@')[1]}`,
-        message: 'A 6-digit verification code has been sent. Please enter it to continue.',
+        channel: advertised,
+        destinationHint,
+        message: bothSent
+          ? 'A 6-digit verification code has been sent to your phone AND email. Use whichever arrives first.'
+          : 'A 6-digit verification code has been sent. Please enter it to continue.',
       };
     }
 
