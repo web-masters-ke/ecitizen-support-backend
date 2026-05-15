@@ -124,8 +124,12 @@ export class AgenciesService {
     const {
       page = 1,
       limit = 20,
-      sortBy = 'createdAt',
-      sortOrder = 'desc',
+      // Default to alphabetical by name. Operators browse this list to
+      // find a specific ministry/agency, not to see recent ones; sorting
+      // by createdAt desc made the list look randomised. Caller can
+      // still override via sortBy=createdAt&sortOrder=desc.
+      sortBy = 'agencyName',
+      sortOrder = 'asc',
       agencyType,
       isActive,
       onboardingStatus,
@@ -663,7 +667,78 @@ export class AgenciesService {
     });
 
     this.logger.log(`Service provider created: ${provider.id}`);
+
+    // Auto-attach a baseline SLA — guarantees this SP has measurable
+    // response/resolution targets the moment they're mapped to an
+    // agency. Best-effort, never blocks the SP creation.
+    this.ensureDefaultSlaForProvider(provider.id, provider.providerName)
+      .catch((err) =>
+        this.logger.warn(`Default SLA bootstrap failed for ${provider.id}: ${(err as Error)?.message}`),
+      );
+
     return provider;
+  }
+
+  /**
+   * Ensure the system's default routing agency has a baseline SLA
+   * policy with the standard four priority rules. The SP will inherit
+   * this via AgencyServiceMapping once it's hooked up to that agency.
+   * Idempotent — finds existing "Default SP SLA" before creating.
+   */
+  private async ensureDefaultSlaForProvider(spId: string, spName: string): Promise<void> {
+    const defaultCode = process.env.DEFAULT_ROUTING_AGENCY_CODE || 'ECITIZEN';
+    const routingAgency =
+      (await this.prisma.agency.findFirst({ where: { agencyCode: defaultCode, isActive: true }, select: { id: true } })) ??
+      (await this.prisma.agency.findFirst({ where: { isActive: true }, orderBy: { createdAt: 'asc' }, select: { id: true } }));
+    if (!routingAgency) {
+      this.logger.warn(`No active agency to host default SLA for SP ${spId}`);
+      return;
+    }
+
+    const policyName = 'Default SP SLA';
+    const existing = await this.prisma.slaPolicy.findFirst({
+      where: { agencyId: routingAgency.id, policyName },
+      select: { id: true },
+    });
+    if (existing) {
+      this.logger.log(`SP ${spName}: existing Default SP SLA on routing agency — no action`);
+      return;
+    }
+
+    // Map priority name → minutes (response / resolution / escalation-after).
+    // Conservative baseline; agency can edit afterwards via the change-
+    // request approval workflow.
+    const baseline: Array<{ name: string; resp: number; res: number; esc: number }> = [
+      { name: 'CRITICAL', resp: 30,   res: 4 * 60,  esc: 60 },     // 30m / 4h / escalate after 1h
+      { name: 'HIGH',     resp: 2*60, res: 24 * 60, esc: 4 * 60 }, // 2h / 24h / 4h
+      { name: 'MEDIUM',   resp: 4*60, res: 48 * 60, esc: 8 * 60 }, // 4h / 48h / 8h
+      { name: 'LOW',      resp: 24*60,res: 5*24*60, esc: 48 * 60 },// 24h / 5d / 48h
+    ];
+    const priorityRecords = await this.prisma.ticketPriorityLevel.findMany({
+      where: { name: { in: baseline.map((b) => b.name as any) } },
+    });
+    const priorityMap = new Map(priorityRecords.map((p) => [p.name, p.id]));
+
+    await this.prisma.slaPolicy.create({
+      data: {
+        agencyId: routingAgency.id,
+        policyName,
+        description: `Baseline SLA auto-attached on creation of service provider "${spName}". Edit via the SLA tab.`,
+        isActive: true,
+        appliesBusinessHours: true,
+        slaRules: {
+          create: baseline
+            .filter((b) => priorityMap.has(b.name as any))
+            .map((b) => ({
+              priorityId: priorityMap.get(b.name as any)!,
+              responseTimeMinutes: b.resp,
+              resolutionTimeMinutes: b.res,
+              escalationAfterMinutes: b.esc,
+            })),
+        },
+      },
+    });
+    this.logger.log(`SP ${spName}: bootstrapped Default SP SLA on routing agency ${routingAgency.id}`);
   }
 
   async findOneServiceProvider(id: string) {

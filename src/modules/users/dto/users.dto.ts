@@ -122,6 +122,19 @@ export class UpdateUserDto extends PartialType(CreateUserDto) {
 }
 
 // ──────────────────────────────────────────────
+// Agent "accepting tickets" toggle. Lets an agent go on a quick break
+// without losing their session — the auto-assigner skips them when
+// available=false, but they keep their JWT so they can finish in-flight
+// work.
+// ──────────────────────────────────────────────
+
+export class ToggleAvailabilityDto {
+  @ApiProperty({ description: 'true = accept new tickets, false = on break' })
+  @IsBoolean()
+  available: boolean;
+}
+
+// ──────────────────────────────────────────────
 // Self-service password change. Different from admin reset — caller
 // must prove they know the current password.
 // ──────────────────────────────────────────────

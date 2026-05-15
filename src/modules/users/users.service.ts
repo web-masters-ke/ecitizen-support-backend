@@ -580,6 +580,36 @@ eCitizen Service Team`;
   // Only firstName, lastName, phoneNumber, nationalId — no role/status changes.
   // ──────────────────────────────────────────────
 
+  /**
+   * Toggle the agent's "accepting new tickets" flag. Reused for the
+   * /users/me/availability endpoint. Flips employmentStatus on every
+   * AgencyUser link for the caller — most users only have one link
+   * (their primary agency) but COMMAND_CENTER_ADMINs occasionally
+   * span several. updateMany returns a count so we can confirm.
+   *
+   * Why employmentStatus and not a new field: auto-assign already
+   * filters AgencyUser.employmentStatus = 'active' (see
+   * tickets.service.autoAssignToLeastBusyAgent). Setting it to
+   * 'unavailable' immediately makes the user invisible to the load
+   * balancer without a schema migration.
+   */
+  async setMyAvailability(userId: string, available: boolean) {
+    const newStatus = available ? 'active' : 'unavailable';
+    const result = await this.prisma.agencyUser.updateMany({
+      where: { userId },
+      data: { employmentStatus: newStatus },
+    });
+    this.logger.log(
+      `User ${userId} availability → ${newStatus} (${result.count} agency link${result.count === 1 ? '' : 's'})`,
+    );
+    return {
+      success: true,
+      available,
+      employmentStatus: newStatus,
+      updatedAgencies: result.count,
+    };
+  }
+
   async updateMyProfile(userId: string, dto: UpdateMyProfileDto) {
     await this.ensureUserExists(userId);
 

@@ -28,6 +28,7 @@ import {
   ToggleUserStatusDto,
   UserFilterDto,
   ChangePasswordDto,
+  ToggleAvailabilityDto,
 } from './dto/users.dto';
 import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
 import { RolesGuard } from '../../common/guards/roles.guard';
@@ -116,6 +117,33 @@ export class UsersController {
     @Body() dto: UpdateMyProfileDto,
   ) {
     return this.usersService.updateMyProfile(currentUserId, dto);
+  }
+
+  // ──────────────────────────────────────────────
+  // PATCH /api/v1/users/me/availability — toggle "accepting new tickets"
+  // Agent flips this when they go on break / end shift / want to clear
+  // their queue without taking new work. The auto-assigner already
+  // filters AgencyUser.employmentStatus = 'active' so toggling this
+  // immediately stops new ticket auto-assignments to them. Setting
+  // it back to true re-enrols them.
+  // ──────────────────────────────────────────────
+
+  @Patch('me/availability')
+  @Roles('SUPER_ADMIN', 'COMMAND_CENTER_ADMIN', 'AGENCY_AGENT', 'SERVICE_PROVIDER_AGENT')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({
+    summary: 'Toggle my "accepting new tickets" availability',
+    description:
+      'Flips employmentStatus on every AgencyUser link for the caller. ' +
+      '"available": true sets active, "available": false sets unavailable. ' +
+      'Auto-assign skips unavailable agents.',
+  })
+  @ApiResponse({ status: 200, description: 'Availability updated' })
+  async toggleMyAvailability(
+    @CurrentUser('sub') currentUserId: string,
+    @Body() dto: ToggleAvailabilityDto,
+  ) {
+    return this.usersService.setMyAvailability(currentUserId, dto.available);
   }
 
   // ──────────────────────────────────────────────

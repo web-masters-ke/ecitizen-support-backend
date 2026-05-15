@@ -11,6 +11,7 @@ import {
   HttpCode,
   HttpStatus,
   UseGuards,
+  BadRequestException,
 } from '@nestjs/common';
 import {
   ApiTags,
@@ -565,6 +566,41 @@ export class TicketLookupsController {
   @SwaggerResponse({ status: 200, description: 'List of ticket statuses' })
   async getStatuses() {
     return this.ticketsService.getStatuses();
+  }
+
+  // ------------------------------------------
+  // POST /api/v1/contact — citizen general inquiry
+  // Backs the public /contact page on the webclient. Routes the
+  // submission into the regular public-report ticket pipeline so an
+  // agent picks it up like any other ticket. Subject becomes the ticket
+  // subject; message becomes the description. Contact details ride
+  // along so the agent can follow up. No auth — anyone can submit.
+  // ------------------------------------------
+  @Post('contact')
+  @Public()
+  @ApiOperation({
+    summary: 'Submit a general citizen inquiry (no auth)',
+    description:
+      'Citizen contact-us form submission. Stored as a public ticket on the default routing agency so it goes through the normal triage + assignment workflow.',
+  })
+  @SwaggerResponse({ status: 201, description: 'Inquiry accepted as a ticket' })
+  @HttpCode(HttpStatus.CREATED)
+  async submitContactInquiry(
+    @Body() dto: { fullName?: string; email?: string; phone?: string; subject: string; message: string },
+  ) {
+    // Defensive: subject + message are the only mandatory fields. Reuse
+    // createPublicTicket so we inherit the AI agency routing + auto-
+    // assign + audit trail without writing new ticket plumbing.
+    if (!dto.subject || !dto.message) {
+      throw new BadRequestException('Both subject and message are required.');
+    }
+    return this.ticketsService.createPublicTicket({
+      subject: dto.subject.trim(),
+      description: dto.message.trim(),
+      reporterName: dto.fullName?.trim(),
+      reporterEmail: dto.email?.trim(),
+      reporterPhone: dto.phone?.trim(),
+    });
   }
 
 }

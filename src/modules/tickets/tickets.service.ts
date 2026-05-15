@@ -5,6 +5,7 @@ import {
   ForbiddenException,
   Logger,
 } from '@nestjs/common';
+import { Cron, CronExpression } from '@nestjs/schedule';
 import { JwtPayload } from '../../common/decorators/current-user.decorator';
 
 const EXTERNAL_USER_TYPES = new Set(['CITIZEN', 'BUSINESS']);
@@ -1859,6 +1860,121 @@ export class TicketsService {
       { assigneeId: chosen, reason: 'Auto-assigned by load balancer' } as AssignTicketDto,
       chosen, // assigned "by" the chosen agent themselves — system action; avoids a foreign-key crash if no system user exists
     );
+  }
+
+  // ============================================
+  // STALE TICKET AUTO-REASSIGN (cron, every 5 min)
+  // ============================================
+  // A ticket gets stale when an agent owns it but hasn't moved it for
+  // >STALE_HOURS. We pull each, find a different least-busy active
+  // candidate in the agency, and reassign. The recipient gets the same
+  // assignment notification as a manual reassign so they know to act.
+  //
+  // Cron interval is short (5 min) and the query is cheap (single
+  // findMany scoped to ASSIGNED status + updatedAt < cutoff) so this
+  // is safe to run continuously. Idempotent — once reassigned, the
+  // updatedAt clock resets and the new owner has another STALE_HOURS
+  // window before they show up again.
+  private readonly STALE_HOURS = 1;
+
+  @Cron(CronExpression.EVERY_5_MINUTES, { name: 'staleTicketReassign' })
+  async reassignStaleTickets(): Promise<void> {
+    const cutoff = new Date(Date.now() - this.STALE_HOURS * 60 * 60 * 1000);
+    // Only consider tickets that are actively assigned but untouched.
+    // We exclude RESOLVED / CLOSED / REOPENED — those have their own
+    // lifecycle and shouldn't be reshuffled.
+    const stale = await this.prisma.ticket.findMany({
+      where: {
+        isDeleted: false,
+        currentAssigneeId: { not: null },
+        status: { name: 'ASSIGNED' },
+        updatedAt: { lt: cutoff },
+      },
+      select: {
+        id: true,
+        ticketNumber: true,
+        agencyId: true,
+        currentAssigneeId: true,
+        updatedAt: true,
+      },
+      take: 50, // Cap per cycle to keep the job cheap
+    });
+
+    if (stale.length === 0) return;
+    this.logger.log(`Stale-ticket cron: found ${stale.length} ticket(s) untouched for >${this.STALE_HOURS}h`);
+
+    for (const t of stale) {
+      try {
+        await this.reassignStaleTo(t.id, t.agencyId, t.currentAssigneeId!);
+      } catch (err) {
+        this.logger.warn(
+          `Stale-ticket cron: failed to reassign ${t.ticketNumber}: ${(err as Error)?.message}`,
+        );
+      }
+    }
+  }
+
+  /**
+   * Pick a different active agent in the same agency (not the current
+   * owner) with the lightest load, and reassign. Mirrors
+   * autoAssignToLeastBusyAgent but with an exclude clause.
+   */
+  private async reassignStaleTo(ticketId: string, agencyId: string, currentOwner: string): Promise<void> {
+    const links = await this.prisma.agencyUser.findMany({
+      where: {
+        agencyId,
+        employmentStatus: 'active',
+        user: { isActive: true, id: { not: currentOwner } },
+      },
+      select: { userId: true, user: { select: { userType: true } } },
+    });
+    const candidateIds = links
+      .filter((l) => l.user.userType === 'AGENCY_AGENT' || l.user.userType === 'COMMAND_CENTER_ADMIN')
+      .map((l) => l.userId);
+    if (candidateIds.length === 0) {
+      // No fresh agent to hand to — leave it; supervisor will see the
+      // stale status badge in the list and intervene.
+      this.logger.log(`Stale ticket ${ticketId}: no alternate agent in agency ${agencyId}`);
+      return;
+    }
+
+    const openStatuses = await this.prisma.ticketStatus.findMany({
+      where: { isClosedStatus: false },
+      select: { id: true },
+    });
+    const openStatusIds = openStatuses.map((s) => s.id);
+    const counts = await this.prisma.ticket.groupBy({
+      by: ['currentAssigneeId'],
+      where: {
+        agencyId,
+        currentAssigneeId: { in: candidateIds },
+        statusId: { in: openStatusIds },
+        isDeleted: false,
+      },
+      _count: { _all: true },
+    });
+    const loadMap = new Map<string, number>(
+      counts.map((c) => [c.currentAssigneeId as string, c._count._all]),
+    );
+    let chosen = candidateIds[0];
+    let chosenLoad = loadMap.get(chosen) ?? 0;
+    for (const id of candidateIds) {
+      const load = loadMap.get(id) ?? 0;
+      if (load < chosenLoad) {
+        chosen = id;
+        chosenLoad = load;
+      }
+    }
+
+    await this.assignTicket(
+      ticketId,
+      {
+        assigneeId: chosen,
+        reason: `Auto-reassigned — previous agent inactive on this ticket for ${this.STALE_HOURS}h`,
+      } as AssignTicketDto,
+      chosen,
+    );
+    this.logger.log(`Stale ticket ${ticketId}: reassigned from ${currentOwner} → ${chosen}`);
   }
 
   /**
