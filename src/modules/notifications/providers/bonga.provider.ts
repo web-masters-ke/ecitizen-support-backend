@@ -62,7 +62,6 @@ export class BongaProvider {
         {
           headers: {
             'Content-Type': 'application/json',
-            Accept: 'application/json',
           },
           timeout: 30000,
         },
