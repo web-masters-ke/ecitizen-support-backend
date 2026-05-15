@@ -72,9 +72,17 @@ export class BongaProvider {
           serviceID: this.serviceId,
         },
         {
+          // NOTE: do NOT send Accept: application/json. The Wasaa-internal
+          // Bonga gateway (167.172.14.50:4002) returns HTTP 406 Not
+          // Acceptable when that header is present and answers with
+          // {"status":666,"status_message":"error sending message"} which
+          // we'd report as a generic failure. DevOps reproduced this
+          // from inside the pod: same payload + same MSISDN, only
+          // difference is the Accept header. Drop it; the gateway then
+          // responds 200 with status:222 (sent). Content-Type alone is
+          // enough for the gateway to parse the request body.
           headers: {
             'Content-Type': 'application/json',
-            Accept: 'application/json',
           },
           timeout: 30000,
         },
